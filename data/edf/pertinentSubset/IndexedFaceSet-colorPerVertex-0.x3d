@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="&#xA;IndexedFaceSet colorPerVertex test. The shape used is a 4 sided pyramid with bottom. The top row has colorPerVertex set to TRUE, the bottom row has colorPerVertex set to FALSE. The top row has colors blended between the vertexes; the bottom row has each face being one color. Other than that, the two rows are identical, with the exception of the bottom left pyramid; it is slightly rotated away from the viewpoint to enable seeing the inside of the shape.&#xA;&#x9;&#x9;"/></head><Scene><Transform translation="-2.5 1.45 3" rotation="0 0 1 0">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="TRUE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+
+
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform><Transform translation="0 1.45 3" rotation="1 0 0 1">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="TRUE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform><Transform translation="2.5 1.45 3" rotation="1 1 0 1.3">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="TRUE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform><Transform translation="-2.5 -1.45 3" rotation="1 0 0 -0.5">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="FALSE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform><Transform translation="0 -1.45 3" rotation="1 0 0 1">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="FALSE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform><Transform translation="2.5 -1.45 3" rotation="1 1 0 1.3">
+                <Shape>
+                        <Appearance> <Material/> </Appearance>
+
+                        <IndexedFaceSet colorPerVertex="FALSE" coordIndex="0 4 3 -1 1 4 0 -1 2 4 1 -1 3 4 2 -1 0 3 2 1 -1">
+                                <Coordinate point="1 0 -1 -1 0 -1 -1 0 1 1 0 1 0 1 0"/>
+                                <Color color="0 0 1    0 1 0   0 1 1  1 0 0  1 0 1  1 1 0"/>
+                        </IndexedFaceSet>
+                </Shape>
+        </Transform></Scene></X3D>

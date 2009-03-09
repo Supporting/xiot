@@ -1,0 +1,20 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Shape with 0 attribute(s): 
+Event    9 - Start node Appearance with 0 attribute(s): 
+Event   10 - Start node Material with 0 attribute(s): 
+Event   11 - End node Material
+Event   12 - End node Appearance
+Event   13 - Start node TriangleFanSet with 2 attribute(s): fanCount ccw 
+Event   14 - Start node Coordinate with 1 attribute(s): point 
+Event   15 - End node Coordinate
+Event   16 - End node TriangleFanSet
+Event   17 - End node Shape
+Event   18 - End node Scene
+Event   19 - End node X3D
+Event   20 - End Document

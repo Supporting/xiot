@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.1//EN" "http://www.web3d.org/specifications/x3d-3.1.dtd">
+<X3D profile='Immersive' version='3.1'>
+<head>
+</head>
+<Scene>
+      <Background skyColor='0.33 0.35 0.43'></Background>
+      <NavigationInfo speed='4.0' type='"EXAMINE","FLY","ANY"'></NavigationInfo>
+      <DirectionalLight ambientIntensity='1.0' intensity='0.0'></DirectionalLight>
+      <Transform DEF='ROOT'>
+         <Transform scale='1.20013 1.39791 1.28184' translation='2.02626 2.57748 1.51752'>
+            <Shape>
+               <Appearance>
+                  <Material ambientIntensity='0.0' diffuseColor='1.0 1.0 1.0' shininess='0.0078125'></Material>
+               </Appearance>
+               <IndexedLineSet coordIndex='0 1 -1 2 3 -1 4 5 -1'>
+                  <Coordinate DEF='VTKcoordinates0000' point='-1.0 0.0 0.0 ,1.0 0.0 0.0 ,0.0 -1.0 0.0 ,0.0 1.0 0.0 ,0.0 0.0 -1.0 ,0.0 0.0 1.0'></Coordinate>
+                  <Color DEF='VTKcolors0000' color='1.0 0.0 0.0 ,1.0 0.0 0.0 ,0.99607843 1.0 0.0 ,0.99607843 1.0 0.0 ,0.0 1.0 0.0 ,0.0 1.0 0.0'></Color>
+               </IndexedLineSet>
+            </Shape>
+         </Transform>
+      </Transform>
+</Scene>
+</X3D>

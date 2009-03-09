@@ -1,0 +1,7 @@
+_ignoreNodes.insert(X3D::head);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);
+_ignoreNodes.insert(X3D::IndexedTriangleStripSet);

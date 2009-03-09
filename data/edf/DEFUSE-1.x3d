@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Insure DEF names are unique. The browser should flag that the DEF names are NOT unique - either by &#xA;printing a warning message, stopping rendering, or, not rendering the second box."/></head><Scene><Transform translation="-2 0 0">
+	<Shape DEF="foo">
+	   <Box/>
+	</Shape>
+</Transform><Transform translation="2 0 0">
+	<Shape DEF="foo">
+	   <Box/>
+	</Shape>
+</Transform></Scene></X3D>

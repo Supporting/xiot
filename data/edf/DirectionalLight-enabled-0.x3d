@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="&#xA;DirectionalLight test. Light disabled. Headlight turned off.&#xA;&#x9;&#x9;"/></head><Scene><NavigationInfo headlight="false"/><Transform translation="-2.5 1.45 0">
+            <Shape>
+                <Appearance> <Material/> </Appearance>
+                <Box/>
+            </Shape> 
+        </Transform><Transform translation="0 1.45 0">
+            <Shape>
+                <Appearance> <Material/> </Appearance>
+                <Cone/>
+            </Shape> 
+        </Transform><Transform translation="2.5 1.45 0">
+            <Shape>
+                <Appearance> <Material/> </Appearance>
+                <Sphere/>
+            </Shape>
+        </Transform><Transform translation="-2.5 -1.45 0">
+            <Shape>
+                <Appearance> <Material/> </Appearance>
+                <Cylinder/>
+            </Shape>
+        </Transform><Transform translation="0 -1.45 0">
+            <Shape>
+                <Appearance> <Material diffuseColor="0.5 0.7 0.2"/> </Appearance>
+                <Sphere/>
+            </Shape>
+        </Transform><Transform translation="2.5 -1.45 0">
+            <Shape>
+                <Appearance> <Material diffuseColor="0.8 0.1 0.9"/> </Appearance>
+                <Sphere/>
+            </Shape>
+        </Transform><DirectionalLight on="false"/></Scene></X3D>

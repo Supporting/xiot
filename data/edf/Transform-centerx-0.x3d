@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="This test defines a Transform that specifies an offset along the X axis from the center of the local coordinate system. The test should draw three cylinders, one at the center of the local coordinate system and two more on top of it but rotated 1.57 radians along the X axis resulting in a cross like figure"/></head><Scene><Transform translation="-2.5 1.75 1" rotation="0 0 1 0"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform><Transform translation="0 1.75 1" rotation="0 1 0 3.1415926"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform><Transform translation="2.5 1.75 1" rotation="0 1 0 -1.57"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform><Transform translation="-2.5 -1.75 1" rotation="0 1 0 1.57"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform><Transform translation="0 -1.75 1" rotation="1 0 0 1.57"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform><Transform translation="2.5 -1.75 1" rotation="1 0 0 -1.57"><Transform>
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Cylinder height="2" radius="0.25"/>
+   </Shape>
+   <Transform center="-1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+   <Transform center="1.5 0 0" rotation="1 0 0 1.57">
+      <Shape>
+         <Appearance>
+            <Material/>
+         </Appearance>
+         <Cylinder height="2" radius="0.25"/>
+      </Shape>
+   </Transform>
+</Transform></Transform></Scene></X3D>

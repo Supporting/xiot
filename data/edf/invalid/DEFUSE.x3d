@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Exercise DEF/USE functionality. One shape is a DEF, the other a USE. Both should be identical."/></head><Scene>
+
+
+<!-- erratic x3d  : recursive def/use should be ignored, but box should be displayed-->
+<Transform translation="-2 0 0">
+	<Shape DEF="foo">
+	   <Box/>
+	   <Shape USE="foo"/>
+	</Shape>
+</Transform>
+
+</Scene></X3D>

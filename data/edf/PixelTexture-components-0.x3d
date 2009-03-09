@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="This tests the various number of components in PixelTexture"/></head><Scene><Transform translation="0 0 -2">
+			<Shape>
+				<Box size="9 9 .1"/>
+				<Appearance>
+					<Material diffuseColor="0 0 0" emissiveColor="0 0 1"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 2 0">
+			<Shape>
+                                <IndexedFaceSet coordIndex="0 1 2 0 2 3">
+                                        <Coordinate point="-1.0 -1.0 0 1.0 -1.0 0 1.0 1.0 0 -1.0 1.0 0"/>
+                                </IndexedFaceSet>
+
+				<Appearance>
+		                  <PixelTexture image="2 2 1 255 128 0 255"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 2 0">
+			<Shape>
+                                <IndexedFaceSet coordIndex="0 1 2 0 2 3">
+                                        <Coordinate point="-1.0 -1.0 0 1.0 -1.0 0 1.0 1.0 0 -1.0 1.0 0"/>
+                                </IndexedFaceSet>
+
+				<Appearance>
+            		      <PixelTexture image="2 2 2 0xFFFF 0x7FFF 0xFF00 0xFFFF"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 -2 0">
+			<Shape>
+                                <IndexedFaceSet coordIndex="0 1 2 0 2 3">
+                                        <Coordinate point="-1.0 -1.0 0 1.0 -1.0 0 1.0 1.0 0 -1.0 1.0 0"/>
+                                </IndexedFaceSet>
+
+				<Appearance>
+		                  <PixelTexture image="2 2 3 0xFF0000 0xFFFF00 0x00FFFF 0xFF00FF"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 -2 0">
+			<Shape>
+                                <IndexedFaceSet coordIndex="0 1 2 0 2 3">
+                                        <Coordinate point="-1.0 -1.0 0 1.0 -1.0 0 1.0 1.0 0 -1.0 1.0 0"/>
+                                </IndexedFaceSet>
+
+				<Appearance>
+		                  <PixelTexture image="2 2 4 0xFF0000FF  0x00FF0080 0x00000000 0x000000FF"/>
+				</Appearance>
+			</Shape>
+		</Transform></Scene></X3D>

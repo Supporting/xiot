@@ -1,0 +1,74 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node NavigationInfo with 1 attribute(s): headlight 
+Event    9 - End node NavigationInfo
+Event   10 - Start node Transform with 1 attribute(s): translation 
+Event   11 - Start node Shape with 0 attribute(s): 
+Event   12 - Start node Appearance with 0 attribute(s): 
+Event   13 - Start node Material with 0 attribute(s): 
+Event   14 - End node Material
+Event   15 - End node Appearance
+Event   16 - Start node Box with 0 attribute(s): 
+Event   17 - End node Box
+Event   18 - End node Shape
+Event   19 - End node Transform
+Event   20 - Start node Transform with 1 attribute(s): translation 
+Event   21 - Start node Shape with 0 attribute(s): 
+Event   22 - Start node Appearance with 0 attribute(s): 
+Event   23 - Start node Material with 0 attribute(s): 
+Event   24 - End node Material
+Event   25 - End node Appearance
+Event   26 - Start node Cone with 0 attribute(s): 
+Event   27 - End node Cone
+Event   28 - End node Shape
+Event   29 - End node Transform
+Event   30 - Start node Transform with 1 attribute(s): translation 
+Event   31 - Start node Shape with 0 attribute(s): 
+Event   32 - Start node Appearance with 0 attribute(s): 
+Event   33 - Start node Material with 0 attribute(s): 
+Event   34 - End node Material
+Event   35 - End node Appearance
+Event   36 - Start node Sphere with 0 attribute(s): 
+Event   37 - End node Sphere
+Event   38 - End node Shape
+Event   39 - End node Transform
+Event   40 - Start node Transform with 1 attribute(s): translation 
+Event   41 - Start node Shape with 0 attribute(s): 
+Event   42 - Start node Appearance with 0 attribute(s): 
+Event   43 - Start node Material with 0 attribute(s): 
+Event   44 - End node Material
+Event   45 - End node Appearance
+Event   46 - Start node Cylinder with 0 attribute(s): 
+Event   47 - End node Cylinder
+Event   48 - End node Shape
+Event   49 - End node Transform
+Event   50 - Start node Transform with 1 attribute(s): translation 
+Event   51 - Start node Shape with 0 attribute(s): 
+Event   52 - Start node Appearance with 0 attribute(s): 
+Event   53 - Start node Material with 1 attribute(s): diffuseColor 
+Event   54 - End node Material
+Event   55 - End node Appearance
+Event   56 - Start node Sphere with 0 attribute(s): 
+Event   57 - End node Sphere
+Event   58 - End node Shape
+Event   59 - End node Transform
+Event   60 - Start node Transform with 1 attribute(s): translation 
+Event   61 - Start node Shape with 0 attribute(s): 
+Event   62 - Start node Appearance with 0 attribute(s): 
+Event   63 - Start node Material with 1 attribute(s): diffuseColor 
+Event   64 - End node Material
+Event   65 - End node Appearance
+Event   66 - Start node Sphere with 0 attribute(s): 
+Event   67 - End node Sphere
+Event   68 - End node Shape
+Event   69 - End node Transform
+Event   70 - Start node DirectionalLight with 1 attribute(s): color 
+Event   71 - End node DirectionalLight
+Event   72 - End node Scene
+Event   73 - End node X3D
+Event   74 - End Document

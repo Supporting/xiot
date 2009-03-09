@@ -1,0 +1,22 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 0 attribute(s): 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Box with 2 attribute(s): solid size 
+Event   11 - End node Box
+Event   12 - End node Shape
+Event   13 - End node Transform
+Event   14 - Start node Transform with 1 attribute(s): translation 
+Event   15 - Start node Shape with 0 attribute(s): 
+Event   16 - Start node Box with 1 attribute(s): solid 
+Event   17 - End node Box
+Event   18 - End node Shape
+Event   19 - End node Transform
+Event   20 - End node Scene
+Event   21 - End node X3D
+Event   22 - End Document

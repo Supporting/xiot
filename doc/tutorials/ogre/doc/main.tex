@@ -1,0 +1,467 @@
+\documentclass[%
+%a5paper,							% alle weiteren Papierformat einstellbar
+%landscape,						% Querformat
+%10pt,								% Schriftgröße (12pt, 11pt (Standard))
+%BCOR1cm,							% Bindekorrektur, bspw. 1 cm
+%DIVcalc,							% führt die Satzspiegelberechnung neu aus
+%											  s. scrguide 2.4
+%twoside,							% Doppelseiten
+%twocolumn,						% zweispaltiger Satz
+%halfparskip*,				% Absatzformatierung s. scrguide 3.1
+%headsepline,					% Trennline zum Seitenkopf	
+%footsepline,					% Trennline zum Seitenfuß
+%titlepage,						% Titelei auf eigener Seite
+%normalheadings,			% Überschriften etwas kleiner (smallheadings)
+%idxtotoc,						% Index im Inhaltsverzeichnis
+%liststotoc,					% Abb.- und Tab.verzeichnis im Inhalt
+%bibtotoc,						% Literaturverzeichnis im Inhalt
+%abstracton,					% Überschrift über der Zusammenfassung an	
+%leqno,   						% Nummerierung von Gleichungen links
+%fleqn,								% Ausgabe von Gleichungen linksbündig
+%draft								% überlangen Zeilen in Ausgabe gekennzeichnet
+]
+{scrartcl}
+\usepackage{listings}
+
+\usepackage[pdftex]{graphicx} %%Grafiken in pdfLaTeX
+
+\usepackage[pdftex,
+            colorlinks=false,
+            bookmarks=true,
+            %pagebackref=true,
+            bookmarksnumbered=false,
+            pdfauthor={Kristian Sons},
+            pdfsubject={Delivery for WP1 of X3Db project of EDF and Actor3D},
+            pdfstartview=FitH,
+            pdftitle={WP1: Feasibility study and Implementation proposal},
+            pdfkeywords={X3D, compression, encoding, binary, exporter, VTK, Paraview}]
+            {hyperref}      %Hyperlinks vom Inhaltsverzeichnis zum Kapitel, Abblidungsverzichnis zu Bild
+
+\renewcommand{\ttdefault}{pcr}  % pcr is the latex word for Courier
+\usepackage{listings}
+
+\setlength{\parindent}{0pt}
+%\ifpdf
+	\DeclareGraphicsExtensions{.pdf,.jpg,.png}
+%\else%
+	%\DeclareGraphicsExtensions{.eps}
+%\fi
+
+
+% Define Colors 
+\usepackage{color}
+\definecolor{actorblue}{rgb}{0.0, 0.016, 0.698}
+\definecolor{commentColor}{rgb}{0.0, 0.6, 0.0}
+
+%% Listings definieren %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{listinggray}{gray}{0.95}
+\lstloadlanguages{c,c++,xml}
+\lstset{	basicstyle=\ttfamily\small, 
+					backgroundcolor=\color{listinggray},
+					identifierstyle=\ttfamily,
+					rulecolor=\color{actorblue},
+					linewidth=\textwidth,
+					commentstyle=\color{commentColor}, 
+				  stringstyle=\upshape,
+				  showspaces=false,
+				  showstringspaces=false,
+				  tabsize = 2,
+					keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},				  
+					prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+			} 
+
+\lstset{numbers=left,numberstyle=\tiny}
+\lstset{frame=trbl,frameround=ffff}
+\lstset{captionpos=b}
+\lstset{breaklines=true}
+\lstset{aboveskip=\bigskipamount}
+
+%% deutsche Anpassung %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[ngerman,USenglish]{babel}		
+\usepackage[T1]{fontenc}							
+\usepackage[latin1]{inputenc}		
+\usepackage{palatino} 
+
+
+\begin{document}
+\section{Introduction}
+This is a tutorial how to use the x3dLoader library to import X3D data into a rendering system. For this tutorial Ogre was chosen. But you could use your favorite rendering system i.e. OpenScenegraph, OpenInventor, VTK, NVSG in almost the same manner. Thus this tutorial focuses on the rendering system to a lesser extend, but focuses on how to use the x3dLoader library. For further details on the Ogre library, please refer to \url{http://www.ogre3d.org/}.
+
+The tutorial is a step-by-step tutorial on how to implement a small X3D viewer that can handle a subset of the X3D functionality. The tutorial uses a Windows XP with Visual Studio as platform. Apart from the Installation it should work on all other common OS without major changes since both libraries are multi-platform.
+
+\section{Preliminaries}
+Before you can start, you have to install both libraries, Ogre and x3dLoader.
+
+\subsection{Installation of Ogre}
+For windows, just download and install the binary OgreSDK package. It includes all necessary files and resources to start developing for Ogre. The install also sets the environment variable \verb|OGRE_HOME|. CMake will use this to find your Ogre installation.
+
+On Linux systems, you can easily install Ogre using the apt package system doing something like this:
+
+\begin{lstlisting}
+sudo apt-get install libogre6 libogre6-dev
+\end{lstlisting}
+
+The tutorial is based on a Ogre version 1.6.1. If your Linux distribution does not provide this version of Ogre, you have to download the sources from www.ogre3d.org to compile you version of Ogre.
+
+\subsection{Installation of x3dLoader}
+You can either use the binary x3dLoader package for windows or compile the library from source. To compile form source just start the Cmake and press generate. You don´t have to set special options for this tutorial. Also refer to the x3dLoader documentation on how to build the library from source.
+
+\subsection{Installation of code snippets for the tutorials}
+
+
+\section{Step 1: Create Ogre Application}
+The first thing to do is to get a application running, that opens up an Ogre rendering window and provides some navigation in the scene. I chose to extend the \verb|ExampleApplication| provided in the sample section of the SDK. It provides navigation and displays additional scene information that can be useful to debug problems.
+So setting up this application is very simple. I create a class \verb|TutorialApplication| that derives from \verb|ExampleApplication|. I have to implement the pure virtual method \verb|createScene|. In this first step, we do nothing in this function. It will be the place, where we will create the scene in the next steps. 
+
+\noindent Then in the \verb|main.cpp|\ I just start this application:
+
+
+\begin{lstlisting}[language={c++}]
+	TutorialApplication app;
+
+	try {
+	  app.go();
+	} catch( Exception& e ) {
+	  fprintf(stderr, "An exception has occurred: %s\n",
+		e.getFullDescription().c_str());
+	}
+\end{lstlisting}
+As you can see, we created a render window with some Ogre overlays. Since the scene is empty, you can not really test the navigation yet, but trust me: It already works. To exit the application press 'Q' or 'Esc'.
+
+\begin{figure}
+	\centering
+		\includegraphics[width=10cm]{step1}
+	\label{fig:step1}
+\end{figure}
+
+
+\paragraph{Troubleshooting}
+It is a little tricky to get the application started, since we already have some dependencies.
+\begin{itemize}
+	\item You will need the dynamic Ogre libraries\footnote{OgreMain and OIS}. Make sure, that they are either in the same directory or somewhere in the system library path. 
+	\item Don´t mix up debug and release DLLs since this can cause errors.
+	\item Some DLLs are loaded dynamically by Ogre. These are defined in the Plugins.cfg. Make sure, all DLLs listed here are in the library path. 
+	\item If the application complains about resources that are not found, check if all paths in the resources.cfg are reachable and readable.
+	\item In general: If you figure out any problems, check the Ogre.log file to figure out what went wrong.
+\end{itemize}
+ 
+\section{Step 2: Set up the x3dLoader library}
+The second step is to set up the x3dLoader, so we can specify a X3D file via command line and the X3DLoader will process our file. In this step we will (not yet) build up the Ogre scenegraph so the visual result will not differ from step 1.
+
+First we add the method 
+\begin{lstlisting}[language={c++}]
+void setX3DFile(const std::string &filename); 
+\end{lstlisting}
+to the TutorialApplication. This is the way to tell the application which file to load. So we alter the code in \verb|main.cpp|:
+\begin{lstlisting}[language={c++}]
+ // Check output string
+  if (fileExists(input_filename))
+  {
+	  TutorialApplication app;
+	  app.setX3DFile(input_filename.c_str());
+
+	  try {
+		  app.go();
+	  } catch( Exception& e ) {
+		  fprintf(stderr, "An exception has occurred: %s\n",
+			  e.getFullDescription().c_str());
+	  }
+
+	  return 0;
+  }
+  cerr << "Input file not found or not readable: ";
+  cerr << input_filename << endl;
+  return 1;
+\end{lstlisting}
+
+In the TutorialApplication we implement the method \verb|createScene| a little more meaningful than in step 1:
+\begin{lstlisting}[language={c++}]
+void TutorialApplication::createScene()
+{
+	// New instance of X3DLoader
+	X3D::X3DLoader loader;
+	// Create and set NodeHandler
+	OgreNodeHandler* handler = new OgreNodeHandler();
+	loader.setNodeHandler(handler);
+	// Start processing
+	loader.load(_filename);
+}
+\end{lstlisting}
+I created an instance of X3DLoader. This class is also the factory for the concrete loader. It will decide which Loader to use depending on the file extension of the filename.
+We need to create and set up a X3DNodeHandler for the loader. I named the one that will build up the Ogre structure OgreNodeHandler. It derives from X3DDefaultNodeHandler, so we don´t have to implement all the pure virtual functions. In this step I just override startUnhandled and endUnhandled to get some feedback from the x3dLoader library:
+
+\begin{lstlisting}[language={c++}]
+/// Called by all start callback functions
+int OgreNodeHandler::startUnhandled(const char* nodeName,
+                          const X3D::X3DAttributes &attr)
+{
+	cout << "Unhandled: <" << nodeName << ">" << endl;
+	return 1;
+}
+
+/// Called by all end callback functions
+int OgreNodeHandler::endUnhandled(const char* nodeName)
+{
+	cout << "Unhandled: </" << nodeName << ">" << endl;
+	return 1;
+}
+\end{lstlisting}
+
+Now you can start step2 like this:
+\begin{lstlisting}
+./step.exe 01_RedSphereBlueBox.x3d
+\end{lstlisting}
+Now you should see the events of our OgreNodeHandler printed in the command window. Tip: Switch off 'full screen' in the renderer configuration so you can see more of the command window. The 01\_RedSphereBlueBox.x3d file found in the data directory will also be the first file to implement in Step 3.
+
+\begin{figure}
+	\centering
+		\includegraphics[width=10cm]{step2}
+	\label{fig:step2}
+\end{figure}
+
+
+\paragraph{Troubleshooting}
+Now we added a additional dependency to the x3dLoader library. So if you want to start step2, make sure the system is going to find the dynamic libraries xercesc, x3dloader and openFI. Again, prevent to mix up debug and release versions.
+
+\section{Mappings}
+Now that we have the Ogre library and x3dLoader library running, we can start to implement the callbacks for all X3D nodes we want to support. But before we do this in Step 3, we need a rough idea on how to map the X3D structure to the Ogre structure. For this, we need a closer look on the Ogre structure:
+
+\subsection{SceneManager}
+The Ogre SceneManager has mainly three functions for our application:
+\begin{enumerate}
+	\item It is the factory for a bunch of nodes we need, i.e. to create lights, scene nodes, entities etc.
+	\item It gives access to the root scene node. This is a good start for out scene hierarchy
+	\item It is possible to query for already defined objects. We will need this to implement instancing via the X3D USE mechanism.
+\end{enumerate}
+
+\subsection{SceneNode}
+A SceneNode represents a node in the scene graph. It supports transformation and child nodes. So it´s a good choice to map to grouping nodes in the X3D scene graph.
+
+\subsection{Entities}
+Entities are logical objects that can be attached to the scene graph. An entity is always based on a Mesh. So it´s not possible to create an entity without a mesh.
+
+\subsection{Mesh and Submesh}
+A Mesh is mainly a composition of SubMesh objects. Each SubMesh object represents a part of the mesh with it´s own material.
+
+There are more than one possibilities to map the X3D objects to Ogre objects. The mapping we will use in this tutorial looks like this:
+
+\begin{center}
+	\begin{tabular}{|l|l|}
+	\hline 
+		Transform	&	SceneNode \\ \hline 
+		Shape			& Entity \\ \hline 
+		X3DGeometryNode and derived nodes & Mesh with one SubMesh \\ \hline 
+		Appearance & Material \\ \hline 
+		X3DLightNode and derived nodes & Light \\ \hline 
+	\end{tabular}
+\end{center}
+
+The idea is to create the mapped node when we get a 'startNode' callback, map the X3D attributes to the Ogre object's attribute and add it to the current parent Ogre object in the hierarchy. Unfortunately this is not always that easy. You will experience the difficulties in the next step.
+
+\section{Step 3: Implement mappings}
+In this step we will implement the nodes, necessary to view the file 01\_RedSphereBlueBox.x3d in our Ogre viewer. These are:
+
+\begin{itemize}
+	\item Transform
+	\item Appearance
+	\item Material
+	\item Shape
+	\item Sphere
+	\item Box
+	\item DirectionalLight
+\end{itemize}
+
+Before implementing the node, we create a method to pass the SceneManager to the NodeHandler, so we have it always reachable.
+
+\subsection{Transform}
+
+
+Implementing the X3D Transform node is pretty forward. We map it to the Ogre SceneNode object. The first existing SceneNode is the RootSceneNode, held by the SceneManager. This is pushed to the NodeStack when the document starts:
+
+\begin{lstlisting}[language={c++}]
+void OgreNodeHandler::startDocument()
+{
+	assert(_sceneManager);
+	_nodeStack.push(_sceneManager->getRootSceneNode());
+}
+\end{lstlisting}
+
+Every time a Transform node starts, we have to create a new SceneNode, set the transformation parameters and attach it to the last SceneNode in the scene graph hierarchy. This one is saved on a stack. The new object is pushed on the stack and is the parent form all child Transform nodes:
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::startTransform(const X3D::X3DAttributes &attr) {
+  // Get all the X3D tranformation data. Right now just translation and rotation
+  // TODO: scale, scaleOrientation, center
+  X3D::SFVec3f translation;
+  X3D::SFRotation rotation;
+
+  int index = attr.getAttributeIndex(X3D::translation);
+  if (index != -1)
+  {
+	  translation = attr.getSFVec3f(index);
+  }
+  index = attr.getAttributeIndex(X3D::rotation);
+  if (index != -1)
+  {
+	  rotation = attr.getSFRotation(index);
+  }
+  // Create a SceneNode using the parent SceneNode from the stack
+  SceneNode* node = _nodeStack.top()->createChildSceneNode(createUniqueName(attr, "transform"));
+  node->resetToInitialState();
+  node->translate(translation.x, translation.y, translation.z);
+  node->rotate(Vector3(rotation.x, rotation.y, rotation.z), Radian(rotation.angle));
+  _nodeStack.push(node);
+  return 1;
+}
+\end{lstlisting}
+
+When a Transform node ends, we remove the corresponding SceneNode from the stack:
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::endTransform() {
+  _nodeStack.pop();
+  return 1;
+}
+\end{lstlisting}
+
+Now that was easy, wasn't it? We have not yet implemented the USE-case of a Transform. We will do that later.
+
+\subsection{Appearance and Material}
+Appearance and Material is not as easy as Transform. There's no 1:1 mapping for those nodes. The X3D Appearance node just groups Material, Texture, Shader and some other nodes that influences the appearance of a Shape. A Ogre::Material is even more complex. It has a list of Render-Techniques and these Techniques again a list of Render-Passes. For default shading there is a default Technique at position 0 of the Technique-List and this Default-Technique has automatically one pass at position 0. An Ogre::Material also holds the textures. This is why an Ogre::Material maps better to Appearance that to Material. So what we do when a Appearance node starts:
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::startAppearance(const X3D::X3DAttributes &attr) {
+  _currentMaterial = MaterialManager::getSingleton().create(createUniqueName(attr, "material"), "X3DRENDERER");
+  _currentMaterial->load();
+  _currentMaterial->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+  return 1;
+}
+\end{lstlisting}
+Again, we first create the corresponding Ogre object and load it. For Materials, this is done using the MaterialManager singleton instance. We save the current Material to the member variable \verb|_currentMaterial| so we can use it in later events. Then we take the default pass and disable the lighting. Why? This is specified in the X3D specification: If there is not Material node defined, the shape is unlit. Since we don't know if there is a Material node to come, we better switch lighting off.
+
+Since we don't know the current mesh yet, we don´t do anything else for Appearance, but wait until the end of the Shape node.
+
+If a Material node starts we give more information about shading to the current Ogre::Material. So we set the standard shaing values like diffuseColor, ambientColor or shininess. And we mus not forget to enable the lighting again.
+
+\subsection{Shape}
+A X3D Shape maps to an Ogre Entity object. But we can't create an Entity at the start of a Shape, because we need to have a Mesh for it, that we are going to create if we find a Geometry node. So we can either cache the Mesh and create the Entity at the end of the the Shape or create an Entity as soon as we find a mesh. In this tutorial I decided to create the Entity in the Geometry node (s. \hyperref[Sphere]{Sphere and Box}).
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::startShape(const X3D::X3DAttributes &attr) {
+  if (attr.isUSE()) {
+	  _currentEntity = _sceneManager->getEntity(attr.getUSE())->clone(createUniqueName(attr, "shapeUSE"));
+  } else  {
+	  // We can not create a entity yet, because Ogre does not
+	  // allow an entity without a mesh. So we create the entity as
+	  // soon as we have a mesh
+	  _shapeName = attr.isDEF() ? attr.getDEF() : createUniqueName(attr, "shape");
+  }
+  return 1;
+}
+\end{lstlisting}
+
+In line 2 we check, if this Shape has a USE attribute. This means it´s just another instance of an Shape object that is already in the scene graph. Then we query the SceneManager for that object and copy the whole Entity. Ogre provides better methods for instancing Entities, this is just the easiest way \footnote{see InstancedGeometry and StaticGeometry}. 
+
+If it's not an instance, we just save the DEF attribute or create an other name for it.
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::endShape() {
+  if (!_currentEntity)
+  {
+		// No one created an entity, so there was no geometry
+		// node 
+		return 1;
+  }
+  _nodeStack.top()->attachObject(_currentEntity);
+  
+	if (_currentMaterial.isNull())// This happens if there is no Appearance node in as Shape
+	{
+		// So we set a defualt material as specified in the X3D spec.
+		_currentEntity->getSubEntity(0)->setMaterialName("_X3DNOMATERIAL");
+	}
+	else
+	{
+	  // If we have a material, we attach it to the first SubMesh in the node
+		_currentEntity->getSubEntity(0)->setMaterialName(_currentMaterial->getName());
+  }
+	
+	// Reset all states as we leave a Shape
+  _currentMaterial.setNull();
+  _currentEntity = NULL;
+  _shapeName.clear();
+  return 1;
+}
+\end{lstlisting}
+
+Now that we leave the Shape node, we check if we found an Appearance node and if we found some kind of geometry. If there was no geometry in the shape we can leave immediately.
+If we found geometry, we attach it to the scene graph.
+
+If there was no Appearance node, we load a defined Material, that is defined in a material script. This can be done by just setting the name of the material. The Ogre ResourceManager will search for it in all resources defined in resources.cfg. If we found an Appearance, we have a defined material and can attach it to the geometry.
+
+\subsection{Sphere and Box}
+\label{Sphere}
+The both nodes create Meshes and an Entity. Since Ogre does not provide primitive geometry objects, we have to create them ourself's. I demonstrate two possible ways to do this.
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::startBox(const X3D::X3DAttributes &attr) {
+  _currentEntity = _sceneManager->createEntity(createUniqueName(attr, "shape"), "cube.mesh");
+  return 1;
+}
+\end{lstlisting}
+
+First way is to load a Mesh form a resource and create an entity from it. I have chosen this way for the box. It is a very easy way. If we have more than one box, Ogre will automatically reuse the Mesh we loaded the first time. The dark side of this approach is, that we can't easily support the Box size attribute. We would have to resize the mesh and then we can't reuse it.
+
+The second approach is to manually create the mesh. For primitives this is based on some mathematical function. For a Sphere there was an example in the sample section of the Ogre SDK.  
+
+\begin{lstlisting}[language={c++}]
+int OgreNodeHandler::startSphere(const X3D::X3DAttributes &attr) {
+  int index = attr.getAttributeIndex(X3D::radius);
+  float radius = index == -1 ? 1.0 : attr.getSFFloat(index);
+
+  const string name = createUniqueName(attr, "sphere");
+  GeomUtils::createSphere(name , radius, 20, 20, true, false);
+
+  _currentMesh = MeshManager::getSingleton().getByName(name);
+  _currentEntity = _sceneManager->createEntity(_shapeName, name);
+  return 1;
+}
+\end{lstlisting}
+
+In line 2 we query the x3dLoader library for the radius attribute. If it is not set, we use the default value (1.0). In line 6 we use the provided method to create a Sphere mesh with the given radius an 20 segments horizontal and vertical. The method will create the mesh and register it at the MeshManager with the given name. So we can easily create an Entity from it.
+
+\subsection{DirectionalLight}
+Creating a light is very straight forward.
+
+\begin{lstlisting}[language={c++}]
+  Light* light = _sceneManager->createLight(createUniqueName(attr, "directionalLight"));
+  light->setType(Ogre::Light::LT_DIRECTIONAL);
+\end{lstlisting}
+
+We create a light using the SceneManager and define the type as directional.
+Then we set the attributes:
+
+\begin{lstlisting}[language={c++}]
+	index = attr.getAttributeIndex(X3D::color);
+	if (index != -1)
+	{
+		color = attr.getSFColor(index);
+	}
+	else
+		color.r = color.g = color.b = 1;
+	// ...
+\end{lstlisting}
+
+Finally we attach the light to the scene graph:	
+
+\begin{lstlisting}[language={c++}]
+	_nodeStack.top()->attachObject(light);  
+\end{lstlisting}
+
+\begin{figure}
+	\centering
+		\includegraphics[width=10cm]{step3}
+	\label{fig:step3}
+\end{figure}
+
+%\section{Step 4: Implementing IndexedFaceSet}
+
+\end{document}

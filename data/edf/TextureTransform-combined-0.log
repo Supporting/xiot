@@ -1,0 +1,46 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 1 attribute(s): translation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Box with 1 attribute(s): size 
+Event   11 - End node Box
+Event   12 - Start node Appearance with 0 attribute(s): 
+Event   13 - Start node ImageTexture with 1 attribute(s): url 
+Event   14 - End node ImageTexture
+Event   15 - Start node TextureTransform with 2 attribute(s): translation scale 
+Event   16 - End node TextureTransform
+Event   17 - End node Appearance
+Event   18 - End node Shape
+Event   19 - End node Transform
+Event   20 - Start node Transform with 1 attribute(s): translation 
+Event   21 - Start node Shape with 0 attribute(s): 
+Event   22 - Start node Box with 1 attribute(s): size 
+Event   23 - End node Box
+Event   24 - Start node Appearance with 0 attribute(s): 
+Event   25 - Start node ImageTexture with 2 attribute(s): url repeatS 
+Event   26 - End node ImageTexture
+Event   27 - Start node TextureTransform with 1 attribute(s): scale 
+Event   28 - End node TextureTransform
+Event   29 - End node Appearance
+Event   30 - End node Shape
+Event   31 - End node Transform
+Event   32 - Start node Transform with 1 attribute(s): translation 
+Event   33 - Start node Shape with 0 attribute(s): 
+Event   34 - Start node Box with 1 attribute(s): size 
+Event   35 - End node Box
+Event   36 - Start node Appearance with 0 attribute(s): 
+Event   37 - Start node ImageTexture with 2 attribute(s): url repeatT 
+Event   38 - End node ImageTexture
+Event   39 - Start node TextureTransform with 1 attribute(s): scale 
+Event   40 - End node TextureTransform
+Event   41 - End node Appearance
+Event   42 - End node Shape
+Event   43 - End node Transform
+Event   44 - End node Scene
+Event   45 - End node X3D
+Event   46 - End Document

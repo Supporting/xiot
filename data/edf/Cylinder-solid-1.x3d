@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="&#xA;Test Cylinder; should produce 3 rows of cylinders; top row (with lighting disables)  should have one with solid set to FALSE with bottom,top and side missing (nothing displayed), one with side missing and solid FALSE, and one with both bottom and top missing and soild FALSE, middle row; a tall, thin cylinder, a shorter cylinder, a very short cylinder. Bottom row: a normal cylinder, one with a very small height, no top/bottom,  and one with a very small radius. The last 2 cylinders should be displayed as a thin ring and rod, respectively.&#xA;&#x9;&#x9;"/></head><Scene><Transform translation="-2.5 2.5 0">
+		        <Shape>
+		        <Cylinder bottom="FALSE" side="FALSE" solid="TRUE"/>
+		        </Shape>
+		</Transform><Transform translation="0 2.5 0">
+		        <Shape>
+		        <Cylinder side="FALSE" solid="FALSE"/>
+		        </Shape>
+		</Transform><Transform translation="2.5 2.5 0" rotation="1 0 0 1.57">
+		        <Shape>
+		        <Cylinder bottom="FALSE" top="FALSE" solid="FALSE"/>
+		        </Shape>
+		</Transform><Transform translation="-2.5 0 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder radius="0.3"/>
+		        </Shape>
+		</Transform><Transform translation="0 0 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder height="1.2"/>
+		        </Shape>
+		</Transform><Transform translation="2.5 0 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder height="0.2"/>
+		        </Shape>
+		</Transform><Transform translation="-2.5 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder radius="1.0"/>
+		        </Shape>
+		</Transform><Transform translation="2.5 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder radius="0.001"/>
+		        </Shape>
+		</Transform><Transform translation="0 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cylinder height="0.1" top="false" bottom="false" solid="false"/>
+		        </Shape>
+		</Transform></Scene></X3D>

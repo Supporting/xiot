@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="ScalarInterpolator test. This test should display two shapes; a Box with size 3 3 3, and a Sphere. The Box should vary in transparency; when opaque, it should totally obscure the Sphere behind it; when fully transparent, only the Sphere should be seen. The transparency should vary linearly, and the cycle should repeat every 5 seconds."/></head><Scene><TimeSensor DEF="TIME0" loop="true" cycleInterval="5"/><ScalarInterpolator DEF="SCAL_INTERP" key="0 0.5 1" keyValue="0 1 0"/><Transform translation="0 0 -3">
+            <Shape>
+               <Appearance>
+                  <Material/>
+               </Appearance>
+               <Sphere/>
+            </Shape>
+         </Transform><Transform DEF="TRANS1">
+            <Shape>
+               <Appearance>
+                  <Material DEF="BOX1"/>
+               </Appearance>
+               <Box size="3 3 3"/>
+            </Shape>
+         </Transform><ROUTE fromField="fraction_changed" fromNode="TIME0" toField="set_fraction" toNode="SCAL_INTERP"/><ROUTE fromField="value_changed" fromNode="SCAL_INTERP" toField="set_transparency" toNode="BOX1"/></Scene></X3D>

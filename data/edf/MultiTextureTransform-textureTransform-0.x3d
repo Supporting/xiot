@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Basic MultiTextureTransform Test with Two Sets of Texture Transforms"/></head><Scene><Transform translation="0 0 0">
+			<Shape>
+				<IndexedFaceSet coordIndex="0 1 2 0 2 3">
+					<Coordinate point="-.5 -.5 0 .5 -.5 0 .5 .5 0 -.5 .5 0"/>
+					<MultiTextureCoordinate>
+						<TextureCoordinate point="0 0, 1 0, 1 1, 0 1"/>
+						<TextureCoordinate point="0 0, 1 0, 1 1, 0 1"/>
+					</MultiTextureCoordinate>
+				</IndexedFaceSet>
+				<Appearance>
+					<MultiTexture mode="&#34;REPLACE&#34;,&#34;MODULATE&#34;">
+						<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+						<ImageTexture url="&#34;images/trianglelight.jpg&#34;"/>
+					</MultiTexture>
+					<MultiTextureTransform>
+						<TextureTransform translation="0 0" scale="1 1"/>
+						<TextureTransform translation="2 2" scale="2 2"/>
+					</MultiTextureTransform>
+				</Appearance>
+			</Shape>
+		</Transform></Scene></X3D>

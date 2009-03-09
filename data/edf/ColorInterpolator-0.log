@@ -1,0 +1,108 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node TimeSensor with 3 attribute(s): DEF loop cycleInterval 
+Event    9 - End node TimeSensor
+Event   10 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   11 - End node ColorInterpolator
+Event   12 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   13 - End node ColorInterpolator
+Event   14 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   15 - End node ColorInterpolator
+Event   16 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   17 - End node ColorInterpolator
+Event   18 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   19 - End node ColorInterpolator
+Event   20 - Start node ColorInterpolator with 3 attribute(s): DEF key keyValue 
+Event   21 - End node ColorInterpolator
+Event   22 - Start node Transform with 1 attribute(s): translation 
+Event   23 - Start node Shape with 0 attribute(s): 
+Event   24 - Start node Appearance with 0 attribute(s): 
+Event   25 - Start node Material with 1 attribute(s): DEF 
+Event   26 - End node Material
+Event   27 - End node Appearance
+Event   28 - Start node Box with 0 attribute(s): 
+Event   29 - End node Box
+Event   30 - End node Shape
+Event   31 - End node Transform
+Event   32 - Start node Transform with 1 attribute(s): translation 
+Event   33 - Start node Shape with 0 attribute(s): 
+Event   34 - Start node Appearance with 0 attribute(s): 
+Event   35 - Start node Material with 1 attribute(s): DEF 
+Event   36 - End node Material
+Event   37 - End node Appearance
+Event   38 - Start node Box with 0 attribute(s): 
+Event   39 - End node Box
+Event   40 - End node Shape
+Event   41 - End node Transform
+Event   42 - Start node Transform with 1 attribute(s): translation 
+Event   43 - Start node Shape with 0 attribute(s): 
+Event   44 - Start node Appearance with 0 attribute(s): 
+Event   45 - Start node Material with 1 attribute(s): DEF 
+Event   46 - End node Material
+Event   47 - End node Appearance
+Event   48 - Start node Box with 0 attribute(s): 
+Event   49 - End node Box
+Event   50 - End node Shape
+Event   51 - End node Transform
+Event   52 - Start node Transform with 1 attribute(s): translation 
+Event   53 - Start node Shape with 0 attribute(s): 
+Event   54 - Start node Appearance with 0 attribute(s): 
+Event   55 - Start node Material with 1 attribute(s): DEF 
+Event   56 - End node Material
+Event   57 - End node Appearance
+Event   58 - Start node Box with 0 attribute(s): 
+Event   59 - End node Box
+Event   60 - End node Shape
+Event   61 - End node Transform
+Event   62 - Start node Transform with 1 attribute(s): translation 
+Event   63 - Start node Shape with 0 attribute(s): 
+Event   64 - Start node Appearance with 0 attribute(s): 
+Event   65 - Start node Material with 1 attribute(s): DEF 
+Event   66 - End node Material
+Event   67 - End node Appearance
+Event   68 - Start node Box with 0 attribute(s): 
+Event   69 - End node Box
+Event   70 - End node Shape
+Event   71 - End node Transform
+Event   72 - Start node Transform with 1 attribute(s): translation 
+Event   73 - Start node Shape with 0 attribute(s): 
+Event   74 - Start node Appearance with 0 attribute(s): 
+Event   75 - Start node Material with 1 attribute(s): DEF 
+Event   76 - End node Material
+Event   77 - End node Appearance
+Event   78 - Start node Box with 0 attribute(s): 
+Event   79 - End node Box
+Event   80 - End node Shape
+Event   81 - End node Transform
+Event   82 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   83 - End node ROUTE
+Event   84 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   85 - End node ROUTE
+Event   86 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   87 - End node ROUTE
+Event   88 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   89 - End node ROUTE
+Event   90 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   91 - End node ROUTE
+Event   92 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   93 - End node ROUTE
+Event   94 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   95 - End node ROUTE
+Event   96 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   97 - End node ROUTE
+Event   98 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   99 - End node ROUTE
+Event  100 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event  101 - End node ROUTE
+Event  102 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event  103 - End node ROUTE
+Event  104 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event  105 - End node ROUTE
+Event  106 - End node Scene
+Event  107 - End node X3D
+Event  108 - End Document

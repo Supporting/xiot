@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="This tests the generation of texture coordinates for primitive geomtry"/></head><Scene><Transform translation="-4 0 0">
+			<Shape>
+				<Box/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-1 0 0">
+			<Shape>
+				<Sphere/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 0 0">
+			<Shape>
+				<Cone/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="5 0 0">
+			<Shape>
+				<Cylinder/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform></Scene></X3D>

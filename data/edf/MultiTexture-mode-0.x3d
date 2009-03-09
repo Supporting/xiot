@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="This tests the various values of the MultiTexture node's mode field"/></head><Scene><NavigationInfo headlight="true"/><Transform translation="0 0 -2">
+			<Shape>
+				<Box size="9 9 .1"/>
+				<Appearance>
+					<Material diffuseColor="0 0 0" emissiveColor=".5 .5 .5"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="MODULATE">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="REPLACE">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="MODULATE2X">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="MODULATE4X">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="ADD">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="ADDSIGNED">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="ADDSIGNED2X">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="SUBTRACT">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="OFF">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 -3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="SELECTARG1">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 -3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="0 1 0"/>
+					<MultiTexture mode="SELECTARG2">
+						<ImageTexture url="&#34;images/256x256.jpg&#34;"/>
+					</MultiTexture>
+				</Appearance>
+			</Shape>
+		</Transform></Scene></X3D>

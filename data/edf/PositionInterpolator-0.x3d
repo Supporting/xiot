@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="PositionInterpolator test. This test should display a Box, size 3 3 3, that, every 2 seconds should go to the right, and down. For the first second, the box should be stationary in the centre of the screen, movement should only take place every other second. Note that when the box moves, it appears to rotate; It in fact does not; this is only a visual artifact."/></head><Scene><TimeSensor DEF="TIME0" loop="true" cycleInterval="2"/><PositionInterpolator DEF="POSITION_INTERP" key="0 0.5 0.75 1" keyValue="0 0 0  0 0 0  7 -3  -5  0 0 0"/><Transform DEF="TRANS1">
+            <Shape>
+               <Appearance>
+                  <Material DEF="BOX1"/>
+               </Appearance>
+               <Box size="3 3 3"/>
+            </Shape>
+         </Transform><ROUTE fromField="fraction_changed" fromNode="TIME0" toField="set_fraction" toNode="POSITION_INTERP"/><ROUTE fromField="value_changed" fromNode="POSITION_INTERP" toField="set_translation" toNode="TRANS1"/></Scene></X3D>
