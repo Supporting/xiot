@@ -36,6 +36,20 @@ set(X3DLOADER_SRC
 	X3DFIEncodingAlgorithms.cpp
 )
 
+SET(X3DEXPORTER_SRC
+	X3DWriterFI.cpp
+	X3DWriterXML.cpp
+	X3DZLibDataCompressor.cpp
+)
+
+SET(X3DEXPORTER_HEADER
+	X3DWriter.h
+	X3DWriterFI.h
+	X3DWriterFIHelper.h
+	X3DWriterXML.h
+	X3DZLibDataCompressor.h
+)
+
 set(OPENFI_SRC
 	FIDecoder.cpp
 	FIContentHandler.cpp
@@ -77,7 +91,7 @@ include_directories( ${XERCESC_INCLUDE_DIR})
 add_library(openFI SHARED ${OPENFI_SRC} ${OPENFI_HEADER})
 
 
-add_library(x3dLoader SHARED ${X3DLOADER_SRC} ${X3DLOADER_HEADER})
+add_library(x3dLoader SHARED ${X3DLOADER_SRC} ${X3DLOADER_HEADER} ${X3DEXPORTER_SRC} ${X3DEXPORTER_HEADER})
 target_link_libraries (x3dLoader ${XERCESC_LIBRARY}) 
 target_link_libraries (x3dLoader ${ZLIB_LIBRARIES}) 
 target_link_libraries (x3dLoader openFI) 
@@ -92,7 +106,7 @@ install(TARGETS x3dLoader openFI
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         )
-install(FILES ${X3DLOADER_HEADER} ${OPENFI_HEADER} DESTINATION include)
+install(FILES ${X3DLOADER_HEADER} ${X3DEXPORTER_HEADER} ${OPENFI_HEADER} DESTINATION include)
 
 if (WIN32)
 	install(FILES ${XERCESC_DLL} DESTINATION bin)

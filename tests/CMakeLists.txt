@@ -14,6 +14,10 @@ target_link_libraries(shapeCounter x3dLoader)
 add_executable (fitest fitest.cpp Argument_helper.cpp)
 target_link_libraries(fitest x3dLoader)
 
+#IOTest
+add_executable (ioTest IOTest.cpp Argument_helper.cpp)
+target_link_libraries(ioTest x3dLoader)
+
 
 #createEventLog
 add_executable (createEventLog createEventLog.cpp Argument_helper.cpp X3DLogNodeHandler.cpp X3DLogNodeHandler.h)
