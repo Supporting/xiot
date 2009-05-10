@@ -1745,7 +1745,7 @@ int X3DLogNodeHandler::startUnknown(const char* nodeName, const X3DAttributes &a
 }
 
 int X3DLogNodeHandler::endUnknown(int id, const char* nodeName) {
-  fprintf(fp, "Event %4i - End unknown node %s with %i attribute(s): %s\n", iCounter++, nodeName);
+  fprintf(fp, "Event %4i - End unknown node %s.\n", iCounter++, nodeName);
   return 1;
 }
 
