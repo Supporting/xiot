@@ -25,8 +25,8 @@ vtkX3DImporter::~vtkX3DImporter()
 
 int vtkX3DImporter::ImportBegin()
 {
-	X3D::X3DLoader loader;
-	X3D::X3DTypes::initMaps();
+	XIOT::X3DLoader loader;
+	XIOT::X3DTypes::initMaps();
 	vtkX3DNodeHandler handler(this->Renderer);
 	loader.setNodeHandler(&handler);
 	handler.setVerbose(this->Verbose == 1);
@@ -34,7 +34,7 @@ int vtkX3DImporter::ImportBegin()
 		if (!loader.load(this->FileName))
 			return 0;
 	} 
-	catch (X3D::X3DParseException& e)
+	catch (XIOT::X3DParseException& e)
 	{	
 	  vtkErrorMacro( << "Error while parsing file " << this->FileName << ":" << e.getMessage().c_str()
 					  << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")");

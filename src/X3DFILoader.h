@@ -9,7 +9,7 @@
 #include <string>
 #include <fstream>
 
-namespace X3D {
+namespace XIOT {
 
 /**  
  *  Loader for FI (binary) encoded X3D files. 

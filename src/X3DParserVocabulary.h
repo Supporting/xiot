@@ -8,7 +8,7 @@
 #include <fstream>
 #include <map>
 
-namespace X3D {
+namespace XIOT {
 
 
 /**

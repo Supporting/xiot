@@ -6,7 +6,7 @@ using namespace std;
 #define isWhiteSpace(c) ((c) == ' ' || (c) == '\t' || (c) == '\v' ||  (c) == '\n' || (c) == '\r' || (c) == '\f') 
 #define isWhiteSpaceOrComma(c) (isWhiteSpace((c)) || ((c) == ','))
 
-namespace X3D {
+namespace XIOT {
 
 	bool X3DDataTypeFactory::getSFBoolFromString(const std::string &s){
 		std::stringstream ss;

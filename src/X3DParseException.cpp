@@ -1,7 +1,7 @@
 #include "X3DParseException.h"
 
 
-namespace X3D {
+namespace XIOT {
 
 X3DParseException::X3DParseException(const std::string &message, int lineNumber, int columnNumber) : 
 _message(message), _lineNumber(lineNumber), _columnNumber(columnNumber)

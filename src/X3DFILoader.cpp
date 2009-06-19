@@ -12,7 +12,7 @@
 #include <cassert>
 #include <exception>
 
-namespace X3D {
+namespace XIOT {
 
 class X3DFIContentHandler : public FI::DefaultContentHandler
 {
@@ -58,7 +58,7 @@ void X3DFIContentHandler::startElement(const FI::ParserVocabulary* vocab, const 
 	X3DFIAttributes fiAttributes(&attributes, vocab);
 	int id = element._qualifiedName._nameSurrogateIndex - 1;
 	int state = _switch.doStartElement(id, fiAttributes);
-	if (state == X3D::SKIP_CHILDREN)
+	if (state == XIOT::SKIP_CHILDREN)
 		_skipCount = 1;
 }
 
@@ -96,7 +96,7 @@ bool X3DFILoader::load(std::string filename, bool fileValidation)
   parser.setStream(&fs);
   parser.setContentHandler(handler);
 
-  FI::ParserVocabulary* vocabulary = new X3D::X3DParserVocabulary();
+  FI::ParserVocabulary* vocabulary = new XIOT::X3DParserVocabulary();
   parser.addExternalVocabularies(vocabulary->getExternalVocabularyURI(), vocabulary);
 
   try {

@@ -8,7 +8,7 @@ namespace FI {
 	class ParserVocabulary;
 };
 
-namespace X3D {
+namespace XIOT {
 
 class FIAttributeImpl;
 

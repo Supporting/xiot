@@ -61,7 +61,7 @@ int start(string filename)
 
 	parser.setStream(&fs);
 	parser.setContentHandler(handler);
-	FI::ParserVocabulary* vocabulary = new X3D::X3DParserVocabulary();
+	FI::ParserVocabulary* vocabulary = new XIOT::X3DParserVocabulary();
 	// externalVocabularyURI = "urn:external-vocabulary"
 	parser.addExternalVocabularies(vocabulary->getExternalVocabularyURI(), 	vocabulary);
 	try {

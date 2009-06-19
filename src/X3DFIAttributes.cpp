@@ -12,7 +12,7 @@
 
 #define getValueAt(index) _impl->_attributes->at((index))._normalizedValue
 
-namespace X3D {
+namespace XIOT {
 
 class FIAttributeImpl
 {

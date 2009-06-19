@@ -33,54 +33,54 @@ class vtkUnsignedCharArray;
  * @see X3DDefaultNodeHandler
  * @ingroup vtkX3DImporter
  */
-class vtkX3DNodeHandler : public X3D::X3DDefaultNodeHandler
+class vtkX3DNodeHandler : public XIOT::X3DDefaultNodeHandler
 {
 public:
 	
 	vtkX3DNodeHandler(vtkRenderer* Renderer);
 	~vtkX3DNodeHandler();
 
-	int startUnhandled(const char* nodeName, const X3D::X3DAttributes &attr);
+	int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
 	
-	int startAppearance(const X3D::X3DAttributes &attr);
+	int startAppearance(const XIOT::X3DAttributes &attr);
 	
-	int startMaterial(const X3D::X3DAttributes &attr);
+	int startMaterial(const XIOT::X3DAttributes &attr);
 	
-	int startTransform(const X3D::X3DAttributes &attr);
+	int startTransform(const XIOT::X3DAttributes &attr);
 	int endTransform();
 
-	int startSphere(const X3D::X3DAttributes &attr);
+	int startSphere(const XIOT::X3DAttributes &attr);
 
-	int startShape(const X3D::X3DAttributes &attr);
+	int startShape(const XIOT::X3DAttributes &attr);
 	int endShape();
 
-	int startIndexedLineSet(const X3D::X3DAttributes &attr);
+	int startIndexedLineSet(const XIOT::X3DAttributes &attr);
 	int endIndexedLineSet();
 
 
-	int startIndexedFaceSet(const X3D::X3DAttributes &attr);
+	int startIndexedFaceSet(const XIOT::X3DAttributes &attr);
 	int endIndexedFaceSet();
 
-	int startCoordinate(const X3D::X3DAttributes &attr);
+	int startCoordinate(const XIOT::X3DAttributes &attr);
 	
-	int startNormal(const X3D::X3DAttributes &attr);
+	int startNormal(const XIOT::X3DAttributes &attr);
 	
-	int startColor(const X3D::X3DAttributes &attr);
+	int startColor(const XIOT::X3DAttributes &attr);
 	
-	int startTextureCoordinate(const X3D::X3DAttributes &attr);
+	int startTextureCoordinate(const XIOT::X3DAttributes &attr);
 	
-	int startPointSet(const X3D::X3DAttributes &attr);
+	int startPointSet(const XIOT::X3DAttributes &attr);
 	int endPointSet();
 
-	int startBox(const X3D::X3DAttributes &attr);
+	int startBox(const XIOT::X3DAttributes &attr);
 
-	int startCone(const X3D::X3DAttributes &attr);
+	int startCone(const XIOT::X3DAttributes &attr);
 
-	int startCylinder(const X3D::X3DAttributes &attr);
+	int startCylinder(const XIOT::X3DAttributes &attr);
 	
-	int startDirectionalLight(const X3D::X3DAttributes &attr);
+	int startDirectionalLight(const XIOT::X3DAttributes &attr);
 	
-	int startBackground(const X3D::X3DAttributes &attr);
+	int startBackground(const XIOT::X3DAttributes &attr);
 
 	void setVerbose(bool verbose);
 private:

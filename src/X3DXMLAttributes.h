@@ -3,7 +3,7 @@
 
 #include "X3DAttributes.h"
 
-namespace X3D {
+namespace XIOT {
 
 /**
  * @class AttributeImpl

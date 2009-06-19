@@ -4,7 +4,7 @@
 #include "X3DLoaderConfigure.h"
 #include <string> 
 
-namespace X3D {
+namespace XIOT {
 
 class X3DAttributes;
 

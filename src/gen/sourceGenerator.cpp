@@ -6,14 +6,14 @@
 #define _CRT_SECURE_NO_DEPRECATE // disable MSVS warning concerning unsafe "fopen"
 
 using namespace std;
-using namespace X3D;
+using namespace XIOT;
 
 void generateX3DSwitch()
 {
 	FILE* f = fopen("X3DSwitch.inc", "w");
 	fprintf(f, "int X3DSwitch::doStartElement(int id, const X3DAttributes& attr) const\n{\n\tassert(_handler);\n\n");
 	fprintf(f, "\tswitch(id)\n\t{\n");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		fprintf(f, "\tcase %s:\n", elementStr.c_str());
@@ -24,7 +24,7 @@ void generateX3DSwitch()
 
 	fprintf(f, "int X3DSwitch::doEndElement(int id, const char* nodeName) const\n{\n\n");
 	fprintf(f, "\tswitch(id)\n\t{\n");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		fprintf(f, "\tcase %s:\n", elementStr.c_str());
@@ -40,7 +40,7 @@ void generateNodeHandler()
 {
 	FILE* f = fopen("X3DNodeHandler.h.inc", "w");
 
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		fprintf(f, "  /// Callbacks for %s Nodes\n",elementStr.c_str()); 
@@ -55,7 +55,7 @@ void generateNodeHandler()
 void generateDefaultNodeHandler()
 {
 	FILE* f = fopen("X3DDefaultNodeHandler.h.inc", "w");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		
@@ -67,7 +67,7 @@ void generateDefaultNodeHandler()
 	fclose(f);
 
 	f = fopen("X3DDefaultNodeHandler.cpp.inc", "w");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		fprintf(f, "int X3DDefaultNodeHandler::start%s(const X3DAttributes &attr) {\n", elementStr.c_str());
@@ -91,7 +91,7 @@ void generateDefaultNodeHandler()
 void generateLogNodeHandler()
 {
 	FILE* f = fopen("X3DLogNodeHandler.h.inc", "w");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		
@@ -104,7 +104,7 @@ void generateLogNodeHandler()
 	fclose(f);
 
 	f = fopen("X3DLogNodeHandler.cpp.inc", "w");
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		fprintf(f, "int X3DLogNodeHandler::start%s(const X3DAttributes &attr) {\n", elementStr.c_str());
@@ -134,7 +134,7 @@ void generateMaps()
 	
 
 	// Generate elementFromIDMap
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		
@@ -144,7 +144,7 @@ void generateMaps()
 	fprintf(f, "\n\n");
 
 	// Generate elementFromStringMap
-	for (int i = 0; i < X3DELEMENT_COUNT; i++)
+	for (int i = 0; i < ID::X3DELEMENT_COUNT; i++)
 	{
 		std::string elementStr = X3DTypes::getElementByID(i);
 		
@@ -154,7 +154,7 @@ void generateMaps()
 	fprintf(f, "\n\n");
 
 	// Generate attributeFromIDMap
-	for (int i = 0; i < X3DATTRIBUTE_COUNT; i++)
+	for (int i = 0; i < ID::X3DATTRIBUTE_COUNT; i++)
 	{
 		std::string attributeStr = X3DTypes::getAttributeByID(i);
 		
@@ -164,7 +164,7 @@ void generateMaps()
 	fprintf(f, "\n\n");
 
 	// Generate attributeFromStringMap
-	for (int i = 0; i < X3DATTRIBUTE_COUNT; i++)
+	for (int i = 0; i < ID::X3DATTRIBUTE_COUNT; i++)
 	{
 		std::string attributeStr = X3DTypes::getAttributeByID(i);
 		

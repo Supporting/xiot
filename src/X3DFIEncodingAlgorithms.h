@@ -5,7 +5,7 @@
 #include "FIEncodingAlgorithms.h"
 #include <string>
 
-namespace X3D {
+namespace XIOT {
 
 /**
  * Encoding algorithm to encode/decode arrays of type int.

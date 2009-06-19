@@ -7,7 +7,7 @@
 
 //#define ENCODEASSTRING 1
 
-using namespace X3D;
+using namespace XIOT;
 using namespace std;
 
 /*======================================================================== */
@@ -188,7 +188,7 @@ X3DWriterFI::X3DWriterFI()
   this->IsLineFeedEncodingOn = true;
   this->Fastest = 0;
   this->type = X3DFI;
-  X3D::X3DTypes::initMaps();
+  X3DTypes::initMaps();
 }
 
 //----------------------------------------------------------------------------

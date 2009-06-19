@@ -36,8 +36,7 @@
  * All of the methods of the x3dLoader library  reside in the X3D namespace in order
  * to prevent name conflicts.
  */
-namespace X3D
-{
+namespace XIOT {
   /**
    * Return value for element callbacks that indicates
    * the parser should continue normally.
@@ -191,6 +190,7 @@ namespace X3D
   };
 
 
+  namespace ID {
   /* Elements */
   enum X3DElement
     {
@@ -719,6 +719,7 @@ namespace X3D
 	matrix = 345,
 	X3DATTRIBUTE_COUNT
     };
+	}; // namespace ID
 };
 
 #endif

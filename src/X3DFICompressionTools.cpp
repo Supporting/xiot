@@ -11,7 +11,7 @@
 #define MANTISSA_BITS_32 23
 #define SIGN_SHIFT_32    31
 #define PACKER_BUFFER_SIZE 1024
-namespace X3D {
+namespace XIOT {
 	namespace FITools {
 
 BitPacker::BitPacker() {

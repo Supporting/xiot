@@ -85,11 +85,11 @@
 	how the library works.
 	\section usage Usage
 	The idea of this library is that you have just to provide a single instance of
-	your custom X3D::X3DNodeHandler. Best way is to derive from X3D::X3DDefaultNodeHandler, so you have just to implement those callbacks you are interested in.
+	your custom XIOT::X3DNodeHandler. Best way is to derive from XIOT::X3DDefaultNodeHandler, so you have just to implement those callbacks you are interested in.
 	\subsection nodecallbacks Node Callbacks
 	The library generates callbacks for all existing nodes in the X3D spec. So if you want to process Shape nodes, you just override <code>startShape</code> or <code>endShape</code> depending on your aim. A simple Shape counter looks like this:
 	\code
-class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
+class MyShapeCounter : public XIOT::X3DDefaultNodeHandler {
 	
   public:
     MyShapeCounter() { };
@@ -103,10 +103,10 @@ class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
       std::cout << std::endl;
     }
 
-    virtual int startShape(const X3D::X3DAttributes &attr)
+    virtual int startShape(const XIOT::X3DAttributes &attr)
     {
       _count++;
-      return X3D::CONTINUE;
+      return XIOT::CONTINUE;
     }
 
   protected:
@@ -114,36 +114,36 @@ class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
 };
 \endcode
 
-In callback <code>startShape</code> we return X3D::CONTINUE so the parser will continue with standard processing. You could also return X3D::SKIP_CHILDREN since we do not expect further Shape nodes below a Shape node.
+In callback <code>startShape</code> we return XIOT::CONTINUE so the parser will continue with standard processing. You could also return XIOT::SKIP_CHILDREN since we do not expect further Shape nodes below a Shape node.
 	\subsection Accessing Fields
-	You get access to the X3D fields via the X3D::X3DAttributes parameter in the start
+	You get access to the X3D fields via the XIOT::X3DAttributes parameter in the start
 	callbacks. The common way is first to check if a certain attribute is available and
-	than to request it using the Getter methods of X3D::X3DAttributes.
+	than to request it using the Getter methods of XIOT::X3DAttributes.
 	\code
-int MyNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
+int MyNodeHandler::startMaterial(const XIOT::X3DAttributes &attr)
 {	
-	int index = attr.getAttributeIndex(X3D::diffuseColor);
+	int index = attr.getAttributeIndex(ID::diffuseColor);
 	if (index != -1)
 	{
-		X3D::SFColor diffuseColor = attr.getSFColor(index);
+		XIOT::SFColor diffuseColor = attr.getSFColor(index);
 		cout << "Diffuse Color is set as: " << diffuseColor.r << " " << diffuseColor.g << " " << diffuseColor.b << endl;
 	}
-	return X3D::CONTINUE;
+	return XIOT::CONTINUE;
 }
 	\endcode
 	Please be aware that the library does not know the corresponding datatype for a field. The internal parser will always try to convert the field (come what may). The user is in charge to request the right data type.  
 
 	\subsection errorhandling Error Handling
-	If an error occures during parsing, a X3D::X3DParseExeption will be thrown wich contains information about the error:
+	If an error occures during parsing, a XIOT::X3DParseExeption will be thrown wich contains information about the error:
 \code
 int start(const string &input_filename)
 {
-	X3D::X3DLoader loader;
+	XIOT::X3DLoader loader;
 	MyNodeHandler handler;
 	loader.setNodeHandler(&handler);
 	try {
 		loader.load(input_filename);
-	} catch (X3D::X3DParseException& e)
+	} catch (XIOT::X3DParseException& e)
 	{	
 	  cerr << "Error while parsing file " << input_filename << ":" << endl;
 	  cerr << e.getMessage() << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")" << endl;
@@ -180,7 +180,7 @@ int start(const string &input_filename)
 
    * @defgroup x3dloader X3D Loader
  */
-namespace X3D {
+namespace XIOT {
 
 // forward declarations
 class X3DNodeHandler;

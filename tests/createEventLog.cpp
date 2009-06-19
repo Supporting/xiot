@@ -14,8 +14,8 @@ std::string output_filename;
 
 int start(const std::string &input_filename, const std::string &output_filename)
 {
-	X3D::X3DLoader loader;
-	X3D::X3DTypes::initMaps();
+	XIOT::X3DLoader loader;
+	X3DTypes::initMaps();
 	X3DLogNodeHandler* handler = new X3DLogNodeHandler(input_filename);
 	loader.setNodeHandler(handler);
 	loader.load(input_filename);

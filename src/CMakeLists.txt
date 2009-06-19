@@ -91,17 +91,17 @@ include_directories( ${XERCESC_INCLUDE_DIR})
 add_library(openFI SHARED ${OPENFI_SRC} ${OPENFI_HEADER})
 
 
-add_library(x3dLoader SHARED ${X3DLOADER_SRC} ${X3DLOADER_HEADER} ${X3DEXPORTER_SRC} ${X3DEXPORTER_HEADER})
-target_link_libraries (x3dLoader ${XERCESC_LIBRARY}) 
-target_link_libraries (x3dLoader ${ZLIB_LIBRARIES}) 
-target_link_libraries (x3dLoader openFI) 
+add_library(xiot SHARED ${X3DLOADER_SRC} ${X3DLOADER_HEADER} ${X3DEXPORTER_SRC} ${X3DEXPORTER_HEADER})
+target_link_libraries (xiot ${XERCESC_LIBRARY}) 
+target_link_libraries (xiot ${ZLIB_LIBRARIES}) 
+target_link_libraries (xiot openFI) 
 
 include_directories(.)
 add_executable(sourceGenerator gen/sourceGenerator.cpp)
-target_link_libraries (sourceGenerator x3dLoader) 
+target_link_libraries (sourceGenerator xiot) 
 
 # install stuff
-install(TARGETS x3dLoader openFI
+install(TARGETS xiot openFI
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib

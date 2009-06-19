@@ -7,7 +7,7 @@
 
 using namespace std;
 
-namespace X3D {
+namespace XIOT {
 
 X3DSwitch::X3DSwitch()
 : _handler(NULL)
@@ -29,347 +29,347 @@ int X3DSwitch::doStartElement(int id, const X3DAttributes& attr) const
 
 	switch(id)
 	{
-	case Shape:
+	case ID::Shape:
 		return _handler->startShape(attr);
-	case Appearance:
+	case ID::Appearance:
 		return _handler->startAppearance(attr);
-	case Material:
+	case ID::Material:
 		return _handler->startMaterial(attr);
-	case IndexedFaceSet:
+	case ID::IndexedFaceSet:
 		return _handler->startIndexedFaceSet(attr);
-	case ProtoInstance:
+	case ID::ProtoInstance:
 		return _handler->startProtoInstance(attr);
-	case Transform:
+	case ID::Transform:
 		return _handler->startTransform(attr);
-	case ImageTexture:
+	case ID::ImageTexture:
 		return _handler->startImageTexture(attr);
-	case TextureTransform:
+	case ID::TextureTransform:
 		return _handler->startTextureTransform(attr);
-	case Coordinate:
+	case ID::Coordinate:
 		return _handler->startCoordinate(attr);
-	case Normal:
+	case ID::Normal:
 		return _handler->startNormal(attr);
-	case Color:
+	case ID::Color:
 		return _handler->startColor(attr);
-	case ColorRGBA:
+	case ID::ColorRGBA:
 		return _handler->startColorRGBA(attr);
-	case TextureCoordinate:
+	case ID::TextureCoordinate:
 		return _handler->startTextureCoordinate(attr);
-	case ROUTE:
+	case ID::ROUTE:
 		return _handler->startROUTE(attr);
-	case fieldValue:
+	case ID::fieldValue:
 		return _handler->startfieldValue(attr);
-	case Group:
+	case ID::Group:
 		return _handler->startGroup(attr);
-	case LOD:
+	case ID::LOD:
 		return _handler->startLOD(attr);
-	case Switch:
+	case ID::Switch:
 		return _handler->startSwitch(attr);
-	case Script:
+	case ID::Script:
 		return _handler->startScript(attr);
-	case IndexedTriangleFanSet:
+	case ID::IndexedTriangleFanSet:
 		return _handler->startIndexedTriangleFanSet(attr);
-	case IndexedTriangleSet:
+	case ID::IndexedTriangleSet:
 		return _handler->startIndexedTriangleSet(attr);
-	case IndexedTriangleStripSet:
+	case ID::IndexedTriangleStripSet:
 		return _handler->startIndexedTriangleStripSet(attr);
-	case MultiTexture:
+	case ID::MultiTexture:
 		return _handler->startMultiTexture(attr);
-	case MultiTextureCoordinate:
+	case ID::MultiTextureCoordinate:
 		return _handler->startMultiTextureCoordinate(attr);
-	case MultiTextureTransform:
+	case ID::MultiTextureTransform:
 		return _handler->startMultiTextureTransform(attr);
-	case IndexedLineSet:
+	case ID::IndexedLineSet:
 		return _handler->startIndexedLineSet(attr);
-	case PointSet:
+	case ID::PointSet:
 		return _handler->startPointSet(attr);
-	case StaticGroup:
+	case ID::StaticGroup:
 		return _handler->startStaticGroup(attr);
-	case Sphere:
+	case ID::Sphere:
 		return _handler->startSphere(attr);
-	case Box:
+	case ID::Box:
 		return _handler->startBox(attr);
-	case Cone:
+	case ID::Cone:
 		return _handler->startCone(attr);
-	case Anchor:
+	case ID::Anchor:
 		return _handler->startAnchor(attr);
-	case Arc2D:
+	case ID::Arc2D:
 		return _handler->startArc2D(attr);
-	case ArcClose2D:
+	case ID::ArcClose2D:
 		return _handler->startArcClose2D(attr);
-	case AudioClip:
+	case ID::AudioClip:
 		return _handler->startAudioClip(attr);
-	case Background:
+	case ID::Background:
 		return _handler->startBackground(attr);
-	case Billboard:
+	case ID::Billboard:
 		return _handler->startBillboard(attr);
-	case BooleanFilter:
+	case ID::BooleanFilter:
 		return _handler->startBooleanFilter(attr);
-	case BooleanSequencer:
+	case ID::BooleanSequencer:
 		return _handler->startBooleanSequencer(attr);
-	case BooleanToggle:
+	case ID::BooleanToggle:
 		return _handler->startBooleanToggle(attr);
-	case BooleanTrigger:
+	case ID::BooleanTrigger:
 		return _handler->startBooleanTrigger(attr);
-	case Circle2D:
+	case ID::Circle2D:
 		return _handler->startCircle2D(attr);
-	case Collision:
+	case ID::Collision:
 		return _handler->startCollision(attr);
-	case ColorInterpolator:
+	case ID::ColorInterpolator:
 		return _handler->startColorInterpolator(attr);
-	case Contour2D:
+	case ID::Contour2D:
 		return _handler->startContour2D(attr);
-	case ContourPolyline2D:
+	case ID::ContourPolyline2D:
 		return _handler->startContourPolyline2D(attr);
-	case CoordinateDouble:
+	case ID::CoordinateDouble:
 		return _handler->startCoordinateDouble(attr);
-	case CoordinateInterpolator:
+	case ID::CoordinateInterpolator:
 		return _handler->startCoordinateInterpolator(attr);
-	case CoordinateInterpolator2D:
+	case ID::CoordinateInterpolator2D:
 		return _handler->startCoordinateInterpolator2D(attr);
-	case Cylinder:
+	case ID::Cylinder:
 		return _handler->startCylinder(attr);
-	case CylinderSensor:
+	case ID::CylinderSensor:
 		return _handler->startCylinderSensor(attr);
-	case DirectionalLight:
+	case ID::DirectionalLight:
 		return _handler->startDirectionalLight(attr);
-	case Disk2D:
+	case ID::Disk2D:
 		return _handler->startDisk2D(attr);
-	case EXPORT:
+	case ID::EXPORT:
 		return _handler->startEXPORT(attr);
-	case ElevationGrid:
+	case ID::ElevationGrid:
 		return _handler->startElevationGrid(attr);
-	case EspduTransform:
+	case ID::EspduTransform:
 		return _handler->startEspduTransform(attr);
-	case ExternProtoDeclare:
+	case ID::ExternProtoDeclare:
 		return _handler->startExternProtoDeclare(attr);
-	case Extrusion:
+	case ID::Extrusion:
 		return _handler->startExtrusion(attr);
-	case FillProperties:
+	case ID::FillProperties:
 		return _handler->startFillProperties(attr);
-	case Fog:
+	case ID::Fog:
 		return _handler->startFog(attr);
-	case FontStyle:
+	case ID::FontStyle:
 		return _handler->startFontStyle(attr);
-	case GeoCoordinate:
+	case ID::GeoCoordinate:
 		return _handler->startGeoCoordinate(attr);
-	case GeoElevationGrid:
+	case ID::GeoElevationGrid:
 		return _handler->startGeoElevationGrid(attr);
-	case GeoLOD:
+	case ID::GeoLOD:
 		return _handler->startGeoLOD(attr);
-	case GeoLocation:
+	case ID::GeoLocation:
 		return _handler->startGeoLocation(attr);
-	case GeoMetadata:
+	case ID::GeoMetadata:
 		return _handler->startGeoMetadata(attr);
-	case GeoOrigin:
+	case ID::GeoOrigin:
 		return _handler->startGeoOrigin(attr);
-	case GeoPositionInterpolator:
+	case ID::GeoPositionInterpolator:
 		return _handler->startGeoPositionInterpolator(attr);
-	case GeoTouchSensor:
+	case ID::GeoTouchSensor:
 		return _handler->startGeoTouchSensor(attr);
-	case GeoViewpoint:
+	case ID::GeoViewpoint:
 		return _handler->startGeoViewpoint(attr);
-	case HAnimDisplacer:
+	case ID::HAnimDisplacer:
 		return _handler->startHAnimDisplacer(attr);
-	case HAnimHumanoid:
+	case ID::HAnimHumanoid:
 		return _handler->startHAnimHumanoid(attr);
-	case HAnimJoint:
+	case ID::HAnimJoint:
 		return _handler->startHAnimJoint(attr);
-	case HAnimSegment:
+	case ID::HAnimSegment:
 		return _handler->startHAnimSegment(attr);
-	case HAnimSite:
+	case ID::HAnimSite:
 		return _handler->startHAnimSite(attr);
-	case IMPORT:
+	case ID::IMPORT:
 		return _handler->startIMPORT(attr);
-	case IS:
+	case ID::IS:
 		return _handler->startIS(attr);
-	case Inline:
+	case ID::Inline:
 		return _handler->startInline(attr);
-	case IntegerSequencer:
+	case ID::IntegerSequencer:
 		return _handler->startIntegerSequencer(attr);
-	case IntegerTrigger:
+	case ID::IntegerTrigger:
 		return _handler->startIntegerTrigger(attr);
-	case KeySensor:
+	case ID::KeySensor:
 		return _handler->startKeySensor(attr);
-	case LineProperties:
+	case ID::LineProperties:
 		return _handler->startLineProperties(attr);
-	case LineSet:
+	case ID::LineSet:
 		return _handler->startLineSet(attr);
-	case LoadSensor:
+	case ID::LoadSensor:
 		return _handler->startLoadSensor(attr);
-	case MetadataDouble:
+	case ID::MetadataDouble:
 		return _handler->startMetadataDouble(attr);
-	case MetadataFloat:
+	case ID::MetadataFloat:
 		return _handler->startMetadataFloat(attr);
-	case MetadataInteger:
+	case ID::MetadataInteger:
 		return _handler->startMetadataInteger(attr);
-	case MetadataSet:
+	case ID::MetadataSet:
 		return _handler->startMetadataSet(attr);
-	case MetadataString:
+	case ID::MetadataString:
 		return _handler->startMetadataString(attr);
-	case MovieTexture:
+	case ID::MovieTexture:
 		return _handler->startMovieTexture(attr);
-	case NavigationInfo:
+	case ID::NavigationInfo:
 		return _handler->startNavigationInfo(attr);
-	case NormalInterpolator:
+	case ID::NormalInterpolator:
 		return _handler->startNormalInterpolator(attr);
-	case NurbsCurve:
+	case ID::NurbsCurve:
 		return _handler->startNurbsCurve(attr);
-	case NurbsCurve2D:
+	case ID::NurbsCurve2D:
 		return _handler->startNurbsCurve2D(attr);
-	case NurbsOrientationInterpolator:
+	case ID::NurbsOrientationInterpolator:
 		return _handler->startNurbsOrientationInterpolator(attr);
-	case NurbsPatchSurface:
+	case ID::NurbsPatchSurface:
 		return _handler->startNurbsPatchSurface(attr);
-	case NurbsPositionInterpolator:
+	case ID::NurbsPositionInterpolator:
 		return _handler->startNurbsPositionInterpolator(attr);
-	case NurbsSet:
+	case ID::NurbsSet:
 		return _handler->startNurbsSet(attr);
-	case NurbsSurfaceInterpolator:
+	case ID::NurbsSurfaceInterpolator:
 		return _handler->startNurbsSurfaceInterpolator(attr);
-	case NurbsSweptSurface:
+	case ID::NurbsSweptSurface:
 		return _handler->startNurbsSweptSurface(attr);
-	case NurbsSwungSurface:
+	case ID::NurbsSwungSurface:
 		return _handler->startNurbsSwungSurface(attr);
-	case NurbsTextureCoordinate:
+	case ID::NurbsTextureCoordinate:
 		return _handler->startNurbsTextureCoordinate(attr);
-	case NurbsTrimmedSurface:
+	case ID::NurbsTrimmedSurface:
 		return _handler->startNurbsTrimmedSurface(attr);
-	case OrientationInterpolator:
+	case ID::OrientationInterpolator:
 		return _handler->startOrientationInterpolator(attr);
-	case PixelTexture:
+	case ID::PixelTexture:
 		return _handler->startPixelTexture(attr);
-	case PlaneSensor:
+	case ID::PlaneSensor:
 		return _handler->startPlaneSensor(attr);
-	case PointLight:
+	case ID::PointLight:
 		return _handler->startPointLight(attr);
-	case Polyline2D:
+	case ID::Polyline2D:
 		return _handler->startPolyline2D(attr);
-	case Polypoint2D:
+	case ID::Polypoint2D:
 		return _handler->startPolypoint2D(attr);
-	case PositionInterpolator:
+	case ID::PositionInterpolator:
 		return _handler->startPositionInterpolator(attr);
-	case PositionInterpolator2D:
+	case ID::PositionInterpolator2D:
 		return _handler->startPositionInterpolator2D(attr);
-	case ProtoBody:
+	case ID::ProtoBody:
 		return _handler->startProtoBody(attr);
-	case ProtoDeclare:
+	case ID::ProtoDeclare:
 		return _handler->startProtoDeclare(attr);
-	case ProtoInterface:
+	case ID::ProtoInterface:
 		return _handler->startProtoInterface(attr);
-	case ProximitySensor:
+	case ID::ProximitySensor:
 		return _handler->startProximitySensor(attr);
-	case ReceiverPdu:
+	case ID::ReceiverPdu:
 		return _handler->startReceiverPdu(attr);
-	case Rectangle2D:
+	case ID::Rectangle2D:
 		return _handler->startRectangle2D(attr);
-	case ScalarInterpolator:
+	case ID::ScalarInterpolator:
 		return _handler->startScalarInterpolator(attr);
-	case Scene:
+	case ID::Scene:
 		return _handler->startScene(attr);
-	case SignalPdu:
+	case ID::SignalPdu:
 		return _handler->startSignalPdu(attr);
-	case Sound:
+	case ID::Sound:
 		return _handler->startSound(attr);
-	case SphereSensor:
+	case ID::SphereSensor:
 		return _handler->startSphereSensor(attr);
-	case SpotLight:
+	case ID::SpotLight:
 		return _handler->startSpotLight(attr);
-	case StringSensor:
+	case ID::StringSensor:
 		return _handler->startStringSensor(attr);
-	case Text:
+	case ID::Text:
 		return _handler->startText(attr);
-	case TextureBackground:
+	case ID::TextureBackground:
 		return _handler->startTextureBackground(attr);
-	case TextureCoordinateGenerator:
+	case ID::TextureCoordinateGenerator:
 		return _handler->startTextureCoordinateGenerator(attr);
-	case TimeSensor:
+	case ID::TimeSensor:
 		return _handler->startTimeSensor(attr);
-	case TimeTrigger:
+	case ID::TimeTrigger:
 		return _handler->startTimeTrigger(attr);
-	case TouchSensor:
+	case ID::TouchSensor:
 		return _handler->startTouchSensor(attr);
-	case TransmitterPdu:
+	case ID::TransmitterPdu:
 		return _handler->startTransmitterPdu(attr);
-	case TriangleFanSet:
+	case ID::TriangleFanSet:
 		return _handler->startTriangleFanSet(attr);
-	case TriangleSet:
+	case ID::TriangleSet:
 		return _handler->startTriangleSet(attr);
-	case TriangleSet2D:
+	case ID::TriangleSet2D:
 		return _handler->startTriangleSet2D(attr);
-	case TriangleStripSet:
+	case ID::TriangleStripSet:
 		return _handler->startTriangleStripSet(attr);
-	case Viewpoint:
+	case ID::Viewpoint:
 		return _handler->startViewpoint(attr);
-	case VisibilitySensor:
+	case ID::VisibilitySensor:
 		return _handler->startVisibilitySensor(attr);
-	case WorldInfo:
+	case ID::WorldInfo:
 		return _handler->startWorldInfo(attr);
-	case X3D:
+	case ID::X3D:
 		return _handler->startX3D(attr);
-	case component:
+	case ID::component:
 		return _handler->startcomponent(attr);
-	case connect:
+	case ID::connect:
 		return _handler->startconnect(attr);
-	case field:
+	case ID::field:
 		return _handler->startfield(attr);
-	case head:
+	case ID::head:
 		return _handler->starthead(attr);
-	case humanoidBodyType:
+	case ID::humanoidBodyType:
 		return _handler->starthumanoidBodyType(attr);
-	case meta:
+	case ID::meta:
 		return _handler->startmeta(attr);
-	case CADAssembly:
+	case ID::CADAssembly:
 		return _handler->startCADAssembly(attr);
-	case CADFace:
+	case ID::CADFace:
 		return _handler->startCADFace(attr);
-	case CADLayer:
+	case ID::CADLayer:
 		return _handler->startCADLayer(attr);
-	case CADPart:
+	case ID::CADPart:
 		return _handler->startCADPart(attr);
-	case ComposedCubeMapTexture:
+	case ID::ComposedCubeMapTexture:
 		return _handler->startComposedCubeMapTexture(attr);
-	case ComposedShader:
+	case ID::ComposedShader:
 		return _handler->startComposedShader(attr);
-	case ComposedTexture3D:
+	case ID::ComposedTexture3D:
 		return _handler->startComposedTexture3D(attr);
-	case FloatVertexAttribute:
+	case ID::FloatVertexAttribute:
 		return _handler->startFloatVertexAttribute(attr);
-	case FogCoordinate:
+	case ID::FogCoordinate:
 		return _handler->startFogCoordinate(attr);
-	case GeneratedCubeMapTexture:
+	case ID::GeneratedCubeMapTexture:
 		return _handler->startGeneratedCubeMapTexture(attr);
-	case ImageCubeMapTexture:
+	case ID::ImageCubeMapTexture:
 		return _handler->startImageCubeMapTexture(attr);
-	case ImageTexture3D:
+	case ID::ImageTexture3D:
 		return _handler->startImageTexture3D(attr);
-	case IndexedQuadSet:
+	case ID::IndexedQuadSet:
 		return _handler->startIndexedQuadSet(attr);
-	case LocalFog:
+	case ID::LocalFog:
 		return _handler->startLocalFog(attr);
-	case Matrix3VertexAttribute:
+	case ID::Matrix3VertexAttribute:
 		return _handler->startMatrix3VertexAttribute(attr);
-	case Matrix4VertexAttribute:
+	case ID::Matrix4VertexAttribute:
 		return _handler->startMatrix4VertexAttribute(attr);
-	case PackagedShader:
+	case ID::PackagedShader:
 		return _handler->startPackagedShader(attr);
-	case PixelTexture3D:
+	case ID::PixelTexture3D:
 		return _handler->startPixelTexture3D(attr);
-	case ProgramShader:
+	case ID::ProgramShader:
 		return _handler->startProgramShader(attr);
-	case QuadSet:
+	case ID::QuadSet:
 		return _handler->startQuadSet(attr);
-	case ShaderPart:
+	case ID::ShaderPart:
 		return _handler->startShaderPart(attr);
-	case ShaderProgram:
+	case ID::ShaderProgram:
 		return _handler->startShaderProgram(attr);
-	case TextureCoordinate3D:
+	case ID::TextureCoordinate3D:
 		return _handler->startTextureCoordinate3D(attr);
-	case TextureCoordinate4D:
+	case ID::TextureCoordinate4D:
 		return _handler->startTextureCoordinate4D(attr);
-	case TextureTransform3D:
+	case ID::TextureTransform3D:
 		return _handler->startTextureTransform3D(attr);
-	case TextureTransformMatrix3D:
+	case ID::TextureTransformMatrix3D:
 		return _handler->startTextureTransformMatrix3D(attr);
 	case -1:
 	default:
@@ -382,347 +382,347 @@ int X3DSwitch::doEndElement(int id, const char* nodeName) const
 
 	switch(id)
 	{
-	case Shape:
+	case ID::Shape:
 		return _handler->endShape();
-	case Appearance:
+	case ID::Appearance:
 		return _handler->endAppearance();
-	case Material:
+	case ID::Material:
 		return _handler->endMaterial();
-	case IndexedFaceSet:
+	case ID::IndexedFaceSet:
 		return _handler->endIndexedFaceSet();
-	case ProtoInstance:
+	case ID::ProtoInstance:
 		return _handler->endProtoInstance();
-	case Transform:
+	case ID::Transform:
 		return _handler->endTransform();
-	case ImageTexture:
+	case ID::ImageTexture:
 		return _handler->endImageTexture();
-	case TextureTransform:
+	case ID::TextureTransform:
 		return _handler->endTextureTransform();
-	case Coordinate:
+	case ID::Coordinate:
 		return _handler->endCoordinate();
-	case Normal:
+	case ID::Normal:
 		return _handler->endNormal();
-	case Color:
+	case ID::Color:
 		return _handler->endColor();
-	case ColorRGBA:
+	case ID::ColorRGBA:
 		return _handler->endColorRGBA();
-	case TextureCoordinate:
+	case ID::TextureCoordinate:
 		return _handler->endTextureCoordinate();
-	case ROUTE:
+	case ID::ROUTE:
 		return _handler->endROUTE();
-	case fieldValue:
+	case ID::fieldValue:
 		return _handler->endfieldValue();
-	case Group:
+	case ID::Group:
 		return _handler->endGroup();
-	case LOD:
+	case ID::LOD:
 		return _handler->endLOD();
-	case Switch:
+	case ID::Switch:
 		return _handler->endSwitch();
-	case Script:
+	case ID::Script:
 		return _handler->endScript();
-	case IndexedTriangleFanSet:
+	case ID::IndexedTriangleFanSet:
 		return _handler->endIndexedTriangleFanSet();
-	case IndexedTriangleSet:
+	case ID::IndexedTriangleSet:
 		return _handler->endIndexedTriangleSet();
-	case IndexedTriangleStripSet:
+	case ID::IndexedTriangleStripSet:
 		return _handler->endIndexedTriangleStripSet();
-	case MultiTexture:
+	case ID::MultiTexture:
 		return _handler->endMultiTexture();
-	case MultiTextureCoordinate:
+	case ID::MultiTextureCoordinate:
 		return _handler->endMultiTextureCoordinate();
-	case MultiTextureTransform:
+	case ID::MultiTextureTransform:
 		return _handler->endMultiTextureTransform();
-	case IndexedLineSet:
+	case ID::IndexedLineSet:
 		return _handler->endIndexedLineSet();
-	case PointSet:
+	case ID::PointSet:
 		return _handler->endPointSet();
-	case StaticGroup:
+	case ID::StaticGroup:
 		return _handler->endStaticGroup();
-	case Sphere:
+	case ID::Sphere:
 		return _handler->endSphere();
-	case Box:
+	case ID::Box:
 		return _handler->endBox();
-	case Cone:
+	case ID::Cone:
 		return _handler->endCone();
-	case Anchor:
+	case ID::Anchor:
 		return _handler->endAnchor();
-	case Arc2D:
+	case ID::Arc2D:
 		return _handler->endArc2D();
-	case ArcClose2D:
+	case ID::ArcClose2D:
 		return _handler->endArcClose2D();
-	case AudioClip:
+	case ID::AudioClip:
 		return _handler->endAudioClip();
-	case Background:
+	case ID::Background:
 		return _handler->endBackground();
-	case Billboard:
+	case ID::Billboard:
 		return _handler->endBillboard();
-	case BooleanFilter:
+	case ID::BooleanFilter:
 		return _handler->endBooleanFilter();
-	case BooleanSequencer:
+	case ID::BooleanSequencer:
 		return _handler->endBooleanSequencer();
-	case BooleanToggle:
+	case ID::BooleanToggle:
 		return _handler->endBooleanToggle();
-	case BooleanTrigger:
+	case ID::BooleanTrigger:
 		return _handler->endBooleanTrigger();
-	case Circle2D:
+	case ID::Circle2D:
 		return _handler->endCircle2D();
-	case Collision:
+	case ID::Collision:
 		return _handler->endCollision();
-	case ColorInterpolator:
+	case ID::ColorInterpolator:
 		return _handler->endColorInterpolator();
-	case Contour2D:
+	case ID::Contour2D:
 		return _handler->endContour2D();
-	case ContourPolyline2D:
+	case ID::ContourPolyline2D:
 		return _handler->endContourPolyline2D();
-	case CoordinateDouble:
+	case ID::CoordinateDouble:
 		return _handler->endCoordinateDouble();
-	case CoordinateInterpolator:
+	case ID::CoordinateInterpolator:
 		return _handler->endCoordinateInterpolator();
-	case CoordinateInterpolator2D:
+	case ID::CoordinateInterpolator2D:
 		return _handler->endCoordinateInterpolator2D();
-	case Cylinder:
+	case ID::Cylinder:
 		return _handler->endCylinder();
-	case CylinderSensor:
+	case ID::CylinderSensor:
 		return _handler->endCylinderSensor();
-	case DirectionalLight:
+	case ID::DirectionalLight:
 		return _handler->endDirectionalLight();
-	case Disk2D:
+	case ID::Disk2D:
 		return _handler->endDisk2D();
-	case EXPORT:
+	case ID::EXPORT:
 		return _handler->endEXPORT();
-	case ElevationGrid:
+	case ID::ElevationGrid:
 		return _handler->endElevationGrid();
-	case EspduTransform:
+	case ID::EspduTransform:
 		return _handler->endEspduTransform();
-	case ExternProtoDeclare:
+	case ID::ExternProtoDeclare:
 		return _handler->endExternProtoDeclare();
-	case Extrusion:
+	case ID::Extrusion:
 		return _handler->endExtrusion();
-	case FillProperties:
+	case ID::FillProperties:
 		return _handler->endFillProperties();
-	case Fog:
+	case ID::Fog:
 		return _handler->endFog();
-	case FontStyle:
+	case ID::FontStyle:
 		return _handler->endFontStyle();
-	case GeoCoordinate:
+	case ID::GeoCoordinate:
 		return _handler->endGeoCoordinate();
-	case GeoElevationGrid:
+	case ID::GeoElevationGrid:
 		return _handler->endGeoElevationGrid();
-	case GeoLOD:
+	case ID::GeoLOD:
 		return _handler->endGeoLOD();
-	case GeoLocation:
+	case ID::GeoLocation:
 		return _handler->endGeoLocation();
-	case GeoMetadata:
+	case ID::GeoMetadata:
 		return _handler->endGeoMetadata();
-	case GeoOrigin:
+	case ID::GeoOrigin:
 		return _handler->endGeoOrigin();
-	case GeoPositionInterpolator:
+	case ID::GeoPositionInterpolator:
 		return _handler->endGeoPositionInterpolator();
-	case GeoTouchSensor:
+	case ID::GeoTouchSensor:
 		return _handler->endGeoTouchSensor();
-	case GeoViewpoint:
+	case ID::GeoViewpoint:
 		return _handler->endGeoViewpoint();
-	case HAnimDisplacer:
+	case ID::HAnimDisplacer:
 		return _handler->endHAnimDisplacer();
-	case HAnimHumanoid:
+	case ID::HAnimHumanoid:
 		return _handler->endHAnimHumanoid();
-	case HAnimJoint:
+	case ID::HAnimJoint:
 		return _handler->endHAnimJoint();
-	case HAnimSegment:
+	case ID::HAnimSegment:
 		return _handler->endHAnimSegment();
-	case HAnimSite:
+	case ID::HAnimSite:
 		return _handler->endHAnimSite();
-	case IMPORT:
+	case ID::IMPORT:
 		return _handler->endIMPORT();
-	case IS:
+	case ID::IS:
 		return _handler->endIS();
-	case Inline:
+	case ID::Inline:
 		return _handler->endInline();
-	case IntegerSequencer:
+	case ID::IntegerSequencer:
 		return _handler->endIntegerSequencer();
-	case IntegerTrigger:
+	case ID::IntegerTrigger:
 		return _handler->endIntegerTrigger();
-	case KeySensor:
+	case ID::KeySensor:
 		return _handler->endKeySensor();
-	case LineProperties:
+	case ID::LineProperties:
 		return _handler->endLineProperties();
-	case LineSet:
+	case ID::LineSet:
 		return _handler->endLineSet();
-	case LoadSensor:
+	case ID::LoadSensor:
 		return _handler->endLoadSensor();
-	case MetadataDouble:
+	case ID::MetadataDouble:
 		return _handler->endMetadataDouble();
-	case MetadataFloat:
+	case ID::MetadataFloat:
 		return _handler->endMetadataFloat();
-	case MetadataInteger:
+	case ID::MetadataInteger:
 		return _handler->endMetadataInteger();
-	case MetadataSet:
+	case ID::MetadataSet:
 		return _handler->endMetadataSet();
-	case MetadataString:
+	case ID::MetadataString:
 		return _handler->endMetadataString();
-	case MovieTexture:
+	case ID::MovieTexture:
 		return _handler->endMovieTexture();
-	case NavigationInfo:
+	case ID::NavigationInfo:
 		return _handler->endNavigationInfo();
-	case NormalInterpolator:
+	case ID::NormalInterpolator:
 		return _handler->endNormalInterpolator();
-	case NurbsCurve:
+	case ID::NurbsCurve:
 		return _handler->endNurbsCurve();
-	case NurbsCurve2D:
+	case ID::NurbsCurve2D:
 		return _handler->endNurbsCurve2D();
-	case NurbsOrientationInterpolator:
+	case ID::NurbsOrientationInterpolator:
 		return _handler->endNurbsOrientationInterpolator();
-	case NurbsPatchSurface:
+	case ID::NurbsPatchSurface:
 		return _handler->endNurbsPatchSurface();
-	case NurbsPositionInterpolator:
+	case ID::NurbsPositionInterpolator:
 		return _handler->endNurbsPositionInterpolator();
-	case NurbsSet:
+	case ID::NurbsSet:
 		return _handler->endNurbsSet();
-	case NurbsSurfaceInterpolator:
+	case ID::NurbsSurfaceInterpolator:
 		return _handler->endNurbsSurfaceInterpolator();
-	case NurbsSweptSurface:
+	case ID::NurbsSweptSurface:
 		return _handler->endNurbsSweptSurface();
-	case NurbsSwungSurface:
+	case ID::NurbsSwungSurface:
 		return _handler->endNurbsSwungSurface();
-	case NurbsTextureCoordinate:
+	case ID::NurbsTextureCoordinate:
 		return _handler->endNurbsTextureCoordinate();
-	case NurbsTrimmedSurface:
+	case ID::NurbsTrimmedSurface:
 		return _handler->endNurbsTrimmedSurface();
-	case OrientationInterpolator:
+	case ID::OrientationInterpolator:
 		return _handler->endOrientationInterpolator();
-	case PixelTexture:
+	case ID::PixelTexture:
 		return _handler->endPixelTexture();
-	case PlaneSensor:
+	case ID::PlaneSensor:
 		return _handler->endPlaneSensor();
-	case PointLight:
+	case ID::PointLight:
 		return _handler->endPointLight();
-	case Polyline2D:
+	case ID::Polyline2D:
 		return _handler->endPolyline2D();
-	case Polypoint2D:
+	case ID::Polypoint2D:
 		return _handler->endPolypoint2D();
-	case PositionInterpolator:
+	case ID::PositionInterpolator:
 		return _handler->endPositionInterpolator();
-	case PositionInterpolator2D:
+	case ID::PositionInterpolator2D:
 		return _handler->endPositionInterpolator2D();
-	case ProtoBody:
+	case ID::ProtoBody:
 		return _handler->endProtoBody();
-	case ProtoDeclare:
+	case ID::ProtoDeclare:
 		return _handler->endProtoDeclare();
-	case ProtoInterface:
+	case ID::ProtoInterface:
 		return _handler->endProtoInterface();
-	case ProximitySensor:
+	case ID::ProximitySensor:
 		return _handler->endProximitySensor();
-	case ReceiverPdu:
+	case ID::ReceiverPdu:
 		return _handler->endReceiverPdu();
-	case Rectangle2D:
+	case ID::Rectangle2D:
 		return _handler->endRectangle2D();
-	case ScalarInterpolator:
+	case ID::ScalarInterpolator:
 		return _handler->endScalarInterpolator();
-	case Scene:
+	case ID::Scene:
 		return _handler->endScene();
-	case SignalPdu:
+	case ID::SignalPdu:
 		return _handler->endSignalPdu();
-	case Sound:
+	case ID::Sound:
 		return _handler->endSound();
-	case SphereSensor:
+	case ID::SphereSensor:
 		return _handler->endSphereSensor();
-	case SpotLight:
+	case ID::SpotLight:
 		return _handler->endSpotLight();
-	case StringSensor:
+	case ID::StringSensor:
 		return _handler->endStringSensor();
-	case Text:
+	case ID::Text:
 		return _handler->endText();
-	case TextureBackground:
+	case ID::TextureBackground:
 		return _handler->endTextureBackground();
-	case TextureCoordinateGenerator:
+	case ID::TextureCoordinateGenerator:
 		return _handler->endTextureCoordinateGenerator();
-	case TimeSensor:
+	case ID::TimeSensor:
 		return _handler->endTimeSensor();
-	case TimeTrigger:
+	case ID::TimeTrigger:
 		return _handler->endTimeTrigger();
-	case TouchSensor:
+	case ID::TouchSensor:
 		return _handler->endTouchSensor();
-	case TransmitterPdu:
+	case ID::TransmitterPdu:
 		return _handler->endTransmitterPdu();
-	case TriangleFanSet:
+	case ID::TriangleFanSet:
 		return _handler->endTriangleFanSet();
-	case TriangleSet:
+	case ID::TriangleSet:
 		return _handler->endTriangleSet();
-	case TriangleSet2D:
+	case ID::TriangleSet2D:
 		return _handler->endTriangleSet2D();
-	case TriangleStripSet:
+	case ID::TriangleStripSet:
 		return _handler->endTriangleStripSet();
-	case Viewpoint:
+	case ID::Viewpoint:
 		return _handler->endViewpoint();
-	case VisibilitySensor:
+	case ID::VisibilitySensor:
 		return _handler->endVisibilitySensor();
-	case WorldInfo:
+	case ID::WorldInfo:
 		return _handler->endWorldInfo();
-	case X3D:
+	case ID::X3D:
 		return _handler->endX3D();
-	case component:
+	case ID::component:
 		return _handler->endcomponent();
-	case connect:
+	case ID::connect:
 		return _handler->endconnect();
-	case field:
+	case ID::field:
 		return _handler->endfield();
-	case head:
+	case ID::head:
 		return _handler->endhead();
-	case humanoidBodyType:
+	case ID::humanoidBodyType:
 		return _handler->endhumanoidBodyType();
-	case meta:
+	case ID::meta:
 		return _handler->endmeta();
-	case CADAssembly:
+	case ID::CADAssembly:
 		return _handler->endCADAssembly();
-	case CADFace:
+	case ID::CADFace:
 		return _handler->endCADFace();
-	case CADLayer:
+	case ID::CADLayer:
 		return _handler->endCADLayer();
-	case CADPart:
+	case ID::CADPart:
 		return _handler->endCADPart();
-	case ComposedCubeMapTexture:
+	case ID::ComposedCubeMapTexture:
 		return _handler->endComposedCubeMapTexture();
-	case ComposedShader:
+	case ID::ComposedShader:
 		return _handler->endComposedShader();
-	case ComposedTexture3D:
+	case ID::ComposedTexture3D:
 		return _handler->endComposedTexture3D();
-	case FloatVertexAttribute:
+	case ID::FloatVertexAttribute:
 		return _handler->endFloatVertexAttribute();
-	case FogCoordinate:
+	case ID::FogCoordinate:
 		return _handler->endFogCoordinate();
-	case GeneratedCubeMapTexture:
+	case ID::GeneratedCubeMapTexture:
 		return _handler->endGeneratedCubeMapTexture();
-	case ImageCubeMapTexture:
+	case ID::ImageCubeMapTexture:
 		return _handler->endImageCubeMapTexture();
-	case ImageTexture3D:
+	case ID::ImageTexture3D:
 		return _handler->endImageTexture3D();
-	case IndexedQuadSet:
+	case ID::IndexedQuadSet:
 		return _handler->endIndexedQuadSet();
-	case LocalFog:
+	case ID::LocalFog:
 		return _handler->endLocalFog();
-	case Matrix3VertexAttribute:
+	case ID::Matrix3VertexAttribute:
 		return _handler->endMatrix3VertexAttribute();
-	case Matrix4VertexAttribute:
+	case ID::Matrix4VertexAttribute:
 		return _handler->endMatrix4VertexAttribute();
-	case PackagedShader:
+	case ID::PackagedShader:
 		return _handler->endPackagedShader();
-	case PixelTexture3D:
+	case ID::PixelTexture3D:
 		return _handler->endPixelTexture3D();
-	case ProgramShader:
+	case ID::ProgramShader:
 		return _handler->endProgramShader();
-	case QuadSet:
+	case ID::QuadSet:
 		return _handler->endQuadSet();
-	case ShaderPart:
+	case ID::ShaderPart:
 		return _handler->endShaderPart();
-	case ShaderProgram:
+	case ID::ShaderProgram:
 		return _handler->endShaderProgram();
-	case TextureCoordinate3D:
+	case ID::TextureCoordinate3D:
 		return _handler->endTextureCoordinate3D();
-	case TextureCoordinate4D:
+	case ID::TextureCoordinate4D:
 		return _handler->endTextureCoordinate4D();
-	case TextureTransform3D:
+	case ID::TextureTransform3D:
 		return _handler->endTextureTransform3D();
-	case TextureTransformMatrix3D:
+	case ID::TextureTransformMatrix3D:
 		return _handler->endTextureTransformMatrix3D();
 	case -1:
 	default:

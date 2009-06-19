@@ -16,7 +16,7 @@
 using namespace std;
 XERCES_CPP_NAMESPACE_USE
 
-namespace X3D {
+namespace XIOT {
 
 class X3DXMLContentHandler;
 
@@ -70,10 +70,10 @@ void X3DXMLContentHandler::startElement(const XMLCh* const, const XMLCh* const, 
 		return;
 	}
 	char* nodeName = XMLString::transcode(qname);
-	int id = X3D::X3DTypes::getElementID(nodeName);
+	int id = X3DTypes::getElementID(nodeName);
 	X3DXMLAttributes xmlAttributes(&attrs);
 	int state = _switch.doStartElement(id, xmlAttributes);
-	if (state == X3D::SKIP_CHILDREN)
+	if (state == XIOT::SKIP_CHILDREN)
 		_skipCount = 1;
 	XMLString::release(&nodeName);
 
@@ -87,7 +87,7 @@ void X3DXMLContentHandler::endElement(const XMLCh *const, const XMLCh *const, co
 		return;
 	}
 	char* nodeName = XMLString::transcode(qname);
-	int id = X3D::X3DTypes::getElementID(nodeName);
+	int id = X3DTypes::getElementID(nodeName);
 	_switch.doEndElement(id, nodeName);
 	XMLString::release(&nodeName);
 

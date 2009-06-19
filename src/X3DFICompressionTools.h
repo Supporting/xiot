@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace X3D {
+namespace XIOT {
 
 	/**
 	 * Contains some not exported helper classes to compress/uncompress

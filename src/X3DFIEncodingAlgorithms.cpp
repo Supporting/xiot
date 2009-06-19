@@ -10,7 +10,7 @@
 
 #include "X3DFICompressionTools.h"
 
-namespace X3D {
+namespace XIOT {
 
 	std::string QuantizedzlibFloatArrayAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{

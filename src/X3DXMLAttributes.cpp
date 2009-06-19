@@ -4,7 +4,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-namespace X3D {
+namespace XIOT {
 
 class XMLAttributeImpl
 {

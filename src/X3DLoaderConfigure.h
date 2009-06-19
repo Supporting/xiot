@@ -39,7 +39,7 @@
 // sources we should export if building a shared library.  For other
 // sources we should import if using a shared library.
 #if defined(_WIN32)
-# if defined(x3dLoader_EXPORTS)
+# if defined(xiot_EXPORTS)
 #  define X3DLOADER_EXPORT __declspec(dllexport)
 # else
 #  define X3DLOADER_EXPORT __declspec(dllimport)

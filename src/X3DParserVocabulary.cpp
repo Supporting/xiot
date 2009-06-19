@@ -1,7 +1,7 @@
 #include "X3DParserVocabulary.h"
 #include "X3DTypes.h"
 
-namespace X3D {
+namespace XIOT {
 
 X3DParserVocabulary::X3DParserVocabulary() :  DefaultParserVocabulary() 
 {

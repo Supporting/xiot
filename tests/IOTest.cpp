@@ -12,11 +12,12 @@
 
 
 using namespace std;
+using namespace XIOT;
 
 string input_filename;
 string output_filename;
 
-class MyNodeHandler : public X3D::X3DDefaultNodeHandler
+class MyNodeHandler : public X3DDefaultNodeHandler
 {
 public:
 	MyNodeHandler() {
@@ -34,69 +35,69 @@ public:
 		cout << "Event number " << number << ": " << eventName << endl;
 	}
 
-	virtual int startX3D(const X3D::X3DAttributes &attr)
+	virtual int startX3D(const X3DAttributes &attr)
 	{
 		testEvent(1, "start X3D");
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 
-	virtual int startShape(const X3D::X3DAttributes& attr)
+	virtual int startShape(const X3DAttributes& attr)
 	{
 		testEvent(3, "start Shape");
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 
 	virtual int endShape()
 	{
 		testEvent(10, "end Shape");
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 
-	virtual int startBox(const X3D::X3DAttributes& attr)
+	virtual int startBox(const X3DAttributes& attr)
 	{
 		testEvent(8, "start Box");
-		int index = attr.getAttributeIndex(X3D::size);
+		int index = attr.getAttributeIndex(ID::size);
 		assert(index != -1);
 		
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 	
 	virtual int endBox()
 	{
 		testEvent(9, "end Box");
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 	
-	virtual int startMaterial(const X3D::X3DAttributes& attr)
+	virtual int startMaterial(const X3DAttributes& attr)
 	{
 		testEvent(5, "start Material");
-		int index = attr.getAttributeIndex(X3D::diffuseColor);
+		int index = attr.getAttributeIndex(ID::diffuseColor);
 		assert(index != -1);
 		
-		X3D::SFColor diffuseColor = attr.getSFColor(index);
+		SFColor diffuseColor = attr.getSFColor(index);
 		assert(diffuseColor.r == 1.0);
 		assert(diffuseColor.g == 0.0);
 		assert(diffuseColor.b == 0.0);
 		cout << "Diffuse Color is: " << diffuseColor.r << " " << diffuseColor.g << " " << diffuseColor.b << endl;
 		
-		index = attr.getAttributeIndex(X3D::transparency);
+		index = attr.getAttributeIndex(ID::transparency);
 		assert(index != -1);
 		float transparency = attr.getSFFloat(index);
 		assert(transparency == 0.1f);
 		
-		return X3D::CONTINUE;		
+		return CONTINUE;		
 	}
 
-	virtual int startUnhandled(const char* nodeName, const X3D::X3DAttributes& attr)
+	virtual int startUnhandled(const char* nodeName, const X3DAttributes& attr)
 	{
 		cout << "Event number " << ++_eventCount << ": unhandled start event " << nodeName << endl;
-		return X3D::CONTINUE;
+		return CONTINUE;
 	}
 
 	virtual int endUnhandled(const char* nodeName)
 	{
 		cout << "Event number " << ++_eventCount << ": unhandled end event " << nodeName << endl;
-		return X3D::CONTINUE;
+		return CONTINUE;
 	}
 
 
@@ -121,17 +122,17 @@ int start()
 		else 
 			w->OpenFile("iotest.x3db");
 		w->StartDocument();
-		w->StartNode(X3D::X3D);
-		w->StartNode(X3D::Scene);
-		w->StartNode(X3D::Shape);
-		w->StartNode(X3D::Appearance);
-		w->StartNode(X3D::Material);
-		w->SetSFVec3f(X3D::diffuseColor, 1.0f, 0.0f, 0.0f);
-		w->SetSFFloat(X3D::transparency, 0.1f);
+		w->StartNode(ID::X3D);
+		w->StartNode(ID::Scene);
+		w->StartNode(ID::Shape);
+		w->StartNode(ID::Appearance);
+		w->StartNode(ID::Material);
+		w->SetSFVec3f(ID::diffuseColor, 1.0f, 0.0f, 0.0f);
+		w->SetSFFloat(ID::transparency, 0.1f);
 		w->EndNode();
 		w->EndNode(); // Appearance
-		w->StartNode(X3D::Box);
-		w->SetSFVec3f(X3D::size, 0.5f, 0.5f, 0.5f);
+		w->StartNode(ID::Box);
+		w->SetSFVec3f(ID::size, 0.5f, 0.5f, 0.5f);
 		w->EndNode(); // Box
 		w->EndNode();//Shape
 		w->EndNode(); // Scene
@@ -145,7 +146,7 @@ int start()
 	
 	for(int i = 0; i< 2; i++)
 	{
-		X3D::X3DLoader loader;
+		X3DLoader loader;
 		MyNodeHandler handler;
 		loader.setNodeHandler(&handler);
 		try {
@@ -153,7 +154,7 @@ int start()
 				loader.load("iotest.x3d");
 			else
 				loader.load("iotest.x3db");
-		} catch (X3D::X3DParseException& e)
+		} catch (X3DParseException& e)
 		{	
 		  cerr << "Error while parsing file:" << endl;
 		  cerr << e.getMessage() << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")" << endl;

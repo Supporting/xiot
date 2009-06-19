@@ -9,67 +9,68 @@
 
 
 using namespace std;
+using namespace XIOT;
 
 string input_filename;
 string output_filename;
 
-class MyNodeHandler : public X3D::X3DDefaultNodeHandler
+class MyNodeHandler : public X3DDefaultNodeHandler
 {
-	virtual int startShape(const X3D::X3DAttributes& attr);
+	virtual int startShape(const X3DAttributes& attr);
 	virtual int endShape();
 	
-	virtual int startMaterial(const X3D::X3DAttributes& attr);
+	virtual int startMaterial(const X3DAttributes& attr);
 	
-	virtual int startUnhandled(const char* nodeName, const X3D::X3DAttributes& attr);
+	virtual int startUnhandled(const char* nodeName, const X3DAttributes& attr);
 	virtual int endUnhandled(const char* nodeName);
 };
 
-int MyNodeHandler::startShape(const X3D::X3DAttributes &attr)
+int MyNodeHandler::startShape(const X3DAttributes &attr)
 {
 	cout << "Start Shape event" << endl;
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int MyNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
+int MyNodeHandler::startMaterial(const X3DAttributes &attr)
 {
 	cout << "Start Material event" << endl;
 	int index;
 
-	index = attr.getAttributeIndex(X3D::diffuseColor);
+	index = attr.getAttributeIndex(ID::diffuseColor);
 	if (index != -1)
 	{
-		X3D::SFColor diffuseColor = attr.getSFColor(index);
+		SFColor diffuseColor = attr.getSFColor(index);
 		cout << "Diffuse Color is set as: " << diffuseColor.r << " " << diffuseColor.g << " " << diffuseColor.b << endl;
 	}
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int MyNodeHandler::endShape()
 {
 	cout << "End Shape event" << endl;
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int MyNodeHandler::startUnhandled(const char* nodeName, const X3D::X3DAttributes& attr)
+int MyNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes& attr)
 {
 	cout << "Unhandled Start Node event: " << nodeName << endl;
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int MyNodeHandler::endUnhandled(const char* nodeName)
 {
 	cout << "Unhandled End Node event: " << nodeName << endl;
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int start(const string &input_filename)
 {
-	X3D::X3DLoader loader;
+	X3DLoader loader;
 	MyNodeHandler handler;
 	loader.setNodeHandler(&handler);
 	try {
 		loader.load(input_filename);
-	} catch (X3D::X3DParseException& e)
+	} catch (X3DParseException& e)
 	{	
 	  cerr << "Error while parsing file " << input_filename << ":" << endl;
       cerr << e.getMessage() << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")" << endl;

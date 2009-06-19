@@ -3,7 +3,7 @@
 
 #include "X3DDefaultNodeHandler.h"
 
-using namespace X3D;
+using namespace XIOT;
 
 /**
  * Handler that logs all library events to a file.
@@ -25,7 +25,7 @@ public:
   void startDocument();
   void endDocument();
 
-  int startShape(const X3D::X3DAttributes &attr);
+  int startShape(const X3DAttributes &attr);
   int endShape();
 
   int startAppearance(const X3DAttributes &attr);

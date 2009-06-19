@@ -5,7 +5,7 @@
 
 #include "X3DTypes.h"
 
-namespace X3D {
+namespace XIOT {
 
 /**
  * The <b>X3DDataTypeFactory</b> provides getXXXFromString functions which parse a given 

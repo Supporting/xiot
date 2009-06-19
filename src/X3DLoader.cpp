@@ -9,7 +9,7 @@
 
 using namespace std;
 
-namespace X3D {
+namespace XIOT {
 
 X3DLoader::X3DLoader()
 : _handler(NULL)

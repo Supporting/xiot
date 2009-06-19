@@ -3,7 +3,7 @@
 
 #include "X3DNodeHandler.h"
 
-namespace X3D {
+namespace XIOT {
 
 class X3DAttributes;
 

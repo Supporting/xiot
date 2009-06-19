@@ -4,7 +4,7 @@
 #include "X3DLoader.h"
 #include <string>
 
-namespace X3D {
+namespace XIOT {
 
 /**
  * @class XMLParserImpl

@@ -13,7 +13,7 @@ using namespace std;
 string input_filename;
 string output_filename;
 
-class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
+class MyShapeCounter : public XIOT::X3DDefaultNodeHandler {
 	
   public:
     MyShapeCounter() { };
@@ -27,10 +27,10 @@ class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
       std::cout << std::endl;
     }
 
-    virtual int startShape(const X3D::X3DAttributes &attr)
+    virtual int startShape(const XIOT::X3DAttributes &attr)
     {
       _count++;
-	  return X3D::CONTINUE;
+	  return XIOT::CONTINUE;
     }
 
   protected:
@@ -39,12 +39,12 @@ class MyShapeCounter : public X3D::X3DDefaultNodeHandler {
 
 int start(const string &input_filename, const string &output_filename)
 {
-	X3D::X3DLoader loader;
+	XIOT::X3DLoader loader;
 	MyShapeCounter* handler = new MyShapeCounter();
 	loader.setNodeHandler(handler);
 	try {
 		loader.load(input_filename);
-	} catch (X3D::X3DParseException& e)
+	} catch (XIOT::X3DParseException& e)
 	{	
 	  cerr << "Error while parsing file " << input_filename << ":" << endl;
       cerr << e.getMessage() << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")" << endl;

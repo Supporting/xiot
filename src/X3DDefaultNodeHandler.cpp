@@ -1,7 +1,7 @@
 #include "X3DDefaultNodeHandler.h"
 
 
-namespace X3D {
+namespace XIOT {
 
 X3DDefaultNodeHandler::X3DDefaultNodeHandler()
 {

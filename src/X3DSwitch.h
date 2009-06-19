@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace X3D {
+namespace XIOT {
 
 // forward declarations
 class X3DAttributes;

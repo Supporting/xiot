@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace X3D {
+namespace XIOT {
 
 /** 
  * <b>X3DAttributes</b> is an interface for retrieving information about attributes of a X3D element.

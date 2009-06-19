@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iostream>
 
-namespace X3D {
+namespace XIOT {
 	  
 	  std::map<std::string, int>	X3DTypes::elementFromStringMap;
 	  std::map<std::string, int>	X3DTypes::attributeFromStringMap;

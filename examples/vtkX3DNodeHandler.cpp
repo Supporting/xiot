@@ -33,6 +33,7 @@
 #include "vtkPolyDataNormals.h"
 
 using namespace std;
+using namespace XIOT;
 
 // Hardcoded conversion from radians to degrees: necessary as XML uses radians while VTK expects degrees
 #define RAD_TO_DEG 57.29577951f
@@ -57,10 +58,10 @@ vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer)
 	this->CurrentColors = NULL;
 	this->CurrentTransform = vtkTransform::New();
 	
-	_ignoreNodes.insert(X3D::X3D);
-	_ignoreNodes.insert(X3D::Scene);
-	_ignoreNodes.insert(X3D::StaticGroup);
-	_ignoreNodes.insert(X3D::Group);
+	_ignoreNodes.insert(ID::X3D);
+	_ignoreNodes.insert(ID::Scene);
+	_ignoreNodes.insert(ID::StaticGroup);
+	_ignoreNodes.insert(ID::Group);
 
 	bDEFCoordinate = false;
 	bDEFTextureCoordinate = false;
@@ -154,7 +155,7 @@ vtkX3DNodeHandler::~vtkX3DNodeHandler()
   }
 }
 
-int vtkX3DNodeHandler::startTransform(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startTransform(const X3DAttributes &attr)
 {
 	this->CurrentTransform->Push();
 
@@ -163,49 +164,49 @@ int vtkX3DNodeHandler::startTransform(const X3D::X3DAttributes &attr)
 	// No defaults needed, as vtk uses the same defaults for the translation, rotation, scale
 
 	// Check for translation
-	index = attr.getAttributeIndex(X3D::translation);
+	index = attr.getAttributeIndex(ID::translation);
 	if(index != -1)
 	{
-		X3D::SFVec3f vec = attr.getSFVec3f(index);
+		SFVec3f vec = attr.getSFVec3f(index);
 		this->CurrentTransform->Translate(vec.x, vec.y, vec.z);
 	}
 
 	// Check for rotation
-	index = attr.getAttributeIndex(X3D::rotation);
+	index = attr.getAttributeIndex(ID::rotation);
 	if(index != -1)
 	{
-		X3D::SFRotation rot = attr.getSFRotation(index);
+		SFRotation rot = attr.getSFRotation(index);
 		this->CurrentTransform->RotateWXYZ(rot.angle * RAD_TO_DEG, &rot.x);
 	}
 
 	// Check for scale
-	index = attr.getAttributeIndex(X3D::scale);
+	index = attr.getAttributeIndex(ID::scale);
 	if(index != -1)
 	{
-		X3D::SFVec3f vec = attr.getSFVec3f(index);
+		SFVec3f vec = attr.getSFVec3f(index);
 		this->CurrentTransform->Scale(vec.x, vec.y, vec.z);
 	}
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int vtkX3DNodeHandler::endTransform()
 {
 	this->CurrentTransform->Pop();
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startMaterial(const X3DAttributes &attr)
 {
 	bool ambientSet = false;
 
 	// There was no Appearance Node
 	if(!this->CurrentProperty)
-		return X3D::CONTINUE;
+		return CONTINUE;
 
 	int index;
 	
 	// Check for ambientIntensity
-	index = attr.getAttributeIndex(X3D::ambientIntensity);
+	index = attr.getAttributeIndex(ID::ambientIntensity);
 	if(index != -1)
 	{
 		float ambientIntensity = attr.getSFFloat(index);
@@ -216,10 +217,10 @@ int vtkX3DNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
 		this->CurrentProperty->SetAmbient(0.2f);
 	
 	// Check for diffuse color
-	index = attr.getAttributeIndex(X3D::diffuseColor);
+	index = attr.getAttributeIndex(ID::diffuseColor);
 	if(index != -1)
 	{
-		X3D::SFColor col = attr.getSFColor(index);
+		SFColor col = attr.getSFColor(index);
 		// Set both, ambient and diffuse Color to this value
 		// The ambient Color will be multiplied with the ambientIntensity
 		// above
@@ -235,16 +236,16 @@ int vtkX3DNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
 	// Check for emissiveColor
 	// VTK does not support emissive color. It will be mapped to ambient
 	// color only if ambientIntensity is not set.
-	index = attr.getAttributeIndex(X3D::emissiveColor);
+	index = attr.getAttributeIndex(ID::emissiveColor);
 	if(index != -1 && !ambientSet)
 	{
-		X3D::SFColor col = attr.getSFColor(index);
+		SFColor col = attr.getSFColor(index);
 		this->CurrentProperty->SetAmbientColor(col.r, col.g, col.b);
 		this->CurrentProperty->SetAmbient(1.0);
 	}
 	
 	// Check for shininess
-	index = attr.getAttributeIndex(X3D::shininess);
+	index = attr.getAttributeIndex(ID::shininess);
 	if(index != -1)
 	{
 		float shininess = attr.getSFFloat(index);
@@ -255,17 +256,17 @@ int vtkX3DNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
 		this->CurrentProperty->SetSpecularPower(0.2 * 128.0);
 
 	// Check for specularColor
-	index = attr.getAttributeIndex(X3D::specularColor);
+	index = attr.getAttributeIndex(ID::specularColor);
 	if(index != -1)
 	{
-		X3D::SFColor col = attr.getSFColor(index);
+		SFColor col = attr.getSFColor(index);
 		this->CurrentProperty->SetSpecularColor(col.r, col.g, col.b);
 	}
 	else
 		this->CurrentProperty->SetSpecularColor(0.0f, 0.0f, 0.0f);
 
 	// Check for transparency
-	index = attr.getAttributeIndex(X3D::transparency);
+	index = attr.getAttributeIndex(ID::transparency);
 	if(index != -1)
 	{
 		float transparency = attr.getSFFloat(index);
@@ -274,20 +275,20 @@ int vtkX3DNodeHandler::startMaterial(const X3D::X3DAttributes &attr)
 	else
 		this->CurrentProperty->SetOpacity(1.0f);
 
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startAppearance(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startAppearance(const X3DAttributes &attr)
 {
 	if(this->CurrentProperty)
 		this->CurrentProperty->Delete();
 
 	this->CurrentProperty = vtkProperty::New();
 	this->CurrentProperty->SetInterpolationToPhong();
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startShape(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startShape(const X3DAttributes &attr)
 {
 	actor = vtkActor::New();
 
@@ -324,7 +325,7 @@ int vtkX3DNodeHandler::startShape(const X3D::X3DAttributes &attr)
 	this->CurrentActor = actor;
     // Add actor to renderer
     this->Renderer->AddActor(actor);
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int vtkX3DNodeHandler::endShape()
@@ -355,7 +356,7 @@ int vtkX3DNodeHandler::endShape()
 
 	// Nothing to do in case there's no defString
 	if(defString.empty())
-		return X3D::CONTINUE;
+		return CONTINUE;
 
 	// Create a copy of the CurrentActor
 	vtkActor* DEFactor = vtkActor::New();
@@ -365,14 +366,14 @@ int vtkX3DNodeHandler::endShape()
 	defShape.insert(pair<string,vtkActor*>(defString, DEFactor));
 	defString.erase();
 	
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startSphere(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startSphere(const X3DAttributes &attr)
 {
 	if(!this->CurrentActor)
 	{
-		return X3D::CONTINUE;
+		return CONTINUE;
 	}
 
 	int index;
@@ -381,7 +382,7 @@ int vtkX3DNodeHandler::startSphere(const X3D::X3DAttributes &attr)
 	vtkSphereSource *sphere = vtkSphereSource::New();
     
 	// Check for radius
-	index = attr.getAttributeIndex(X3D::radius);
+	index = attr.getAttributeIndex(ID::radius);
 	if(index != -1)
 	{
 		float fRadius = attr.getSFFloat(index);
@@ -402,33 +403,33 @@ int vtkX3DNodeHandler::startSphere(const X3D::X3DAttributes &attr)
       this->CurrentActor->SetProperty(this->CurrentProperty);
     }
 
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 
 
-int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes &attr)
 {
-	int elementID = X3D::X3DTypes::getElementID(nodeName);
+	int elementID = X3DTypes::getElementID(nodeName);
 	
 	if (_ignoreNodes.find(elementID) == _ignoreNodes.end())
 	{
 		if (this->_verbose)
 			cout << "Ignoring node " << nodeName << " and all of it's children." << endl;
-		return X3D::SKIP_CHILDREN;
+		return SKIP_CHILDREN;
 	}
 	if (this->_verbose)
 		cout << "Ignoring node " << nodeName << endl;
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 	
 	int index;
 
 	if(!this->CurrentActor)
 	{
-		return X3D::CONTINUE;
+		return CONTINUE;
 	}
 
 	pmap = vtkPolyDataMapper::New();
@@ -436,7 +437,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 	
 	pmap->SetInput(this->CurrentIndexedFaceSet->GetOutput());
 	// normal per vertex
-	index = attr.getAttributeIndex(X3D::normalPerVertex);
+	index = attr.getAttributeIndex(ID::normalPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
 		this->CurrentIndexedFaceSet->NormalPerVertexOff();
@@ -445,7 +446,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 		this->CurrentIndexedFaceSet->NormalPerVertexOn();
 
 	// color per vertex
-	index = attr.getAttributeIndex(X3D::colorPerVertex);
+	index = attr.getAttributeIndex(ID::colorPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
 		this->CurrentIndexedFaceSet->ColorPerVertexOff();
@@ -454,7 +455,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 		this->CurrentIndexedFaceSet->ColorPerVertexOn();
 
 	// coord index
-	index = attr.getAttributeIndex(X3D::coordIndex);
+	index = attr.getAttributeIndex(ID::coordIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -468,7 +469,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 	}
 
 	// color index
-	index = attr.getAttributeIndex(X3D::colorIndex);
+	index = attr.getAttributeIndex(ID::colorIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -482,7 +483,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 	}
 
 	// normal index
-	index = attr.getAttributeIndex(X3D::normalIndex);
+	index = attr.getAttributeIndex(ID::normalIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -496,7 +497,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 	}
 
 	// texCoord index
-	index = attr.getAttributeIndex(X3D::texCoordIndex);
+	index = attr.getAttributeIndex(ID::texCoordIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -513,7 +514,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3D::X3DAttributes &attr) {
 
     this->CurrentActor->SetMapper(pmap);
     pmap->Delete();
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int vtkX3DNodeHandler::endIndexedFaceSet() {
@@ -541,19 +542,19 @@ int vtkX3DNodeHandler::endIndexedFaceSet() {
   this->CurrentIndexedFaceSet->Delete();
   this->CurrentIndexedFaceSet = NULL;
 
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startCoordinate(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startCoordinate(const X3DAttributes &attr) {
  
-	int index = attr.getAttributeIndex(X3D::point);
+	int index = attr.getAttributeIndex(ID::point);
     vtkPoints* points = NULL;
 
 	if(index != -1)
 	{
-	  std::vector<X3D::SFVec3f> coords = attr.getMFVec3f(index);
+	  std::vector<SFVec3f> coords = attr.getMFVec3f(index);
 	  points = vtkPoints::New();
-	  for(std::vector<X3D::SFVec3f>::iterator I = coords.begin(); I != coords.end(); I++)
+	  for(std::vector<SFVec3f>::iterator I = coords.begin(); I != coords.end(); I++)
 	  {
 		  points->InsertNextPoint(&(*I).x);
 	  }
@@ -582,18 +583,18 @@ int vtkX3DNodeHandler::startCoordinate(const X3D::X3DAttributes &attr) {
 			this->CurrentScalars->InsertNextValue(i);
 			}
 	}
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startNormal(const X3D::X3DAttributes &attr) {
-  int index = attr.getAttributeIndex(X3D::vector);
+int vtkX3DNodeHandler::startNormal(const X3DAttributes &attr) {
+  int index = attr.getAttributeIndex(ID::vector);
   
   if(index != -1)
   {
-	  std::vector<X3D::SFVec3f> normals = attr.getMFVec3f(index);
+	  std::vector<SFVec3f> normals = attr.getMFVec3f(index);
 	  vtkFloatArray* normalArray = vtkFloatArray::New();
 	  normalArray->SetNumberOfComponents(3);
-	  for(std::vector<X3D::SFVec3f>::iterator I = normals.begin(); I != normals.end(); I++)
+	  for(std::vector<SFVec3f>::iterator I = normals.begin(); I != normals.end(); I++)
 	  {
 		  normalArray->InsertNextTupleValue(&(*I).x);
 	  }
@@ -615,16 +616,16 @@ int vtkX3DNodeHandler::startNormal(const X3D::X3DAttributes &attr) {
 		bDEFNormal = true;
 	}
 
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startColor(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startColor(const X3DAttributes &attr) {
 	  
-	int index = attr.getAttributeIndex(X3D::color);
+	int index = attr.getAttributeIndex(ID::color);
 
 	if(index != -1)
 	{
-		std::vector<X3D::SFColor> colors = attr.getMFColor(index);
+		std::vector<SFColor> colors = attr.getMFColor(index);
 	
 		if(this->CurrentColors)
 			this->CurrentColors->Delete();
@@ -632,7 +633,7 @@ int vtkX3DNodeHandler::startColor(const X3D::X3DAttributes &attr) {
 	 	this->CurrentColors = vtkUnsignedCharArray::New();
 		this->CurrentColors->SetNumberOfComponents(3);
 		
-		for(std::vector<X3D::SFColor>::iterator I = colors.begin(); I != colors.end(); I++)
+		for(std::vector<SFColor>::iterator I = colors.begin(); I != colors.end(); I++)
 		{
 			this->CurrentColors->InsertNextTuple3((*I).r * 255, (*I).g * 255, (*I).b * 255);
 		}
@@ -651,18 +652,18 @@ int vtkX3DNodeHandler::startColor(const X3D::X3DAttributes &attr) {
 		bDEFColor = true;
 	}
     
-    return X3D::CONTINUE;
+    return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startTextureCoordinate(const X3D::X3DAttributes &attr) {
-  int index = attr.getAttributeIndex(X3D::point);
+int vtkX3DNodeHandler::startTextureCoordinate(const X3DAttributes &attr) {
+  int index = attr.getAttributeIndex(ID::point);
   assert(this->CurrentIndexedFaceSet);
   if(index != -1)
   {
-	  std::vector<X3D::SFVec2f> normals = attr.getMFVec2f(index);
+	  std::vector<SFVec2f> normals = attr.getMFVec2f(index);
 	  vtkFloatArray* texCoordArray = vtkFloatArray::New();
 	  texCoordArray->SetNumberOfComponents(2);
-	  for(std::vector<X3D::SFVec2f>::iterator I = normals.begin(); I != normals.end(); I++)
+	  for(std::vector<SFVec2f>::iterator I = normals.begin(); I != normals.end(); I++)
 	  {
 		  texCoordArray->InsertNextTuple2((*I).x, (*I).y);
 	  }
@@ -683,10 +684,10 @@ int vtkX3DNodeHandler::startTextureCoordinate(const X3D::X3DAttributes &attr) {
 		defTextureCoordinates.insert(pair<std::string,vtkFloatArray*>(attr.getDEF(), this->CurrentTCoords));
 		bDEFTextureCoordinate = true;
 	}
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startPointSet(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startPointSet(const X3DAttributes &attr) {
 	pmap = vtkPolyDataMapper::New();
 	pmap->SetScalarVisibility(0);
 
@@ -711,7 +712,7 @@ int vtkX3DNodeHandler::startPointSet(const X3D::X3DAttributes &attr) {
 	this->CurrentScalars = vtkFloatArray::New();
 
 
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int vtkX3DNodeHandler::endPointSet() {
@@ -740,20 +741,20 @@ int vtkX3DNodeHandler::endPointSet() {
 		pmap->SetScalarVisibility(1);
 	}
 
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startBox(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startBox(const X3DAttributes &attr) {
 	pmap = vtkPolyDataMapper::New();
     vtkCubeSource *cube= vtkCubeSource::New();
  
 	int index;
 
     // Check for size
-	index = attr.getAttributeIndex(X3D::size);
+	index = attr.getAttributeIndex(ID::size);
 	if(index != -1)
 	{
-		X3D::SFVec3f size = attr.getSFVec3f(index);
+		SFVec3f size = attr.getSFVec3f(index);
 		cube->SetXLength(size.x);
 		cube->SetYLength(size.y);
 		cube->SetZLength(size.z);
@@ -775,17 +776,17 @@ int vtkX3DNodeHandler::startBox(const X3D::X3DAttributes &attr) {
     {
       this->CurrentActor->SetProperty(this->CurrentProperty);
     }
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startCone(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startCone(const X3DAttributes &attr) {
 	pmap = vtkPolyDataMapper::New();
     vtkConeSource *cone= vtkConeSource::New();
 
     int index;
 
     // Check for height
-	index = attr.getAttributeIndex(X3D::height);
+	index = attr.getAttributeIndex(ID::height);
 	if(index != -1)
 	{
 		float height = attr.getSFFloat(index);
@@ -797,7 +798,7 @@ int vtkX3DNodeHandler::startCone(const X3D::X3DAttributes &attr) {
 	}
 
 	// Check for bottomRadius
-	index = attr.getAttributeIndex(X3D::bottomRadius);
+	index = attr.getAttributeIndex(ID::bottomRadius);
 	if(index != -1)
 	{
 		float bottomRadius = attr.getSFFloat(index);
@@ -816,17 +817,17 @@ int vtkX3DNodeHandler::startCone(const X3D::X3DAttributes &attr) {
     {
       this->CurrentActor->SetProperty(this->CurrentProperty);
     }
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startCylinder(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startCylinder(const X3DAttributes &attr) {
 	pmap = vtkPolyDataMapper::New();
 	vtkCylinderSource *cylinder = vtkCylinderSource::New();
 
     int index;
 
     // Check for height
-	index = attr.getAttributeIndex(X3D::height);
+	index = attr.getAttributeIndex(ID::height);
 	if(index != -1)
 	{
 		float height = attr.getSFFloat(index);
@@ -838,7 +839,7 @@ int vtkX3DNodeHandler::startCylinder(const X3D::X3DAttributes &attr) {
 	}
 
 	// Check for radius
-	index = attr.getAttributeIndex(X3D::radius);
+	index = attr.getAttributeIndex(ID::radius);
 	if(index != -1)
 	{
 		float radius = attr.getSFFloat(index);
@@ -857,14 +858,14 @@ int vtkX3DNodeHandler::startCylinder(const X3D::X3DAttributes &attr) {
     {
       this->CurrentActor->SetProperty(this->CurrentProperty);
     }
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startIndexedLineSet(const X3D::X3DAttributes &attr)
+int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
 {
 	if(!this->CurrentActor)
 	{
-		return X3D::CONTINUE;
+		return CONTINUE;
 	}
 
 	int index;
@@ -875,7 +876,7 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3D::X3DAttributes &attr)
 	pmap->SetInput(this->CurrentIndexedLineSet->GetOutput());
 	
 	// color per vertex
-	index = attr.getAttributeIndex(X3D::colorPerVertex);
+	index = attr.getAttributeIndex(ID::colorPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
 		this->CurrentIndexedLineSet->ColorPerVertexOff();
@@ -884,7 +885,7 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3D::X3DAttributes &attr)
 		this->CurrentIndexedLineSet->ColorPerVertexOn();
 
 	// coord index
-	index = attr.getAttributeIndex(X3D::coordIndex);
+	index = attr.getAttributeIndex(ID::coordIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -898,7 +899,7 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3D::X3DAttributes &attr)
 	}
 
 	// color index
-	index = attr.getAttributeIndex(X3D::colorIndex);
+	index = attr.getAttributeIndex(ID::colorIndex);
 	if(index != -1)
 	{
 		std::vector<int> coords = attr.getMFInt32(index);
@@ -914,13 +915,13 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3D::X3DAttributes &attr)
     
     this->CurrentActor->SetMapper(pmap);
     pmap->Delete();
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 int vtkX3DNodeHandler::endIndexedLineSet()
 {
 	if (!this->CurrentPoints)
-		return X3D::CONTINUE;
+		return CONTINUE;
 
   this->CurrentIndexedLineSet->SetCoords(this->CurrentPoints);
   
@@ -937,10 +938,10 @@ int vtkX3DNodeHandler::endIndexedLineSet()
   this->CurrentIndexedLineSet->Delete();
   this->CurrentIndexedLineSet = NULL;
 
-  return X3D::CONTINUE;
+  return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
+int vtkX3DNodeHandler::startDirectionalLight(const X3DAttributes &attr) {
 	
 	if (this->CurrentLight)
     {
@@ -953,7 +954,7 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 	int index;
 
 	// Check for ambientIntensity (SetIntensity does not really suit here)
-	index = attr.getAttributeIndex(X3D::ambientIntensity);
+	index = attr.getAttributeIndex(ID::ambientIntensity);
 	if(index != -1)
 	{
 		float ambientIntensity = attr.getSFFloat(index);
@@ -964,20 +965,20 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 		this->CurrentLight->SetIntensity(1.0f);
 
 	// Check for color
-	index = attr.getAttributeIndex(X3D::color);
+	index = attr.getAttributeIndex(ID::color);
 	if(index != -1)
 	{
-		X3D::SFColor color = attr.getSFColor(index);
+		SFColor color = attr.getSFColor(index);
 		this->CurrentLight->SetColor(color.r, color.g, color.b);
 	}
 	else
 		this->CurrentLight->SetColor(1.0f, 1.0f, 1.0f);
 
 	// Check for direction
-	index = attr.getAttributeIndex(X3D::direction);
+	index = attr.getAttributeIndex(ID::direction);
 	if(index != -1)
 	{
-		X3D::SFVec3f direction = attr.getSFVec3f(index);
+		SFVec3f direction = attr.getSFVec3f(index);
 		this->CurrentLight->SetFocalPoint(direction.x, direction.y, direction.z);
 	}
 	else
@@ -985,7 +986,7 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 
 
 	// Check for intensity
-	index = attr.getAttributeIndex(X3D::intensity);
+	index = attr.getAttributeIndex(ID::intensity);
 	if(index != -1)
 	{
 		float intensity = attr.getSFFloat(index);
@@ -995,7 +996,7 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 		this->CurrentLight->SetIntensity(1.0f);
 
 	// Check for on
-	index = attr.getAttributeIndex(X3D::on);
+	index = attr.getAttributeIndex(ID::on);
 	if(index != -1)
 	{
 		bool on = attr.getSFBool(index);
@@ -1004,21 +1005,21 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 	else
 		this->CurrentLight->SetSwitch(1);
 
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startBackground(const X3D::X3DAttributes &attr) {
-	int index = attr.getAttributeIndex(X3D::skyColor);
+int vtkX3DNodeHandler::startBackground(const X3DAttributes &attr) {
+	int index = attr.getAttributeIndex(ID::skyColor);
 	if(index != -1)
 	{
-		std::vector<X3D::SFColor> skyColor = attr.getMFColor(index);
+		std::vector<SFColor> skyColor = attr.getMFColor(index);
 		if (skyColor.size())
 		{
-			X3D::SFColor mainColor = skyColor[0];
+			SFColor mainColor = skyColor[0];
 			this->Renderer->SetBackground(mainColor.r, mainColor.g, mainColor.b);
 		}
 	}
-	return X3D::CONTINUE;
+	return CONTINUE;
 }
 
 void vtkX3DNodeHandler::setVerbose(bool verbose)
