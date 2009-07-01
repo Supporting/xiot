@@ -6,6 +6,8 @@ set (X3DIMPORTER_SRC
 ../examples/vtkX3DNodeHandler.h
 ../examples/vtkX3DIndexedFaceSetSource.h
 ../examples/vtkX3DIndexedFaceSetSource.cpp
+../examples/vtkX3DIndexedLineSetSource.h
+../examples/vtkX3DIndexedLineSetSource.cpp
 )
 
 include_directories(. ${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR}/examples)
@@ -20,4 +22,4 @@ ADD_PARAVIEW_PLUGIN(pvX3DReader "1.0"
    GUI_RESOURCE_FILES X3DReaderGUI.xml)
 
 
-target_link_libraries(pvX3DReader x3dLoader)
+target_link_libraries(pvX3DReader xiot)
