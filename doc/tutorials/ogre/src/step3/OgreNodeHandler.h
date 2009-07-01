@@ -1,5 +1,5 @@
-#ifndef X3D_X3DLogNodeHandler_H
-#define X3D_X3DLogNodeHandler_H
+#ifndef X3D_OgreNodeHandler_H
+#define X3D_OgreNodeHandler_H
 
 #include "X3DDefaultNodeHandler.h"
 #include "OgreMaterial.h"
@@ -23,7 +23,7 @@ class IndexedFaceSet;
  * occuring throughout the file import.
  * @see X3DDefaultNodeHandler
  */
-class OgreNodeHandler : public X3D::X3DDefaultNodeHandler {
+class OgreNodeHandler : public XIOT::X3DDefaultNodeHandler {
 
 public:
 
@@ -35,28 +35,28 @@ public:
   void startDocument();
   void endDocument();
 
-  int startShape(const X3D::X3DAttributes &attr);
+  int startShape(const XIOT::X3DAttributes &attr);
   int endShape();
 
-  int startSphere(const X3D::X3DAttributes &attr);
+  int startSphere(const XIOT::X3DAttributes &attr);
 
-  int startBox(const X3D::X3DAttributes &attr);
+  int startBox(const XIOT::X3DAttributes &attr);
 
-  int startAppearance(const X3D::X3DAttributes &attr);
+  int startAppearance(const XIOT::X3DAttributes &attr);
   int endAppearance();
 
-  int startMaterial(const X3D::X3DAttributes &attr);
+  int startMaterial(const XIOT::X3DAttributes &attr);
 
-  int startTransform(const X3D::X3DAttributes &attr);
+  int startTransform(const XIOT::X3DAttributes &attr);
   int endTransform();
 
-  int startDirectionalLight(const X3D::X3DAttributes &attr);
+  int startDirectionalLight(const XIOT::X3DAttributes &attr);
 
-  int startUnknown(const char* nodeName, const X3D::X3DAttributes &attr);
+  int startUnknown(const char* nodeName, const XIOT::X3DAttributes &attr);
   int endUnknown(int id, const char* nodeName);
 
   protected:
-	  std::string createUniqueName(const X3D::X3DAttributes &attr, const std::string& prefix="");
+	  std::string createUniqueName(const XIOT::X3DAttributes &attr, const std::string& prefix="");
 
   private:
 	  Ogre::SceneManager* _sceneManager;

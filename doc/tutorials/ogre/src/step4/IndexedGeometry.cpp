@@ -2,7 +2,7 @@
 #include "Ogre.h"
 
 using namespace Ogre;
-
+using namespace XIOT;
 
 #include <cassert>
 
@@ -71,10 +71,10 @@ void IndexedGeometry::setColorIndex(const std::vector<int> &colorIndex){ _colorI
 void IndexedGeometry::setTexCoordIndex(const std::vector<int> &texCoordIndex){ _texCoordIndex = texCoordIndex; }
 
 // Data
-void IndexedGeometry::setCoords(const std::vector<X3D::SFVec3f> &coords){ _coords = coords; }
-void IndexedGeometry::setNormals(const std::vector<X3D::SFVec3f> &normals){ _normals = normals; }
-void IndexedGeometry::setTexCoords(const std::vector<X3D::SFVec2f> &texCoords){ _texCoords = texCoords; }
-void IndexedGeometry::setColors(const std::vector<X3D::SFColor> &colors) { _colors = colors; }
+void IndexedGeometry::setCoords(const std::vector<SFVec3f> &coords){ _coords = coords; }
+void IndexedGeometry::setNormals(const std::vector<SFVec3f> &normals){ _normals = normals; }
+void IndexedGeometry::setTexCoords(const std::vector<SFVec2f> &texCoords){ _texCoords = texCoords; }
+void IndexedGeometry::setColors(const std::vector<SFColor> &colors) { _colors = colors; }
 
 
 
@@ -224,7 +224,7 @@ void IndexedGeometry::createIndexedFaceSet()
 	for(std::vector<vertex>::const_iterator V = vertices.begin(); V != vertices.end(); V++)
 	{
 		const vertex &v = (*V);
-		X3D::SFVec3f pos = _coords.at(v.pos);
+		SFVec3f pos = _coords.at(v.pos);
 		*pVertex++ = pos.x;
 		*pVertex++ = pos.y;
 		*pVertex++ = pos.z;
@@ -232,7 +232,7 @@ void IndexedGeometry::createIndexedFaceSet()
 
 		if (hasPointNormals)
 		{
-			const X3D::SFVec3f normal = _normals.at(v.normal);
+			const SFVec3f normal = _normals.at(v.normal);
 			*pVertex++ = normal.x;
 			*pVertex++ = normal.y;
 			*pVertex++ = normal.z;
@@ -285,18 +285,18 @@ void IndexedGeometry::createIndexedLineSet(Ogre::ManualObject* manualObject)
 			inStrip = false;
 			stripCount++;
 		} else {
-			X3D::SFVec3f pos = _coords.at(*I);
+			SFVec3f pos = _coords.at(*I);
 			manualObject->position(pos.x, pos.y, pos.z);
 			if (hasColors)
 			{
 				if (hasVertexColors)
 				{
-					X3D::SFColor colour = _colorIndex.empty() ? _colors.at(*I) : _colors.at(_colorIndex.at(*I));
+					SFColor colour = _colorIndex.empty() ? _colors.at(*I) : _colors.at(_colorIndex.at(*I));
 					manualObject->colour(colour.r, colour.g, colour.b);
 				}
 				else
 				{
-					X3D::SFColor colour = _colorIndex.empty() ? _colors.at(stripCount) : _colors.at(_colorIndex.at(stripCount));
+					SFColor colour = _colorIndex.empty() ? _colors.at(stripCount) : _colors.at(_colorIndex.at(stripCount));
 					manualObject->colour(colour.r, colour.g, colour.b);
 				}
 			}

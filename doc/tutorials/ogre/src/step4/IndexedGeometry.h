@@ -26,10 +26,10 @@ public:
  void setTexCoordIndex(const std::vector<int> &texCoordIndex);
 
   // Data
- void setCoords(const std::vector<X3D::SFVec3f> &coords);
- void setNormals(const std::vector<X3D::SFVec3f> &normals);
- void setTexCoords(const std::vector<X3D::SFVec2f> &texCoords);
- void setColors(const std::vector<X3D::SFColor> &xolors);
+ void setCoords(const std::vector<XIOT::SFVec3f> &coords);
+ void setNormals(const std::vector<XIOT::SFVec3f> &normals);
+ void setTexCoords(const std::vector<XIOT::SFVec2f> &texCoords);
+ void setColors(const std::vector<XIOT::SFColor> &xolors);
   
  void createIndexedFaceSet();
  void createIndexedLineSet(Ogre::ManualObject*);
@@ -48,10 +48,10 @@ public:
   std::vector<int> _colorIndex;
   std::vector<int> _texCoordIndex;
 
-  std::vector<X3D::SFVec3f> _coords;
-  std::vector<X3D::SFVec3f> _normals;
-  std::vector<X3D::SFVec2f> _texCoords;
-  std::vector<X3D::SFColor> _colors;
+  std::vector<XIOT::SFVec3f> _coords;
+  std::vector<XIOT::SFVec3f> _normals;
+  std::vector<XIOT::SFVec2f> _texCoords;
+  std::vector<XIOT::SFColor> _colors;
 
 
 private:

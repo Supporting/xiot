@@ -23,7 +23,7 @@ class IndexedFaceSet;
  * occuring throughout the file import.
  * @see X3DDefaultNodeHandler
  */
-class OgreNodeHandler : public X3D::X3DDefaultNodeHandler {
+class OgreNodeHandler : public XIOT::X3DDefaultNodeHandler {
 
 public:
 
@@ -31,7 +31,7 @@ public:
   ~OgreNodeHandler();
 
   /// Called by all start callback functions
-  virtual int startUnhandled(const char* nodeName, const X3D::X3DAttributes &attr);
+  virtual int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
 
   /// Called by all end callback functions
   virtual int endUnhandled(const char* nodeName);

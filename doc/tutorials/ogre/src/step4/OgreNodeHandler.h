@@ -23,7 +23,7 @@ class IndexedGeometry;
  * occuring throughout the file import.
  * @see X3DDefaultNodeHandler
  */
-class OgreNodeHandler : public X3D::X3DDefaultNodeHandler {
+class OgreNodeHandler : public XIOT::X3DDefaultNodeHandler {
 
 public:
 
@@ -35,38 +35,38 @@ public:
   void startDocument();
   void endDocument();
 
-  int startShape(const X3D::X3DAttributes &attr);
+  int startShape(const XIOT::X3DAttributes &attr);
   int endShape();
 
-  int startSphere(const X3D::X3DAttributes &attr);
+  int startSphere(const XIOT::X3DAttributes &attr);
 
-  int startBox(const X3D::X3DAttributes &attr);
+  int startBox(const XIOT::X3DAttributes &attr);
 
-  int startAppearance(const X3D::X3DAttributes &attr);
+  int startAppearance(const XIOT::X3DAttributes &attr);
   int endAppearance();
 
-  int startMaterial(const X3D::X3DAttributes &attr);
+  int startMaterial(const XIOT::X3DAttributes &attr);
 
-  int startColor(const X3D::X3DAttributes &attr);
+  int startColor(const XIOT::X3DAttributes &attr);
 
-  int startCoordinate(const X3D::X3DAttributes &attr);
-  int startNormal(const X3D::X3DAttributes &attr);
+  int startCoordinate(const XIOT::X3DAttributes &attr);
+  int startNormal(const XIOT::X3DAttributes &attr);
 
-  int startTransform(const X3D::X3DAttributes &attr);
+  int startTransform(const XIOT::X3DAttributes &attr);
   int endTransform();
 
-  int startIndexedFaceSet(const X3D::X3DAttributes &attr);
+  int startIndexedFaceSet(const XIOT::X3DAttributes &attr);
   int endIndexedFaceSet();
 
-  int startIndexedLineSet(const X3D::X3DAttributes &attr);
+  int startIndexedLineSet(const XIOT::X3DAttributes &attr);
   int endIndexedLineSet();
 
-  int startDirectionalLight(const X3D::X3DAttributes &attr);
+  int startDirectionalLight(const XIOT::X3DAttributes &attr);
 
-  int startUnknown(const char* nodeName, const X3D::X3DAttributes &attr);
+  int startUnknown(const char* nodeName, const XIOT::X3DAttributes &attr);
 
   protected:
-	  std::string createUniqueName(const X3D::X3DAttributes &attr, const std::string& prefix="");
+	  std::string createUniqueName(const XIOT::X3DAttributes &attr, const std::string& prefix="");
 
   private:
 	  Ogre::SceneManager* _sceneManager;

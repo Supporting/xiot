@@ -6,6 +6,7 @@
 
 using namespace Ogre;
 using namespace std;
+using namespace XIOT;
 
 OgreNodeHandler::OgreNodeHandler()
 {
@@ -36,7 +37,7 @@ void OgreNodeHandler::endDocument()
 {
 }
 
-int OgreNodeHandler::startShape(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startShape(const XIOT::X3DAttributes &attr) {
   std::cout << "End Shape\n";
   if (attr.isUSE()) {
 	  _currentEntity = _sceneManager->getEntity(attr.getUSE())->clone(createUniqueName(attr, "shapeUSE"));
@@ -85,20 +86,20 @@ int OgreNodeHandler::endShape() {
   return 1;
 }
 
-int OgreNodeHandler::startTransform(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startTransform(const XIOT::X3DAttributes &attr) {
   std::cout << "Start Transform\n";
   // Get all the X3D tranformation data. Right now just translation and rotation
   // TODO: scale, scaleOrientation, center
 
-  X3D::SFVec3f translation;
-  X3D::SFRotation rotation;
+  SFVec3f translation;
+  SFRotation rotation;
 
-  int index = attr.getAttributeIndex(X3D::translation);
+  int index = attr.getAttributeIndex(ID::translation);
   if (index != -1)
   {
 	  translation = attr.getSFVec3f(index);
   }
-  index = attr.getAttributeIndex(X3D::rotation);
+  index = attr.getAttributeIndex(ID::rotation);
   if (index != -1)
   {
 	  rotation = attr.getSFRotation(index);
@@ -120,10 +121,10 @@ int OgreNodeHandler::endTransform() {
 }
 
 
-int OgreNodeHandler::startSphere(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startSphere(const XIOT::X3DAttributes &attr) {
   std::cout << "Start Sphere\n";
 
-  int index = attr.getAttributeIndex(X3D::radius);
+  int index = attr.getAttributeIndex(ID::radius);
   float radius = index == -1 ? 1.0 : attr.getSFFloat(index);
 
   const string name = createUniqueName(attr, "sphere");
@@ -134,7 +135,7 @@ int OgreNodeHandler::startSphere(const X3D::X3DAttributes &attr) {
   return 1;
 }
 
-int OgreNodeHandler::startBox(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startBox(const XIOT::X3DAttributes &attr) {
   std::cout << "Start Box\n";
   _currentEntity = _sceneManager->createEntity(createUniqueName(attr, "shape"), "cube.mesh");
   return 1;
@@ -143,7 +144,7 @@ int OgreNodeHandler::startBox(const X3D::X3DAttributes &attr) {
 
 
 
-int OgreNodeHandler::startAppearance(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startAppearance(const XIOT::X3DAttributes &attr) {
   std::cout << "Start Appearance\n";
   _currentMaterial = MaterialManager::getSingleton().create(createUniqueName(attr, "material"), "X3DRENDERER");
   _currentMaterial->load();
@@ -157,18 +158,18 @@ int OgreNodeHandler::endAppearance() {
   return 1;
 }
 
-int OgreNodeHandler::startMaterial(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startMaterial(const XIOT::X3DAttributes &attr) {
   std::cout << "Start Material\n";
   if (!_currentMaterial.isNull())
   {
 	  Pass* pass = _currentMaterial->getTechnique(0)->getPass(0);
-	  int index = attr.getAttributeIndex(X3D::ambientIntensity);
+	  int index = attr.getAttributeIndex(ID::ambientIntensity);
 	  float ambientIntensity = (index == -1) ? 0.2f : attr.getSFFloat(index);
-	  index = attr.getAttributeIndex(X3D::transparency);
+	  index = attr.getAttributeIndex(ID::transparency);
 	  float transparency = (index == -1) ? 0.0f : attr.getSFFloat(index);
 	  
-	  X3D::SFColor diffuseColor;
-	  index = attr.getAttributeIndex(X3D::diffuseColor);
+	  SFColor diffuseColor;
+	  index = attr.getAttributeIndex(ID::diffuseColor);
 	  if (index != -1)
 	  {
 		  diffuseColor = attr.getSFColor(index);
@@ -178,21 +179,21 @@ int OgreNodeHandler::startMaterial(const X3D::X3DAttributes &attr) {
 		  diffuseColor.r = diffuseColor.g = diffuseColor.b = 0.8;
 	  }
 
-	  X3D::SFColor specularColor;
-	  index = attr.getAttributeIndex(X3D::specularColor);
+	  SFColor specularColor;
+	  index = attr.getAttributeIndex(ID::specularColor);
 	  if (index != -1)
 	  {
 		  specularColor = attr.getSFColor(index);
 	  }
 
-  	  X3D::SFColor emissiveColor;    
-	  index = attr.getAttributeIndex(X3D::emissiveColor);
+  	  SFColor emissiveColor;    
+	  index = attr.getAttributeIndex(ID::emissiveColor);
 	  if (index != -1)
 	  {
 		  emissiveColor = attr.getSFColor(index);
 	  }
 	  
-	  index = attr.getAttributeIndex(X3D::shininess);
+	  index = attr.getAttributeIndex(ID::shininess);
 	  float shininess = (index == -1) ? 0.2f : attr.getSFFloat(index);
 	  shininess = Math::Clamp(shininess * 128.0f, 0.0f, 128.0f);
 
@@ -221,15 +222,15 @@ int OgreNodeHandler::startMaterial(const X3D::X3DAttributes &attr) {
 
 
 
-int OgreNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startDirectionalLight(const XIOT::X3DAttributes &attr) {
 	Light* light = _sceneManager->createLight(createUniqueName(attr, "directionalLight"));
 	light->setType(Ogre::Light::LT_DIRECTIONAL);
 
 	// Get the X3D values;
-	X3D::SFVec3f direction;
-	X3D::SFColor color;
+	SFVec3f direction;
+	SFColor color;
 
-	int index = attr.getAttributeIndex(X3D::direction);
+	int index = attr.getAttributeIndex(ID::direction);
 	if (index != -1)
 	{
 		direction = attr.getSFVec3f(index);
@@ -237,7 +238,7 @@ int OgreNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 	else
 		direction.z = -1;
 
-	index = attr.getAttributeIndex(X3D::color);
+	index = attr.getAttributeIndex(ID::color);
 	if (index != -1)
 	{
 		color = attr.getSFColor(index);
@@ -245,10 +246,10 @@ int OgreNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 	else
 		color.r = color.g = color.b = 1;
 
-	index = attr.getAttributeIndex(X3D::intensity);
+	index = attr.getAttributeIndex(ID::intensity);
 	float intensity = (index == -1) ? 1 : attr.getSFFloat(index);
 
-	index = attr.getAttributeIndex(X3D::on);
+	index = attr.getAttributeIndex(ID::on);
 	bool on = (index == -1) ? true : attr.getSFBool(index);
 
 	// Set the Ogre values
@@ -265,7 +266,7 @@ int OgreNodeHandler::startDirectionalLight(const X3D::X3DAttributes &attr) {
 }
 
 
-int OgreNodeHandler::startUnknown(const char* nodeName, const X3D::X3DAttributes &attr) {
+int OgreNodeHandler::startUnknown(const char* nodeName, const XIOT::X3DAttributes &attr) {
    std::cout << "Event %4i - Start unknown node %s with %i attribute(s): %s\n";
   return 1;
 }
@@ -275,7 +276,7 @@ int OgreNodeHandler::endUnknown(int id, const char* nodeName) {
   return 1;
 }
 
-std::string OgreNodeHandler::createUniqueName(const X3D::X3DAttributes &attr, const std::string& prefix)
+std::string OgreNodeHandler::createUniqueName(const XIOT::X3DAttributes &attr, const std::string& prefix)
 {
 	if (attr.isDEF())
 		return attr.getDEF();

@@ -30,7 +30,7 @@ void TutorialApplication::setX3DFile(const std::string& filename)
 void TutorialApplication::createScene()
 {
 
-	X3D::X3DLoader loader;
+	XIOT::X3DLoader loader;
 	OgreNodeHandler* handler = new OgreNodeHandler();
 	handler->setSceneManager(this->mSceneMgr);
 	loader.setNodeHandler(handler);

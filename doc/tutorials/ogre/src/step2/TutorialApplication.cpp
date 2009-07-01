@@ -3,7 +3,7 @@
 #include "OgreNodeHandler.h"
 
 
-void TutorialApplication::setX3DFile(const std::string& filename)
+void TutorialApplication::setX3DFile(const char* filename)
 {
 	_filename = filename;
 }
@@ -11,11 +11,11 @@ void TutorialApplication::setX3DFile(const std::string& filename)
 void TutorialApplication::createScene()
 {
 	// New instance of X3DLoader
-	X3D::X3DLoader loader;
+	XIOT::X3DLoader loader;
 	// Create and set NodeHandler
-	OgreNodeHandler* handler = new OgreNodeHandler();
-	loader.setNodeHandler(handler);
+	OgreNodeHandler handler;
+	loader.setNodeHandler(&handler);
 	// Start processing
-	loader.load(_filename);
+	loader.load(_filename.c_str());
 }
 

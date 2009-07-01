@@ -24,10 +24,10 @@ find_package(OGRE REQUIRED)
 find_package(OIS)
 
 # Find the X3DLoader libraries
-set(X3DLOADER_INCLUDE_DIR ${X3DLOADER_INCLUDE_DIR} CACHE PATH "")
-set(X3DLOADER_LIBRARY ${X3DLOADER_LIBRARY} CACHE FILEPATH  "")
+set(XIOT_INCLUDE_DIR ${X3DLOADER_INCLUDE_DIR} CACHE PATH "")
+set(XIOT_LIBRARY ${X3DLOADER_LIBRARY} CACHE FILEPATH  "")
 
-find_library(X3DLOADER_LIBRARY NAMES x3dLoader)
+find_library(XIOT_LIBRARY NAMES xiot DOC "The location of the XIOT library")
 
 set(STEP1_SRC
 	step1/main.cpp
@@ -37,7 +37,9 @@ set(STEP1_SRC
 set(STEP2_SRC
 	step2/main.cpp
 	step2/TutorialApplication.cpp
+	step2/TutorialApplication.h
 	step2/OgreNodeHandler.cpp
+	step2/OgreNodeHandler.h
 	ArgumentHelper.cpp
 	)
 
@@ -64,19 +66,19 @@ set(STEP4_SRC
 	)
 
 link_directories(${OGRE_LIB_DIR})
-include_directories(${OGRE_INCLUDE_DIR} ${X3DLOADER_INCLUDE_DIR} .)
+include_directories(${OGRE_INCLUDE_DIR} ${XIOT_INCLUDE_DIR} .)
 	
 add_executable(step1 ${STEP1_SRC})
 target_link_libraries(step1 ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
 
 add_executable(step2 ${STEP2_SRC})
-target_link_libraries(step2 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${X3DLOADER_LIBRARY})
+target_link_libraries(step2 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${XIOT_LIBRARY})
 
 add_executable(step3 ${STEP3_SRC})
-target_link_libraries(step3 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${X3DLOADER_LIBRARY})
+target_link_libraries(step3 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${XIOT_LIBRARY})
 
 add_executable(step4 ${STEP4_SRC})
-target_link_libraries(step4 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${X3DLOADER_LIBRARY})
+target_link_libraries(step4 ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${XIOT_LIBRARY})
 
 CONFIGURE_FILE(cfg/resources.cfg.in
     ${EXECUTABLE_OUTPUT_PATH}/resources.cfg @ONLY)

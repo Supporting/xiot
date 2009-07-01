@@ -16,7 +16,7 @@ public:
 	virtual ~TutorialApplication(){};
 
     virtual void createScene(void);    // pure virtual - this has to be overridden
-	void setX3DFile(const std::string &filename);
+	void setX3DFile(const char* filename);
 
 	std::string _filename;
 };

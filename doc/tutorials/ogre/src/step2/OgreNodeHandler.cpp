@@ -14,7 +14,7 @@ OgreNodeHandler::~OgreNodeHandler()
 }
 
 /// Called by all start callback functions
-int OgreNodeHandler::startUnhandled(const char* nodeName, const X3D::X3DAttributes &attr)
+int OgreNodeHandler::startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr)
 {
 	cout << "Unhandled: <" << nodeName << ">" << endl;
 	return 1;
