@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Test natural order of transformation. This test defines a single Transform with all its fields assigned some values. This test is designed to check the natural order of the transformation operations. The natural order of the transformation operations is: center, scaleOrientation, rotation and translation. The test should generate a cube in view"/></head><Scene><Transform translation="-2.5 1.75 1" rotation="0 0 1 0"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform><Transform translation="0 1.75 1" rotation="0 1 0 3.1415926"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform><Transform translation="2.5 1.75 1" rotation="0 1 0 -1.57"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform><Transform translation="-2.5 -1.75 1" rotation="0 1 0 1.57"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform><Transform translation="0 -1.75 1" rotation="1 0 0 1.57"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform><Transform translation="2.5 -1.75 1" rotation="1 0 0 -1.57"><Transform center="0 2 0" rotation="0 0 1 1.57" scale="0.5 0.75 0.5" scaleOrientation="0 1 0 1.57" translation="-1.5 -1 0">
+<Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+   <Box/>
+</Shape>
+</Transform></Transform></Scene></X3D>

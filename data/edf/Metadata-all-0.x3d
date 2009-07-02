@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="All metadata nodes are present."/></head><Scene><Transform translation="-2.5 1.75 1" rotation="0 0 1 0"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform><Transform translation="0 1.75 1" rotation="0 1 0 3.1415926"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform><Transform translation="2.5 1.75 1" rotation="0 1 0 -1.57"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform><Transform translation="-2.5 -1.75 1" rotation="0 1 0 1.57"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform><Transform translation="0 -1.75 1" rotation="1 0 0 1.57"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform><Transform translation="2.5 -1.75 1" rotation="1 0 0 -1.57"><Shape>
+   <Box>
+      <MetadataString name="data" reference="www.web3d.org" value="conformance"/>
+   </Box>
+   <MetadataFloat name="floatData" reference="www.web3d.org" value="42.0"/>
+   <MetadataSet name="setData" reference="www.web3d.org">
+       <MetadataDouble containerField="value" name="doubleData" reference="www.web3d.org" value="42.0"/>
+       <MetadataInteger containerField="value" name="intData" reference="www.web3d.org" value="42"/>
+   </MetadataSet>
+
+</Shape></Transform></Scene></X3D>

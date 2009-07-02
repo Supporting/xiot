@@ -1,0 +1,474 @@
+\documentclass[t]{beamer}
+%\usepackage{pgf}
+%\usepackage{beamerthemeHannover}
+%\usecolortheme{beetle}
+
+\usetheme{PaloAlto}
+\usecolortheme{fly}
+
+
+\usepackage{color}
+\definecolor{actorblue}{rgb}{0.0, 0.016, 0.698}
+\definecolor{commentColor}{rgb}{0.0, 0.6, 0.0}
+\definecolor{listinggray}{gray}{0.95}
+
+\usepackage{listings}
+\lstloadlanguages{xml,VRML,c++}
+
+%\lstset{	basicstyle=\ttfamily\small, 
+%\lstset{basicstyle=\ttfamily\tiny, keywordstyle=\bfseries}
+%\lstset{rulecolor=\color{actorblue}}
+%\lstset{linewidth=\textwidth}
+%\lstset{commentstyle=\textit, stringstyle=\upshape,showspaces=false,showstringspaces=false} %\lstset{numbers=left,numberstyle=\tiny}
+%\lstset{frame=trbl,frameround=ffff}
+%\lstset{captionpos=b}
+%\lstset{breaklines=true}
+%\lstset{aboveskip=\bigskipamount}
+
+
+\lstset{	basicstyle=\ttfamily\tiny, 
+%					backgroundcolor=\color{listinggray},
+					identifierstyle=\ttfamily,
+					rulecolor=\color{actorblue},
+					linewidth=\textwidth,
+					commentstyle=\color{commentColor}, 
+				  stringstyle=\upshape,
+				  showspaces=false,
+				  showstringspaces=false,
+				  tabsize = 2,
+					keywordstyle=\bfseries\ttfamily\color[rgb]{0,0,1},				  
+					prebreak = \raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+					captionpos=b,
+					captionstyle=\tiny
+			} 
+
+\lstset{frame=trbl,frameround=ffff}
+
+
+\pgfdeclareimage[height=1cm]{logo1}{F:/Actor3D/images/logos/logo_simple2}
+
+
+\title{X3D Training Session}
+\subtitle{@EDF R\&D}
+\author{Kristian Sons}
+\logo{\includegraphics[height=1.2cm]{F:/Actor3D/images/logos/logo_simple2}}
+%\institution{EDF}
+\date{10+11.03.2009}
+%\titlegraphic{}
+
+\begin{document}
+
+\begin{frame}[t]
+\titlepage
+\end{frame}
+
+%\begin{frame}
+%\frametitle{Outline}
+%\tableofcontents
+%\end{frame}
+%\AtBeginSection[]
+%{
+%   \begin{frame}
+%       \frametitle{Outline}
+%       \tableofcontents[currentsection]
+%   \end{frame}
+%}
+
+%\part{Introduction}
+%\setbeamertemplate{background canvas}[vertical shading][top=blue!60!black, bottom=red!60!black]
+
+
+
+\begin{frame}[t]
+\frametitle{About me}
+\framesubtitle{Kristian Sons}
+\begin{itemize}
+	\item Media computer scientist
+	\item Focus on computer graphics
+	\item Scientist at EADS Corporate Research Center 
+	\item Experience in
+	\begin{itemize}
+	\item C++, Java, Python
+	\item Eclipse RCP, EMF, Qt
+	\item OpenGL, Realtime Raytracing
+	\item Shader, VTK, OpenInventor
+	\end{itemize}
+	\item Founded Actor3D Oct. 2007
+	\begin{itemize}
+	\item Services and projects: \\EDF R\&D, EADS IW, Teraport
+	\item Products: Actor3D Editor
+	\end{itemize}
+\end{itemize}
+
+
+\end{frame}
+
+   \begin{frame}
+       \frametitle{Outline}
+       \tableofcontents
+   \end{frame}
+
+
+\section{X3D}
+
+\begin{frame}[t]
+\frametitle{What is X3D?}
+\framesubtitle{General}
+\begin{itemize}
+  \item Standardized scene graph description
+  \begin{itemize}
+    \item Support of 2D and 3D geometry
+    \item Hierarchical grouping
+    \item Lights, Material, (Multi-)Texturing, Shader, Animation,
+    Interaction\ldots
+  \end{itemize}
+  \item X3D 3.2 specification defines 215 scenegraph nodes.
+  \item Components
+  \begin{itemize}
+    \item Humanoid animation
+    \item NURBS
+  \end{itemize}
+  \item Profiles
+  \begin{itemize}
+    \item Interchange
+    \item Interactive
+  \end{itemize}
+  \item Successor of VRML
+\end{itemize}
+\end{frame}
+
+\subsection{Features}
+
+\frame<1-2>[label=features]
+{
+\frametitle{What is X3D?}
+\framesubtitle{Special features}
+\begin{itemize}
+  \item<alert@1> Open ISO standard
+  \item<alert@2> Encodings
+  \onslide*<2> { 
+  \begin{itemize}
+    \item XML
+    \item Classic VRML
+    \item Binary
+  \end{itemize}}
+  \item<alert@3> References
+ \onslide*<3> { 
+  \begin{itemize}
+  \item Reuse of sub-scenegraph
+    \item Exactly the same object
+    \item Smaller filesize
+    \item Possibly smaller memory consumption
+  \end{itemize}
+  }
+  
+    \item<alert@4> Prototypes
+    \onslide*<4> {
+    \begin{itemize}
+  \item Reuse of sub-scenegraph
+    \item Connected attributes and nodes
+    \item Define new objects 
+    \end{itemize}
+     }
+
+     \item<alert@5> Events and Routing
+    \onslide*<5> {
+    \begin{itemize}
+  \item Allows interaction in combination with sensor and timer nodes
+  \item Fields in scene graph can send and/or receive events depending on type 
+    \end{itemize}
+    } 
+
+        \item<alert@6> Scripting via Scene access interface (SAI)
+    \onslide*<6> {
+    \begin{itemize} 
+  \item ECMAScript (JavaScript)
+  \item Java
+    \end{itemize}
+    } 
+    \end{itemize}
+    }
+    
+    \subsection{Encodings}
+    
+\begin{frame}[fragile]
+\frametitle{Encodings}
+\framesubtitle{XML}
+\begin{itemize}
+  \item Human readable
+  \item Easy to process and generate
+  \item Large data files
+\end{itemize}
+\begin{lstlisting}[language={xml}]
+<X3D version='3.0' profile='Interchange'>
+  <Scene>
+    <Transform>
+      <NavigationInfo headlight='false' avatarSize='0.25 1.6 0.75' type='"EXAMINE"'/>
+      <DirectionalLight/>
+      <Transform translation='3.0 0.0 1.0'>
+        <Shape>
+          <Sphere radius='2.3'/>
+          <Appearance>
+            <Material diffuseColor='1.0 0.0 0.0'/>
+          </Appearance>
+        </Shape>
+      </Transform>
+  </Scene>
+</X3D>
+  \end{lstlisting}
+
+\end{frame}
+  
+  \begin{frame}[fragile]
+\frametitle{Encodings}
+  \framesubtitle{Classic VRML}
+\begin{itemize}
+  \item Human readable
+  \item Hard to process
+  \end{itemize}
+\begin{lstlisting}[language={VRML}]
+#X3D V3.2 utf8
+PROFILE Interchange
+
+Transform {
+  children [
+    NavigationInfo {
+      headlight FALSE
+      avatarSize [ 0.25 1.6 0.75 ]
+      type [ "EXAMINE" ]
+    }
+    DirectionalLight {
+    }
+    Transform {
+      translation 3.0 0.0 1.0
+      children [
+    Shape {
+	  geometry Sphere { radius 2.3
+	  }
+	  appearance Appearance {
+	    material Material { diffuseColor 1.0 0.0 0.0 }
+	  }
+	}
+    ] } ] }
+\end{lstlisting}
+
+\end{frame}
+  
+  \begin{frame}[t]
+\frametitle{Encodings}
+  \framesubtitle{Binary}
+\begin{itemize}
+  \item Binary encoding of XML using Fast Infoset (FI)
+  \item X3D-specific field encodings
+  \item Lossy or lossless
+  \item Not human readable
+  \item Small filesizes
+  \item Fast processing possible
+  \item Project with EDF has shown: \\ Compression rate up to 95\% compared to
+  XML encoding 
+  \end{itemize}
+  \end{frame}
+  
+  \againframe<3-6>{features}
+  
+  \subsection{Applications}
+  
+ \begin{frame}
+ \frametitle{What is X3D?}
+\framesubtitle{Applications}
+\begin{itemize}
+  \item Product Presentation
+  \item Product Configuration
+  \item Manuals / Training
+  \item Games / Entertainment
+  \item Scientific Visualization 
+  \item Visualize and Communicate Simulation Results
+  \item \dots
+\end{itemize}
+ \end{frame}
+  
+    
+ \begin{frame}
+ \frametitle{What is X3D?}
+\framesubtitle{Media}
+\begin{itemize}
+  \item Desktop
+  \item Web
+  \item Mobile
+  \item POS / POI / CDROM
+  \item Virtual Reality
+  \item Embedded in other documents (PDF, Word, PowerPoint)
+  \item \dots
+\end{itemize}
+ \end{frame}
+  
+  \section{General}
+  \subsection{History} 
+\begin{frame}
+\frametitle{History}
+\framesubtitle{Project History}
+
+\begin{itemize}
+	\item Project: Binary X3D exporter for VTK
+	\onslide*<2> { 
+	  \begin{itemize}
+		\item Without Java bindings
+		\item Reimplementation of existing vtkX3DExporter
+		\item One Interface for both encodings, XML and FI
+		\item Using VTK data types
+		\item Contributed without major changes to VTK CVS tree
+		\end{itemize}
+	 }
+  \item Project: Generalized X3D exporter
+	\onslide*<3> { 
+  \begin{itemize}
+	\item Replace VTK data types with standard C++/STL types
+	\item Improved interface
+	\item Improved performance
+	\end{itemize}
+	}
+  \item Project: X3D Loader library
+	\onslide*<4> { 
+  \begin{itemize}
+	\item XML and FI encoding
+	\item Event based
+	\item Demonstrator and Tutorial
+	\item Spin-Off: OpenFI-library
+	\end{itemize}
+	}
+  \end{itemize}
+\end{frame}
+  
+\subsection{Concepts} 
+\begin{frame}
+\frametitle{Concepts}
+%\framesubtitle{Workflow}
+\begin{itemize}
+	\item Hide encoding from user
+	\item Use IDs instead of strings
+	\item Try to avoid data structures
+	\item Keep it simple
+\end{itemize}
+\end{frame}
+
+\subsection{Libraries}
+\begin{frame}
+\frametitle{Libraries}
+\framesubtitle{Contributions}
+\begin{itemize}
+	\item Exporter
+	\begin{itemize}
+		\item zlib
+	\end{itemize}
+	\item Loader
+	\begin{itemize}
+		\item zlib, xercesc, openFI
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\section{X3D Exporter}
+
+\begin{frame}[fragile]
+	\frametitle{X3D Exporter}
+	\framesubtitle{Functionality}
+	\begin{itemize}
+	\item What does the importer for you?
+	\begin{itemize}
+		\item Write the document using the specified encoding
+		\item Document header / footer generation
+		\item Formatting (XML)
+	\end{itemize}
+	\item<2-> You have to take care for semantics:
+	\begin{itemize}
+		\item Matching start/end Node
+		\item Allowed attributes
+		\item Allowed data types
+	\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{X3D Exporter}
+	\framesubtitle{Code}
+\begin{lstlisting}[language={c++}]
+writer->StartDocument();
+  writer->StartNode(X3D::X3D);
+    writer->SetSFString(X3D::profile, "Immersive");
+    writer->SetSFString(X3D::version, "3.0");
+    writer->StartNode(X3D::Scene);
+      writer->StartNode(X3D::Shape);
+        writer->StartNode(X3D::Box);
+          writer->SetSFVec3f(X3D::size, 2.0f, 0.5f, 0.5f); 
+        writer->EndNode();
+      writer->EndNode();
+    writer->EndNode();
+  writer->EndNode();
+writer->EndDocument();
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{X3D Exporter}
+	\framesubtitle{Result - XML}
+\begin{lstlisting}[language={xml}, title=Result XML encoded: 173 Byte]
+<?xml version="1.0" encoding ="UTF-8"?>
+
+<X3D profile="Immersive" version="3.0">
+  <Scene>
+    <Shape>
+      <Box size="2 0.5 0.5"/>
+    </Shape>
+  </Scene>
+</X3D>
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{X3D Exporter}
+	\framesubtitle{Result - FI}
+\begin{lstlisting}[title=Result Fast Infoset encoded: 82 Byte]
+0000000 010000e0 16001020 3a6e7275 65747865  >.... ...urn:exte<
+0000020 6c616e72 636f762d 6c756261 60797261  >rnal-vocabulary`<
+0000040 48af406a 6d6d4900 69737265 fa406576  >j@.H.Immersive@.<
+0000060 302e3342 200a90f0 a000a056 0008295d  >B3.0... V...])..<
+0000100 2e302032 2e302035 f0a0f035 f0a0f0a0  >2 0.5 0.5.......<
+0000120 0000ffa0                             >....<
+\end{lstlisting}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Discussion}
+	\framesubtitle{What do you think about?}
+	\begin{itemize}
+		\pause \item Scene Optimizations (s. Chinsel)
+		\pause \item Scene reduction
+		\pause \item Importer (i.e. OpenJT, fbx...)
+		\pause \item Exporter (i.e. U3D)
+		\pause \item API
+	\end{itemize}
+\end{frame}
+
+\section{X3D Loader}
+
+\begin{frame}
+	\frametitle{The End}
+	\begin{block}{Thank you for your attention!}
+	Kristian Sons \\
+	Chiemgaustr 62 \\
+	81549 M\"{u}nchen / Germany \\ 
+	\vspace{1cm}
+	
+	\begin{tabular}{ll}
+	tel  &   +49-89-20327854\\
+fax   &  +49-89-20327853\\
+mobile & +49-151-50987608\\
+mail  &  kristian.sons@actor3d.com\\
+web   &  \hyperlink{http://www.actor3d.com}{http://www.actor3d.com}
+\end{tabular}
+	\end{block}
+\end{frame}
+
+\end{document}

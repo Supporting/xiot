@@ -1,0 +1,58 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 2 attribute(s): translation rotation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   11 - Start node Coordinate with 1 attribute(s): point 
+Event   12 - End node Coordinate
+Event   13 - End node IndexedTriangleStripSet
+Event   14 - End node Shape
+Event   15 - End node Transform
+Event   16 - Start node Transform with 2 attribute(s): translation rotation 
+Event   17 - Start node Shape with 0 attribute(s): 
+Event   18 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   19 - Start node Coordinate with 1 attribute(s): point 
+Event   20 - End node Coordinate
+Event   21 - End node IndexedTriangleStripSet
+Event   22 - End node Shape
+Event   23 - End node Transform
+Event   24 - Start node Transform with 2 attribute(s): translation rotation 
+Event   25 - Start node Shape with 0 attribute(s): 
+Event   26 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   27 - Start node Coordinate with 1 attribute(s): point 
+Event   28 - End node Coordinate
+Event   29 - End node IndexedTriangleStripSet
+Event   30 - End node Shape
+Event   31 - End node Transform
+Event   32 - Start node Transform with 2 attribute(s): translation rotation 
+Event   33 - Start node Shape with 0 attribute(s): 
+Event   34 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   35 - Start node Coordinate with 1 attribute(s): point 
+Event   36 - End node Coordinate
+Event   37 - End node IndexedTriangleStripSet
+Event   38 - End node Shape
+Event   39 - End node Transform
+Event   40 - Start node Transform with 2 attribute(s): translation rotation 
+Event   41 - Start node Shape with 0 attribute(s): 
+Event   42 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   43 - Start node Coordinate with 1 attribute(s): point 
+Event   44 - End node Coordinate
+Event   45 - End node IndexedTriangleStripSet
+Event   46 - End node Shape
+Event   47 - End node Transform
+Event   48 - Start node Transform with 2 attribute(s): translation rotation 
+Event   49 - Start node Shape with 0 attribute(s): 
+Event   50 - Start node IndexedTriangleStripSet with 1 attribute(s): index 
+Event   51 - Start node Coordinate with 1 attribute(s): point 
+Event   52 - End node Coordinate
+Event   53 - End node IndexedTriangleStripSet
+Event   54 - End node Shape
+Event   55 - End node Transform
+Event   56 - End node Scene
+Event   57 - End node X3D
+Event   58 - End Document

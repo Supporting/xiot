@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN"
+  "http://www.web3d.org/specifications/x3d-3.0.dtd">
+
+<X3D version='3.0' profile='Interchange'>
+  <head>
+    <meta name='filename' content='Instancing.x3d'/>
+  </head>
+  <Scene>
+    <Transform>
+      <Shape>
+        <Sphere/>
+      </Shape>
+      <Transform translation='2.0 0.0 0.0'>
+        <Shape DEF='Joe'>
+          <Sphere radius='0.2'/>
+        </Shape>
+      </Transform>
+      <Transform translation='-2.0 0.0 0.0'>
+        <Shape USE='Joe'/>
+      </Transform>
+    </Transform>
+  </Scene>
+</X3D>

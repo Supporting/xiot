@@ -1,0 +1,106 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 2 attribute(s): translation rotation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Box with 0 attribute(s): 
+Event   11 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   12 - End node MetadataString
+Event   13 - End node Box
+Event   14 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   15 - End node MetadataFloat
+Event   16 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   17 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   18 - End node MetadataDouble
+Event   19 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event   20 - End node MetadataInteger
+Event   21 - End node MetadataSet
+Event   22 - End node Shape
+Event   23 - End node Transform
+Event   24 - Start node Transform with 2 attribute(s): translation rotation 
+Event   25 - Start node Shape with 0 attribute(s): 
+Event   26 - Start node Box with 0 attribute(s): 
+Event   27 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   28 - End node MetadataString
+Event   29 - End node Box
+Event   30 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   31 - End node MetadataFloat
+Event   32 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   33 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   34 - End node MetadataDouble
+Event   35 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event   36 - End node MetadataInteger
+Event   37 - End node MetadataSet
+Event   38 - End node Shape
+Event   39 - End node Transform
+Event   40 - Start node Transform with 2 attribute(s): translation rotation 
+Event   41 - Start node Shape with 0 attribute(s): 
+Event   42 - Start node Box with 0 attribute(s): 
+Event   43 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   44 - End node MetadataString
+Event   45 - End node Box
+Event   46 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   47 - End node MetadataFloat
+Event   48 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   49 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   50 - End node MetadataDouble
+Event   51 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event   52 - End node MetadataInteger
+Event   53 - End node MetadataSet
+Event   54 - End node Shape
+Event   55 - End node Transform
+Event   56 - Start node Transform with 2 attribute(s): translation rotation 
+Event   57 - Start node Shape with 0 attribute(s): 
+Event   58 - Start node Box with 0 attribute(s): 
+Event   59 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   60 - End node MetadataString
+Event   61 - End node Box
+Event   62 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   63 - End node MetadataFloat
+Event   64 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   65 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   66 - End node MetadataDouble
+Event   67 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event   68 - End node MetadataInteger
+Event   69 - End node MetadataSet
+Event   70 - End node Shape
+Event   71 - End node Transform
+Event   72 - Start node Transform with 2 attribute(s): translation rotation 
+Event   73 - Start node Shape with 0 attribute(s): 
+Event   74 - Start node Box with 0 attribute(s): 
+Event   75 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   76 - End node MetadataString
+Event   77 - End node Box
+Event   78 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   79 - End node MetadataFloat
+Event   80 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   81 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   82 - End node MetadataDouble
+Event   83 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event   84 - End node MetadataInteger
+Event   85 - End node MetadataSet
+Event   86 - End node Shape
+Event   87 - End node Transform
+Event   88 - Start node Transform with 2 attribute(s): translation rotation 
+Event   89 - Start node Shape with 0 attribute(s): 
+Event   90 - Start node Box with 0 attribute(s): 
+Event   91 - Start node MetadataString with 3 attribute(s): name reference value 
+Event   92 - End node MetadataString
+Event   93 - End node Box
+Event   94 - Start node MetadataFloat with 3 attribute(s): name reference value 
+Event   95 - End node MetadataFloat
+Event   96 - Start node MetadataSet with 2 attribute(s): name reference 
+Event   97 - Start node MetadataDouble with 4 attribute(s): containerField name reference value 
+Event   98 - End node MetadataDouble
+Event   99 - Start node MetadataInteger with 4 attribute(s): containerField name reference value 
+Event  100 - End node MetadataInteger
+Event  101 - End node MetadataSet
+Event  102 - End node Shape
+Event  103 - End node Transform
+Event  104 - End node Scene
+Event  105 - End node X3D
+Event  106 - End Document

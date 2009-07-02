@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+  <head>
+    <meta content='Example10.x3d' name='title'/>
+    <meta content='Don Brutzman' name='translator'/>
+    <meta content='26 June 2000' name='created'/>
+    <meta content='13 August 2002' name='modified'/>
+    <meta content='VRML 97 specification example: simple PointSet example composed of 3 points. The first point is red (1 0 0), the second point is green (0 1 0), and the third point is blue (0 0 1). The second PointSet instances the Coordinate node defined in the first PointSet, but defines different colours.' name='description'/>
+    <meta content='original/exampleD_10.wrl' name='reference'/>
+    <meta content='http://www.web3d.org/technicalinfo/specifications/vrml97/part1/examples.html#D.10' name='reference'/>
+    <meta content='http://www.web3d.org/x3d/content/examples/Basic/Vrml97Specification/Example10.x3d' name='identifier'/>
+    <meta content='X3D-Edit 3.2, https://savage.nps.edu/X3D-Edit' name='generator'/>
+    <meta content='../license.html' name='license'/>
+  </head>
+  <Scene>
+    <Shape>
+      <PointSet>
+        <Color color='1.0 0.0 0.0 1.0 0.0 0.0 1.0 0.0 0.0'/>
+        <Coordinate DEF='mypts' point='0.0 0.0 0.0 2.0 2.0 2.0 3.0 3.0 3.0'/>
+      </PointSet>
+    </Shape>
+    <Transform translation='2.0 0.0 0.0'>
+      <Shape>
+        <PointSet>
+          <Color color='0.5 0.5 0.0 0.5 0.5 0.0 0.5 0.5 0.0'/>
+          <Coordinate USE='mypts'/>
+        </PointSet>
+      </Shape>
+    </Transform>
+  </Scene>
+</X3D>

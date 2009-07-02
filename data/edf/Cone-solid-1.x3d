@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="&#xA;Test Cone; should produce 3 rows of cones; top row should have one with both bottom and side missing, one with side missing and solid FALSE, and one with bottom missing and soild FALSE, middle row; a tall, thin cone, a shorter cone, a very short cone. Bottom row: a normal cone, one with a bottomRadius of 0.00001 and one with a height of 0.00001. The last 2 cones might not be visible; if they are, they will be very &#34;thin&#34; or &#34;flat&#34;.&#xA;&#x9;&#x9;"/></head><Scene><Transform translation="-2.5 2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone bottom="FALSE" side="FALSE"/>
+		        </Shape>
+		</Transform><Transform translation="0 2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone side="FALSE" solid="FALSE"/>
+		        </Shape>
+		</Transform><Transform translation="2.5 2.5 0" rotation="1 0 0 1.57">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone bottom="FALSE" solid="FALSE"/>
+		        </Shape>
+		</Transform><Transform translation="-2.5 0 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone bottomRadius="0.3"/>
+		        </Shape>
+		</Transform><Transform translation="0 0 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone height="1.2"/>
+		        </Shape>
+		</Transform><Transform translation="-2.5 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone bottomRadius="0.1"/>
+		        </Shape>
+		</Transform><Transform translation="2.5 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+			<Cone bottomRadius="0.01"/>
+		        </Shape>
+		</Transform><Transform translation="0 -2.5 0">
+		        <Shape>
+               			<Appearance> <Material/> </Appearance>
+		        <Cone height="0.00001"/>
+		        </Shape>
+		</Transform></Scene></X3D>

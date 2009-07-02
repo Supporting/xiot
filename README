@@ -1,0 +1,71 @@
+X3DLoader library version 0.1
+
+About
+=====
+
+	X3DLoader is a portable toolkit including a C++ library for reading
+X3D content with several encodings. Currently XML encoding and binary
+Fast Infoset encoding is supported
+
+License terms
+=====
+
+	TODO
+	
+Package directory layout
+========================
+   /doc
+     /html              :  API HTML documentation.
+   /examples            :  Example programs: VTK based X3D viewer
+   /contrib             :  3rd party libraries (windows only)
+   /data                :  Example X3D files
+   /plugins             :  ParaView plugin example
+   /src                 :  Library source
+     /gen			    :  Source generation
+   /tests               :  Test programs
+
+   
+Prerequisites
+=============
+	X3DLoader requires XercesC XML parser and zlib compression library to
+	build.
+	
+	XercesC
+	=======
+	The Apache XML parser library is contained in the contrib directory for
+	win32 and win64 build with VC9. On Linux system, XercecC can easily be 
+	obtained using the package system, i.e. via:
+	
+	sudo apt-get install libxerces27 libxerces27-dev
+	
+	If not, consult the following URI to get binaries or the source for 
+	XercesC:
+	http://xerces.apache.org/xerces-c/
+	
+	The library has been tested with Xerces versions 2.7.0 and 3.0.0.
+	
+	zlib
+	====
+	The zlib compression library is packaged with many systems. Static builds
+	for win32/64 build with VC are contained in the contrib directory. On Linux 
+	systems, zlib can easily be obtained using the package system, i.e. via:
+	
+	sudo apt-get install zlib1g zlib1g-dev
+	
+	If not, consult the following URI to get binaries or the source for 
+	zlib:
+	http://www.zlib.net/
+	
+	The library has been tested with zlib version 1.2.3.
+	
+	For additional prerequisites for the example viewer and for the ParaView
+	plugin please refer to the README files in subdirectories example and 
+	plugins.
+	
+
+Installation
+============
+
+   Refer to the file "INSTALL" for detailed installation instructions.
+	
+	

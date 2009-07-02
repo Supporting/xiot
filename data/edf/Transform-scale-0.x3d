@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Scales a box in increasing size"/></head><Scene><Transform translation="-3 0 0">
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Box/>
+   </Shape>
+</Transform><Transform translation="0 0 0" scale="1.25 1.25 1.25">
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Box/>
+   </Shape>
+</Transform><Transform translation="3 0 0" scale="1.5 1.5 1.5">
+   <Shape>
+      <Appearance>
+         <Material/>
+      </Appearance>
+      <Box/>
+   </Shape>
+</Transform></Scene></X3D>

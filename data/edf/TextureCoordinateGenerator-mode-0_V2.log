@@ -1,0 +1,88 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node Scene with 0 attribute(s): 
+Event    4 - Start node Viewpoint with 2 attribute(s): description position 
+Event    5 - End node Viewpoint
+Event    6 - Start node Transform with 1 attribute(s): translation 
+Event    7 - Start node Shape with 0 attribute(s): 
+Event    8 - Start node IndexedFaceSet with 2 attribute(s): creaseAngle coordIndex 
+Event    9 - Start node Coordinate with 2 attribute(s): DEF point 
+Event   10 - End node Coordinate
+Event   11 - Start node MultiTextureCoordinate with 0 attribute(s): 
+Event   12 - Start node TextureCoordinateGenerator with 1 attribute(s): mode 
+Event   13 - End node TextureCoordinateGenerator
+Event   14 - End node MultiTextureCoordinate
+Event   15 - End node IndexedFaceSet
+Event   16 - Start node Appearance with 0 attribute(s): 
+Event   17 - Start node Material with 0 attribute(s): 
+Event   18 - End node Material
+Event   19 - Start node MultiTexture with 1 attribute(s): mode 
+Event   20 - Start node ImageTexture with 1 attribute(s): url 
+Event   21 - End node ImageTexture
+Event   22 - End node MultiTexture
+Event   23 - End node Appearance
+Event   24 - End node Shape
+Event   25 - End node Transform
+Event   26 - Start node Transform with 1 attribute(s): translation 
+Event   27 - Start node Shape with 0 attribute(s): 
+Event   28 - Start node IndexedFaceSet with 2 attribute(s): creaseAngle coordIndex 
+Event   29 - Start node Coordinate with 1 attribute(s): USE 
+Event   30 - End node Coordinate
+Event   31 - Start node MultiTextureCoordinate with 0 attribute(s): 
+Event   32 - Start node TextureCoordinateGenerator with 1 attribute(s): mode 
+Event   33 - End node TextureCoordinateGenerator
+Event   34 - End node MultiTextureCoordinate
+Event   35 - End node IndexedFaceSet
+Event   36 - Start node Appearance with 0 attribute(s): 
+Event   37 - Start node Material with 0 attribute(s): 
+Event   38 - End node Material
+Event   39 - Start node MultiTexture with 1 attribute(s): mode 
+Event   40 - Start node ImageTexture with 1 attribute(s): url 
+Event   41 - End node ImageTexture
+Event   42 - End node MultiTexture
+Event   43 - End node Appearance
+Event   44 - End node Shape
+Event   45 - End node Transform
+Event   46 - Start node Transform with 1 attribute(s): translation 
+Event   47 - Start node Shape with 0 attribute(s): 
+Event   48 - Start node IndexedFaceSet with 2 attribute(s): creaseAngle coordIndex 
+Event   49 - Start node Coordinate with 1 attribute(s): USE 
+Event   50 - End node Coordinate
+Event   51 - Start node MultiTextureCoordinate with 0 attribute(s): 
+Event   52 - Start node TextureCoordinateGenerator with 1 attribute(s): mode 
+Event   53 - End node TextureCoordinateGenerator
+Event   54 - End node MultiTextureCoordinate
+Event   55 - End node IndexedFaceSet
+Event   56 - Start node Appearance with 0 attribute(s): 
+Event   57 - Start node Material with 0 attribute(s): 
+Event   58 - End node Material
+Event   59 - Start node MultiTexture with 1 attribute(s): mode 
+Event   60 - Start node ImageTexture with 1 attribute(s): url 
+Event   61 - End node ImageTexture
+Event   62 - End node MultiTexture
+Event   63 - End node Appearance
+Event   64 - End node Shape
+Event   65 - End node Transform
+Event   66 - Start node Transform with 1 attribute(s): translation 
+Event   67 - Start node Shape with 0 attribute(s): 
+Event   68 - Start node IndexedFaceSet with 2 attribute(s): creaseAngle coordIndex 
+Event   69 - Start node Coordinate with 1 attribute(s): USE 
+Event   70 - End node Coordinate
+Event   71 - Start node MultiTextureCoordinate with 0 attribute(s): 
+Event   72 - Start node TextureCoordinateGenerator with 1 attribute(s): mode 
+Event   73 - End node TextureCoordinateGenerator
+Event   74 - End node MultiTextureCoordinate
+Event   75 - End node IndexedFaceSet
+Event   76 - Start node Appearance with 0 attribute(s): 
+Event   77 - Start node Material with 0 attribute(s): 
+Event   78 - End node Material
+Event   79 - Start node MultiTexture with 1 attribute(s): mode 
+Event   80 - Start node ImageTexture with 1 attribute(s): url 
+Event   81 - End node ImageTexture
+Event   82 - End node MultiTexture
+Event   83 - End node Appearance
+Event   84 - End node Shape
+Event   85 - End node Transform
+Event   86 - End node Scene
+Event   87 - End node X3D
+Event   88 - End Document

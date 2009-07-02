@@ -1,0 +1,68 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 1 attribute(s): translation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Box with 1 attribute(s): size 
+Event   11 - End node Box
+Event   12 - Start node Appearance with 0 attribute(s): 
+Event   13 - Start node Material with 2 attribute(s): diffuseColor emissiveColor 
+Event   14 - End node Material
+Event   15 - End node Appearance
+Event   16 - End node Shape
+Event   17 - End node Transform
+Event   18 - Start node Transform with 1 attribute(s): translation 
+Event   19 - Start node Shape with 0 attribute(s): 
+Event   20 - Start node IndexedFaceSet with 1 attribute(s): coordIndex 
+Event   21 - Start node Coordinate with 1 attribute(s): point 
+Event   22 - End node Coordinate
+Event   23 - End node IndexedFaceSet
+Event   24 - Start node Appearance with 0 attribute(s): 
+Event   25 - Start node PixelTexture with 1 attribute(s): image 
+Event   26 - End node PixelTexture
+Event   27 - End node Appearance
+Event   28 - End node Shape
+Event   29 - End node Transform
+Event   30 - Start node Transform with 1 attribute(s): translation 
+Event   31 - Start node Shape with 0 attribute(s): 
+Event   32 - Start node IndexedFaceSet with 1 attribute(s): coordIndex 
+Event   33 - Start node Coordinate with 1 attribute(s): point 
+Event   34 - End node Coordinate
+Event   35 - End node IndexedFaceSet
+Event   36 - Start node Appearance with 0 attribute(s): 
+Event   37 - Start node PixelTexture with 1 attribute(s): image 
+Event   38 - End node PixelTexture
+Event   39 - End node Appearance
+Event   40 - End node Shape
+Event   41 - End node Transform
+Event   42 - Start node Transform with 1 attribute(s): translation 
+Event   43 - Start node Shape with 0 attribute(s): 
+Event   44 - Start node IndexedFaceSet with 1 attribute(s): coordIndex 
+Event   45 - Start node Coordinate with 1 attribute(s): point 
+Event   46 - End node Coordinate
+Event   47 - End node IndexedFaceSet
+Event   48 - Start node Appearance with 0 attribute(s): 
+Event   49 - Start node PixelTexture with 1 attribute(s): image 
+Event   50 - End node PixelTexture
+Event   51 - End node Appearance
+Event   52 - End node Shape
+Event   53 - End node Transform
+Event   54 - Start node Transform with 1 attribute(s): translation 
+Event   55 - Start node Shape with 0 attribute(s): 
+Event   56 - Start node IndexedFaceSet with 1 attribute(s): coordIndex 
+Event   57 - Start node Coordinate with 1 attribute(s): point 
+Event   58 - End node Coordinate
+Event   59 - End node IndexedFaceSet
+Event   60 - Start node Appearance with 0 attribute(s): 
+Event   61 - Start node PixelTexture with 1 attribute(s): image 
+Event   62 - End node PixelTexture
+Event   63 - End node Appearance
+Event   64 - End node Shape
+Event   65 - End node Transform
+Event   66 - End node Scene
+Event   67 - End node X3D
+Event   68 - End Document

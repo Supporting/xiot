@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="This tests the various image formats used in the url field"/></head><Scene><Transform translation="0 0 -2">
+			<Shape>
+				<Box size="9 9 .1"/>
+				<Appearance>
+					<Material diffuseColor="0 0 0" emissiveColor=".5 .5 .5"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<ImageTexture url="&#34;images/vts[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<ImageTexture url="&#34;images/8bcolrp[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/rgb_alpha[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/rgb_trans[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/8bcolrtp[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<ImageTexture url="&#34;images/greyscale[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<ImageTexture url="&#34;images/greyscale[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 -1 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/greyscalecolor[1].jpg&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="-2 -3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/greyscalecolor[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="0 -3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/greyscale_alpha[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform><Transform translation="2 -3 0">
+			<Shape>
+				<Box size="1 1 1"/>
+				<Appearance>
+					<Material diffuseColor="1 0 0"/>
+					<ImageTexture url="&#34;images/greyscale_trans[1].png&#34;"/>
+				</Appearance>
+			</Shape>
+		</Transform></Scene></X3D>

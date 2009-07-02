@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="NormalInterpolator test. This test displays an indexedFaceSet that, although it resembles an elongated pyramid in reality, visually it looks like it changes shape. The edges and the two interior vertexes should change intensity gigiving the impression that the shape is changing, while in reality it is only the normals changing. "/></head><Scene><TimeSensor DEF="TIME0" loop="true" cycleInterval="2"/><NormalInterpolator DEF="NORM_INTERP" key="0 0.5 1" keyValue="                 0 0 1     0 0 1   0 1 0   0 1 0   0 1 0  0 1 0                 0 1 0     0 1 0   0 0 1   0 0 1   0 0 1  0 0 1                 0 0 1     0 0 1   0 1 0   0 1 0   0 1 0  0 1 0 "/><Transform>
+            <Shape>
+               <Appearance>
+                  <Material/>
+               </Appearance>
+        <IndexedFaceSet coordIndex="0 2 3 1 -1                          1 5 4 0 -1                         0 4 2 -1                         1 3 5 -1 ">
+		<Normal DEF="NORMAL" vector="0 0 1 0 0 1 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0"/>
+            <Coordinate point="-1.7 0 2  1.7 0 2                         -4 -3 -1                         4 -3 -1                         -4 3 -1                         4 3 -1 "/>
+         </IndexedFaceSet>
+
+            </Shape>
+         </Transform><ROUTE fromField="fraction_changed" fromNode="TIME0" toField="set_fraction" toNode="NORM_INTERP"/><ROUTE fromField="value_changed" fromNode="NORM_INTERP" toField="vector" toNode="NORMAL"/></Scene></X3D>

@@ -1,0 +1,14 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Shape with 0 attribute(s): 
+Event    9 - Start node Box with 0 attribute(s): 
+Event   10 - End node Box
+Event   11 - End node Shape
+Event   12 - End node Scene
+Event   13 - End node X3D
+Event   14 - End Document

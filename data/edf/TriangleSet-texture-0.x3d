@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Test that no default texture coordinates are generated"/></head><Scene><Transform translation="-2.5 1.75 1" rotation="0 0 1 0"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform><Transform translation="0 1.75 1" rotation="0 1 0 3.1415926"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform><Transform translation="2.5 1.75 1" rotation="0 1 0 -1.57"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform><Transform translation="-2.5 -1.75 1" rotation="0 1 0 1.57"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform><Transform translation="0 -1.75 1" rotation="1 0 0 1.57"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform><Transform translation="2.5 -1.75 1" rotation="1 0 0 -1.57"><Shape>
+      <Appearance>
+          <PixelTexture image=" 2 4 3 0xff0000 0xff00 0xff0000 0xff00 0xffff00 255 0xffff00 255"/>
+      </Appearance>
+   <TriangleSet>
+       <Coordinate point="           1 0 -1           0 2 0           1 0 1                      -1 0 -1           0 2 0           1 0 -1                      -1 0 1                     0 2 0           -1 0 -1                      1 0 1                     0 2 0           -1 0 1                      1 0 -1           1 0 1          -1 0 1                      1 0 -1           -1 0 1           -1 0 -1                     "/>
+   </TriangleSet>
+</Shape></Transform></Scene></X3D>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<X3D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.actor3d.com/x3d" profile="Interchange" version="3.0">
+  <head>
+    <meta name="filename" content="RedSphereBlueBox.x3d"/>
+  </head>
+  <Scene>
+    <Transform>
+      <NavigationInfo headlight="false" type="&quot;EXAMINE&quot;"/>
+      <DirectionalLight/>
+      <Transform translation="3.0 0.0 1.0">
+        <Shape>
+          <Appearance>
+            <Material  diffuseColor="1.0 0.0 0.0" emissiveColor="1.0 0.5019608 1.0" shininess="1.0"/>
+          </Appearance>
+          <Sphere radius="2.3"/>
+        </Shape>
+      </Transform>
+      <Transform rotation="0.0 0.707 0.707 0.9" translation="-2.4 0.2 1.0">
+        <Shape>
+          <Appearance>
+            <Material diffuseColor="0.0 0.0 1.0"/>
+          </Appearance>
+          <Box/>
+        </Shape>
+      </Transform>
+      <Viewpoint/>
+    </Transform>
+  </Scene>
+</X3D>

@@ -1,0 +1,28 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node TimeSensor with 3 attribute(s): DEF loop cycleInterval 
+Event    9 - End node TimeSensor
+Event   10 - Start node OrientationInterpolator with 3 attribute(s): DEF key keyValue 
+Event   11 - End node OrientationInterpolator
+Event   12 - Start node Transform with 1 attribute(s): DEF 
+Event   13 - Start node Shape with 0 attribute(s): 
+Event   14 - Start node Appearance with 0 attribute(s): 
+Event   15 - Start node Material with 1 attribute(s): DEF 
+Event   16 - End node Material
+Event   17 - End node Appearance
+Event   18 - Start node Box with 1 attribute(s): size 
+Event   19 - End node Box
+Event   20 - End node Shape
+Event   21 - End node Transform
+Event   22 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   23 - End node ROUTE
+Event   24 - Start node ROUTE with 4 attribute(s): fromField fromNode toField toNode 
+Event   25 - End node ROUTE
+Event   26 - End node Scene
+Event   27 - End node X3D
+Event   28 - End Document

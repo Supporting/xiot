@@ -1,0 +1,82 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 2 attribute(s): translation rotation 
+Event    9 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   10 - End node NavigationInfo
+Event   11 - Start node Shape with 0 attribute(s): 
+Event   12 - Start node Appearance with 0 attribute(s): 
+Event   13 - Start node Material with 1 attribute(s): emissiveColor 
+Event   14 - End node Material
+Event   15 - End node Appearance
+Event   16 - Start node Box with 0 attribute(s): 
+Event   17 - End node Box
+Event   18 - End node Shape
+Event   19 - End node Transform
+Event   20 - Start node Transform with 2 attribute(s): translation rotation 
+Event   21 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   22 - End node NavigationInfo
+Event   23 - Start node Shape with 0 attribute(s): 
+Event   24 - Start node Appearance with 0 attribute(s): 
+Event   25 - Start node Material with 1 attribute(s): emissiveColor 
+Event   26 - End node Material
+Event   27 - End node Appearance
+Event   28 - Start node Box with 0 attribute(s): 
+Event   29 - End node Box
+Event   30 - End node Shape
+Event   31 - End node Transform
+Event   32 - Start node Transform with 2 attribute(s): translation rotation 
+Event   33 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   34 - End node NavigationInfo
+Event   35 - Start node Shape with 0 attribute(s): 
+Event   36 - Start node Appearance with 0 attribute(s): 
+Event   37 - Start node Material with 1 attribute(s): emissiveColor 
+Event   38 - End node Material
+Event   39 - End node Appearance
+Event   40 - Start node Box with 0 attribute(s): 
+Event   41 - End node Box
+Event   42 - End node Shape
+Event   43 - End node Transform
+Event   44 - Start node Transform with 2 attribute(s): translation rotation 
+Event   45 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   46 - End node NavigationInfo
+Event   47 - Start node Shape with 0 attribute(s): 
+Event   48 - Start node Appearance with 0 attribute(s): 
+Event   49 - Start node Material with 1 attribute(s): emissiveColor 
+Event   50 - End node Material
+Event   51 - End node Appearance
+Event   52 - Start node Box with 0 attribute(s): 
+Event   53 - End node Box
+Event   54 - End node Shape
+Event   55 - End node Transform
+Event   56 - Start node Transform with 2 attribute(s): translation rotation 
+Event   57 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   58 - End node NavigationInfo
+Event   59 - Start node Shape with 0 attribute(s): 
+Event   60 - Start node Appearance with 0 attribute(s): 
+Event   61 - Start node Material with 1 attribute(s): emissiveColor 
+Event   62 - End node Material
+Event   63 - End node Appearance
+Event   64 - Start node Box with 0 attribute(s): 
+Event   65 - End node Box
+Event   66 - End node Shape
+Event   67 - End node Transform
+Event   68 - Start node Transform with 2 attribute(s): translation rotation 
+Event   69 - Start node NavigationInfo with 2 attribute(s): headlight type 
+Event   70 - End node NavigationInfo
+Event   71 - Start node Shape with 0 attribute(s): 
+Event   72 - Start node Appearance with 0 attribute(s): 
+Event   73 - Start node Material with 1 attribute(s): emissiveColor 
+Event   74 - End node Material
+Event   75 - End node Appearance
+Event   76 - Start node Box with 0 attribute(s): 
+Event   77 - End node Box
+Event   78 - End node Shape
+Event   79 - End node Transform
+Event   80 - End node Scene
+Event   81 - End node X3D
+Event   82 - End Document

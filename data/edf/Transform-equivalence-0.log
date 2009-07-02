@@ -1,0 +1,82 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 2 attribute(s): translation rotation 
+Event    9 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   10 - Start node Shape with 0 attribute(s): 
+Event   11 - Start node Appearance with 0 attribute(s): 
+Event   12 - Start node Material with 0 attribute(s): 
+Event   13 - End node Material
+Event   14 - End node Appearance
+Event   15 - Start node Box with 0 attribute(s): 
+Event   16 - End node Box
+Event   17 - End node Shape
+Event   18 - End node Transform
+Event   19 - End node Transform
+Event   20 - Start node Transform with 2 attribute(s): translation rotation 
+Event   21 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   22 - Start node Shape with 0 attribute(s): 
+Event   23 - Start node Appearance with 0 attribute(s): 
+Event   24 - Start node Material with 0 attribute(s): 
+Event   25 - End node Material
+Event   26 - End node Appearance
+Event   27 - Start node Box with 0 attribute(s): 
+Event   28 - End node Box
+Event   29 - End node Shape
+Event   30 - End node Transform
+Event   31 - End node Transform
+Event   32 - Start node Transform with 2 attribute(s): translation rotation 
+Event   33 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   34 - Start node Shape with 0 attribute(s): 
+Event   35 - Start node Appearance with 0 attribute(s): 
+Event   36 - Start node Material with 0 attribute(s): 
+Event   37 - End node Material
+Event   38 - End node Appearance
+Event   39 - Start node Box with 0 attribute(s): 
+Event   40 - End node Box
+Event   41 - End node Shape
+Event   42 - End node Transform
+Event   43 - End node Transform
+Event   44 - Start node Transform with 2 attribute(s): translation rotation 
+Event   45 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   46 - Start node Shape with 0 attribute(s): 
+Event   47 - Start node Appearance with 0 attribute(s): 
+Event   48 - Start node Material with 0 attribute(s): 
+Event   49 - End node Material
+Event   50 - End node Appearance
+Event   51 - Start node Box with 0 attribute(s): 
+Event   52 - End node Box
+Event   53 - End node Shape
+Event   54 - End node Transform
+Event   55 - End node Transform
+Event   56 - Start node Transform with 2 attribute(s): translation rotation 
+Event   57 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   58 - Start node Shape with 0 attribute(s): 
+Event   59 - Start node Appearance with 0 attribute(s): 
+Event   60 - Start node Material with 0 attribute(s): 
+Event   61 - End node Material
+Event   62 - End node Appearance
+Event   63 - Start node Box with 0 attribute(s): 
+Event   64 - End node Box
+Event   65 - End node Shape
+Event   66 - End node Transform
+Event   67 - End node Transform
+Event   68 - Start node Transform with 2 attribute(s): translation rotation 
+Event   69 - Start node Transform with 5 attribute(s): center rotation scale scaleOrientation translation 
+Event   70 - Start node Shape with 0 attribute(s): 
+Event   71 - Start node Appearance with 0 attribute(s): 
+Event   72 - Start node Material with 0 attribute(s): 
+Event   73 - End node Material
+Event   74 - End node Appearance
+Event   75 - Start node Box with 0 attribute(s): 
+Event   76 - End node Box
+Event   77 - End node Shape
+Event   78 - End node Transform
+Event   79 - End node Transform
+Event   80 - End node Scene
+Event   81 - End node X3D
+Event   82 - End Document

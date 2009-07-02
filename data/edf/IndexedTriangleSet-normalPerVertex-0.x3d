@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><X3D xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:X3D="http://www.web3d.org/specification/x3d/x3d-3.0.dtd" profile="Interchange"><head><meta name="description" profile="Test normal averaging"/></head><Scene><Transform translation="-2.5 1.75 1" rotation="0 0 1 0"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform><Transform translation="0 1.75 1" rotation="0 1 0 3.1415926"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform><Transform translation="2.5 1.75 1" rotation="0 1 0 -1.57"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform><Transform translation="-2.5 -1.75 1" rotation="0 1 0 1.57"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform><Transform translation="0 -1.75 1" rotation="1 0 0 1.57"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform><Transform translation="2.5 -1.75 1" rotation="1 0 0 -1.57"><Shape>
+   <Appearance>
+      <Material/>
+   </Appearance>
+      <IndexedTriangleSet index=" 0 3 4 1 0 4 2 1 4 3 2 4 0 2 3 0 1 2" ccw="false" normalPerVertex="true">
+          <Coordinate point="1.0 0.0 -1.0, -1.0 0.0 -1.0, -1.0 0.0 1.0, 1.0 0.0 1.0, 0.0 2.0 0.0, "/>
+      </IndexedTriangleSet>
+</Shape></Transform></Scene></X3D>

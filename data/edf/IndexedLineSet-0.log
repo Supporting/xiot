@@ -1,0 +1,84 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 1 attribute(s): translation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Appearance with 0 attribute(s): 
+Event   11 - Start node Material with 0 attribute(s): 
+Event   12 - End node Material
+Event   13 - End node Appearance
+Event   14 - Start node IndexedLineSet with 1 attribute(s): coordIndex 
+Event   15 - Start node Coordinate with 1 attribute(s): point 
+Event   16 - End node Coordinate
+Event   17 - End node IndexedLineSet
+Event   18 - End node Shape
+Event   19 - End node Transform
+Event   20 - Start node Transform with 1 attribute(s): translation 
+Event   21 - Start node Shape with 0 attribute(s): 
+Event   22 - Start node IndexedLineSet with 1 attribute(s): coordIndex 
+Event   23 - Start node Coordinate with 1 attribute(s): point 
+Event   24 - End node Coordinate
+Event   25 - End node IndexedLineSet
+Event   26 - End node Shape
+Event   27 - End node Transform
+Event   28 - Start node Transform with 1 attribute(s): translation 
+Event   29 - Start node Shape with 0 attribute(s): 
+Event   30 - Start node Appearance with 0 attribute(s): 
+Event   31 - Start node Material with 1 attribute(s): emissiveColor 
+Event   32 - End node Material
+Event   33 - End node Appearance
+Event   34 - Start node IndexedLineSet with 1 attribute(s): coordIndex 
+Event   35 - Start node Coordinate with 1 attribute(s): point 
+Event   36 - End node Coordinate
+Event   37 - End node IndexedLineSet
+Event   38 - End node Shape
+Event   39 - End node Transform
+Event   40 - Start node Transform with 1 attribute(s): translation 
+Event   41 - Start node Shape with 0 attribute(s): 
+Event   42 - Start node Appearance with 0 attribute(s): 
+Event   43 - Start node Material with 0 attribute(s): 
+Event   44 - End node Material
+Event   45 - End node Appearance
+Event   46 - Start node IndexedLineSet with 3 attribute(s): colorPerVertex colorIndex coordIndex 
+Event   47 - Start node Coordinate with 1 attribute(s): point 
+Event   48 - End node Coordinate
+Event   49 - Start node Color with 1 attribute(s): color 
+Event   50 - End node Color
+Event   51 - End node IndexedLineSet
+Event   52 - End node Shape
+Event   53 - End node Transform
+Event   54 - Start node Transform with 1 attribute(s): translation 
+Event   55 - Start node Shape with 0 attribute(s): 
+Event   56 - Start node Appearance with 0 attribute(s): 
+Event   57 - Start node Material with 0 attribute(s): 
+Event   58 - End node Material
+Event   59 - End node Appearance
+Event   60 - Start node IndexedLineSet with 2 attribute(s): colorIndex coordIndex 
+Event   61 - Start node Coordinate with 1 attribute(s): point 
+Event   62 - End node Coordinate
+Event   63 - Start node Color with 1 attribute(s): color 
+Event   64 - End node Color
+Event   65 - End node IndexedLineSet
+Event   66 - End node Shape
+Event   67 - End node Transform
+Event   68 - Start node Transform with 1 attribute(s): translation 
+Event   69 - Start node Shape with 0 attribute(s): 
+Event   70 - Start node Appearance with 0 attribute(s): 
+Event   71 - Start node Material with 0 attribute(s): 
+Event   72 - End node Material
+Event   73 - End node Appearance
+Event   74 - Start node IndexedLineSet with 2 attribute(s): colorPerVertex coordIndex 
+Event   75 - Start node Coordinate with 1 attribute(s): point 
+Event   76 - End node Coordinate
+Event   77 - Start node Color with 1 attribute(s): color 
+Event   78 - End node Color
+Event   79 - End node IndexedLineSet
+Event   80 - End node Shape
+Event   81 - End node Transform
+Event   82 - End node Scene
+Event   83 - End node X3D
+Event   84 - End Document

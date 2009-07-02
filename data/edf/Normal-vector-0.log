@@ -1,0 +1,94 @@
+Event    1 - Start Document
+Event    2 - Start node X3D with 1 attribute(s): profile 
+Event    3 - Start node head with 0 attribute(s): 
+Event    4 - Start node meta with 2 attribute(s): name profile 
+Event    5 - End node meta
+Event    6 - End node head
+Event    7 - Start node Scene with 0 attribute(s): 
+Event    8 - Start node Transform with 2 attribute(s): translation rotation 
+Event    9 - Start node Shape with 0 attribute(s): 
+Event   10 - Start node Appearance with 0 attribute(s): 
+Event   11 - Start node Material with 0 attribute(s): 
+Event   12 - End node Material
+Event   13 - End node Appearance
+Event   14 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   15 - Start node Coordinate with 1 attribute(s): point 
+Event   16 - End node Coordinate
+Event   17 - Start node Normal with 1 attribute(s): vector 
+Event   18 - End node Normal
+Event   19 - End node IndexedTriangleSet
+Event   20 - End node Shape
+Event   21 - End node Transform
+Event   22 - Start node Transform with 2 attribute(s): translation rotation 
+Event   23 - Start node Shape with 0 attribute(s): 
+Event   24 - Start node Appearance with 0 attribute(s): 
+Event   25 - Start node Material with 0 attribute(s): 
+Event   26 - End node Material
+Event   27 - End node Appearance
+Event   28 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   29 - Start node Coordinate with 1 attribute(s): point 
+Event   30 - End node Coordinate
+Event   31 - Start node Normal with 1 attribute(s): vector 
+Event   32 - End node Normal
+Event   33 - End node IndexedTriangleSet
+Event   34 - End node Shape
+Event   35 - End node Transform
+Event   36 - Start node Transform with 2 attribute(s): translation rotation 
+Event   37 - Start node Shape with 0 attribute(s): 
+Event   38 - Start node Appearance with 0 attribute(s): 
+Event   39 - Start node Material with 0 attribute(s): 
+Event   40 - End node Material
+Event   41 - End node Appearance
+Event   42 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   43 - Start node Coordinate with 1 attribute(s): point 
+Event   44 - End node Coordinate
+Event   45 - Start node Normal with 1 attribute(s): vector 
+Event   46 - End node Normal
+Event   47 - End node IndexedTriangleSet
+Event   48 - End node Shape
+Event   49 - End node Transform
+Event   50 - Start node Transform with 2 attribute(s): translation rotation 
+Event   51 - Start node Shape with 0 attribute(s): 
+Event   52 - Start node Appearance with 0 attribute(s): 
+Event   53 - Start node Material with 0 attribute(s): 
+Event   54 - End node Material
+Event   55 - End node Appearance
+Event   56 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   57 - Start node Coordinate with 1 attribute(s): point 
+Event   58 - End node Coordinate
+Event   59 - Start node Normal with 1 attribute(s): vector 
+Event   60 - End node Normal
+Event   61 - End node IndexedTriangleSet
+Event   62 - End node Shape
+Event   63 - End node Transform
+Event   64 - Start node Transform with 2 attribute(s): translation rotation 
+Event   65 - Start node Shape with 0 attribute(s): 
+Event   66 - Start node Appearance with 0 attribute(s): 
+Event   67 - Start node Material with 0 attribute(s): 
+Event   68 - End node Material
+Event   69 - End node Appearance
+Event   70 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   71 - Start node Coordinate with 1 attribute(s): point 
+Event   72 - End node Coordinate
+Event   73 - Start node Normal with 1 attribute(s): vector 
+Event   74 - End node Normal
+Event   75 - End node IndexedTriangleSet
+Event   76 - End node Shape
+Event   77 - End node Transform
+Event   78 - Start node Transform with 2 attribute(s): translation rotation 
+Event   79 - Start node Shape with 0 attribute(s): 
+Event   80 - Start node Appearance with 0 attribute(s): 
+Event   81 - Start node Material with 0 attribute(s): 
+Event   82 - End node Material
+Event   83 - End node Appearance
+Event   84 - Start node IndexedTriangleSet with 1 attribute(s): index 
+Event   85 - Start node Coordinate with 1 attribute(s): point 
+Event   86 - End node Coordinate
+Event   87 - Start node Normal with 1 attribute(s): vector 
+Event   88 - End node Normal
+Event   89 - End node IndexedTriangleSet
+Event   90 - End node Shape
+Event   91 - End node Transform
+Event   92 - End node Scene
+Event   93 - End node X3D
+Event   94 - End Document
