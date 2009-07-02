@@ -1,0 +1,10 @@
+2009-05-10 09:02  Kristian Sons <xiot@actor3d.com>
+
+	* Added tags folder
+	  Fixed <cstring> bug in X3DFICompressionTools.cpp
+	  Fixed argument bug in X3DLogNodeHandler
+
+2009-03-09 10:16  Kristian Sons <xiot@actor3d.com>
+
+	* Initial import
+
