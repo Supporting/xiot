@@ -28,14 +28,14 @@
 
  /*!
    
- \mainpage A Simple X3D loading library
+ \mainpage XIOT - The X3D I/O Toolkit library
 
     \section intro_sec Introduction
-	The aim of this library is to provide a tool set that allows loading of X3D files. It is
-	meant to be easy to integrate to third party software. The intention is to have an easy
-	possibility to integrate X3D import functions to existing scene graphs or render systems
+	The aim of this library is to provide a tool set that allows importing and exporting of X3D files.
+	It is meant to be easy to integrate to third party software. The intention is to have an easy
+	possibility to integrate X3D import or export functions to existing scene graphs or render systems
 	like <A href="http://www.vtk.org">VTK</A> or <a href="http://www.ogre3d.org/">Ogre3D</a>.
-	So X3DLoader does <b>not</b> provide a scene graph, no logic checking
+	So XIOT does <b>not</b> provide a scene graph, no logic checking
 	and no event system. The library focuses on the possibility to map an X3D description
 	to an existing scene graph or event system. The logic validation has to be done during
 	the mapping to the target system.
@@ -55,11 +55,11 @@
 	IDE. You will need CMake >= 2.6.0 to process the delivered configuration files. 
 
 	\subsection depends Dependencies
-	The x3dLoader library depends on tow external libraries: xercesc for parsing of XML encoded X3D files,
+	The XIOT library depends on tow external libraries: xercesc for parsing of XML encoded X3D files,
 	and zlib for decoding of binary encoded X3D files
 
 	\subsubsection xercesc XercesC
-	To compile and run the x3dLoader library you will need <a href="http://xerces.apache.org/xerces-c/">Xerces-C</a>.
+	To compile and run the XIOT library you will need <a href="http://xerces.apache.org/xerces-c/">Xerces-C</a>.
 	The library distribution comes with a win32 and win64 version of this library.
 	For all other platforms, CMake will try to find the library on your system. 
 	It will complain and stop processing if it cannot find Xerces
