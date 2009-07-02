@@ -1,32 +1,29 @@
 /*=========================================================================
+     This file is part of the XIOT library.
 
-/// This file is part of the X3DExporter library
-/// Copyright (C) 2008 Kristian Sons (x3dexporter@actor3d.com)
+     Copyright (C) 2008-2009 EDF R&D
+     Author: Kristian Sons (xiot@actor3d.com)
 
-/// This project has been funded with support from EDF R&D
-/// Christophe MOUTON
+     This library is free software; you can redistribute it and/or modify
+     it under the terms of the GNU Lesser Public License as published by
+     the Free Software Foundation; either version 2.1 of the License, or
+     (at your option) any later version.
 
-/// TODO: Link
+     The XIOT library is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU Lesser Public License for more details.
 
-/// This library is free software; you can redistribute it and/or
-/// modify it under the terms of the GNU Lesser General Public
-/// License as published by the Free Software Foundation; either
-/// version 2.1 of the License, or (at your option) any later version.
-
-/// This library is distributed in the hope that it will be useful,
-/// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-/// Lesser General Public License for more details.
-
-/// You should have received a copy of the GNU Lesser General Public
-/// License along with this library; if not, write to the Free Software
-/// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
+     You should have received a copy of the GNU Lesser Public License
+     along with XIOT; if not, write to the Free Software
+     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+     MA 02110-1301  USA
 =========================================================================*/
+
 #ifndef X3DTYPES_H
 #define X3DTYPES_H
 
-#include "X3DLoaderConfigure.h"
+#include "XIOTConfigure.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -171,7 +168,7 @@ namespace XIOT {
    * attribute's or element's string representation by its ID 
    * or vice versa.
    */
-  class X3DLOADER_EXPORT X3DTypes {
+  class XIOT_EXPORT X3DTypes {
 	friend class X3DParserVocabulary;
 
   public:

@@ -15,7 +15,7 @@ set(X3DLOADER_HEADER
 	X3DFICompressionTools.h
 	X3DParserVocabulary.h
 	X3DFIEncodingAlgorithms.h
-	X3DLoaderConfigure.h
+	XIOTConfigure.h
 )
 
 
