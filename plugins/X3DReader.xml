@@ -6,7 +6,7 @@
      <Documentation
        short_help="Read a X3D file."
        long_help="Read the geometry of a X3D file.">
-       The X3D reader reads X3D (www.web3d.org) files. The default file extension for XML encoded X3D files is .x3d.
+       The X3D reader reads X3D (www.web3d.org) files. The default file extension for XML encoded X3D files is .x3d, for binary encoded file .x3db
      </Documentation>
      <StringVectorProperty
         name="FileName"
