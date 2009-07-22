@@ -1,16 +1,44 @@
-X3DLoader library version 0.1
+XIOT - The X3D I/O Toolkit library 
 
 About
 =====
 
-	X3DLoader is a portable toolkit including a C++ library for reading
-X3D content with several encodings. Currently XML encoding and binary
-Fast Infoset encoding is supported
+	This library provides an open source generic C++ toolkit to import and
+	export X3D in its differents XML encodings : ASCII and binary. A special
+	development was done to provide a FI (FastInfoset) based X3D encoding.
+	
+	See project homepage for more details:
+	http://forge.collaviz.org/community/xiot
+	
+Credits
+=====
+	This project was lead by Actor3D and funded by EDF R&D in the context of 
+	the COLLAVIZ project with the financial support of the French National 
+	Research Agency (ANR-08-COSI-003)
+
+	See also:
+		- http://www.actor3d.com
+		- http://research.edf.com
+		- http://www.collaviz.org/
 
 License terms
 =====
 
-	TODO
+  This library is free software; you can redistribute it and/or modify it
+  under the terms of the GNU Lesser General Public License as published by the
+  Free Software Foundation; either version 2.1 of the License, or (at your
+  option) any later version.
+
+  This library is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+  for more details.
+
+  You should have received a copy of the GNU Lesser General Public License
+  along with this library; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  
+  See the COPYING file for details.
 	
 Package directory layout
 ========================
