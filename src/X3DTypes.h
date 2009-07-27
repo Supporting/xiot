@@ -102,7 +102,7 @@ namespace XIOT {
    */
   struct SFRotation {
 	  float x, y, z, angle;	  
-   	  SFRotation() : x(0.0f), y(0.0f), z(0.0f), angle(0.0f) {};
+   	  SFRotation() : x(0.0f), y(0.0f), z(1.0f), angle(0.0f) {};
 	  SFRotation(float X, float Y, float Z, float Angle) : x(X), y(Y), z(Z), angle(Angle) {};
 	  template <class C>
 		explicit SFRotation(const C& c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]) {};
@@ -121,6 +121,8 @@ namespace XIOT {
 	  SFColor() : r(0.0f), g(0.0f), b(0.0f) { 
 		  //std::cout << "Creating SFColor" << std::endl;
 	  };
+	  SFColor(float R, float G, float B) : r(R), g(G), b(B) {};
+	
 	  SFColor(const SFColor &other) : r(other.r), g(other.g), b(other.b) {
 		  //std::cout << "Copying SFColor" << std::endl;
 	  };
