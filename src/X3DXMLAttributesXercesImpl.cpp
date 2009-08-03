@@ -1,4 +1,4 @@
-#include "X3DXMLAttributes.h"
+#include <xiot/X3DXMLAttributes.h>
 #include <xercesc/sax2/Attributes.hpp>
 #include <xercesc/util/XMLString.hpp>
 

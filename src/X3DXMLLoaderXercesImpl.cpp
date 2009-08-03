@@ -1,9 +1,9 @@
-#include "X3DXMLLoader.h"
-#include "X3DNodeHandler.h"
-#include "X3DTypes.h"
-#include "X3DSwitch.h"
-#include "X3DXMLAttributes.h"
-#include "X3DParseException.h"
+#include <xiot/X3DXMLLoader.h>
+#include <xiot/X3DNodeHandler.h>
+#include <xiot/X3DTypes.h>
+#include <xiot/X3DSwitch.h>
+#include <xiot/X3DXMLAttributes.h>
+#include <xiot/X3DParseException.h>
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/sax2/DefaultHandler.hpp>
