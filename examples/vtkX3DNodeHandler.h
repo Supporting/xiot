@@ -4,7 +4,7 @@
 #include <map>
 #include <set>
 
-#include "X3DDefaultNodeHandler.h"
+#include <xiot/X3DDefaultNodeHandler.h>
 #include "vtkRenderer.h"
 
 class vtkActor;

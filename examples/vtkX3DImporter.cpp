@@ -1,10 +1,11 @@
 #include "vtkX3DImporter.h"
 #include "vtkObjectFactory.h"
 
-#include "X3DLoader.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DAttributes.h>
+#include <xiot/X3DParseException.h>
+
 #include "vtkX3DNodeHandler.h"
-#include "X3DAttributes.h"
-#include "X3DParseException.h"
 
 vtkCxxRevisionMacro(vtkX3DImporter, "$Revision: 1.19 $");
 vtkStandardNewMacro(vtkX3DImporter);

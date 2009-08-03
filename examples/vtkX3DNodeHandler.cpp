@@ -2,8 +2,8 @@
 #include <map>
 
 #include "vtkX3DNodeHandler.h"
-#include "X3DAttributes.h"
-#include "X3DTypes.h"
+#include <xiot/X3DAttributes.h>
+#include <xiot/X3DTypes.h>
 
 #include "vtkActor.h"
 #include "vtkByteSwap.h"
