@@ -66,8 +66,6 @@ elseif(${XML_PARSER_SELECTION} STREQUAL "expat")
 	
 endif(${XML_PARSER_SELECTION} STREQUAL "xerces")
 
-include_regular_expression( "^X3D.*$" )
-
 set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DTypes.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DLoader.h

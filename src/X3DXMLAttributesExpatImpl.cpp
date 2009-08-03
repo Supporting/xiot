@@ -1,4 +1,4 @@
-#include "X3DXMLAttributes.h"
+#include <xiot/X3DXMLAttributes.h>
 
 #include "expat.h"
 #include <cstring>
