@@ -1,14 +1,14 @@
-#include "X3DFIEncodingAlgorithms.h"
+#include <xiot/X3DFIEncodingAlgorithms.h>
 
 #include <iostream>
 #include <zlib.h>
 
-#include "FITypes.h"
-#include "FIConstants.h"
-#include "X3DParseException.h"
+#include <xiot/FITypes.h>
+#include <xiot/FIConstants.h>
+#include <xiot/X3DParseException.h>
 
 
-#include "X3DFICompressionTools.h"
+#include <xiot/X3DFICompressionTools.h>
 
 namespace XIOT {
 

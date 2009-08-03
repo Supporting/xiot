@@ -3,12 +3,12 @@
 #include <string>
 #include <fstream>
 #include <cassert>
-#include "X3DLoader.h"
-#include "X3DDefaultNodeHandler.h"
-#include "X3DAttributes.h"
-#include "X3DParseException.h"
-#include "X3DWriterFI.h"
-#include "X3DWriterXML.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DDefaultNodeHandler.h>
+#include <xiot/X3DAttributes.h>
+#include <xiot/X3DParseException.h>
+#include <xiot/X3DWriterFI.h>
+#include <xiot/X3DWriterXML.h>
 
 
 using namespace std;

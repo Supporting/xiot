@@ -1,11 +1,11 @@
-#include "X3DFILoader.h"
+#include <xiot/X3DFILoader.h>
 
-#include "X3DFIAttributes.h"
-#include "FIConstants.h"
-#include "FISAXParser.h"
-#include "FIContentHandler.h"
-#include "FITypes.h"
-#include "X3DParserVocabulary.h"
+#include <xiot/X3DFIAttributes.h>
+#include <xiot/FIConstants.h>
+#include <xiot/FISAXParser.h>
+#include <xiot/FIContentHandler.h>
+#include <xiot/FITypes.h>
+#include <xiot/X3DParserVocabulary.h>
 
 #include <iostream>
 #include <sstream>

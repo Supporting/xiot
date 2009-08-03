@@ -22,8 +22,8 @@
 #ifndef X3D_X3DFIENCODINGALGORITHMS_H
 #define X3D_X3DFIENCODINGALGORITHMS_H
 
-#include "X3DTypes.h"
-#include "FIEncodingAlgorithms.h"
+#include <xiot/X3DTypes.h>
+#include <xiot/FIEncodingAlgorithms.h>
 #include <string>
 
 namespace XIOT {

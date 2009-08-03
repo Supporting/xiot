@@ -22,7 +22,7 @@
 #ifndef X3D_X3DXMLLOADER_H
 #define X3D_X3DXMLLOADER_H
 
-#include "X3DLoader.h"
+#include <xiot/X3DLoader.h>
 #include <string>
 
 namespace XIOT {
@@ -36,7 +36,7 @@ class XMLParserImpl;
 /**  
  *  Loader for XML encoded X3D files. 
  *
- *  The class uses an XercesC XML parser internally to generate the events for the X3DNodeHandler.
+ *  Wrapper to hide the XML parser implementation from the interface.
  *  Instead of using this class directly you can use the X3DLoader which will delgate to the
  *  right encoding implementation depending on the files suffix.
  *  

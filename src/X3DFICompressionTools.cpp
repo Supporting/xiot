@@ -3,7 +3,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "X3DFICompressionTools.h"
+#include <xiot/X3DFICompressionTools.h>
 
 #define EXPONENT_MASK_32 0x7f800000
 #define MANTISSA_MASK_32 0x007fffff

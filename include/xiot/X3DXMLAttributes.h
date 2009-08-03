@@ -22,7 +22,7 @@
 #ifndef X3D_X3DXMLATTRIBUTES_H
 #define X3D_X3DXMLATTRIBUTES_H
 
-#include "X3DAttributes.h"
+#include <xiot/X3DAttributes.h>
 
 namespace XIOT {
 

@@ -22,9 +22,9 @@
 #ifndef X3D_X3DATTRIBUTES_H
 #define X3D_X3DATTRIBUTES_H
 
-#include "XIOTConfigure.h"
-#include "X3DTypes.h"
-#include "X3DDataTypeFactory.h"
+#include <xiot/XIOTConfigure.h>
+#include <xiot/X3DTypes.h>
+#include <xiot/X3DDataTypeFactory.h>
 #include <string>
 #include <vector>
 

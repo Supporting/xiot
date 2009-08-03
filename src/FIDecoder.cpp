@@ -1,8 +1,8 @@
-#include "FIDecoder.h"
+#include <xiot/FIDecoder.h>
 
-#include "X3DFIAttributes.h"
-#include "FIConstants.h"
-#include "FIParserVocabulary.h"
+#include <xiot/X3DFIAttributes.h>
+#include <xiot/FIConstants.h>
+#include <xiot/FIParserVocabulary.h>
 
 #include <iostream>
 #include <sstream>

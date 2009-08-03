@@ -24,7 +24,7 @@
 
 #include <string>
 
-#include "X3DTypes.h"
+#include <xiot/X3DTypes.h>
 
 namespace XIOT {
 

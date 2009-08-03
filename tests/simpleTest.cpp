@@ -2,10 +2,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "X3DLoader.h"
-#include "X3DDefaultNodeHandler.h"
-#include "X3DAttributes.h"
-#include "X3DParseException.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DDefaultNodeHandler.h>
+#include <xiot/X3DAttributes.h>
+#include <xiot/X3DParseException.h>
 
 
 using namespace std;

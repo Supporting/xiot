@@ -22,9 +22,9 @@
 #ifndef X3D_X3DPARSERVOCABULARY_H
 #define X3D_X3DPARSERVOCABULARY_H
 
-#include "FIParserVocabulary.h"
-#include "XIOTConfigure.h"
-#include "X3DFIEncodingAlgorithms.h"
+#include <xiot/XIOTConfigure.h>
+#include <xiot/FIParserVocabulary.h>
+#include <xiot/X3DFIEncodingAlgorithms.h>
 #include <string>
 #include <fstream>
 #include <map>

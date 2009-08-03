@@ -1,8 +1,8 @@
-#include "X3DWriterXML.h"
+#include <xiot/X3DWriterXML.h>
 
 #include <cstring>
 
-#include "X3DTypes.h"
+#include <xiot/X3DTypes.h>
 
 using namespace XIOT;
 

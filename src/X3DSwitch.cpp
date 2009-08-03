@@ -1,7 +1,7 @@
-#include "X3DSwitch.h"
-#include "X3DAttributes.h"
-#include "X3DTypes.h"
-#include "X3DNodeHandler.h"
+#include <xiot/X3DSwitch.h>
+#include <xiot/X3DAttributes.h>
+#include <xiot/X3DTypes.h>
+#include <xiot/X3DNodeHandler.h>
 #include <iostream>
 #include <cassert>
 

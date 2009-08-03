@@ -22,7 +22,7 @@
 #ifndef X3D_X3DLOADER_H
 #define X3D_X3DLOADER_H
 
-#include "XIOTConfigure.h"
+#include <xiot/XIOTConfigure.h>
 #include <string>
 
 

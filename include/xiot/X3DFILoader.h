@@ -22,11 +22,11 @@
 #ifndef X3D_X3DFILOADER_H
 #define X3D_X3DFILOADER_H
 
-#include "X3DLoader.h"
-#include "X3DNodeHandler.h"
-#include "X3DSwitch.h"
-#include "X3DFIAttributes.h"
-#include "FITypes.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DNodeHandler.h>
+#include <xiot/X3DSwitch.h>
+#include <xiot/X3DFIAttributes.h>
+#include <xiot/FITypes.h>
 #include <string>
 #include <fstream>
 

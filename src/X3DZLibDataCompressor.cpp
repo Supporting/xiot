@@ -1,4 +1,4 @@
-#include "X3DZLibDataCompressor.h"
+#include <xiot/X3DZLibDataCompressor.h>
 #include "zlib.h"
 
 //----------------------------------------------------------------------------

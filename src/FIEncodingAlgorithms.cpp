@@ -1,10 +1,10 @@
-#include "FIEncodingAlgorithms.h"
+#include <xiot/FIEncodingAlgorithms.h>
+#include <xiot/FITypes.h>
+#include <xiot/FIConstants.h>
 
 #include <iostream>
 #include <cassert>
 
-#include "FITypes.h"
-#include "FIConstants.h"
 
 
 namespace FI {

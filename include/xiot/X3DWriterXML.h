@@ -22,7 +22,7 @@
 #ifndef X3DWriterXML_H
 #define X3DWriterXML_H
 
-#include "X3DWriter.h"
+#include <xiot/X3DWriter.h>
 
 struct XMLInfo {
 

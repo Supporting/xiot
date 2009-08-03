@@ -22,7 +22,7 @@
 #ifndef X3DWRITERFI_H
 #define X3DWRITERFI_H
 
-#include "X3DWriter.h"
+#include <xiot/X3DWriter.h>
 
 class X3DWriterFIByte;
 class X3DZLibDataCompressor;

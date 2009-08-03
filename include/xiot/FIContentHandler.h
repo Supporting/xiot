@@ -23,7 +23,7 @@
 #define FI_PROCESSOR_H
 
 #include <istream>
-#include "FITypes.h"
+#include <xiot/FITypes.h>
 
 namespace FI {
 

@@ -2,9 +2,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "X3DLoader.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DAttributes.h>
 #include "X3DLogNodeHandler.h"
-#include "X3DAttributes.h"
 
 
 using namespace std;

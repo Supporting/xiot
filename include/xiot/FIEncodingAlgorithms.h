@@ -22,7 +22,7 @@
 #ifndef FI_FIENCODINGALGORITHMS_H
 #define FI_FIENCODINGALGORITHMS_H
 
-#include "FITypes.h"
+#include <xiot/FITypes.h>
 #include <string>
 
 namespace FI {

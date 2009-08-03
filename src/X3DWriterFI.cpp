@@ -1,9 +1,9 @@
-#include "X3DWriterFI.h"
+#include <xiot/X3DWriterFI.h>
 
 #include <cstring>
 
-#include "X3DZLibDataCompressor.h"
-#include "X3DTypes.h"
+#include <xiot/X3DZLibDataCompressor.h>
+#include <xiot/X3DTypes.h>
 
 //#define ENCODEASSTRING 1
 
@@ -169,7 +169,7 @@ void X3DWriterFIByte::PutBits(const std::string &bitstring)
     }
 }
 
-#include "X3DWriterFIHelper.h"
+#include <xiot/X3DWriterFIHelper.h>
 
 //----------------------------------------------------------------------------
 X3DWriterFI::~X3DWriterFI()

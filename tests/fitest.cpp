@@ -2,10 +2,10 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "FISAXParser.h"
-#include "FIContentHandler.h"
-#include "FIParserVocabulary.h"
-#include "X3DParserVocabulary.h"
+#include <xiot/FISAXParser.h>
+#include <xiot/FIContentHandler.h>
+#include <xiot/FIParserVocabulary.h>
+#include <xiot/X3DParserVocabulary.h>
 
 using namespace std;
 

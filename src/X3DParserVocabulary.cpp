@@ -1,5 +1,5 @@
-#include "X3DParserVocabulary.h"
-#include "X3DTypes.h"
+#include <xiot/X3DParserVocabulary.h>
+#include <xiot/X3DTypes.h>
 
 namespace XIOT {
 

@@ -22,8 +22,8 @@
 #ifndef FI_PARSERVOCABULARY_H
 #define FI_PARSERVOCABULARY_H
 
-#include "FITypes.h"
-#include "FIEncodingAlgorithms.h"
+#include <xiot/FITypes.h>
+#include <xiot/FIEncodingAlgorithms.h>
 #include <string>
 #include <fstream>
 #include <iostream>

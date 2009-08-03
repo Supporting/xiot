@@ -22,8 +22,8 @@
 #ifndef X3D_X3DFIATTRIBUTES_H
 #define X3D_X3DFIATTRIBUTES_H
 
-#include "X3DAttributes.h"
-#include "FITypes.h"
+#include <xiot/X3DAttributes.h>
+#include <xiot/FITypes.h>
 
 namespace FI {
 	class ParserVocabulary;

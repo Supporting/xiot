@@ -1,7 +1,7 @@
 #ifndef X3D_X3DLogNodeHandler_H
 #define X3D_X3DLogNodeHandler_H
 
-#include "X3DDefaultNodeHandler.h"
+#include <xiot/X3DDefaultNodeHandler.h>
 
 using namespace XIOT;
 

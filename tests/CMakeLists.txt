@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-include_directories(. ${PROJECT_SOURCE_DIR}/src)
+include_directories(. ${PROJECT_SOURCE_DIR}/include)
 
 #simpleTest
 add_executable (simpleTest simpleTest.cpp Argument_helper.cpp)

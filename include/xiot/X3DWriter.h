@@ -25,7 +25,7 @@
 #define DOUBLE_DEGTORAD 0.017453292519943295
 #define FLOAT_DEGTORAD 0.017453292519943295f
 
-#include "XIOTConfigure.h"
+#include <xiot/XIOTConfigure.h>
 #include <vector>
 #include <string>
 #include <iostream>

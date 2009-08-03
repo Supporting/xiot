@@ -1,8 +1,8 @@
-#include "X3DLoader.h"
-#include "X3DXMLLoader.h"
-#include "X3DFILoader.h"
-#include "X3DParseException.h"
-#include "X3DTypes.h"
+#include <xiot/X3DLoader.h>
+#include <xiot/X3DXMLLoader.h>
+#include <xiot/X3DFILoader.h>
+#include <xiot/X3DParseException.h>
+#include <xiot/X3DTypes.h>
 
 #include <iostream>
 #include <cassert>

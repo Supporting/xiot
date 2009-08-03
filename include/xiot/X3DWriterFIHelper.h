@@ -23,8 +23,8 @@
 #define X3DWRITERFIHELPER_H
 
 #include <cmath>
-#include "X3DWriterFI.h"
-#include "X3DZLibDataCompressor.h"
+#include <xiot/X3DWriterFI.h>
+#include <xiot/X3DZLibDataCompressor.h>
 
 #define EXPONENT_MASK_32 0x7f800000
 #define MANTISSA_MASK_32 0x007fffff

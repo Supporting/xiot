@@ -22,9 +22,9 @@
 #ifndef FI_DECODER_H
 #define FI_DECODER_H
 
-#include "X3DFIAttributes.h"
-#include "FITypes.h"
-#include "FIParserVocabulary.h"
+#include <xiot/X3DFIAttributes.h>
+#include <xiot/FITypes.h>
+#include <xiot/FIParserVocabulary.h>
 #include <string>
 #include <fstream>
 

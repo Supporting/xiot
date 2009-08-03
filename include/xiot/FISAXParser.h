@@ -22,8 +22,8 @@
 #ifndef FI_SAXPARSER_H
 #define FI_SAXPARSER_H
 
-#include "FITypes.h"
-#include "FIDecoder.h"
+#include <xiot/FITypes.h>
+#include <xiot/FIDecoder.h>
 #include <string>
 #include <fstream>
 #include <map>
