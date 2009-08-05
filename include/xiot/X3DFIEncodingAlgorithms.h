@@ -56,7 +56,7 @@ public:
 	 */
 	static std::vector<int> decodeToIntArray(const FI::NonEmptyOctetString &octets);
 
-	static void encode(const std::vector<int> &input, FI::NonEmptyOctetString &octets, bool isImage = false);
+	static void encode(const int* values, size_t size, FI::NonEmptyOctetString &octets, bool isImage = false);
 	
 };
 
@@ -85,6 +85,8 @@ public:
 	 * Quantized zlib float array encoder.
 	 */
 	static std::vector<float> decodeToFloatArray(const FI::NonEmptyOctetString &octets);
+
+	static void encode(const float* values, size_t size, FI::NonEmptyOctetString &octets);
 	
 };
 

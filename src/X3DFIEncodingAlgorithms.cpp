@@ -30,7 +30,7 @@ namespace XIOT {
 		unsigned char exponent = octets[0];
 		unsigned char mantissa = octets[1];
 
-		const unsigned char* pStr = &octets.front();
+		const unsigned char* pStr = octets.c_str();
 
 		unsigned int len = FI::Tools::readUInt(pStr+2);
 		unsigned int numFloats = FI::Tools::readUInt(pStr+6);
@@ -58,6 +58,75 @@ namespace XIOT {
 		return result;
 	}
 
+	void QuantizedzlibFloatArrayAlgorithm::encode(const float* values, size_t size, FI::NonEmptyOctetString &octets)
+	{
+		unsigned char* bytes = new unsigned char[size*4];
+		unsigned char* bytepos = bytes;
+		size_t i;
+
+		const float* vf = values;
+		for (i = 0; i < size; i++)
+		{
+			union float_to_unsigned_int_to_bytes
+			{
+				float f;
+				unsigned int ui;
+				unsigned char ub[4]; // unsigned bytes
+			};
+			float_to_unsigned_int_to_bytes v;
+			v.f = (*vf) * 2.0f;
+
+			// Avoid -0
+			if (v.ui == 0x80000000)
+			{
+				v.f = 0.0f;
+			}
+			// std::cout << "value: " << v << " bytes: " << (int)s[0] << " " << (int)s[1] << " " << (int)s[2] << " " << (int)s[3]) << std::endl;
+			*bytepos++ = v.ub[3];
+			*bytepos++ = v.ub[2];
+			*bytepos++ = v.ub[1];
+			*bytepos++ = v.ub[0];
+			vf++;
+		}
+
+
+		// Compress the data
+		unsigned long compressedSize = (size*4) + static_cast<unsigned long>(ceil((size*4)*0.001)) + 12;
+		Bytef* compressedData = new Bytef[compressedSize];
+
+		// Call zlib's compress function.
+		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(bytes), static_cast<unsigned long>(size*4), 5) != Z_OK)
+		{    
+			throw new X3DParseException("Error while encoding QuantizedzlibFloatArrayAlgorithm");
+		}
+
+		unsigned char *s;
+		// Put the number of bits for exponent
+		octets += static_cast<unsigned char>(8);
+		// Put the number of bits for mantissa
+		octets += static_cast<unsigned char>(23);
+		
+		// Put the length
+		int length = static_cast<int>(size*4);
+		int length_reversed = FI::Tools::reverseBytes(&length);
+		s = reinterpret_cast <unsigned char*> (&length_reversed);
+		octets.append(s, 4);
+
+		// Put the number of floats
+		int numFloats = static_cast<int>(size);
+		int numFloats_reversed = FI::Tools::reverseBytes(&numFloats);;
+		s = reinterpret_cast <unsigned char*> (&numFloats_reversed);
+		octets.append(s, 4);
+
+		for (i = 0; i < compressedSize; i++)
+		{
+			unsigned char c = compressedData[i];
+			octets += c;
+		}
+		delete[] compressedData;
+		delete[] bytes;
+	}
+
 	std::string DeltazlibIntArrayAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{
 		std::vector<int> intArray = DeltazlibIntArrayAlgorithm::decodeToIntArray(octets);
@@ -73,7 +142,7 @@ namespace XIOT {
 
 	std::vector<int> DeltazlibIntArrayAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets)
 	{
-		const unsigned char* pStr = &octets.front();
+		const unsigned char* pStr = octets.c_str();
 
 		unsigned int length = FI::Tools::readUInt((unsigned char*)pStr);
 		unsigned char span = octets[4];
@@ -86,7 +155,7 @@ namespace XIOT {
 			throw new X3DParseException("Error while decoding DeltazlibIntArrayAlgorithm");
 
 		std::vector<int> result(length);
-		
+
 		Bytef* pRes = &temp_result.front();
 		for(unsigned int i = 0; i < length; i++)
 		{
@@ -98,89 +167,89 @@ namespace XIOT {
 		return result;
 	}
 
-	void DeltazlibIntArrayAlgorithm::encode(const std::vector<int> &input, FI::NonEmptyOctetString &octets, bool isImage)
+	void DeltazlibIntArrayAlgorithm::encode(const int* values, size_t size, FI::NonEmptyOctetString &octets, bool isImage)
 	{
 		// compute delta
-      char span = 0;
-      size_t i = 0;
-      int f; unsigned char *p;
-      std::vector<unsigned char> deltas;
+		char span = 0;
+		size_t i = 0;
+		int f; unsigned char *p;
+		std::vector<unsigned char> deltas;
 
-      if (isImage)
-        {
-        span = 0;
-        for(i = 0; i < input.size(); i++)
-          {
-          int v = 1 + (input[i]);
-          int *vp = reinterpret_cast<int*>(&v);
-		  f = FI::Tools::reverseBytes(vp);
-          p = reinterpret_cast <unsigned char*> (&f);
-          deltas.push_back(p[0]);
-          deltas.push_back(p[1]);
-          deltas.push_back(p[2]);
-          deltas.push_back(p[3]);
-          }
-        }
-      else
-        {
-        for (i = 0; i < 20; i++)
-          {
-          if (input[i] == -1)
-            {
-            span = static_cast<char>(i) + 1;
-            break;
-            }
-          }
-        if (!span) span = 4;
+		if (isImage)
+		{
+			span = 0;
+			for(i = 0; i < size; i++)
+			{
+				int v = 1 + (values[i]);
+				int *vp = reinterpret_cast<int*>(&v);
+				f = FI::Tools::reverseBytes(vp);
+				p = reinterpret_cast <unsigned char*> (&f);
+				deltas.push_back(p[0]);
+				deltas.push_back(p[1]);
+				deltas.push_back(p[2]);
+				deltas.push_back(p[3]);
+			}
+		}
+		else
+		{
+			for (i = 0; i < 20; i++)
+			{
+				if (values[i] == -1)
+				{
+					span = static_cast<char>(i) + 1;
+					break;
+				}
+			}
+			if (!span) span = 4;
 
-        for(i = 0; i < static_cast<size_t>(span); i++)
-          {
-          int v = 1 + input[i];
-          int *vp = reinterpret_cast<int*>(&v);
-          f = FI::Tools::reverseBytes(vp);
+			for(i = 0; i < static_cast<size_t>(span); i++)
+			{
+				int v = 1 + values[i];
+				int *vp = reinterpret_cast<int*>(&v);
+				f = FI::Tools::reverseBytes(vp);
 
-          p = reinterpret_cast <unsigned char*> (&f);
-          deltas.push_back(p[0]);
-          deltas.push_back(p[1]);
-          deltas.push_back(p[2]);
-          deltas.push_back(p[3]);
-          }
-        for(i = span; i < input.size(); i++)
-          {
-          int v = 1 + (input[i] - input[i-span]);
-          f = FI::Tools::reverseBytes(&v);
+				p = reinterpret_cast <unsigned char*> (&f);
+				deltas.push_back(p[0]);
+				deltas.push_back(p[1]);
+				deltas.push_back(p[2]);
+				deltas.push_back(p[3]);
+			}
+			for(i = span; i < size; i++)
+			{
+				int v = 1 + (values[i] - values[i-span]);
+				f = FI::Tools::reverseBytes(&v);
 
-          p = reinterpret_cast <unsigned char*> (&f);
-          deltas.push_back(p[0]);
-          deltas.push_back(p[1]);
-          deltas.push_back(p[2]);
-          deltas.push_back(p[3]);
-          }
-        }
+				p = reinterpret_cast <unsigned char*> (&f);
+				deltas.push_back(p[0]);
+				deltas.push_back(p[1]);
+				deltas.push_back(p[2]);
+				deltas.push_back(p[3]);
+			}
+		}
 
-      unsigned long compressedSize = deltas.size() + static_cast<unsigned long>(ceil(deltas.size()*0.001)) + 12;
-      Bytef* compressedData = new Bytef[compressedSize];
-  
-	  // Call zlib's compress function.
-	  if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), isImage ? 9 : 5) != Z_OK)
-      {    
-	    throw new X3DParseException("Error while encoding DeltazlibIntArrayAlgorithm");
-      }
-  
-	  int size32 = static_cast<int>(input.size());
-      int size32_reversed = FI::Tools::reverseBytes(&size32);
-      char *s = reinterpret_cast <char*> (&size32_reversed);
-	  
-	  octets.insert(octets.begin(), s, s+3);
-      octets.push_back(span);
+		unsigned long compressedSize = deltas.size() + static_cast<unsigned long>(ceil(deltas.size()*0.001)) + 12;
+		Bytef* compressedData = new Bytef[compressedSize];
 
-      for (i = 0; i < compressedSize; i++)
-        {
-        unsigned char c = compressedData[i];
-		octets.push_back(c);
-        }
-      delete[] compressedData;
-     
+		// Call zlib's compress function.
+		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), isImage ? 9 : 5) != Z_OK)
+		{    
+			throw new X3DParseException("Error while encoding DeltazlibIntArrayAlgorithm");
+		}
+
+		int size32 = static_cast<int>(size);
+		int size32_reversed = FI::Tools::reverseBytes(&size32);
+		char *s = reinterpret_cast <char*> (&size32_reversed);
+
+		octets.insert(octets.begin(), s, s+4);
+		octets.push_back(span);
+
+		for (i = 0; i < compressedSize; i++)
+		{
+			unsigned char c = compressedData[i];
+			octets.push_back(c);
+		}
+		delete[] compressedData;
+
 	}
 }
 

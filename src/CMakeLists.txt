@@ -77,6 +77,7 @@ set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DParserVocabulary.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DFIEncodingAlgorithms.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriter.h
+	${XIOT_INCLUDE_DIR}/xiot/X3DFIEncoder.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFI.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFIHelper.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterXML.h
@@ -99,12 +100,14 @@ set(XIOT_SRC
 	X3DParserVocabulary.cpp
 	X3DFIEncodingAlgorithms.cpp
 	X3DWriterFI.cpp
+	X3DFIEncoder.cpp
 	X3DWriterXML.cpp
 	X3DZLibDataCompressor.cpp
 	${XML_PARSER_IMPL_SRC}
 )
 
 set(OPENFI_SRC
+	FIEncoder.cpp
 	FIDecoder.cpp
 	FIContentHandler.cpp
 	FISAXParser.cpp
@@ -116,6 +119,8 @@ set(OPENFI_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/FIConstants.h
 	${XIOT_INCLUDE_DIR}/xiot/FITypes.h
 	${XIOT_INCLUDE_DIR}/xiot/FIDecoder.h
+	${XIOT_INCLUDE_DIR}/xiot/FIDecoder.h
+	${XIOT_INCLUDE_DIR}/xiot/FIEncoder.h
 	${XIOT_INCLUDE_DIR}/xiot/FIContentHandler.h
 	${XIOT_INCLUDE_DIR}/xiot/FISAXParser.h
 	${XIOT_INCLUDE_DIR}/xiot/FIParserVocabulary.h

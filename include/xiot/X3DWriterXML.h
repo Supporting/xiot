@@ -24,6 +24,8 @@
 
 #include <xiot/X3DWriter.h>
 
+namespace XIOT {
+
 struct XMLInfo {
 
 XMLInfo(int _elementId)
@@ -93,5 +95,7 @@ private:
   std::vector<XMLInfo> *InfoStack;
 
 };
+
+}
 
 #endif

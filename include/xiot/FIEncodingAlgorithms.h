@@ -52,6 +52,7 @@ public:
 	static const int ALGORITHM_ID = 4;
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
 	static std::vector<int> decodeToIntArray(const FI::NonEmptyOctetString &octets);
+	static void encode(const int* values, size_t size, FI::NonEmptyOctetString &octets);
 };
 
 /**
@@ -80,7 +81,7 @@ public:
 	static const int ALGORITHM_ID = 7;
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
 	static std::vector<float> decodeToFloatArray(const FI::NonEmptyOctetString &octets);
-	
+	static void encode(const float* values, size_t size, FI::NonEmptyOctetString &octets);
 };
 
 
@@ -120,7 +121,7 @@ public:
 		return v.f;
 	};
 
-	inline static int reverseBytes(int* x) {
+	inline static int reverseBytes(const int* x) {
 		/* break x apart, then put it back together backwards */
 		int part1 = (*x)  & 0xFF;
 		int part2 = ((*x) >> 8) & 0xFF;

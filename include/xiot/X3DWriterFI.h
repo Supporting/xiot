@@ -23,9 +23,11 @@
 #define X3DWRITERFI_H
 
 #include <xiot/X3DWriter.h>
+#include <xiot/X3DFIEncoder.h>
+
+namespace XIOT {
 
 class X3DWriterFIByte;
-class X3DZLibDataCompressor;
 struct NodeInfo;
 
 class XIOT_EXPORT X3DWriterFI : public X3DWriter
@@ -87,11 +89,12 @@ private:
   //int Depth;
   X3DWriterFIByte* Writer;
   std::vector<NodeInfo>* InfoStack;
-  X3DZLibDataCompressor* Compressor;
-
+  X3DFIEncoder _encoder;
   int Fastest;
+  std::ofstream _stream;
 
 };
 
+} // namespace XIOT
 #endif
 

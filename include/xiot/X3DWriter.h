@@ -33,6 +33,8 @@
 #include <sstream>
 #include <cassert>
 
+namespace XIOT {
+
 enum X3DWriterType {X3DXML, X3DVRML, X3DFI};
 
 class XIOT_EXPORT X3DWriter
@@ -94,5 +96,8 @@ protected:
   X3DWriterType type;  // stores which implementation is represented by the interface
 	
 };
+
+} // namespace XIOT
+
 #endif
 
