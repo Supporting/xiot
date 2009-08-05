@@ -76,7 +76,6 @@ set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DFICompressionTools.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DParserVocabulary.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DFIEncodingAlgorithms.h
-	${XIOT_INCLUDE_DIR}/xiot/XIOTConfigure.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriter.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFI.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFIHelper.h
@@ -132,7 +131,7 @@ include_directories( ${XML_PARSER_INCLUDE_DIR} )
 add_library(openFI SHARED ${OPENFI_SRC} ${OPENFI_HEADER})
 
 # set up XIOT
-add_library(xiot SHARED ${XIOT_SRC} ${XIOT_HEADER})
+add_library(xiot SHARED ${XIOT_SRC} ${XIOT_HEADER} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h)
 target_link_libraries (xiot ${XML_PARSER_LIBRARY}) 
 target_link_libraries (xiot ${ZLIB_LIBRARIES}) 
 target_link_libraries (xiot openFI) 
@@ -141,7 +140,9 @@ target_link_libraries (xiot openFI)
 add_executable(sourceGenerator gen/sourceGenerator.cpp)
 target_link_libraries (sourceGenerator xiot) 
 
+##
 # install stuff
+##
 install(TARGETS xiot openFI
         RUNTIME DESTINATION bin
         ARCHIVE DESTINATION lib
@@ -152,3 +153,39 @@ install(FILES ${XIOT_HEADER} ${OPENFI_HEADER} DESTINATION include)
 if (WIN32)
 	install(FILES ${XML_PARSER_INSTALL_FILES} DESTINATION bin)
 endif (WIN32)
+
+##
+# vtk distribution stuff
+##
+option(EXPORT_VTK_DIST "Build a XIOT distribution for VTK" OFF)
+mark_as_advanced(EXPORT_VTK_DIST)
+
+if(EXPORT_VTK_DIST)
+add_custom_target(GENERATE_VTK_DIST DEPENDS ${XIOT_SRC} ${XIOT_HEADER} ${OPENFI_SRC} ${OPENFI_HEADER})
+add_custom_command(TARGET GENERATE_VTK_DIST
+                     PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot
+                  )
+
+foreach(SFILE ${XIOT_SRC} ${OPENFI_SRC})
+  set(SFILE ${PROJECT_SOURCE_DIR}/src/${SFILE})
+  add_custom_command(TARGET GENERATE_VTK_DIST
+                     PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${SFILE} ${PROJECT_BINARY_DIR}/vtkxiot
+					)
+endforeach(SFILE)
+
+foreach(SFILE ${XIOT_HEADER} ${OPENFI_HEADER})
+  add_custom_command(TARGET GENERATE_VTK_DIST
+                     PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} ARGS -E copy ${SFILE} ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot
+					)
+endforeach(SFILE)
+
+set(VTK_DIST_SRC_LIST "${XIOT_SRC};${OPENFI_SRC}")
+string(REPLACE ";" "\n\t" VTK_DIST_SRC "${VTK_DIST_SRC_LIST}")
+configure_file( conf/vtkCMakeLists.txt.in ${PROJECT_BINARY_DIR}/vtkxiot/CMakeLists.txt @ONLY)
+configure_file( conf/vtkXIOTConfig.h.in ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot/XIOTConfig.h @ONLY)
+configure_file( conf/vtkFIConfig.h.in ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot/FIConfig.h @ONLY)
+
+endif(EXPORT_VTK_DIST)

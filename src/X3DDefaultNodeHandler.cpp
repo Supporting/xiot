@@ -1391,20 +1391,20 @@ int X3DDefaultNodeHandler::endTextureTransformMatrix3D() {
   return endUnhandled("TextureTransformMatrix3D");
 }
 
-int X3DDefaultNodeHandler::startUnknown(int id, const char* nodeName, const X3DAttributes &attr) {
+int X3DDefaultNodeHandler::startUnknown(int , const char* nodeName, const X3DAttributes &attr) {
   return startUnhandled(nodeName ? nodeName : "Unknown", attr);
 }
 
-int X3DDefaultNodeHandler::endUnknown(int id, const char* nodeName) {
+int X3DDefaultNodeHandler::endUnknown(int , const char* nodeName) {
   return endUnhandled(nodeName ? nodeName : "Unknown");
 }
 
-int X3DDefaultNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes &attr) {
+int X3DDefaultNodeHandler::startUnhandled(const char* , const X3DAttributes &) {
   // do nothing in the default implementation
   return 1;
 }
 
-int X3DDefaultNodeHandler::endUnhandled(const char* nodeName) {
+int X3DDefaultNodeHandler::endUnhandled(const char* ) {
   // do nothing in the default implementation
   return 1;
 }

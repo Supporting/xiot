@@ -23,7 +23,7 @@
 #ifndef X3DTYPES_H
 #define X3DTYPES_H
 
-#include <xiot/XIOTConfigure.h>
+#include <xiot/XIOTConfig.h>
 #include <string>
 #include <vector>
 #include <map>

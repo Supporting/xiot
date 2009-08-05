@@ -8,8 +8,6 @@
 #include <sstream>
 #include <cassert>
 
-#define readByte() _stream->get()
-
 namespace FI {
 
 Decoder::Decoder()
@@ -42,28 +40,28 @@ void Decoder::setStream(std::istream* stream)
 // C.1
 bool Decoder::detectFIDocument()
 {
-	_b = readByte();
+	_stream->get(_b);
 	// C.1.3 A fast infoset document may begin either with an XML declaration (see 12.3) followed by:
 	
 	// a) the sixteen bits '1110000000000000' (identification); followed by
 	if(_b != Constants::IDENT1) // equals 11100000
 		return false;
 	
-	_b = readByte();
+	_stream->get(_b);
 	if(_b != Constants::IDENT2) // equals 00000000
 		return false;
 
 	// b) the sixteen bits '0000000000000001' (version number); followed by
-	_b = readByte();
+	_stream->get(_b);
 	if(_b != Constants::VERSION1) // equals 00000000
 		return false;
 
-	_b = readByte();
+	_stream->get(_b);
 	if(_b != Constants::VERSION2) // equals 00000001
 		return false;
 
 	// c) the bit '0' (padding)
-	_b = readByte();
+	_stream->get(_b);
 	return checkBit(_b, 1) == 0;
 }
 
@@ -90,7 +88,7 @@ void Decoder::processDocumentProperties()
 		decodeVersion();
 }
 
-void Decoder::getDocument(FI::Document &document)
+void Decoder::getDocument(FI::Document &)
 {
 	processDocumentProperties();
 	 // read Children
@@ -103,7 +101,7 @@ bool Decoder::readChildren()
 {
 	
 	do {
-		_b = readByte();
+		_stream->get(_b);
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			Element element;
 			getElement(element);
@@ -131,7 +129,7 @@ bool Decoder::readAttributes(FI::Element& element)
 {
 	if(_b == 0xF0)
 	{
-		readByte();
+		_stream->get();
 		return false; // Termination detected (no more attributes)
 	}
 	else if(_b == 0xFF)
@@ -183,7 +181,7 @@ void Decoder::getElement(FI::Element &element)
 	//_processor->processElementStart(element);
 
 	do {
-		_b = readByte();
+		_stream->get(_b);
 
 		if(!checkBit(_b, 1)) // 0 padding announcing element
 		{
@@ -202,7 +200,7 @@ void Decoder::getElement(FI::Element &element)
 	//std::cout << "endElement: " << X3DTypes::getElementByID(id) << std::endl;
 
 	if((_b == 0xF0) || ((_b == 0xFF) && hasAttributes)) // Termination handling
-		readByte();
+		_stream->get();
 
 }
 
@@ -213,7 +211,7 @@ void Decoder::getAttribute(FI::Attribute &attribute)
 	getQualifiedNameOrIndex2(attribute._qualifiedName);
 	
 	// NOTE – C.17 always ends on the eighth bit of the same or another octet.
-	_b = readByte(); // Get next byte
+	_stream->get(_b); // Get next byte
 	
 	//C.4.4 The value of normalized-value is encoded as described in C.14.
 	getNonIdentifyingStringOrIndex1(attribute._normalizedValue);
@@ -234,7 +232,7 @@ void Decoder::getQualifiedNameOrIndex2(FI::QualifiedNameOrIndex& name)
 		bool isPrefixPresent = checkBit(_b, 7) != 0;
 		bool isNamespaceNamePresent = checkBit(_b, 8) != 0;
 		
-		_b = readByte(); // next byte
+		_stream->get(_b); // next byte
 
 		// C.17.3.2 If the optional component prefix is present, it is encoded as described in C.13.
 		if(isPrefixPresent)
@@ -266,7 +264,7 @@ void Decoder::getQualifiedNameOrIndex3(FI::QualifiedNameOrIndex& name)
 		bool isPrefixPresent = checkBit(_b, 7) != 0;
 		bool isNamespaceNamePresent = checkBit(_b, 8) != 0;
 
-		_b = readByte(); // next byte
+		_stream->get(_b); // next byte
 		
 		// C.18.3.2 If the optional component prefix is present, it is encoded as described in C.13.
 		if(isPrefixPresent)
@@ -413,11 +411,11 @@ void Decoder::getNonEmptyOctetString2(FI::NonEmptyOctetString &value)
 	}
 	else if(_b == Constants::NON_EMPTY_OCTET_STRING_2ND_MEDIUM) // medium
 	{
-		iLength = static_cast<unsigned int>(readByte()) + 65;
+		iLength = static_cast<unsigned int>(_stream->get()) + 65;
 	}
 	else if(_b == Constants::NON_EMPTY_OCTET_STRING_2ND_LARGE)
 	{
-		iLength = (readByte() << 24) + (readByte() << 16) + (readByte() << 8) + readByte() + 321;
+		iLength = (_stream->get() << 24) + (_stream->get() << 16) + (_stream->get() << 8) + _stream->get() + 321;
 	}
 	else
 		throw std::runtime_error("Illegal Octet length encoding"); // Failure
@@ -425,7 +423,7 @@ void Decoder::getNonEmptyOctetString2(FI::NonEmptyOctetString &value)
 	value.reserve(iLength);
 	for(int i = 0; i < iLength; i++)
 	{
-		value.push_back(readByte());
+		value.push_back(static_cast<const char>(_stream->get()));
 	}
 
 }
@@ -443,10 +441,10 @@ void Decoder::getNonEmptyOctetString5(FI::NonEmptyOctetString &value)
 	else switch(_b & Constants::LAST_FOUR_BITS)
 	{
 	case Constants::NON_EMPTY_OCTET_STRING_5TH_MEDIUM:
-		iLength = readByte() + 9;
+		iLength = _stream->get() + 9;
 		break;
 	case Constants::NON_EMPTY_OCTET_STRING_5TH_LARGE:
-		iLength = (readByte() << 24) + (readByte() << 16) + (readByte()<< 8) + readByte() + 265;
+		iLength = (_stream->get() << 24) + (_stream->get() << 16) + (_stream->get()<< 8) + _stream->get() + 265;
 		break;
 	default:
 		throw std::runtime_error("Illegal Octet length encoding");
@@ -454,7 +452,7 @@ void Decoder::getNonEmptyOctetString5(FI::NonEmptyOctetString &value)
 	
 	value.reserve(iLength);
 	for(int i = 0; i < iLength; i++)
-		value.push_back(readByte());
+		value.push_back(static_cast<const char>(_stream->get()));
 
 }
 
@@ -471,7 +469,7 @@ void Decoder::getNonEmptyOctetString7(FI::NonEmptyOctetString &value)
 	else switch(_b & Constants::LAST_TWO_BITS)
 	{
 	case Constants::NON_EMPTY_OCTET_STRING_7TH_MEDIUM:
-		iLength = readByte() + 3;
+		iLength = _stream->get() + 3;
 		break;
 	case Constants::NON_EMPTY_OCTET_STRING_7TH_LARGE:
 		_stream->read((char*)&iLength, 4); 
@@ -483,7 +481,7 @@ void Decoder::getNonEmptyOctetString7(FI::NonEmptyOctetString &value)
 	
 	value.reserve(iLength);
 	for(size_t i = 0; i < iLength; i++)
-		value.push_back(readByte());
+		value.push_back(static_cast<const char>(_stream->get()));
 	
 }
 
@@ -503,7 +501,7 @@ unsigned int Decoder::getInteger2()
 	else switch(_b & Constants::INTEGER_2ND_LENGTH_MASK)
 	{
 		case Constants::INTEGER_2ND_LENGTH_MEDIUM:
-			iValue = ((_b & Constants::LAST_FIVE_BITS) << 8) + readByte() + 65; 
+			iValue = ((_b & Constants::LAST_FIVE_BITS) << 8) + _stream->get() + 65; 
 			break;
 		case Constants::INTEGER_3RD_LENGTH_LARGE:
 			_stream->read(buf, 2);
@@ -529,7 +527,7 @@ unsigned int Decoder::getInteger3()
 	else switch(_b & Constants::INTEGER_3RD_LENGTH_MASK)
 	{
 		case Constants::INTEGER_3RD_LENGTH_SMALL:
-			iValue = ((_b & Constants::LAST_THREE_BITS) << 8) + readByte() + 33; 
+			iValue = ((_b & Constants::LAST_THREE_BITS) << 8) + _stream->get() + 33; 
 			break;
 		case Constants::INTEGER_3RD_LENGTH_MEDIUM:
 			_stream->read(buf, 2);
@@ -537,14 +535,14 @@ unsigned int Decoder::getInteger3()
 			break;
 		case Constants::INTEGER_3RD_LENGTH_LARGE:
 			if((_b & Constants::LAST_THREE_BITS) != 0) // padding
-				return -1;
+				return 0;
 			_stream->read(buf, 3);
 			if((_b & Constants::FOUR_BITS) != 0) // padding
-				return -1;
+				return 0;
 			iValue = ((buf[0] & Constants::LAST_FOUR_BITS) << 16) + (buf[1] << 8) + buf[2] + 526369;
 			break;
 		default:
-			return -1;
+			return 0;
 	}
 
 	return iValue;
@@ -563,7 +561,7 @@ unsigned int Decoder::getInteger4()
 	else switch(_b & Constants::INTEGER_4TH_LENGTH_MASK)
 	{
 		case Constants::INTEGER_4TH_LENGTH_SMALL:
-			iValue = ((_b & Constants::LAST_TWO_BITS) << 8) + readByte() + 17; 
+			iValue = ((_b & Constants::LAST_TWO_BITS) << 8) + _stream->get() + 17; 
 			break;
 		case Constants::INTEGER_4TH_LENGTH_MEDIUM:
 			_stream->read(buf, 2);
@@ -571,14 +569,14 @@ unsigned int Decoder::getInteger4()
 			break;
 		case Constants::INTEGER_4TH_LENGTH_LARGE:
 			if((_b & Constants::LAST_THREE_BITS) != 0) // padding
-				return -1;
+				return 0;
 			_stream->read(buf, 3);
 			if((_b & Constants::FOUR_BITS) != 0) // padding
-				return -1;
+				return 0;
 			iValue = ((buf[0] & Constants::LAST_FOUR_BITS) << 16) + (buf[1] << 8) + buf[2] + 263185;
 			break;
 		default:
-			return -1;
+			return 0;
 	}
 
 	return iValue;
@@ -588,14 +586,14 @@ unsigned int Decoder::getInteger4()
 unsigned int Decoder::getSmallInteger5()
 {
 	unsigned int result = (_b & Constants::LAST_FOUR_BITS) << 4;
-	_b = readByte();
+	_stream->get(_b);
 	return result + ((_b & Constants::FOUR_BITS) >> 4) + 1;
 }
 
 // C.29
 unsigned int Decoder::getSmallInteger7()
 {
-	return (((_b & Constants::LAST_TWO_BITS) << 6) + (((_b = readByte()) & Constants::SIX_BITS) >> 2) + 1);
+	return (((_b & Constants::LAST_TWO_BITS) << 6) + (((_b = static_cast<char>(_stream->get())) & Constants::SIX_BITS) >> 2) + 1);
 }
 
 int Decoder::checkBit(unsigned char c, unsigned char iPos)
@@ -658,15 +656,16 @@ void Decoder::decodeInitialVocabulary()
 	//order) which is present, the number of NameSurrogate items in the component is encoded as described in C.21, and
 	//then each item is encoded (in order) as follows: The six bits '000000' (padding) are appended to the bit stream, and the
 	//NameSurrogate is encoded as described in C.16.
-	unsigned char b = readByte();
-	unsigned char b2 = readByte();
+	char b, b2;
+	_stream->get(b);
+	_stream->get(b2);
 
 	if (
 		b == 0x10  // 00010000
 		&& b2 == 0 // 00000000
 		)
 	{
-		_b = readByte();
+		_stream->get(_b);
 		decodeExternalVocabularyURI();
 		return;
 	}
@@ -723,7 +722,8 @@ void Decoder::decodeStandalone()
 	//C.2.9 If the optional component standalone is present, it is encoded as follows: The seven bits '0000000'
 	//(padding) are appended to the bit stream. If the value of standalone is TRUE, then the bit '1' is appended to the bit
 	//stream, otherwise the bit '0' is appended.
-	bool standalone = readByte() > 0;
+	
+	//bool standalone = _stream->get() > 0;
 }
 void Decoder::decodeVersion()
 {

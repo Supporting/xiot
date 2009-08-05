@@ -173,11 +173,11 @@ namespace XIOT {
 
 			ss >> tempVec.x >> tempVec.y >> tempVec.z;
 			
-			int c = ss.peek();
+			char c = static_cast<char>(ss.peek());
 			while(isWhiteSpaceOrComma(c))
 			{
-				ss.ignore(1);
-				c = ss.peek();
+				ss.ignore();
+				c = static_cast<char>(ss.peek());
 			}
 						
 			vec.push_back(tempVec);
@@ -200,9 +200,9 @@ namespace XIOT {
 		{
 			ss >> tempVec.x >> tempVec.y;
 			
-			c = ss.peek();	// look for ',' and skip it
+			c = static_cast<char>(ss.peek());	// look for ',' and skip it
 			if(c == ',')
-				ss.ignore(1);
+				ss.ignore();
 
 			vec.push_back(tempVec);
 		}		
@@ -223,9 +223,9 @@ namespace XIOT {
 		{
 			ss >> tempRot.x >> tempRot.y >> tempRot.z >> tempRot.angle;
 			
-			c = ss.peek();	// look for ',' and skip it
+			c = static_cast<char>(ss.peek());	// look for ',' and skip it
 			if(c == ',')
-				ss.ignore(1);
+				ss.ignore();
 			
 			vec.push_back(tempRot);
 		}		
@@ -247,9 +247,9 @@ namespace XIOT {
 		{
 			ss >> tempString;
 			
-			c = ss.peek();	// look for ',' and skip it
+			c = static_cast<char>(ss.peek());	// look for ',' and skip it
 			if(c == ',')
-				ss.ignore(1);
+				ss.ignore();
 			
 			vec.push_back(tempString);
 		}		

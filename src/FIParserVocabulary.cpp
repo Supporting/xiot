@@ -9,7 +9,7 @@ ss << s; \
 throw std::runtime_error(ss.str());\
 }
 
-#define OCTETS2STRING(octets, str) { if ((octets).size())  (str).assign(&(octets).front(), (octets).size()); else (str).clear(); }
+#define OCTETS2STRING(octets, str) { if ((octets).size())  (str).insert((str).begin(), (octets).begin(), (octets).end()); else (str).clear(); }
 
 namespace FI {
 

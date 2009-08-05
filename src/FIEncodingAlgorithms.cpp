@@ -28,11 +28,11 @@ namespace FI {
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
 		
-		const char*pOctets = &octets.front();
+		const unsigned char*pOctets = &octets.front();
 		std::vector<float> result(length);
 		for (size_t i = 0; i < length; i++)
 		{
-			result[i] = Tools::readFloat((const unsigned char*)pOctets);
+			result[i] = Tools::readFloat(pOctets);
 			pOctets += 4;
 		}
 		return result;
@@ -56,17 +56,17 @@ namespace FI {
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
 		
-		const char*pOctets = &octets.front();
+		const unsigned char *pOctets = &octets.front();
 		std::vector<int> result(length);
 		for (size_t i = 0; i < length; i++)
 		{
-			result[i] = Tools::readUInt((const unsigned char*)pOctets);
+			result[i] = Tools::readUInt(pOctets);
 			pOctets += 4;
 		}
 		return result;
 	}
 
-std::string BooleanEncodingAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
+std::string BooleanEncodingAlgorithm::decodeToString(const FI::NonEmptyOctetString &) const
 {
 	throw std::runtime_error("BooleanEncodingAlgorithm not implemented (yet)");
 	/*std::vector<bool> floatArray = decodeToBoolArray(octets);
@@ -80,12 +80,9 @@ std::string BooleanEncodingAlgorithm::decodeToString(const FI::NonEmptyOctetStri
 	return ss.str();*/
 }
 
-std::vector<bool> BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &octets)
+std::vector<bool> BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &)
 {
-	std::vector<bool> result;
-	unsigned char unusedBits = octets[0] >> 4;
-
-	return result;
+	throw std::runtime_error("BooleanEncodingAlgorithm not implemented (yet)");
 }
 
 }

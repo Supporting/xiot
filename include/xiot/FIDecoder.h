@@ -188,7 +188,7 @@ protected:
   int checkBit(unsigned char c, unsigned char iPos);
 
 protected:
-  unsigned char _b;
+  char _b;
   ParserVocabulary* _vocab;
 
   std::map<std::string, ParserVocabulary*> _externalVocabularies;

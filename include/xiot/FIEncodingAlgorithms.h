@@ -120,6 +120,15 @@ public:
 		return v.f;
 	};
 
+	inline static int reverseBytes(int* x) {
+		/* break x apart, then put it back together backwards */
+		int part1 = (*x)  & 0xFF;
+		int part2 = ((*x) >> 8) & 0xFF;
+		int part3 = ((*x) >> 16) & 0xFF;
+		int part4 = ((*x) >> 24) & 0xFF;
+		return (part1 << 24) | ( part2 << 16) | (part3 << 8) | part4;
+  }
+
 };
 
 }; // End namespace X3D;

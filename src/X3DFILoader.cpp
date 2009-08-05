@@ -62,7 +62,7 @@ void X3DFIContentHandler::startElement(const FI::ParserVocabulary* vocab, const 
 		_skipCount = 1;
 }
 
-void X3DFIContentHandler::endElement(const FI::ParserVocabulary* vocab, const FI::Element &element)
+void X3DFIContentHandler::endElement(const FI::ParserVocabulary*, const FI::Element &element)
 {
 	if (_skipCount != 0)
 	{
@@ -83,7 +83,7 @@ X3DFILoader::~X3DFILoader()
 	file.close();
 }
 
-bool X3DFILoader::load(std::string filename, bool fileValidation)
+bool X3DFILoader::load(std::string filename, bool )
 {
   assert(_handler);
   x3dswitch.setNodeHandler(_handler);

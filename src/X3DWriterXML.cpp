@@ -328,7 +328,7 @@ void X3DWriterXML::SubDepth()
   this->ActTab.erase(0, 2);
 }
 
-void X3DWriterXML::printAttributeString(int attributeID)
+void X3DWriterXML::printAttributeString(int )
 {
   //this->OutputStream << " " << X3DTypes::getAttributeByID(attributeID) << "=\"" << this->GetNewline() << this->ActTab;
   //fprintf(this->OutputStream, " %s=\"\n%s", this->ActTab);

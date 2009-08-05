@@ -1,13 +1,13 @@
 #include <xiot/X3DFIEncodingAlgorithms.h>
 
 #include <iostream>
+#include <cmath>
+
 #include <zlib.h>
 
 #include <xiot/FITypes.h>
 #include <xiot/FIConstants.h>
 #include <xiot/X3DParseException.h>
-
-
 #include <xiot/X3DFICompressionTools.h>
 
 namespace XIOT {
@@ -30,10 +30,10 @@ namespace XIOT {
 		unsigned char exponent = octets[0];
 		unsigned char mantissa = octets[1];
 
-		const char* pStr = &octets.front();
+		const unsigned char* pStr = &octets.front();
 
-		unsigned int len = FI::Tools::readUInt((unsigned char*)pStr+2);
-		unsigned int numFloats = FI::Tools::readUInt((unsigned char*)pStr+6);
+		unsigned int len = FI::Tools::readUInt(pStr+2);
+		unsigned int numFloats = FI::Tools::readUInt(pStr+6);
 
 		int numBits = exponent + mantissa + 1;
 
@@ -73,7 +73,7 @@ namespace XIOT {
 
 	std::vector<int> DeltazlibIntArrayAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets)
 	{
-		const char* pStr = &octets.front();
+		const unsigned char* pStr = &octets.front();
 
 		unsigned int length = FI::Tools::readUInt((unsigned char*)pStr);
 		unsigned char span = octets[4];
@@ -96,6 +96,91 @@ namespace XIOT {
 			pRes+=4;
 		}
 		return result;
+	}
+
+	void DeltazlibIntArrayAlgorithm::encode(const std::vector<int> &input, FI::NonEmptyOctetString &octets, bool isImage)
+	{
+		// compute delta
+      char span = 0;
+      size_t i = 0;
+      int f; unsigned char *p;
+      std::vector<unsigned char> deltas;
+
+      if (isImage)
+        {
+        span = 0;
+        for(i = 0; i < input.size(); i++)
+          {
+          int v = 1 + (input[i]);
+          int *vp = reinterpret_cast<int*>(&v);
+		  f = FI::Tools::reverseBytes(vp);
+          p = reinterpret_cast <unsigned char*> (&f);
+          deltas.push_back(p[0]);
+          deltas.push_back(p[1]);
+          deltas.push_back(p[2]);
+          deltas.push_back(p[3]);
+          }
+        }
+      else
+        {
+        for (i = 0; i < 20; i++)
+          {
+          if (input[i] == -1)
+            {
+            span = static_cast<char>(i) + 1;
+            break;
+            }
+          }
+        if (!span) span = 4;
+
+        for(i = 0; i < static_cast<size_t>(span); i++)
+          {
+          int v = 1 + input[i];
+          int *vp = reinterpret_cast<int*>(&v);
+          f = FI::Tools::reverseBytes(vp);
+
+          p = reinterpret_cast <unsigned char*> (&f);
+          deltas.push_back(p[0]);
+          deltas.push_back(p[1]);
+          deltas.push_back(p[2]);
+          deltas.push_back(p[3]);
+          }
+        for(i = span; i < input.size(); i++)
+          {
+          int v = 1 + (input[i] - input[i-span]);
+          f = FI::Tools::reverseBytes(&v);
+
+          p = reinterpret_cast <unsigned char*> (&f);
+          deltas.push_back(p[0]);
+          deltas.push_back(p[1]);
+          deltas.push_back(p[2]);
+          deltas.push_back(p[3]);
+          }
+        }
+
+      unsigned long compressedSize = deltas.size() + static_cast<unsigned long>(ceil(deltas.size()*0.001)) + 12;
+      Bytef* compressedData = new Bytef[compressedSize];
+  
+	  // Call zlib's compress function.
+	  if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), isImage ? 9 : 5) != Z_OK)
+      {    
+	    throw new X3DParseException("Error while encoding DeltazlibIntArrayAlgorithm");
+      }
+  
+	  int size32 = static_cast<int>(input.size());
+      int size32_reversed = FI::Tools::reverseBytes(&size32);
+      char *s = reinterpret_cast <char*> (&size32_reversed);
+	  
+	  octets.insert(octets.begin(), s, s+3);
+      octets.push_back(span);
+
+      for (i = 0; i < compressedSize; i++)
+        {
+        unsigned char c = compressedData[i];
+		octets.push_back(c);
+        }
+      delete[] compressedData;
+     
 	}
 }
 

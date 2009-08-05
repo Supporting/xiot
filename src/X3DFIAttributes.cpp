@@ -1,7 +1,6 @@
 #include <xiot/X3DFIAttributes.h>
 
 #include <iostream>
-#include <zlib.h>
 
 #include <xiot/FITypes.h>
 #include <xiot/FIConstants.h>
@@ -39,7 +38,7 @@ int X3DFIAttributes::getAttributeIndex(int attributeID) const{
 	for(std::vector<FI::Attribute>::const_iterator I = _impl->_attributes->begin();
 		I != _impl->_attributes->end(); I++, i++)
 	{
-		if ((*I)._qualifiedName._nameSurrogateIndex == attributeID+1)
+		if ((*I)._qualifiedName._nameSurrogateIndex == static_cast<unsigned int>(attributeID+1))
 			return i;
 	}
 	return -1;

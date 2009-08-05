@@ -3,8 +3,6 @@
 #include <xiot/FIParserVocabulary.h>
 #include <xiot/FIContentHandler.h>
 
-#define readByte() _stream->get()
-
 namespace FI {
 
 
@@ -33,7 +31,7 @@ void SAXParser::processDocument()
 	// Process children
 	while(!_terminated)
 	{
-		_b = readByte();
+		_stream->get(_b);
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			processElement();
 		}
@@ -69,7 +67,7 @@ void SAXParser::processElement()
 	_attributes.clear();
 
 	while(!_terminated) {
-		_b = readByte();
+		_stream->get(_b);
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			processElement();
 		}
@@ -95,7 +93,7 @@ void SAXParser::processElement()
 void SAXParser::processAttributes()
 {
 	do {
-		_b = readByte();
+		_stream->get(_b);
 		if (!checkBit(_b,1))
 		{
 			FI::Attribute attribute;

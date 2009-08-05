@@ -55,6 +55,8 @@ public:
 	 * Delta zlib integer array decoder.
 	 */
 	static std::vector<int> decodeToIntArray(const FI::NonEmptyOctetString &octets);
+
+	static void encode(const std::vector<int> &input, FI::NonEmptyOctetString &octets, bool isImage = false);
 	
 };
 

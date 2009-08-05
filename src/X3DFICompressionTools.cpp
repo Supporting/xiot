@@ -122,7 +122,7 @@ _mantissaBits(mantissaBits)
 	_exponent_bias = (1 << (_exponentBits - 1)) - 1;	 _sign_shift = _exponentBits + _mantissaBits;	_sign_mask = 1 << _sign_shift;	 _exponent_mask = ((1 << _exponentBits) - 1) << _mantissaBits;	 _mantissa_mask = (1 << _mantissaBits) - 1;	_exponent_max = (1 << (_exponentBits - 1)) - 1;	_exponent_min = -_exponent_max - 1;
 }
 
-float FloatPacker::decode(unsigned long src, bool isSigned)
+float FloatPacker::decode(unsigned long src, bool )
 {
 	if (src == 0)
 		return 0.0f;
