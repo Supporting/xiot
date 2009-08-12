@@ -284,7 +284,7 @@ int vtkX3DNodeHandler::startMaterial(const X3DAttributes &attr)
 	return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startAppearance(const X3DAttributes &attr)
+int vtkX3DNodeHandler::startAppearance(const X3DAttributes &vtkNotUsed(attr))
 {
 	if(this->CurrentProperty)
 		this->CurrentProperty->Delete();
@@ -414,7 +414,7 @@ int vtkX3DNodeHandler::startSphere(const X3DAttributes &attr)
 
 
 
-int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes &attr)
+int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes &vtkNotUsed(attr))
 {
 	int elementID = X3DTypes::getElementID(nodeName);
 	
@@ -437,9 +437,8 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 	{
 		return CONTINUE;
 	}
-
 	pmap = vtkPolyDataMapper::New();
-    this->CurrentIndexedFaceSet = vtkX3DIndexedFaceSetSource::New();
+  this->CurrentIndexedFaceSet = vtkX3DIndexedFaceSetSource::New();
 	
 	pmap->SetInput(this->CurrentIndexedFaceSet->GetOutput());
 	// normal per vertex
@@ -520,7 +519,11 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		idArray->Delete();
 	}
 	
-
+  index = attr.getAttributeIndex(ID::creaseAngle);
+  if (index != -1)
+    {
+    this->CurrentIndexedFaceSet->SetCreaseAngle(attr.getSFFloat(index));
+    }
 
     this->CurrentActor->SetMapper(pmap);
     pmap->Delete();
@@ -703,7 +706,7 @@ int vtkX3DNodeHandler::startTextureCoordinate(const X3DAttributes &attr) {
   return CONTINUE;
 }
 
-int vtkX3DNodeHandler::startPointSet(const X3DAttributes &attr) {
+int vtkX3DNodeHandler::startPointSet(const X3DAttributes &vtkNotUsed(attr)) {
 	pmap = vtkPolyDataMapper::New();
 	pmap->SetScalarVisibility(0);
 

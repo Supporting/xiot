@@ -24,7 +24,6 @@ public:
   vtkTypeRevisionMacro(vtkX3DIndexedFaceSetSource,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-
   vtkSetMacro(NormalPerVertex  ,int);
   vtkGetMacro(NormalPerVertex ,int);
   vtkBooleanMacro(NormalPerVertex ,int);
@@ -32,6 +31,10 @@ public:
   vtkSetMacro(ColorPerVertex ,int);
   vtkGetMacro(ColorPerVertex,int);
   vtkBooleanMacro(ColorPerVertex,int);
+
+  vtkSetMacro(CreaseAngle, double);
+  vtkGetMacro(CreaseAngle, double);
+
 
   // Indices
 
@@ -73,6 +76,8 @@ protected:
 
   int NormalPerVertex;
   int ColorPerVertex;
+
+  double CreaseAngle;
 
   vtkIdTypeArray* CoordIndex;
   vtkIdTypeArray* NormalIndex;

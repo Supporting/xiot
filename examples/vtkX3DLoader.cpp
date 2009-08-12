@@ -13,6 +13,7 @@
 #include "vtkLight.h"
 #include "vtkTimerLog.h"
 #include "vtkVRMLExporter.h"
+#include "vtkX3DExporter.h"
 
 using namespace std;
 
@@ -53,6 +54,13 @@ int showScene(vtkImporter* importer)
 		cout << "Time to load file: " << timer->GetElapsedTime() << endl;
 
 	iren->Start();
+
+  vtkX3DExporter* e = vtkX3DExporter::New();
+  e->SetRenderWindow(renWin);
+  e->SetFileName("tmp.x3d");
+  e->Write();
+  e->Delete();
+
 
 	importer->Delete();
 	renderer->Delete();
