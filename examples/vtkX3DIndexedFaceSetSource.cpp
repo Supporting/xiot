@@ -233,28 +233,220 @@ int vtkX3DIndexedFaceSetSource::RequestData(
 	vtkPolyData *output = vtkPolyData::SafeDownCast(
 		outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-	if (!GetCoords() || GetCoords()->GetNumberOfPoints() == 0)
-	{
-		vtkErrorMacro(<<"No coordinates given.");
-		return 1;
-	}
 	if (!GetCoordIndex() || GetCoordIndex()->GetNumberOfTuples() == 0)
 	{
+		// E1
 		vtkErrorMacro(<<"No coordinate index given.");
 		return 1;
 	}
 
-	bool hasTextureCoordinates = this->GetTexCoords() != NULL;
-	bool hasPointColors = this->Colors && this->ColorPerVertex;
-	bool hasPointNormals = this->Normals && this->NormalPerVertex;
-	bool hasCellColors = this->Colors && !hasPointColors;
-	bool hasCellNormals = this->Normals && !hasPointNormals;
-	bool calcPointNormals = !this->Normals && this->NormalPerVertex;
+	if (!GetCoords() || GetCoords()->GetNumberOfPoints() == 0)
+	{
+		// E2
+		vtkErrorMacro(<<"No coordinates given.");
+		return 1;
+	}
 
-	// Make shure, that the index ends with an -1. This is important
+  // Make shure, that the index ends with an -1. This is important
 	// for later processing
 	if (this->CoordIndex->GetValue(this->CoordIndex->GetNumberOfTuples() -1) != -1)
 		this->CoordIndex->InsertNextValue(-1);
+
+	// Create PolyData object
+	vtkPolyData* pd = vtkPolyData::New();
+
+	bool needsVertexSplit = (this->Normals && this->NormalPerVertex && this->NormalIndex) ||
+							(this->Colors  && this->ColorPerVertex &&  this->ColorIndex) ||
+							(this->TexCoords && this->TexCoordIndex);
+
+	if(!needsVertexSplit) 
+    {
+    int calcVertexNormals = false;
+
+    // ----
+    // Start Vertex position and index processing
+    // ----
+    int indexPos = 0;
+	  int nrVertex = 0;
+	  int faceSize = 0;
+  	
+    vtkCellArray* cells = vtkCellArray::New();
+	  vtkPoints* points = vtkPoints::New();
+
+    vtkIdType* index = this->CoordIndex->GetPointer(0);
+    vtkIdType* faceStart = index;
+    const vtkIdType* end = this->CoordIndex->GetPointer(this->CoordIndex->GetNumberOfTuples());
+    while(index != end)
+	    {
+        while(*index != -1)
+          {
+          index++; faceSize++;
+          }
+        cells->InsertNextCell(faceSize);
+        while(faceStart != index)
+          {
+          cells->InsertCellPoint(*faceStart);
+          faceStart++;
+          }
+        faceSize = 0;
+        index++; faceStart++;
+      }
+
+	  /*vtkIdType* pIndex1 = this->CoordIndex->GetPointer(0);
+	  int indexCount = this->CoordIndex->GetNumberOfTuples();
+	  pIndex1 = GetCoordIndex()->GetPointer(0);
+    
+    for(vtkIdType i = 0; i<this->CoordIndex->GetNumberOfTuples(); i++)
+	    {
+  		vtkIdType coordIndex = *pIndex1++;
+	  	if (coordIndex == -1)  // The -1 splits the cells
+		    {
+			  cells->InsertNextCell(counter);
+			  for (int j = counter; j > 0; j--)
+			    {
+				  cells->InsertCellPoint(nrVertex -j);
+			    }
+			  counter = 0;
+			  indexPos++;
+			  continue;
+        } // coordIndex == -1
+
+        // Vertex and vertex position
+		  assert(this->GetCoords()->GetNumberOfPoints() > coordIndex);
+		  double* pos = this->GetCoords()->GetPoint(coordIndex);
+		  points->InsertNextPoint(pos);
+      nrVertex++;
+		  counter++;
+		  indexPos++;
+		  } // CoordIndex iteration*/
+
+    pd->SetPolys(cells);
+    cells->Delete();
+
+    pd->SetPoints(this->Coords);
+    points->Delete();
+
+    // ----
+    // Start Normal processing
+    // ----
+    if (!this->Normals)
+      {
+      if (this->NormalIndex) // E3
+        {
+        vtkWarningMacro(<<"normalIndex given but no normals. Ignoring normalIndex (E3).");
+        }
+        // N1 || N2
+        calcVertexNormals = this->NormalPerVertex;
+      }
+    else // We have a normal Array
+      {
+	    if (!this->NormalPerVertex) // Cell normals
+		    {
+        if (this->NormalIndex) // N3
+          {
+          vtkFloatArray* resolvedNormals = vtkFloatArray::New();
+          resolvedNormals->SetNumberOfComponents(3);
+          for(vtkIdType i = 0; i < this->NormalIndex->GetNumberOfTuples(); i++)
+            {
+            vtkIdType index = this->NormalIndex->GetValue(i);
+            resolvedNormals->InsertNextTuple(this->Normals->GetTuple3(i));
+            }
+          pd->GetCellData()->SetNormals(resolvedNormals);
+          resolvedNormals->Delete();
+          }
+        else // N4
+          {
+          pd->GetCellData()->SetNormals(this->Normals);
+          }
+		    }
+      else // Vertex normals
+        {
+        assert(!this->NormalIndex); // Vertex split needed (N5)
+        // N6
+        pd->GetPointData()->SetNormals(this->Normals);
+        }
+      } // End normal processing
+
+    // ----
+    // Start Color processing
+    // ----
+    if(!this->Colors)
+      {
+      if (this->ColorIndex) // E4
+        {
+        vtkWarningMacro(<<"colorIndex given but no colors. Ignoring colorIndex (E4).");
+        }
+      // C1: Nothing to do
+      }
+    else
+      {
+      if (!this->ColorPerVertex) // Cell colors
+        {
+        if (this->ColorIndex) // C2
+          {
+          vtkUnsignedCharArray* resolvedColors = vtkUnsignedCharArray::New();
+          resolvedColors->SetNumberOfComponents(3);
+          unsigned char color[3];
+          for(vtkIdType i = 0; i < this->ColorIndex->GetNumberOfTuples(); i++)
+            {
+            vtkIdType index = this->ColorIndex->GetValue(i);
+            this->GetColors()->GetTupleValue(i, color);
+			      resolvedColors->InsertNextTupleValue(color);
+            }
+          pd->GetCellData()->SetScalars(resolvedColors);
+          resolvedColors->Delete();
+          }
+        else // C3
+          {
+          // C5 (the colours in the X3DColorNode node are applied to each face of the IndexedFaceSet in order)
+          pd->GetCellData()->SetScalars(this->Colors);
+          }
+        }
+      else // Vertex colors
+        {
+        assert(!this->ColorIndex); // Vertex split needed (C4)
+        pd->GetPointData()->SetScalars(this->Colors);
+        }
+	     } // End normal processing
+
+    // ----
+    // Start Texture Coordinate processing
+    // ----
+    if (!this->TexCoords)
+      {
+      if (this->TexCoordIndex) // E5
+        {
+        vtkWarningMacro(<<"texCoordIndex given but no texture coordinates. Ignoring texCoordIndex (E5).");
+        }
+      // T1
+      // TODO: Implement Texture Coordinate calculation
+      }
+    else // TexCoords are alway per vertex
+      {
+        assert(!this->TexCoordIndex); // Vertex split needed (T2)
+        // T3
+        pd->GetPointData()->SetTCoords(this->TexCoords);
+      }
+
+    if (calcVertexNormals) // N1
+	  {
+		  vtkPolyDataNormals* n = vtkPolyDataNormals::New();
+		  n->ComputePointNormalsOn();
+		  n->SetInput(pd);
+		  n->Update();
+		  output->ShallowCopy(n->GetOutput());
+		  n->Delete();
+	  }
+	  else 
+		  output->ShallowCopy(pd);
+
+    pd->Delete();
+
+  }
+else // Vertex split needed
+	{
+
+	/*
 
 
 	vtkCellArray* cells = vtkCellArray::New();
@@ -436,7 +628,10 @@ int vtkX3DIndexedFaceSetSource::RequestData(
 	texCoords->Delete();
 	normals->Delete();
 	colors->Delete();
-	return 1;
+  */
+	
+	}
+  return 1;
 }
 
 void vtkX3DIndexedFaceSetSource::PrintSelf(ostream& os, vtkIndent indent)

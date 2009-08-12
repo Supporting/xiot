@@ -74,7 +74,8 @@ public:
 		int index = attr.getAttributeIndex(ID::diffuseColor);
 		assert(index != -1);
 		
-		SFColor diffuseColor = attr.getSFColor(index);
+		SFColor diffuseColor;
+		attr.getSFColor(index, diffuseColor);
 		assert(diffuseColor.r == 1.0);
 		assert(diffuseColor.g == 0.0);
 		assert(diffuseColor.b == 0.0);
@@ -123,6 +124,9 @@ int start()
 			w->OpenFile("iotest.x3db");
 		w->StartDocument();
 		w->StartNode(ID::X3D);
+		w->SetSFString(ID::profile, "Immersive");
+		w->SetSFString(ID::version, "3.0");
+
 		w->StartNode(ID::Scene);
 		w->StartNode(ID::Shape);
 		w->StartNode(ID::Appearance);

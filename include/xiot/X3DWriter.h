@@ -92,6 +92,31 @@ public:
   virtual void SetMFString(int attributeID, const std::vector<std::string>&) = 0;
   virtual void SetMFColor(int attributeID, const std::vector<float>&) = 0;
 
+  /**
+    * Set the value of any property in a X3DWriter.
+    *
+    * @param name The unique identifier (URI) of the property being set.
+    * @param value The requested value for the property.  See documentation to learn
+    *            exactly what type of property value each property expects for processing.
+    *            Passing a void pointer that was initialized with a wrong type will lead
+    *            to unexpected result.
+	* @return	 True if the property is knwon and cpuld be set
+    */
+  virtual bool setProperty(const char* const name, void* value) = 0 ;
+  
+  /**
+   * Query the current value of a property in a X3DWriter.
+   *
+   * The parser owns the returned pointer.  The memory allocated for
+   * the returned pointer will be destroyed when the parser is deleted.
+   *
+   * @param name The unique identifier (URI) of the property being set.
+   * @return     The current value of the property.  The pointer spans the same
+   *             life-time as the parser.  A null pointer is returned if nothing
+   *             was specified externally or if the property is not known.
+   */
+  virtual void* getProperty(const char* const name) const = 0 ;
+
 protected:
   X3DWriterType type;  // stores which implementation is represented by the interface
 	

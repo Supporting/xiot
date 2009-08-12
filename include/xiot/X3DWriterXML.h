@@ -77,6 +77,8 @@ public:
   virtual void SetMFString(int attributeID, const std::vector<std::string>&);
   virtual void SetMFColor(int attributeID, const std::vector<float>&);
   
+  virtual bool setProperty(const char* const name, void* value);
+  virtual void* getProperty(const char* const name) const;
 
 public:
   X3DWriterXML();

@@ -142,7 +142,12 @@ void vtkX3DExporterGeneric::WriteData()
     {
     
 	X3DWriterFI* temp = new X3DWriterFI();
-	temp->SetFastest(this->GetFastest());
+	temp->setProperty(Property::IntEncodingAlgorithm, (void*)Encoder::DeltazlibIntArrayEncoder);
+	if (this->GetFastest())
+		temp->setProperty(Property::FloatEncodingAlgorithm, (void*)Encoder::BuiltIn);
+	else
+		temp->setProperty(Property::FloatEncodingAlgorithm, (void*)Encoder::QuantizedzlibFloatArrayEncoder);
+	
 	writer = temp;
 	
     }

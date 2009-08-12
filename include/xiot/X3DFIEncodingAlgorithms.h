@@ -54,7 +54,7 @@ public:
 	 * Decodes a given vector of unsigned chars to a vector of int using the 
 	 * Delta zlib integer array decoder.
 	 */
-	static std::vector<int> decodeToIntArray(const FI::NonEmptyOctetString &octets);
+	static void decodeToIntArray(const FI::NonEmptyOctetString &octets,  std::vector<int> &vec);
 
 	static void encode(const int* values, size_t size, FI::NonEmptyOctetString &octets, bool isImage = false);
 	
@@ -84,7 +84,7 @@ public:
 	 * Decodes a given vector of unsigned chars to a vector of float using the 
 	 * Quantized zlib float array encoder.
 	 */
-	static std::vector<float> decodeToFloatArray(const FI::NonEmptyOctetString &octets);
+	static void decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec);
 
 	static void encode(const float* values, size_t size, FI::NonEmptyOctetString &octets);
 	

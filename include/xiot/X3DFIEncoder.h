@@ -38,10 +38,17 @@ public:
 
   virtual void encodeAttributeIntegerArray(const int* values, size_t size);
   virtual void encodeAttributeFloatArray(const float* values, size_t size);
-  virtual void setFastest(bool fastest);
+
+  void setFloatAlgorithm(int algorithmID);
+  void setIntAlgorithm(int algorithmID);
+  
+  int getFloatAlgorithm() const;
+  int getIntAlgorithm() const;
+
 
 protected:
-	bool _fastest;
+  int _floatAlgorithm;
+  int _intAlgorithm;
 };
 
 } // namespace XIOT

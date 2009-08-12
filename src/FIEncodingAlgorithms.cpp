@@ -20,7 +20,9 @@ namespace FI {
 
 	std::string FloatEncodingAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{
-		std::vector<float> floatArray = decodeToFloatArray(octets);
+		std::vector<float> floatArray;
+		decodeToFloatArray(octets, floatArray);
+		
 		std::stringstream ss;
 		std::vector<float>::const_iterator I; 
 		for(I = floatArray.begin(); I != floatArray.end() -1; I++)
@@ -31,7 +33,7 @@ namespace FI {
 		return ss.str();
 	}
 
-	std::vector<float> FloatEncodingAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets)
+	void FloatEncodingAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec)
 	{
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
@@ -43,7 +45,7 @@ namespace FI {
 			result[i] = Tools::readFloat(pOctets);
 			pOctets += 4;
 		}
-		return result;
+		std::swap(result, vec);
 	}
 
 	void FloatEncodingAlgorithm::encode(const float* values, size_t size, FI::NonEmptyOctetString &octets)
@@ -64,8 +66,11 @@ namespace FI {
 
 	std::string IntEncodingAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{
-		std::vector<int> intArray = decodeToIntArray(octets);
 		std::stringstream ss;
+		std::vector<int> intArray;
+		decodeToIntArray(octets, intArray);
+
+
 		std::vector<int>::const_iterator I;
 		for(I = intArray.begin(); I != intArray.end() -1; I++)
 		{
@@ -75,7 +80,7 @@ namespace FI {
 		return ss.str();
 	}
 
-	std::vector<int> IntEncodingAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets)
+	void IntEncodingAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets, std::vector<int> &vec)
 	{
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
@@ -87,7 +92,7 @@ namespace FI {
 			result[i] = Tools::readUInt(pOctets);
 			pOctets += 4;
 		}
-		return result;
+		std::swap(result, vec);
 	}
 
 	void IntEncodingAlgorithm::encode(const int* values, size_t size, FI::NonEmptyOctetString &octets)
@@ -114,7 +119,7 @@ namespace FI {
 		return ss.str();*/
 	}
 
-	std::vector<bool> BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &)
+	void BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &, std::vector<bool> &vec)
 	{
 		throw std::runtime_error("BooleanEncodingAlgorithm not implemented (yet)");
 	}

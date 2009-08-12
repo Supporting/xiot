@@ -14,7 +14,9 @@ namespace XIOT {
 
 	std::string QuantizedzlibFloatArrayAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{
-		std::vector<float> floatArray = QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(octets);
+		std::vector<float> floatArray;
+		QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(octets, floatArray);
+		
 		std::stringstream ss;
 		std::vector<float>::const_iterator I; 
 		for(I = floatArray.begin(); I != floatArray.end() -1; I++)
@@ -25,7 +27,7 @@ namespace XIOT {
 		return ss.str();
 	}
 
-	std::vector<float> QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets)
+	void QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec)
 	{
 		unsigned char exponent = octets[0];
 		unsigned char mantissa = octets[1];
@@ -55,7 +57,7 @@ namespace XIOT {
 			unsigned long val = bu.unpack(numBits);
 			result[i] = fp.decode(val);
 		}
-		return result;
+		std::swap(result, vec);
 	}
 
 	void QuantizedzlibFloatArrayAlgorithm::encode(const float* values, size_t size, FI::NonEmptyOctetString &octets)
@@ -129,7 +131,9 @@ namespace XIOT {
 
 	std::string DeltazlibIntArrayAlgorithm::decodeToString(const FI::NonEmptyOctetString &octets) const
 	{
-		std::vector<int> intArray = DeltazlibIntArrayAlgorithm::decodeToIntArray(octets);
+		std::vector<int> intArray;
+		DeltazlibIntArrayAlgorithm::decodeToIntArray(octets, intArray);
+
 		std::stringstream ss;
 		std::vector<int>::const_iterator I;
 		for(I = intArray.begin(); I != intArray.end() -1; I++)
@@ -140,7 +144,7 @@ namespace XIOT {
 		return ss.str();
 	}
 
-	std::vector<int> DeltazlibIntArrayAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets)
+	void DeltazlibIntArrayAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets, std::vector<int> &vec)
 	{
 		const unsigned char* pStr = octets.c_str();
 
@@ -164,7 +168,7 @@ namespace XIOT {
 				result[i] += result[i-span];
 			pRes+=4;
 		}
-		return result;
+		std::swap(result, vec);
 	}
 
 	void DeltazlibIntArrayAlgorithm::encode(const int* values, size_t size, FI::NonEmptyOctetString &octets, bool isImage)

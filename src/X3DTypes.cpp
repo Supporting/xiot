@@ -5,11 +5,17 @@
 
 namespace XIOT {
 	  
+	const char* Property::FloatEncodingAlgorithm = "http://www.web3d.org/x3d/properties/fi/FloatEncodingAlgorithm";
+	const char* Property::IntEncodingAlgorithm = "http://www.web3d.org/x3d/properties/fi/IntEncodingAlgorithm";
+	const char* Encoder::BuiltIn = 0; 
+	const char* Encoder::DeltazlibIntArrayEncoder = "encoder://web3d.org/DeltazlibIntArrayEncoder";
+	const char* Encoder::QuantizedzlibFloatArrayEncoder = "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
+
 	  std::map<std::string, int>	X3DTypes::elementFromStringMap;
 	  std::map<std::string, int>	X3DTypes::attributeFromStringMap;
 	  std::map<int, std::string>	X3DTypes::elementFromIDMap;
 	  std::map<int, std::string>	X3DTypes::attributeFromIDMap;
-
+ 
 	  
 	  const char* X3DTypes::getAttributeByID(int id)
 	  {

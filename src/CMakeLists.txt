@@ -15,6 +15,8 @@ if (WIN32)
 endif (WIN32)
 find_package(ZLIB REQUIRED)
 
+set(EXPAT_PARSER_IMPL_SRC X3DXMLLoaderExpatImpl.cpp X3DXMLAttributesExpatImpl.cpp)
+	
 # Set up the chosen XML parser library
 if(${XML_PARSER_SELECTION} STREQUAL "xerces")
 
@@ -55,7 +57,7 @@ elseif(${XML_PARSER_SELECTION} STREQUAL "expat")
 		message(SEND_ERROR "Expat is chosen as external XML parser, but library is not found.")
 	endif(EXPAT_FOUND)
 	
-	set(XML_PARSER_IMPL_SRC	X3DXMLLoaderExpatImpl.cpp X3DXMLAttributesExpatImpl.cpp)
+	set(XML_PARSER_IMPL_SRC	${EXPAT_PARSER_IMPL_SRC})
 	add_definitions( -DXML_STATIC)
 	
 endif(${XML_PARSER_SELECTION} STREQUAL "xerces")
@@ -81,8 +83,6 @@ set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFI.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFIHelper.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterXML.h
-	${XIOT_INCLUDE_DIR}/xiot/X3DZLibDataCompressor.h
-
 )
 
 
@@ -102,8 +102,6 @@ set(XIOT_SRC
 	X3DWriterFI.cpp
 	X3DFIEncoder.cpp
 	X3DWriterXML.cpp
-	X3DZLibDataCompressor.cpp
-	${XML_PARSER_IMPL_SRC}
 )
 
 set(OPENFI_SRC
@@ -136,7 +134,7 @@ include_directories( ${XML_PARSER_INCLUDE_DIR} )
 add_library(openFI SHARED ${OPENFI_SRC} ${OPENFI_HEADER})
 
 # set up XIOT
-add_library(xiot SHARED ${XIOT_SRC} ${XIOT_HEADER} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h)
+add_library(xiot SHARED ${XIOT_SRC} ${XIOT_HEADER} ${XML_PARSER_IMPL_SRC} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h)
 target_link_libraries (xiot ${XML_PARSER_LIBRARY}) 
 target_link_libraries (xiot ${ZLIB_LIBRARIES}) 
 target_link_libraries (xiot openFI) 
@@ -153,7 +151,7 @@ install(TARGETS xiot openFI
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         )
-install(FILES ${XIOT_HEADER} ${OPENFI_HEADER} DESTINATION include)
+install(FILES ${XIOT_HEADER} ${OPENFI_HEADER} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h DESTINATION include)
 
 if (WIN32)
 	install(FILES ${XML_PARSER_INSTALL_FILES} DESTINATION bin)
@@ -172,7 +170,7 @@ add_custom_command(TARGET GENERATE_VTK_DIST
                      COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot
                   )
 
-foreach(SFILE ${XIOT_SRC} ${OPENFI_SRC})
+foreach(SFILE ${XIOT_SRC} ${OPENFI_SRC} ${EXPAT_PARSER_IMPL_SRC})
   set(SFILE ${PROJECT_SOURCE_DIR}/src/${SFILE})
   add_custom_command(TARGET GENERATE_VTK_DIST
                      PRE_BUILD
@@ -187,7 +185,7 @@ foreach(SFILE ${XIOT_HEADER} ${OPENFI_HEADER})
 					)
 endforeach(SFILE)
 
-set(VTK_DIST_SRC_LIST "${XIOT_SRC};${OPENFI_SRC}")
+set(VTK_DIST_SRC_LIST "${XIOT_SRC};${OPENFI_SRC};${EXPAT_PARSER_IMPL_SRC}")
 string(REPLACE ";" "\n\t" VTK_DIST_SRC "${VTK_DIST_SRC_LIST}")
 configure_file( conf/vtkCMakeLists.txt.in ${PROJECT_BINARY_DIR}/vtkxiot/CMakeLists.txt @ONLY)
 configure_file( conf/vtkXIOTConfig.h.in ${PROJECT_BINARY_DIR}/vtkxiot/include/xiot/XIOTConfig.h @ONLY)

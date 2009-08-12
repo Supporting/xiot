@@ -22,6 +22,15 @@ X3DWriterXML::X3DWriterXML()
   X3DTypes::initMaps();
 }
 
+bool X3DWriterXML::setProperty(const char* const , void* )
+{
+	return false;
+}
+
+void* X3DWriterXML::getProperty(const char* const ) const
+{
+	return 0;
+}
 
 int X3DWriterXML::OpenFile(const char* file)
 {

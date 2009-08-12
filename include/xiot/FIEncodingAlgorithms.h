@@ -51,7 +51,7 @@ public:
 	/// This encoding algorithm has a vocabulary table index of 4
 	static const int ALGORITHM_ID = 4;
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
-	static std::vector<int> decodeToIntArray(const FI::NonEmptyOctetString &octets);
+	static void decodeToIntArray(const FI::NonEmptyOctetString &octets, std::vector<int> &vec);
 	static void encode(const int* values, size_t size, FI::NonEmptyOctetString &octets);
 };
 
@@ -66,7 +66,7 @@ public:
 	static const int ALGORITHM_ID = 6;
 
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
-	static std::vector<bool> decodeToBoolArray(const FI::NonEmptyOctetString &octets);
+	static void decodeToBoolArray(const FI::NonEmptyOctetString &octets, std::vector<bool> &vec);
 };
 
 /**
@@ -80,7 +80,7 @@ public:
 	/// This encoding algorithm has a vocabulary table index of 7
 	static const int ALGORITHM_ID = 7;
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
-	static std::vector<float> decodeToFloatArray(const FI::NonEmptyOctetString &octets);
+	static void decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec);
 	static void encode(const float* values, size_t size, FI::NonEmptyOctetString &octets);
 };
 

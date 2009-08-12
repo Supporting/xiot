@@ -52,10 +52,28 @@ namespace XIOT {
    */
   static const int SKIP_CHILDREN = 3;
 
+  struct XIOT_EXPORT Property {
+		static const char* FloatEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/FloatEncodingAlgorithm";
+		static const char* IntEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/IntEncodingAlgorithm";
+  };
+
+  struct XIOT_EXPORT Encoder {
+		static const char* BuiltIn; // 0;
+		static const char* DeltazlibIntArrayEncoder; // "encoder://web3d.org/DeltazlibIntArrayEncoder";
+		static const char* QuantizedzlibFloatArrayEncoder; // "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
+  };
+
 
   /**
    * \defgroup x3ddatatypes X3D Data Types
    */
+
+  typedef std::vector<float> MFFloat;
+  typedef std::vector<int> MFInt32;
+  
+  
+  typedef std::string SFString;
+  typedef std::vector<SFString> MFString;
 
 
   /**
@@ -73,6 +91,8 @@ namespace XIOT {
 		explicit SFVec2f(const C& c) : x(c[0]), y(c[1]) {};
   };
 
+  typedef std::vector<SFVec2f> MFVec2f;
+
   /**
    * The SFVec3f field specifies a three-dimensional (3D) vector.
    *
@@ -88,6 +108,7 @@ namespace XIOT {
 		explicit SFVec3f(const C& c) : x(c[0]), y(c[1]), z(c[2]) {};
   };
 
+  typedef std::vector<SFVec3f> MFVec3f;
   
   /**
    * The SFRotation field specifies one arbitrary rotation. 
@@ -107,6 +128,9 @@ namespace XIOT {
 	  template <class C>
 		explicit SFRotation(const C& c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]) {};
   };
+
+  typedef std::vector<SFRotation> MFRotation;
+
 
   /**
    * The SFColor field specifies one RGB (red-green-blue) colour triple. 
@@ -133,6 +157,8 @@ namespace XIOT {
 		}
   };
 
+  typedef std::vector<SFColor> MFColor;
+
   /**
    * The SFColorRGBA field specifies one RGBA (red-green-blue-alpha) colour
    * quadruple that includes alpha (opacity) information. 
@@ -151,6 +177,8 @@ namespace XIOT {
 		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {}
   };
 
+  typedef std::vector<SFColorRGBA> MFColorRGBA;
+
   /**
    * The SFImage field specifies a single uncompressed 2-dimensional pixel image. 
    *
@@ -161,6 +189,7 @@ namespace XIOT {
    * @ingroup x3ddatatypes
    */
   typedef std::vector<int> SFImage;
+  typedef std::vector<SFImage> MFImage;
 
 
   /**
@@ -718,7 +747,12 @@ namespace XIOT {
 	matrix = 345,
 	X3DATTRIBUTE_COUNT
     };
+	
 	}; // namespace ID
+	
+
+
+
 };
 
 #endif

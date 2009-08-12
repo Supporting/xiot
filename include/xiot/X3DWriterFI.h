@@ -37,9 +37,6 @@ public:
   virtual void CloseFile();
   virtual int OpenFile(const char* file);
 
-
-  //void Write(const char* str);
-
   virtual void Flush();
 
   void StartDocument();
@@ -71,27 +68,25 @@ public:
   virtual void SetMFString(int attributeID, const std::vector<std::string>&);
   virtual void SetMFColor(int attributeID, const std::vector<float>&);
 
-  int GetEncodingMethod();
-
-  void SetFastest(int n_iFastest) {Fastest = n_iFastest;};
-
   X3DWriterFI();
   ~X3DWriterFI();
 
+  virtual bool setProperty(const char* const name, void* value);
+  virtual void* getProperty(const char* const name) const;
+
 
 private:
-  void StartAttribute(int attributeID, bool literal, bool addToTable = false);
-  void EndAttribute();
+  void startAttribute(int attributeID, bool literal, bool addToTable = false);
+  void endAttribute();
 
-  void CheckNode(bool callerIsAttribute = true);
-  bool IsLineFeedEncodingOn;
+  void checkNode(bool callerIsAttribute = true);
 
-  //int Depth;
-  X3DWriterFIByte* Writer;
-  std::vector<NodeInfo>* InfoStack;
+  std::vector<NodeInfo>* _infoStack;
   X3DFIEncoder _encoder;
-  int Fastest;
+  int _fastest;
   std::ofstream _stream;
+  bool _isLineFeedEncodingOn;
+
 
 };
 

@@ -14,14 +14,22 @@ bool X3DAttributes::isUSE() const
 
 std::string X3DAttributes::getDEF() const
 {
+	std::string def;
 	int index = getAttributeIndex(ID::DEF);
-	return index == ATTRIBUTE_NOT_FOUND ? "" : getSFString(index);
+	if (index == ATTRIBUTE_NOT_FOUND)
+		return "";
+	getSFString(index, def);
+	return def;
 }
 
 std::string X3DAttributes::getUSE() const
 {
+	std::string use;
 	int index = getAttributeIndex(ID::USE);
-	return index == ATTRIBUTE_NOT_FOUND ? "" : getSFString(index);
+	if (index == ATTRIBUTE_NOT_FOUND)
+		return "";
+	getSFString(index, use);
+	return use;
 }
 
 } // namespace X3D

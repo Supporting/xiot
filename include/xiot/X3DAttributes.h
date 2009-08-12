@@ -120,45 +120,45 @@ public:
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual SFVec3f getSFVec3f(int index) const = 0;
+  virtual void getSFVec3f(int index, SFVec3f &value) const = 0;
   
     /**
    * Returns the value of the specified attribute as a SFVec2f structure.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual SFVec2f getSFVec2f(int index) const = 0;
+  virtual void getSFVec2f(int index, SFVec2f &value) const = 0;
   /**
    * Returns the value of the specified attribute as a SFRotation structure.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual SFRotation getSFRotation(int index) const = 0;
+  virtual void getSFRotation(int index, SFRotation &value) const = 0;
    /**
    * Returns the value of the specified attribute as a std::string.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::string getSFString(int index) const = 0;
+  virtual void getSFString(int index, SFString &value) const = 0;
   /**
    * Returns the value of the specified attribute as a SFColor structure.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */ 
-  virtual SFColor getSFColor(int index) const = 0;
+  virtual void getSFColor(int index, SFColor &value) const = 0;
   /**
    * Returns the value of the specified attribute as a SFColorRGBA structure.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */ 
-  virtual SFColorRGBA getSFColorRGBA(int index) const = 0;
+  virtual void getSFColorRGBA(int index, SFColorRGBA &value) const = 0;
   
   /**
    * Returns the value of the specified attribute as a SFImage structure.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual SFImage getSFImage(int index) const = 0; 
+  virtual void getSFImage(int index, SFImage &value) const = 0; 
 
   // Multi Field
    /**
@@ -166,50 +166,50 @@ public:
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<float> getMFFloat(int index) const = 0;
+  virtual void getMFFloat(int index, MFFloat& value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<int>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<int> getMFInt32(int index) const = 0;
+  virtual void getMFInt32(int index, MFInt32 &value) const = 0;
 
    /**
    * Returns the values of the specified attribute as a std::vector<SFVec3f>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<SFVec3f> getMFVec3f(int index) const = 0;
+  virtual void getMFVec3f(int index, MFVec3f &value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<SFVec2f>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<SFVec2f> getMFVec2f(int index) const = 0;
+  virtual void getMFVec2f(int index, MFVec2f &value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<SFRotation>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<SFRotation> getMFRotation(int index) const = 0;
+  virtual void getMFRotation(int index, MFRotation &value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<std::string>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<std::string> getMFString(int index) const = 0;
+  virtual void getMFString(int index, MFString &value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<SFColor>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<SFColor> getMFColor(int index) const = 0;
+  virtual void getMFColor(int index, MFColor &value) const = 0;
    /**
    * Returns the values of the specified attribute as a std::vector<SFColorRGBA>.
    * @param index The index of the attribute. Can be obtained using getAttributeIndex(int attributeID)
    * @return Value of the specified attribute.
    */
-  virtual std::vector<SFColorRGBA> getMFColorRGBA(int index) const = 0;
+  virtual void getMFColorRGBA(int index, MFColorRGBA &value) const = 0;
 
 
 };
