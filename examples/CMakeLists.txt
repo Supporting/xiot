@@ -6,8 +6,6 @@ set (VTKIMPORTER_SRC
 	vtkX3DNodeHandler.h
 	vtkX3DIndexedGeometrySource.h
 	vtkX3DIndexedGeometrySource.cpp
-#	vtkX3DIndexedLineSetSource.h
-#	vtkX3DIndexedLineSetSource.cpp
 )
 
 find_package(VTK 5.0 REQUIRED)
