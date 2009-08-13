@@ -359,15 +359,12 @@ int vtkX3DIndexedFaceSetSource::RequestData(
             }
           else if (!((*I).second == v)) // Vertex split
             {
-            cerr << "Split vertex: " << vertexNr<< endl;
             pts[i] = this->Coords->InsertNextPoint(this->Coords->GetPoint(vpos));
-            cerr << "New id: " << pts[i] << endl;
             }
           else
             {
             // Same vertex can be resused
             reuse = 1;
-            cerr << "Reusing: " << vpos << endl;
             }
 
           if(!reuse)
