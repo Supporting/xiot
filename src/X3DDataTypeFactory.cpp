@@ -1,5 +1,9 @@
 #include <xiot/X3DDataTypeFactory.h>
+
+#include <xiot/X3DParseException.h>
+
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -9,13 +13,17 @@ using namespace std;
 namespace XIOT {
 
 	bool X3DDataTypeFactory::getSFBoolFromString(const std::string &s){
-		std::stringstream ss;
-		bool b;
-		
-		ss << s;
-		ss >> std::boolalpha >> b;
+    std::string lower(s);
+		std::transform(lower.begin(), lower.end(), lower.begin(), tolower);
 
-		return b;
+    if (lower == "true")
+      return true;
+    if (lower == "false")
+      return false;
+
+    std::stringstream reason("Unknown value for SFBool: ");
+    reason << s;
+    throw new X3DParseException(reason.str());
 	}
 
 	float X3DDataTypeFactory:: getSFFloatFromString(const std::string &s){
