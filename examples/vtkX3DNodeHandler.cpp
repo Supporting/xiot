@@ -28,8 +28,7 @@
 #include "vtkStripper.h"
 #include "vtkSystemIncludes.h"
 #include "vtkTransform.h"
-#include "vtkX3DIndexedFaceSetSource.h"
-#include "vtkX3DIndexedLineSetSource.h"
+#include "vtkX3DIndexedGeometrySource.h"
 #include "vtkPolyDataNormals.h"
 
 using namespace std;
@@ -54,7 +53,7 @@ vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer)
 	this->CurrentTCoordCells = NULL;
 	this->CurrentMapper = NULL;
 	this->CurrentLut = NULL;
-	this->CurrentIndexedFaceSet = NULL;
+	this->CurrentIndexedGeometry = NULL;
 	this->CurrentColors = NULL;
 	this->CurrentTransform = vtkTransform::New();
 	
@@ -120,9 +119,9 @@ vtkX3DNodeHandler::~vtkX3DNodeHandler()
     {
     this->CurrentLut->Delete();
     }
-  if (this->CurrentIndexedFaceSet)
+  if (this->CurrentIndexedGeometry)
     {
-    this->CurrentIndexedFaceSet->Delete();
+    this->CurrentIndexedGeometry->Delete();
     }
   if (this->CurrentColors)
     {
@@ -438,26 +437,27 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		return CONTINUE;
 	}
 	pmap = vtkPolyDataMapper::New();
-  this->CurrentIndexedFaceSet = vtkX3DIndexedFaceSetSource::New();
+  this->CurrentIndexedGeometry = vtkX3DIndexedGeometrySource::New();
+  this->CurrentIndexedGeometry->SetGeometryFormatToIndexedFaceSet();
 	
-	pmap->SetInput(this->CurrentIndexedFaceSet->GetOutput());
+	pmap->SetInput(this->CurrentIndexedGeometry->GetOutput());
 	// normal per vertex
 	index = attr.getAttributeIndex(ID::normalPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
-		this->CurrentIndexedFaceSet->NormalPerVertexOff();
+		this->CurrentIndexedGeometry->NormalPerVertexOff();
 	}
 	else
-		this->CurrentIndexedFaceSet->NormalPerVertexOn();
+		this->CurrentIndexedGeometry->NormalPerVertexOn();
 
 	// color per vertex
 	index = attr.getAttributeIndex(ID::colorPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
-		this->CurrentIndexedFaceSet->ColorPerVertexOff();
+		this->CurrentIndexedGeometry->ColorPerVertexOff();
 	}
 	else
-		this->CurrentIndexedFaceSet->ColorPerVertexOn();
+		this->CurrentIndexedGeometry->ColorPerVertexOn();
 
 	// coord index
 	index = attr.getAttributeIndex(ID::coordIndex);
@@ -470,7 +470,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedFaceSet->SetCoordIndex(idArray);
+		this->CurrentIndexedGeometry->SetCoordIndex(idArray);
 		idArray->Delete();
 	}
 
@@ -485,7 +485,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedFaceSet->SetColorIndex(idArray);
+		this->CurrentIndexedGeometry->SetColorIndex(idArray);
 		idArray->Delete();
 	}
 
@@ -500,7 +500,7 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedFaceSet->SetNormalIndex(idArray);
+		this->CurrentIndexedGeometry->SetNormalIndex(idArray);
 		idArray->Delete();
 	}
 
@@ -515,14 +515,14 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedFaceSet->SetTexCoordIndex(idArray);
+		this->CurrentIndexedGeometry->SetTexCoordIndex(idArray);
 		idArray->Delete();
 	}
 	
   index = attr.getAttributeIndex(ID::creaseAngle);
   if (index != -1)
     {
-    this->CurrentIndexedFaceSet->SetCreaseAngle(attr.getSFFloat(index));
+    this->CurrentIndexedGeometry->SetCreaseAngle(attr.getSFFloat(index));
     }
 
     this->CurrentActor->SetMapper(pmap);
@@ -533,27 +533,27 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
 int vtkX3DNodeHandler::endIndexedFaceSet() {
 
   if(this->CurrentPoints)
-	this->CurrentIndexedFaceSet->SetCoords(this->CurrentPoints);
+	this->CurrentIndexedGeometry->SetCoords(this->CurrentPoints);
   
   if(this->CurrentColors)
-	this->CurrentIndexedFaceSet->SetColors(this->CurrentColors);
+	this->CurrentIndexedGeometry->SetColors(this->CurrentColors);
   
   if(this->CurrentTCoords)
-	this->CurrentIndexedFaceSet->SetTexCoords(this->CurrentTCoords);
+	this->CurrentIndexedGeometry->SetTexCoords(this->CurrentTCoords);
 
   if(this->CurrentNormals)
-	this->CurrentIndexedFaceSet->SetNormals(this->CurrentNormals);
+	this->CurrentIndexedGeometry->SetNormals(this->CurrentNormals);
 
-  this->CurrentIndexedFaceSet->Update();
+  this->CurrentIndexedGeometry->Update();
   if (this->_verbose)
   {
-	  vtkPolyData* p = this->CurrentIndexedFaceSet->GetOutput();
+	  vtkPolyData* p = this->CurrentIndexedGeometry->GetOutput();
 		cout << "Generated IndexedFaceSet with " << p->GetPolys()->GetNumberOfCells() << " faces, ";
 		cout << p->GetNumberOfPoints() << " points and ";
 		cout << (p->GetPointData()->GetNormals() ? p->GetPointData()->GetNormals()->GetNumberOfTuples() :0 ) << " normals." << endl;
   }
-  this->CurrentIndexedFaceSet->Delete();
-  this->CurrentIndexedFaceSet = NULL;
+  this->CurrentIndexedGeometry->Delete();
+  this->CurrentIndexedGeometry = NULL;
 
   return CONTINUE;
 }
@@ -674,7 +674,9 @@ int vtkX3DNodeHandler::startColor(const X3DAttributes &attr) {
 
 int vtkX3DNodeHandler::startTextureCoordinate(const X3DAttributes &attr) {
   int index = attr.getAttributeIndex(ID::point);
-  assert(this->CurrentIndexedFaceSet);
+  
+  // TODO: Error handling
+  //assert(this->CurrentIndexedGeometry);
   if(index != -1)
   {
 	  MFVec2f normals;
@@ -892,18 +894,19 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
 	int index;
 	
 	pmap = vtkPolyDataMapper::New();
-    this->CurrentIndexedLineSet = vtkX3DIndexedLineSetSource::New();
+  this->CurrentIndexedGeometry = vtkX3DIndexedGeometrySource::New();
+  this->CurrentIndexedGeometry->SetGeometryFormatToIndexedLineSet();
 	
-	pmap->SetInput(this->CurrentIndexedLineSet->GetOutput());
+	pmap->SetInput(this->CurrentIndexedGeometry->GetOutput());
 	
 	// color per vertex
 	index = attr.getAttributeIndex(ID::colorPerVertex);
 	if(index != -1 && !attr.getSFBool(index))
 	{
-		this->CurrentIndexedLineSet->ColorPerVertexOff();
+		this->CurrentIndexedGeometry->ColorPerVertexOff();
 	}
 	else
-		this->CurrentIndexedLineSet->ColorPerVertexOn();
+		this->CurrentIndexedGeometry->ColorPerVertexOn();
 
 	// coord index
 	index = attr.getAttributeIndex(ID::coordIndex);
@@ -916,7 +919,7 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedLineSet->SetCoordIndex(idArray);
+		this->CurrentIndexedGeometry->SetCoordIndex(idArray);
 		idArray->Delete();
 	}
 
@@ -931,7 +934,7 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
 		{
 			idArray->InsertNextValue(*I);
 		}
-		this->CurrentIndexedLineSet->SetColorIndex(idArray);
+		this->CurrentIndexedGeometry->SetColorIndex(idArray);
 		idArray->Delete();
 	}
 
@@ -946,20 +949,20 @@ int vtkX3DNodeHandler::endIndexedLineSet()
 	if (!this->CurrentPoints)
 		return CONTINUE;
 
-  this->CurrentIndexedLineSet->SetCoords(this->CurrentPoints);
+  this->CurrentIndexedGeometry->SetCoords(this->CurrentPoints);
   
   if(this->CurrentColors)
-	this->CurrentIndexedLineSet->SetColors(this->CurrentColors);
+	this->CurrentIndexedGeometry->SetColors(this->CurrentColors);
   
-  this->CurrentIndexedLineSet->Update();
+  this->CurrentIndexedGeometry->Update();
   if (this->_verbose)
   {
-	  vtkPolyData* p = this->CurrentIndexedLineSet->GetOutput();
+	  vtkPolyData* p = this->CurrentIndexedGeometry->GetOutput();
 		cout << "Generated IndexedLineSet with " << p->GetLines()->GetNumberOfCells() << " lines and ";
 		cout << p->GetNumberOfPoints() << " points." << endl;
   }
-  this->CurrentIndexedLineSet->Delete();
-  this->CurrentIndexedLineSet = NULL;
+  this->CurrentIndexedGeometry->Delete();
+  this->CurrentIndexedGeometry = NULL;
 
   return CONTINUE;
 }

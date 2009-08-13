@@ -1,4 +1,4 @@
-#include "vtkX3DIndexedFaceSetSource.h"
+#include "vtkX3DIndexedGeometrySource.h"
 
 #include <cassert>
 #include <map>
@@ -13,12 +13,10 @@
 #include "vtkCellData.h"
 #include "vtkPolyDataNormals.h"
 #include "vtkMath.h"
-#include "vtkHedgeHog.h" //TEMP
-#include "vtkAppendPolyData.h" //TEMP
 
 
-vtkCxxRevisionMacro(vtkX3DIndexedFaceSetSource, "$Revision: 1.19 $");
-vtkStandardNewMacro(vtkX3DIndexedFaceSetSource);
+vtkCxxRevisionMacro(vtkX3DIndexedGeometrySource, "$Revision: 1.19 $");
+vtkStandardNewMacro(vtkX3DIndexedGeometrySource);
 
 struct Vertex {
 	int tc, normal, color;
@@ -38,9 +36,11 @@ struct Vertex {
 
 typedef std::map<int, Vertex> VertexMap;
 
-vtkX3DIndexedFaceSetSource::vtkX3DIndexedFaceSetSource()
+vtkX3DIndexedGeometrySource::vtkX3DIndexedGeometrySource()
 {
-	this->ColorPerVertex = 1;
+  this->GeometryFormat = INDEXED_FACESET;
+	
+  this->ColorPerVertex = 1;
 	this->NormalPerVertex = 1;
 
   this->CreaseAngle = 0;
@@ -58,7 +58,7 @@ vtkX3DIndexedFaceSetSource::vtkX3DIndexedFaceSetSource()
 	this->SetNumberOfInputPorts(0);
 }
 
-vtkX3DIndexedFaceSetSource::~vtkX3DIndexedFaceSetSource()
+vtkX3DIndexedGeometrySource::~vtkX3DIndexedGeometrySource()
 {
 	if (this->CoordIndex)
 	{
@@ -101,7 +101,7 @@ vtkX3DIndexedFaceSetSource::~vtkX3DIndexedFaceSetSource()
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetCoordIndex(vtkIdTypeArray * i)
+void vtkX3DIndexedGeometrySource::SetCoordIndex(vtkIdTypeArray * i)
 {
 	if ( i != this->CoordIndex)
 	{
@@ -118,7 +118,7 @@ void vtkX3DIndexedFaceSetSource::SetCoordIndex(vtkIdTypeArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetNormalIndex(vtkIdTypeArray * i)
+void vtkX3DIndexedGeometrySource::SetNormalIndex(vtkIdTypeArray * i)
 {
 	if ( i != this->NormalIndex)
 	{
@@ -135,7 +135,7 @@ void vtkX3DIndexedFaceSetSource::SetNormalIndex(vtkIdTypeArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetColorIndex(vtkIdTypeArray * i)
+void vtkX3DIndexedGeometrySource::SetColorIndex(vtkIdTypeArray * i)
 {
 	if ( i != this->ColorIndex)
 	{
@@ -152,7 +152,7 @@ void vtkX3DIndexedFaceSetSource::SetColorIndex(vtkIdTypeArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetTexCoordIndex(vtkIdTypeArray * i)
+void vtkX3DIndexedGeometrySource::SetTexCoordIndex(vtkIdTypeArray * i)
 {
 	if ( i != this->TexCoordIndex)
 	{
@@ -169,7 +169,7 @@ void vtkX3DIndexedFaceSetSource::SetTexCoordIndex(vtkIdTypeArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetCoords(vtkPoints * i)
+void vtkX3DIndexedGeometrySource::SetCoords(vtkPoints * i)
 {
 	if ( i != this->Coords)
 	{
@@ -186,7 +186,7 @@ void vtkX3DIndexedFaceSetSource::SetCoords(vtkPoints * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetNormals(vtkFloatArray * i)
+void vtkX3DIndexedGeometrySource::SetNormals(vtkFloatArray * i)
 {
 	if (i->GetNumberOfComponents() != 3)
 	{
@@ -208,7 +208,7 @@ void vtkX3DIndexedFaceSetSource::SetNormals(vtkFloatArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetTexCoords(vtkFloatArray * i)
+void vtkX3DIndexedGeometrySource::SetTexCoords(vtkFloatArray * i)
 {
 	if (i->GetNumberOfComponents() != 2)
 	{
@@ -230,7 +230,7 @@ void vtkX3DIndexedFaceSetSource::SetTexCoords(vtkFloatArray * i)
 	}
 }
 
-void vtkX3DIndexedFaceSetSource::SetColors(vtkUnsignedCharArray * i)
+void vtkX3DIndexedGeometrySource::SetColors(vtkUnsignedCharArray * i)
 {
 	if ( i != this->Colors)
 	{
@@ -248,7 +248,7 @@ void vtkX3DIndexedFaceSetSource::SetColors(vtkUnsignedCharArray * i)
 }
 
 // Generate normals for polygon meshes
-int vtkX3DIndexedFaceSetSource::RequestData(
+int vtkX3DIndexedGeometrySource::RequestData(
 	vtkInformation *vtkNotUsed(request),
 	vtkInformationVector **vtkNotUsed(inputVector),
 	vtkInformationVector *outputVector)
@@ -277,16 +277,17 @@ int vtkX3DIndexedFaceSetSource::RequestData(
 	if (this->CoordIndex->GetValue(this->CoordIndex->GetNumberOfTuples() -1) != -1)
 		this->CoordIndex->InsertNextValue(-1);
 
-	// Create PolyData object
+	// Create PolyData object and set vertex positions
 	vtkPolyData* pd = vtkPolyData::New();
+  pd->SetPoints(this->Coords); 
 
   // ----
   // Start Vertex position and index processing
   // ----
   vtkCellArray* cells = vtkCellArray::New();
-  vtkPoints* points = vtkPoints::New();
 
-  int faceSize = 0;
+  // Convert X3D Index format to CellArray
+  int faceSize = 0, faceCount = 0;
   vtkIdType* index = this->CoordIndex->GetPointer(0);
   vtkIdType* faceStart = index;
   const vtkIdType* end = this->CoordIndex->GetPointer(this->CoordIndex->GetNumberOfTuples());
@@ -296,20 +297,59 @@ int vtkX3DIndexedFaceSetSource::RequestData(
         {
         index++; faceSize++;
         }
-      cells->InsertNextCell(faceSize);
-      while(faceStart != index)
+      faceCount++;
+      if (faceSize == 0)
         {
-        cells->InsertCellPoint(*faceStart);
-        faceStart++;
+        vtkWarningMacro(<<"Face " << faceCount << " has no vertices. Skipping.");
+        }
+      else
+        {
+        cells->InsertNextCell(faceSize);
+        while(faceStart != index)
+          {
+          cells->InsertCellPoint(*faceStart);
+          faceStart++;
+          }
         }
       faceSize = 0;
       index++; faceStart++;
     }
 
+  int success = 0;
+  switch(this->GeometryFormat)
+    {
+    case INDEXED_FACESET:
+      {
+      success = processIndexedFaceSet(pd, cells);
+      break;
+      }
+    case INDEXED_LINESET:
+      {
+      success = processIndexedLineSet(pd, cells);
+      break;
+      }
+    default:
+      vtkErrorMacro(<<"Unknown geometry format: " << this->GeometryFormat);
+    }
+
+    if (success)
+      output->ShallowCopy(pd);
+    pd->Delete();
+    
+    return success;
+  }
+
+int vtkX3DIndexedGeometrySource::processIndexedFaceSet(vtkPolyData* pd, vtkCellArray* cells)
+  {
   bool normalPerVertexIndexed = this->Normals && this->NormalPerVertex &&  this->NormalIndex;
   bool colorPerVertexIndexed = this->Colors && this->ColorPerVertex &&  this->ColorIndex;
   bool textureIndexed = this->TexCoords && this->TexCoordIndex;
 
+  // Use cell data as polygons
+  pd->SetPolys(cells);
+  cells->Delete();
+
+  // Is vertex split needed or can we use data as is?
 	if(normalPerVertexIndexed || colorPerVertexIndexed || textureIndexed) 
     {
     int position = 0, vertexNr = 0;
@@ -360,6 +400,7 @@ int vtkX3DIndexedFaceSetSource::RequestData(
           else if (!((*I).second == v)) // Vertex split
             {
             pts[i] = this->Coords->InsertNextPoint(this->Coords->GetPoint(vpos));
+            vmap.insert( std::pair<int, Vertex>(pts[i], v));
             }
           else
             {
@@ -394,22 +435,23 @@ int vtkX3DIndexedFaceSetSource::RequestData(
       }
 
     if (newColors)
+      {
       this->SetColors(newColors);
+      newColors->Delete();
+      }
     if (newNormals)
+      {
       this->SetNormals(newNormals);
+      newNormals->Delete();
+      }
     if (newTexCoords)
+      {
       this->SetTexCoords(newTexCoords);
+      newTexCoords->Delete();
+      }
     }
     
-  
   int calcVertexNormals = false;
-
-  pd->SetPolys(cells);
-  cells->Delete();
-
-  pd->SetPoints(this->Coords);
-  points->Delete();
-
   // ----
   // Start Normal processing
   // ----
@@ -452,8 +494,113 @@ int vtkX3DIndexedFaceSetSource::RequestData(
     } // End normal processing
 
   // ----
-  // Start Color processing
+  // Color processing
   // ----
+  this->ProcessColor(pd);
+
+  // ----
+  // Start Texture Coordinate processing
+  // ----
+  if (!this->TexCoords)
+    {
+    if (this->TexCoordIndex) // E5
+      {
+      vtkWarningMacro(<<"texCoordIndex given but no texture coordinates. Ignoring texCoordIndex (E5).");
+      }
+    // T1
+    // TODO: Implement Texture Coordinate calculation
+    }
+  else // TexCoords are alway per vertex
+    {
+      assert(!this->TexCoordIndex); // Vertex split needed (T2)
+      // T3
+      pd->GetPointData()->SetTCoords(this->TexCoords);
+    }
+
+  if (calcVertexNormals) // N1
+	  {
+		  vtkPolyDataNormals* n = vtkPolyDataNormals::New();
+		  n->ComputePointNormalsOn();
+      n->SetFeatureAngle(vtkMath::DegreesFromRadians(this->CreaseAngle));
+		  n->SetInput(pd);
+		  n->Update();
+		  pd->ShallowCopy(n->GetOutput());
+		  n->Delete();
+	  }
+  return 1;
+}
+
+int vtkX3DIndexedGeometrySource::processIndexedLineSet(vtkPolyData* pd, vtkCellArray* cells)
+  {
+  bool colorPerVertexIndexed = this->Colors && this->ColorPerVertex &&  this->ColorIndex;
+
+  // Use cell data as polygons
+  pd->SetLines(cells);
+  cells->Delete();
+
+ // Is vertex split needed or can we use data as is?
+	if(colorPerVertexIndexed) 
+    {
+    int position = 0, vertexNr = 0;
+    VertexMap vmap;
+    vtkUnsignedCharArray* newColors = vtkUnsignedCharArray::New();
+    newColors->SetNumberOfComponents(3);
+    newColors->DeepCopy(this->Colors);
+
+    vtkIdType npts, *pts;
+    cells->InitTraversal();
+
+    while(cells->GetNextCell(npts, pts) != 0)
+      {
+      for(vtkIdType i = 0; i < npts; i++)
+        {
+          int vpos = pts[i];
+
+          Vertex v;
+          v.color  = this->ColorIndex->GetValue(position);
+
+          VertexMap::const_iterator I = vmap.find(vpos);
+          int reuse = 0;
+          if (I == vmap.end()) // Vertex does not exist
+            {
+            vmap.insert( std::pair<int, Vertex>(vpos, v));
+            }
+          else if (!((*I).second == v)) // Vertex split
+            {
+            pts[i] = this->Coords->InsertNextPoint(this->Coords->GetPoint(vpos));
+            vmap.insert( std::pair<int, Vertex>(pts[i], v));
+            }
+          else
+            {
+            // Same vertex can be resused
+            reuse = 1;
+            }
+
+          if(!reuse)
+            {
+              unsigned char c[3];
+              this->Colors->GetTupleValue(v.color, c);
+              newColors->InsertTupleValue(pts[i], c);
+            }
+          position++; vertexNr++;
+        }
+        position++; // skip -1
+      }
+
+      this->SetColors(newColors);
+      newColors->Delete();
+    
+    } // End vertex split
+   
+  this->ProcessColor(pd);
+  return 1;
+  }
+
+// ----
+// Start Color processing
+// ----
+void vtkX3DIndexedGeometrySource::ProcessColor(vtkPolyData* pd)
+  {
   if(!this->Colors)
     {
     if (this->ColorIndex) // E4
@@ -490,57 +637,10 @@ int vtkX3DIndexedFaceSetSource::RequestData(
       {
       pd->GetPointData()->SetScalars(this->Colors);
       }
-     } // End normal processing
+    } 
+  } // End ProcessColor
 
-  // ----
-  // Start Texture Coordinate processing
-  // ----
-  if (!this->TexCoords)
-    {
-    if (this->TexCoordIndex) // E5
-      {
-      vtkWarningMacro(<<"texCoordIndex given but no texture coordinates. Ignoring texCoordIndex (E5).");
-      }
-    // T1
-    // TODO: Implement Texture Coordinate calculation
-    }
-  else // TexCoords are alway per vertex
-    {
-      assert(!this->TexCoordIndex); // Vertex split needed (T2)
-      // T3
-      pd->GetPointData()->SetTCoords(this->TexCoords);
-    }
-
-    /*vtkHedgeHog* normViz = vtkHedgeHog::New();
-    normViz->SetVectorModeToUseNormal();
-    normViz->SetInput(pd);
-    normViz->Update();
-    
-    vtkAppendPolyData* ap = vtkAppendPolyData::New();
-    ap->UserManagedInputsOff();
-    ap->AddInput(pd);
-    ap->AddInput(normViz->GetOutput());
-    ap->Update();
-    output->ShallowCopy(ap->GetOutput());*/
-
-    if (calcVertexNormals) // N1
-	  {
-		  vtkPolyDataNormals* n = vtkPolyDataNormals::New();
-		  n->ComputePointNormalsOn();
-      n->SetFeatureAngle(vtkMath::DegreesFromRadians(this->CreaseAngle));
-		  n->SetInput(pd);
-		  n->Update();
-		  output->ShallowCopy(n->GetOutput());
-		  n->Delete();
-	  }
-	  else 
-		  output->ShallowCopy(pd);
-
-  pd->Delete();
-  return 1;
-}
-
-void vtkX3DIndexedFaceSetSource::PrintSelf(ostream& os, vtkIndent indent)
+void vtkX3DIndexedGeometrySource::PrintSelf(ostream& os, vtkIndent indent)
 {
 	this->Superclass::PrintSelf(os,indent);
 	os << indent << "NormalPerVertex: " 

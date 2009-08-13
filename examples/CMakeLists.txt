@@ -4,10 +4,10 @@ set (VTKIMPORTER_SRC
 	vtkX3DImporter.cpp
 	vtkX3DNodeHandler.cpp
 	vtkX3DNodeHandler.h
-	vtkX3DIndexedFaceSetSource.h
-	vtkX3DIndexedFaceSetSource.cpp
-	vtkX3DIndexedLineSetSource.h
-	vtkX3DIndexedLineSetSource.cpp
+	vtkX3DIndexedGeometrySource.h
+	vtkX3DIndexedGeometrySource.cpp
+#	vtkX3DIndexedLineSetSource.h
+#	vtkX3DIndexedLineSetSource.cpp
 )
 
 find_package(VTK 5.0 REQUIRED)

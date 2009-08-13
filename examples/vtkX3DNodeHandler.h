@@ -20,8 +20,7 @@ class vtkPoints;
 class vtkIdTypeArray;
 class vtkVRMLImporterInternal;
 class vtkCellArray;
-class vtkX3DIndexedFaceSetSource;
-class vtkX3DIndexedLineSetSource;
+class vtkX3DIndexedGeometrySource;
 class vtkUnsignedCharArray;
 
 /**
@@ -103,6 +102,7 @@ private:
 	vtkFloatArray        *CurrentScalars;
 	vtkPolyDataMapper    *CurrentMapper;
 	vtkUnsignedCharArray *CurrentColors;
+	vtkX3DIndexedGeometrySource *CurrentIndexedGeometry;
 
 	std::map<std::string,vtkActor*>			defShape;		// used for DEF/USE
 	std::map<std::string,vtkUnsignedCharArray*>		defColor;	// used for DEF/USE
@@ -119,8 +119,6 @@ private:
 	bool	bDEFNormal;
 	bool	_verbose;
 
-	vtkX3DIndexedFaceSetSource *CurrentIndexedFaceSet;
-	vtkX3DIndexedLineSetSource *CurrentIndexedLineSet;
 
 };
 

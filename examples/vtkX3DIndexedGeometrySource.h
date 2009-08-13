@@ -1,5 +1,5 @@
-#ifndef __vtkX3DIndexedFaceSetSource_h
-#define __vtkX3DIndexedFaceSetSource_h
+#ifndef __vtkX3DIndexedGeometrySource_h
+#define __vtkX3DIndexedGeometrySource_h
 
 #include <vtkPolyDataAlgorithm.h>
 
@@ -17,12 +17,29 @@ class vtkUnsignedCharArray;
  * @see <A href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/components/geometry3D.html#IndexedFaceSet"/>IndexedFaceSet</A>
  * @ingroup vtkX3DImporter
  */
-class vtkX3DIndexedFaceSetSource : public vtkPolyDataAlgorithm
+class vtkX3DIndexedGeometrySource : public vtkPolyDataAlgorithm
 {
 public:
-  static vtkX3DIndexedFaceSetSource *New();
-  vtkTypeRevisionMacro(vtkX3DIndexedFaceSetSource,vtkPolyDataAlgorithm);
+  static vtkX3DIndexedGeometrySource *New();
+  vtkTypeRevisionMacro(vtkX3DIndexedGeometrySource,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
+
+//BTX
+enum GeometryFormatEnum
+  {
+  INDEXED_FACESET,
+  INDEXED_LINESET,
+  };
+//ETX
+
+  vtkSetClampMacro(GeometryFormat, int, INDEXED_FACESET, INDEXED_LINESET);
+  vtkGetMacro(GeometryFormat, int);
+  void SetGeometryFormatToIndexedFaceSet()
+    {this->SetGeometryFormat(INDEXED_FACESET);};
+  void SetGeometryFormatToIndexedLineSet()
+    {this->SetGeometryFormat(INDEXED_LINESET);};
+
+
 
   vtkSetMacro(NormalPerVertex  ,int);
   vtkGetMacro(NormalPerVertex ,int);
@@ -68,11 +85,17 @@ public:
   
 
 protected:
-  vtkX3DIndexedFaceSetSource();
-  ~vtkX3DIndexedFaceSetSource();
+  vtkX3DIndexedGeometrySource();
+  ~vtkX3DIndexedGeometrySource();
 
   // Usual data generation method
   int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+  int processIndexedFaceSet(vtkPolyData* pd, vtkCellArray* cells);
+  int processIndexedLineSet(vtkPolyData* pd, vtkCellArray* cells);
+  
+  void ProcessColor(vtkPolyData* pd);
+
+  int GeometryFormat;
 
   int NormalPerVertex;
   int ColorPerVertex;
@@ -93,8 +116,8 @@ protected:
 private:
 
 
-  vtkX3DIndexedFaceSetSource(const vtkX3DIndexedFaceSetSource&); // Not implemented.
-  void operator=(const vtkX3DIndexedFaceSetSource&); // Not implemented.
+  vtkX3DIndexedGeometrySource(const vtkX3DIndexedGeometrySource&); // Not implemented.
+  void operator=(const vtkX3DIndexedGeometrySource&); // Not implemented.
 };
 
 
