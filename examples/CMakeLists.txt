@@ -21,6 +21,9 @@ target_link_libraries(vtkX3DLoader xiot vtkCommon vtkHybrid vtkRendering vtkIO v
 ADD_EXECUTABLE(x3dglyphtest Argument_helper.cc X3DTest.cxx main.cxx vtkX3DExporterGeneric.cxx)
 TARGET_LINK_LIBRARIES(x3dglyphtest xiot vtkCommon vtkHybrid vtkRendering vtkIO vtkFiltering vtkCommon vtkGraphics)
 
+# vtkX3DRewriter
+add_executable (vtkX3DRewriter ${VTKIMPORTER_SRC} vtkX3DRewriter.cpp vtkX3DExporterGeneric.cxx Argument_helper.cpp)
+target_link_libraries(vtkX3DRewriter xiot vtkCommon vtkHybrid vtkRendering vtkIO vtkFiltering vtkCommon vtkGraphics)
 
 install(TARGETS vtkX3DLoader RUNTIME DESTINATION bin)
 install(TARGETS x3dglyphtest RUNTIME DESTINATION bin)

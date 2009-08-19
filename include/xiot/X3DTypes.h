@@ -63,6 +63,21 @@ namespace XIOT {
 		static const char* QuantizedzlibFloatArrayEncoder; // "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
   };
 
+  enum X3DProfile {
+      Core = 0,
+      Full,
+      Immersive,
+      Interactive,
+      Interchange,
+      MPEG4Interactive
+    };
+
+  enum X3DVersion {
+      VERSION_3_0,
+      VERSION_3_1,
+      VERSION_3_2,
+    };
+
 
   /**
    * \defgroup x3ddatatypes X3D Data Types
@@ -89,6 +104,10 @@ namespace XIOT {
 	  SFVec2f(float X, float Y) : x(X), y(Y) {};
 	  template <class C>
 		explicit SFVec2f(const C& c) : x(c[0]), y(c[1]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
   };
 
   typedef std::vector<SFVec2f> MFVec2f;
@@ -106,6 +125,11 @@ namespace XIOT {
 	  SFVec3f(float X, float Y, float Z) : x(X), y(Y), z(Z) {};
   	  template <class C>
 		explicit SFVec3f(const C& c) : x(c[0]), y(c[1]), z(c[2]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
+
   };
 
   typedef std::vector<SFVec3f> MFVec3f;
@@ -127,6 +151,11 @@ namespace XIOT {
 	  SFRotation(float X, float Y, float Z, float Angle) : x(X), y(Y), z(Z), angle(Angle) {};
 	  template <class C>
 		explicit SFRotation(const C& c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
+
   };
 
   typedef std::vector<SFRotation> MFRotation;
@@ -155,6 +184,11 @@ namespace XIOT {
 		explicit SFColor(const C& c) : r(c[0]), g(c[1]), b(c[2]) {
 			//std::cout << "Creating SFColor" << std::endl;
 		}
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&r)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&r)[i];};
+
   };
 
   typedef std::vector<SFColor> MFColor;
@@ -171,10 +205,15 @@ namespace XIOT {
    */
   struct SFColorRGBA {
 	  float r, g, b, a;	  
-   	  SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
+ 	  SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
 	  SFColorRGBA(float R, float G, float B, float A) : r(R), g(G), b(B), a(A) {};
 	  template <class C>
-		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {}
+		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&r)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&r)[i];};
+
   };
 
   typedef std::vector<SFColorRGBA> MFColorRGBA;
@@ -209,6 +248,9 @@ namespace XIOT {
 	  static int getAttributeID(const std::string &attributeStr);
 
 	  static void initMaps();
+
+    static const char* getProfileString(X3DProfile profile);
+    static const char* getVersionString(X3DVersion version);
 
   private:
 	  static std::map<std::string, int>	elementFromStringMap;

@@ -6,8 +6,6 @@
 #include <xiot/FIEncodingAlgorithms.h>
 #include <xiot/X3DFIEncodingAlgorithms.h>
 
-//#define ENCODEASSTRING 1
-
 using namespace std;
 
 namespace XIOT {
@@ -100,9 +98,9 @@ void* X3DWriterFI::getProperty(const char* const name) const
 }
 
 //----------------------------------------------------------------------------
-int X3DWriterFI::OpenFile(const char* file)
+int X3DWriterFI::openFile(const char* file)
 {
-  this->CloseFile();
+  this->closeFile();
   
   _stream.open (file, ios::out | ios::binary);
   if(!_stream.fail())
@@ -114,14 +112,14 @@ int X3DWriterFI::OpenFile(const char* file)
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::CloseFile()
+void X3DWriterFI::closeFile()
 {
   if (_stream.is_open())
 	_stream.close();
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::StartDocument()
+void X3DWriterFI::startDocument()
 {
   _encoder.reset();
   _encoder.encodeHeader(false);
@@ -129,14 +127,14 @@ void X3DWriterFI::StartDocument()
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::EndDocument()
+void X3DWriterFI::endDocument()
 {
   _encoder.encodeDocumentTermination();
 }
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::StartNode(int elementID)
+void X3DWriterFI::startNode(int elementID)
 {
   if (!this->_infoStack->empty())
     {
@@ -155,7 +153,7 @@ void X3DWriterFI::StartNode(int elementID)
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::EndNode()
+void X3DWriterFI::endNode()
 {
   assert(!this->_infoStack->empty());
   this->checkNode(false);
@@ -234,135 +232,70 @@ void X3DWriterFI::endAttribute()
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFVec3f(int attributeID, float x, float y, float z)
+void X3DWriterFI::setSFVec3f(int attributeID, float x, float y, float z)
 {
   std::ostringstream ss;
-
   this->startAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 3;
-  float temp[3];
-  temp[0] = x;
-  temp[1] = y;
-  temp[2] = z;
-
-  _encoder.EncodeFloatFI(this->Writer, temp, size);
-
-#else
   ss << x << " " << y << " " << z;
   _encoder.encodeCharacterString3(ss.str());
-#endif
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFVec2f(int attributeID, float s, float t)
+void X3DWriterFI::setSFVec2f(int attributeID, float s, float t)
 {
   std::ostringstream ss;
-
   this->startAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 2;
-  float temp[2];
-  temp[0] = s;
-  temp[1] = t;
-  
-  _encoder.EncodeFloatFI(this->Writer, temp, size);
-
-#else
   ss << s << " " << t;
   _encoder.encodeCharacterString3(ss.str());
-#endif
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFColor(int attributeID, float r, float g, float b)
+void X3DWriterFI::setSFColor(int attributeID, float r, float g, float b)
 {
-  this->SetSFVec3f(attributeID, r, g, b);
+  this->setSFVec3f(attributeID, r, g, b);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFRotation(int attributeID, float x, float y, float z, float angle)
+void X3DWriterFI::setSFRotation(int attributeID, float x, float y, float z, float angle)
 {
   std::ostringstream ss;
-
   this->startAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 4;
-  float temp[4];
-  
-  size = 4;
-  temp[0] = x;
-  temp[1] = y;
-  temp[2] = z;
-  temp[3] = -angle * FLOAT_DEGTORAD;
-    
-  _encoder.EncodeFloatFI(this->Writer, temp, size);
-
-#else
   ss << x << " " << y << " " << z << " " << angle;
-  
   _encoder.encodeCharacterString3(ss.str());
-
-#endif
 }
 
-void X3DWriterFI::SetMFFloat(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFFloat(int attributeID, const std::vector<float>& values)
 {
   this->startAttribute(attributeID, true, false);
   _encoder.encodeAttributeFloatArray(&(values.front()), values.size());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFColor(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFColor(int attributeID, const std::vector<float>& values)
 {
-  this->SetMFFloat(attributeID, values);
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFRotation(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFRotation(int attributeID, const std::vector<float>& values)
 {
-#ifdef ENCODEASSTRING
-  std::ostringstream ss;
-  unsigned int i = 0;
-    while (i < values.size())
-      {
-      ss << values[i++] << " " << values[i++] << " " << values[i++] << " " << values[i++] << ",";
-      }
-
-    _encoder.EncodeCharacterString3(this->Writer, ss.str());
-#else
-  this->SetMFFloat(attributeID, values);
-#endif
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFVec3f(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFVec3f(int attributeID, const std::vector<float>& values)
 {
-  this->SetMFFloat(attributeID, values);
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFVec2f(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFVec2f(int attributeID, const std::vector<float>& values)
 {
-#ifdef ENCODEASSTRING
-  std::ostringstream ss;
-  unsigned int i = 0;
-    while (i < values.size())
-      {
-      ss << values[i++] << " " << values[i++] << ",";
-      }
-
-    _encoder.EncodeCharacterString3(this->Writer, ss.str());
-#else
-  this->SetMFFloat(attributeID, values);
-#endif
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFImage(int attributeID, const std::vector<int>& values)
+void X3DWriterFI::setSFImage(int attributeID, const std::vector<int>& values)
 {
   this->startAttribute(attributeID, true, false);
   _encoder.encodeAttributeIntegerArray(&values.front(), values.size());
@@ -370,7 +303,7 @@ void X3DWriterFI::SetSFImage(int attributeID, const std::vector<int>& values)
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFInt32(int attributeID, int iValue)
+void X3DWriterFI::setSFInt32(int attributeID, int iValue)
 {
   std::ostringstream ss;
   this->startAttribute(attributeID, true, false);
@@ -382,14 +315,14 @@ void X3DWriterFI::SetSFInt32(int attributeID, int iValue)
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFInt32(int attributeID, const std::vector<int>& values)
+void X3DWriterFI::setMFInt32(int attributeID, const std::vector<int>& values)
 {
   this->startAttribute(attributeID, true, false);
   _encoder.encodeAttributeIntegerArray(&values.front(), values.size());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFFloat(int attributeID, float fValue)
+void X3DWriterFI::setSFFloat(int attributeID, float fValue)
 {
   std::ostringstream ss;
 
@@ -402,14 +335,14 @@ void X3DWriterFI::SetSFFloat(int attributeID, float fValue)
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFBool(int attributeID, bool bValue)
+void X3DWriterFI::setSFBool(int attributeID, bool bValue)
 {
   this->startAttribute(attributeID, false);
   _encoder.encodeInteger2(bValue ? 2 : 1);
 }
 
 //----------------------------------------------------------------------------
-/*void X3DWriterFI::SetMFBool(int attributeID, std::vector<bool>& values)
+/*void X3DWriterFI::setMFBool(int attributeID, std::vector<bool>& values)
 {
   // ok?
   this->startAttribute(attributeID, false);
@@ -421,14 +354,14 @@ void X3DWriterFI::SetSFBool(int attributeID, bool bValue)
 }*/
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFString(int attributeID, const std::string &s)
+void X3DWriterFI::setSFString(int attributeID, const std::string &s)
 {
   this->startAttribute(attributeID, true, true);
   _encoder.encodeCharacterString3(s);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFString(int attributeID, const std::vector<std::string>& strings)
+void X3DWriterFI::setMFString(int attributeID, const std::vector<std::string>& strings)
 {
   std::ostringstream sTemp;
   
@@ -444,7 +377,7 @@ void X3DWriterFI::SetMFString(int attributeID, const std::vector<std::string>& s
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::Flush()
+void X3DWriterFI::flush()
 {
 
 }

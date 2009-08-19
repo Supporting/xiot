@@ -203,7 +203,10 @@ int vtkX3DNodeHandler::startMaterial(const X3DAttributes &attr)
 
 	// There was no Appearance Node
 	if(!this->CurrentProperty)
+    {
+    cerr << "Ingoring <Material> found outside of <Appearance>." << endl;;
 		return CONTINUE;
+    }
 
 	int index;
 	

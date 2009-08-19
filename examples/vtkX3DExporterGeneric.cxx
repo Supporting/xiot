@@ -157,7 +157,7 @@ void vtkX3DExporterGeneric::WriteData()
     }
 
 
-  if (!writer->OpenFile(this->FileName))
+  if (!writer->openFile(this->FileName))
     {
     vtkErrorMacro(<< "unable to open X3D file " << this->FileName);
     return;
@@ -167,85 +167,64 @@ void vtkX3DExporterGeneric::WriteData()
   //  Write header
   //
   vtkDebugMacro("Writing X3D file");
-
-  writer->StartDocument();
-
-  writer->StartNode(ID::X3D);
-  writer->SetSFString(ID::profile, "Immersive");
-  writer->SetSFString(ID::version, "3.0");
-
-  writer->StartNode(ID::head);
-
-  writer->StartNode(ID::meta);
-  writer->SetSFString(ID::name, "filename");
-  writer->SetSFString(ID::content, this->FakeFileName ? this->FakeFileName : this->FileName);
-  writer->EndNode();
-
-  writer->StartNode(ID::meta);
-  writer->SetSFString(ID::name, "generator");
-  writer->SetSFString(ID::content, "Visualization ToolKit X3D exporter v0.9.1");
-  writer->EndNode();
-
-  writer->StartNode(ID::meta);
-  writer->SetSFString(ID::name, "numberofelements");
+  
   vtksys_ios::ostringstream ss;
   ss << ren->GetActors()->GetNumberOfItems();
-  writer->SetSFString(ID::content, ss.str().c_str());
-  writer->EndNode();
 
-  writer->EndNode(); // head
+  std::multimap<std::string, std::string> meta;
+  meta.insert(std::pair<std::string, std::string>("filename", this->FakeFileName ? this->FakeFileName : this->FileName));
+  meta.insert(std::pair<std::string, std::string>("generator", "Visualization ToolKit X3D exporter v0.9.1"));
+  meta.insert(std::pair<std::string, std::string>("numberofelements", ss.str()));
+  writer->startX3DDocument(Immersive, VERSION_3_0, &meta, false);
 
-  writer->StartNode(ID::Scene);
-
-  double *dp = ren->GetBackground();
+  double *dp;
   // Start write the Background
-  writer->StartNode(ID::Background);
-  writer->SetSFColor(ID::skyColor, dp[0], dp[1], dp[2]);
-  writer->EndNode();
+  writer->startNode(ID::Background);
+  writer->setSFColor(ID::skyColor, ren->GetBackground());
+  writer->endNode();
   // End of Background
 
   // Start write the Camera
   cam = ren->GetActiveCamera();
-  writer->StartNode(ID::Viewpoint);
-  writer->SetSFFloat(ID::fieldOfView,(cam->GetViewAngle()*DOUBLE_DEGTORAD));
+  writer->startNode(ID::Viewpoint);
+  writer->setSFFloat(ID::fieldOfView, vtkMath::RadiansFromDegrees(cam->GetViewAngle()));
   
-  dp = cam->GetPosition();
-  writer->SetSFVec3f(ID::position, dp[0], dp[1], dp[2]);
-  writer->SetSFString(ID::description, "Default View");
+  writer->setSFVec3f(ID::position, cam->GetPosition());
+  writer->setSFString(ID::description, "Default View");
   dp = cam->GetOrientationWXYZ();
-  writer->SetSFRotation(ID::orientation, dp[1], dp[2], dp[3], -dp[0]*DOUBLE_DEGTORAD);
-  dp = cam->GetFocalPoint();
-  writer->SetSFVec3f(ID::centerOfRotation, dp[0], dp[1], dp[2]);
-  writer->EndNode();
+  SFRotation orientation(dp[1], dp[2], dp[3], vtkMath::RadiansFromDegrees(-dp[0]));
+  writer->setSFRotation(ID::orientation, orientation);
+  writer->setSFVec3f(ID::centerOfRotation, cam->GetFocalPoint());
+  writer->endNode();
   // End of Camera
 
-  std::vector<std::string> strings;
+  MFString navigationTypes;
+  writer->startNode(ID::NavigationInfo);
+  navigationTypes.push_back("EXAMINE");
+  navigationTypes.push_back("FLY");
+  navigationTypes.push_back("ANY");
+  writer->setMFString(ID::type, navigationTypes);
+
+  writer->setSFFloat(ID::speed, this->Speed);
+  writer->setSFBool(ID::headlight, this->HasHeadLight(ren) ? true : false);
+  writer->endNode();
+
   // do the lights first the ambient then the others
-  writer->StartNode(ID::NavigationInfo);
-  strings.push_back("EXAMINE");
-  strings.push_back("FLY");
-  strings.push_back("ANY");
-  writer->SetMFString(ID::type, strings);
-  writer->SetSFFloat(ID::speed, this->Speed);
-  writer->SetSFBool(ID::headlight, this->HasHeadLight(ren) ? true : false);
-  writer->EndNode();
-
-  writer->StartNode(ID::DirectionalLight);
-  writer->SetSFFloat(ID::ambientIntensity, 1.0f);
-  writer->SetSFFloat(ID::intensity, 0.0f);
+  writer->startNode(ID::DirectionalLight);
+  writer->setSFFloat(ID::ambientIntensity, 1.0f);
+  writer->setSFFloat(ID::intensity, 0.0f);
   dp = ren->GetAmbient();
-  writer->SetSFColor(ID::color, dp[0], dp[1], dp[2]);
-  writer->EndNode();
+  writer->setSFColor(ID::color, dp[0], dp[1], dp[2]);
+  writer->endNode();
 
-
-  // label ROOT
+   // label ROOT
   static double n[] = {0.0, 0.0, 0.0};
-  writer->StartNode(ID::Transform);
-  writer->SetSFString(ID::DEF, "ROOT");
-  writer->SetSFVec3f(ID::translation, n[0], n[1], n[2]);
+  writer->startNode(ID::Transform);
+  writer->setSFString(ID::DEF, "ROOT");
+  writer->setSFVec3f(ID::translation, n[0], n[1], n[2]);
 
-  // make sure we have a default light
-  // if we dont then use a headlight
+
+  // Write out the lights now
   lc = ren->GetLights();
   vtkCollectionSimpleIterator lsit;
   for (lc->InitTraversal(lsit); (aLight = lc->GetNextLight(lsit)); )
@@ -255,6 +234,9 @@ void vtkX3DExporterGeneric::WriteData()
       this->WriteALight(aLight, writer);
       }
     }
+
+
+ 
 
   // do the actors now
   ac = ren->GetActors();
@@ -273,7 +255,7 @@ void vtkX3DExporterGeneric::WriteData()
         }
       }
     }
-  writer->EndNode(); // ROOT Transform
+  writer->endNode(); // ROOT Transform
 
 
   //////////////////////////////////////////////
@@ -283,18 +265,18 @@ void vtkX3DExporterGeneric::WriteData()
   if(a2Dc->GetNumberOfItems()!=0)
     {
     static double s[] = {1000000.0, 1000000.0, 1000000.0};
-    writer->StartNode(ID::ProximitySensor);
-    writer->SetSFString(ID::DEF, "PROX_LABEL");
-    writer->SetSFVec3f(ID::size, s[0], s[1], s[2]);
-    writer->EndNode();
+    writer->startNode(ID::ProximitySensor);
+    writer->setSFString(ID::DEF, "PROX_LABEL");
+    writer->setSFVec3f(ID::size, s[0], s[1], s[2]);
+    writer->endNode();
 
     //disable collision for the text annotations
-    writer->StartNode(ID::Collision);
-	writer->SetSFBool(ID::enabled, false);
+    writer->startNode(ID::Collision);
+	writer->setSFBool(ID::enabled, false);
 
     //add a Label TRANS_LABEL for the text annotations and the sensor
-    writer->StartNode(ID::Transform);
-    writer->SetSFString(ID::DEF, "TRANS_LABEL");
+    writer->startNode(ID::Transform);
+    writer->setSFString(ID::DEF, "TRANS_LABEL");
 
     vtkAssemblyPath *apath2D;
     vtkCollectionSimpleIterator ait2D;
@@ -310,30 +292,27 @@ void vtkX3DExporterGeneric::WriteData()
         this->WriteATextActor2D(aPart2D, writer);
         }
       }
-    writer->EndNode(); // Transform
-    writer->EndNode(); // Collision
+    writer->endNode(); // Transform
+    writer->endNode(); // Collision
 
-    writer->StartNode(ID::ROUTE);
-    writer->SetSFString(ID::fromNode, "PROX_LABEL");
-    writer->SetSFString(ID::fromField, "position_changed");
-    writer->SetSFString(ID::toNode, "TRANS_LABEL");
-    writer->SetSFString(ID::toField, "set_translation");
-    writer->EndNode(); // Route
+    writer->startNode(ID::ROUTE);
+    writer->setSFString(ID::fromNode, "PROX_LABEL");
+    writer->setSFString(ID::fromField, "position_changed");
+    writer->setSFString(ID::toNode, "TRANS_LABEL");
+    writer->setSFString(ID::toField, "set_translation");
+    writer->endNode(); // Route
 
-    writer->StartNode(ID::ROUTE);
-    writer->SetSFString(ID::fromNode, "PROX_LABEL");
-    writer->SetSFString(ID::fromField, "orientation_changed");
-    writer->SetSFString(ID::toNode, "TRANS_LABEL");
-    writer->SetSFString(ID::toField, "set_rotation");
-    writer->EndNode(); // Route
+    writer->startNode(ID::ROUTE);
+    writer->setSFString(ID::fromNode, "PROX_LABEL");
+    writer->setSFString(ID::fromField, "orientation_changed");
+    writer->setSFString(ID::toNode, "TRANS_LABEL");
+    writer->setSFString(ID::toField, "set_rotation");
+    writer->endNode(); // Route
     }
   /////////////////////////////////////////////////
 
-  writer->EndNode(); // Scene
-  writer->EndNode(); // X3D
-  writer->Flush();
-  writer->EndDocument();
-  writer->CloseFile();
+  writer->endX3DDocument();
+  writer->closeFile();
 }
 
 
@@ -358,31 +337,31 @@ void vtkX3DExporterGeneric::WriteALight(vtkLight *aLight,
     {
     if (aLight->GetConeAngle() >= 180.0)
       {
-      writer->StartNode(ID::PointLight);
+      writer->startNode(ID::PointLight);
       }
     else
       { 
-      writer->StartNode(ID::SpotLight);
-      writer->SetSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
-      writer->SetSFFloat(ID::cutOffAngle,aLight->GetConeAngle());
+      writer->startNode(ID::SpotLight);
+      writer->setSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
+      writer->setSFFloat(ID::cutOffAngle,aLight->GetConeAngle());
       }
-    writer->SetSFVec3f(ID::location, pos[0], pos[1], pos[2]);
+    writer->setSFVec3f(ID::location, pos[0], pos[1], pos[2]);
 	dp = aLight->GetAttenuationValues();
-    writer->SetSFVec3f(ID::attenuation, dp[0], dp[1], dp[2]);
+    writer->setSFVec3f(ID::attenuation, dp[0], dp[1], dp[2]);
 
     }
   else
     {
-    writer->StartNode(ID::DirectionalLight);
-    writer->SetSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
+    writer->startNode(ID::DirectionalLight);
+    writer->setSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
     }
 
   // TODO: Check correct color
-  writer->SetSFColor(ID::color, colord[0], colord[1], colord[2]);
-  writer->SetSFFloat(ID::intensity, aLight->GetIntensity());
-  writer->SetSFBool(ID::on, aLight->GetSwitch() ? true : false); 
-  writer->EndNode();
-  writer->Flush();
+  writer->setSFColor(ID::color, colord[0], colord[1], colord[2]);
+  writer->setSFFloat(ID::intensity, aLight->GetIntensity());
+  writer->setSFBool(ID::on, aLight->GetSwitch() ? true : false); 
+  writer->endNode();
+  writer->flush();
 }
 
 //----------------------------------------------------------------------------
@@ -421,13 +400,13 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
   trans->SetMatrix(anActor->vtkProp3D::GetMatrix());
 
   double *dp;
-  writer->StartNode(ID::Transform);
+  writer->startNode(ID::Transform);
   dp = trans->GetPosition();
-  writer->SetSFVec3f(ID::translation, dp[0], dp[1], dp[2]);
+  writer->setSFVec3f(ID::translation, dp[0], dp[1], dp[2]);
   dp = trans->GetOrientationWXYZ();
-  writer->SetSFRotation(ID::rotation, dp[1], dp[2], dp[3], -dp[0]);
+  writer->setSFRotation(ID::rotation, dp[1], dp[2], dp[3], vtkMath::RadiansFromDegrees(-dp[0]));
   dp = trans->GetScale();
-  writer->SetSFVec3f(ID::scale, dp[0], dp[1], dp[2]);
+  writer->setSFVec3f(ID::scale, dp[0], dp[1], dp[2]);
 
   // get the mappers input and matrix
   ds = anActor->GetMapper()->GetInput();
@@ -482,10 +461,10 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
     // types in separate shapes, since the cells type no longer matter.
     if (true)
       {
-      writer->StartNode(ID::Shape);
+      writer->startNode(ID::Shape);
       this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
       vtkX3DExporterWriterRenderPoints(pd, colors, cell_colors, writer);
-      writer->EndNode();
+      writer->endNode();
       }
     }
   else
@@ -508,7 +487,7 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
     bool common_data_written = false;
     if (numPolys > 0)
       {
-      writer->StartNode(ID::Shape);
+      writer->startNode(ID::Shape);
       // Write Appearance
       this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
       // Write Geometry
@@ -516,13 +495,13 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
         (numVerts+numLines), polys, 
         colors, cell_colors, normals, cell_normals, 
         tcoords, common_data_written, index, writer);
-      writer->EndNode();  // close the  Shape
+      writer->endNode();  // close the  Shape
       common_data_written = true;
       }
 
     if (numStrips > 0)
       {
-      writer->StartNode(ID::Shape);
+      writer->startNode(ID::Shape);
       // Write Appearance
       this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
       // Write Geometry
@@ -531,13 +510,13 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
         (numVerts+numLines+numPolys), tstrips, 
         colors, cell_colors, normals, cell_normals, 
         tcoords, common_data_written, index, writer);
-      writer->EndNode();  // close the  Shape
+      writer->endNode();  // close the  Shape
       common_data_written = true;
       }
 
     if (numLines > 0)
       {
-      writer->StartNode(ID::Shape);
+      writer->startNode(ID::Shape);
       // Write Appearance
       this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
       // Write Geometry
@@ -546,22 +525,22 @@ void vtkX3DExporterGeneric::WriteAnActor(vtkActor *anActor,
         points, (numVerts), lines, 
         colors, cell_colors, normals, cell_normals, 
         tcoords, common_data_written, index, writer);
-      writer->EndNode();  // close the  Shape
+      writer->endNode();  // close the  Shape
       common_data_written = true;
       }      
 
     if (numVerts > 0)
       {
-      writer->StartNode(ID::Shape);
+      writer->startNode(ID::Shape);
       this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
       vtkX3DExporterWriterRenderVerts(
         points, verts,
         colors, cell_normals, writer);
-      writer->EndNode();  // close the  Shape
+      writer->endNode();  // close the  Shape
       }
 
     }
-  writer->EndNode(); // close the original transform
+  writer->endNode(); // close the original transform
   anActor->GetMapper()->SetInterpolateScalarsBeforeMapping(isbm);
 }
 
@@ -611,29 +590,29 @@ void vtkX3DExporterGeneric::WriteATextActor2D(vtkActor2D *anTextActor2D,
 
   double temp[3];
 
-  writer->StartNode(ID::Transform);
+  writer->startNode(ID::Transform);
   temp[0] = ((ta->GetPosition()[0])/(this->RenderWindow->GetSize()[0])) - 0.5;
   temp[1] = ((ta->GetPosition()[1])/(this->RenderWindow->GetSize()[1])) - 0.5;
   temp[2] = -2.0;
-  writer->SetSFVec3f(ID::translation, temp[0], temp[1], temp[2]);
+  writer->setSFVec3f(ID::translation, temp[0], temp[1], temp[2]);
   temp[0] = temp[1] = temp[2] = 0.002;
-  writer->SetSFVec3f(ID::scale, temp[0], temp[1], temp[2]);
+  writer->setSFVec3f(ID::scale, temp[0], temp[1], temp[2]);
 
-  writer->StartNode(ID::Shape);
+  writer->startNode(ID::Shape);
 
-  writer->StartNode(ID::Appearance);
+  writer->startNode(ID::Appearance);
 
-  writer->StartNode(ID::Material);
+  writer->startNode(ID::Material);
   temp[0] = 0.0; temp[1] = 0.0; temp[2] = 1.0;
-  writer->SetSFColor(ID::diffuseColor, temp[0], temp[1], temp[2]);
+  writer->setSFColor(ID::diffuseColor, temp[0], temp[1], temp[2]);
   tp->GetColor(temp);
-  writer->SetSFColor(ID::emissiveColor, temp[0], temp[1], temp[2]);
-  writer->EndNode(); // Material
+  writer->setSFColor(ID::emissiveColor, temp[0], temp[1], temp[2]);
+  writer->endNode(); // Material
 
-  writer->EndNode(); // Appearance
+  writer->endNode(); // Appearance
 
-  writer->StartNode(ID::Text);
-  writer->SetSFString(ID::string, ds);
+  writer->startNode(ID::Text);
+  writer->setSFString(ID::string, ds);
 
   vtkstd::string familyStr;
   switch(tp->GetFontFamily())
@@ -664,15 +643,15 @@ void vtkX3DExporterGeneric::WriteATextActor2D(vtkActor2D *anTextActor2D,
 
   justifyStr += " \"BEGIN\"";
 
-  writer->StartNode(ID::FontStyle);
-  writer->SetSFString(ID::family, familyStr);
-  writer->SetSFBool(ID::topToBottom, tp->GetVerticalJustification() == 2);
-  writer->SetSFString(ID::justify, justifyStr);
-  writer->SetSFInt32(ID::size, tp->GetFontSize());
-  writer->EndNode(); // FontStyle
-  writer->EndNode(); // Text
-  writer->EndNode(); // Shape
-  writer->EndNode(); // Transform
+  writer->startNode(ID::FontStyle);
+  writer->setSFString(ID::family, familyStr);
+  writer->setSFBool(ID::topToBottom, tp->GetVerticalJustification() == 2);
+  writer->setSFString(ID::justify, justifyStr);
+  writer->setSFInt32(ID::size, tp->GetFontSize());
+  writer->endNode(); // FontStyle
+  writer->endNode(); // Text
+  writer->endNode(); // Shape
+  writer->endNode(); // Transform
 }
 
 void vtkX3DExporterGeneric::WriteAnAppearance(vtkActor *anActor, bool emissive,
@@ -683,9 +662,9 @@ void vtkX3DExporterGeneric::WriteAnAppearance(vtkActor *anActor, bool emissive,
 
   vtkProperty* prop = anActor->GetProperty();
 
-  writer->StartNode(ID::Appearance);
-  writer->StartNode(ID::Material);
-  writer->SetSFFloat(ID::ambientIntensity,prop->GetAmbient());
+  writer->startNode(ID::Appearance);
+  writer->startNode(ID::Material);
+  writer->setSFFloat(ID::ambientIntensity,prop->GetAmbient());
 
   if (emissive)
     {
@@ -699,7 +678,7 @@ void vtkX3DExporterGeneric::WriteAnAppearance(vtkActor *anActor, bool emissive,
     {
     tempd[0] = tempd[1] = tempd[2] = 0.0f;
     }
-  writer->SetSFColor(ID::emissiveColor, tempd[0], tempd[1], tempd[2]);
+  writer->setSFColor(ID::emissiveColor, tempd[0], tempd[1], tempd[2]);
 
   // Set diffuse color
   tempf2 = prop->GetDiffuse();
@@ -707,7 +686,7 @@ void vtkX3DExporterGeneric::WriteAnAppearance(vtkActor *anActor, bool emissive,
   tempd[0]*=tempf2;
   tempd[1]*=tempf2;
   tempd[2]*=tempf2;
-  writer->SetSFColor(ID::diffuseColor, tempd[0], tempd[1], tempd[2]);
+  writer->setSFColor(ID::diffuseColor, tempd[0], tempd[1], tempd[2]);
 
   // Set specular color
   tempf2 = prop->GetSpecular();
@@ -715,20 +694,20 @@ void vtkX3DExporterGeneric::WriteAnAppearance(vtkActor *anActor, bool emissive,
   tempd[0]*=tempf2;
   tempd[1]*=tempf2;
   tempd[2]*=tempf2;
-  writer->SetSFColor(ID::specularColor, tempd[0], tempd[1], tempd[2]);  
+  writer->setSFColor(ID::specularColor, tempd[0], tempd[1], tempd[2]);  
 
   // Material shininess
-  writer->SetSFFloat(ID::shininess,prop->GetSpecularPower()/128.0);
+  writer->setSFFloat(ID::shininess,prop->GetSpecularPower()/128.0);
   // Material transparency
-  writer->SetSFFloat(ID::transparency,1.0 - prop->GetOpacity());
-  writer->EndNode(); // close material
+  writer->setSFFloat(ID::transparency,1.0 - prop->GetOpacity());
+  writer->endNode(); // close material
 
   // is there a texture map
   if (anActor->GetTexture())
     {
     this->WriteATexture(anActor, writer);
     }
-  writer->EndNode(); // close appearance
+  writer->endNode(); // close appearance
 }
 
 void vtkX3DExporterGeneric::WriteATexture(vtkActor *anActor,
@@ -818,14 +797,14 @@ void vtkX3DExporterGeneric::WriteATexture(vtkActor *anActor,
 
 
 
-  writer->StartNode(ID::PixelTexture);
-  writer->SetSFImage(ID::image, imageDataVec);
+  writer->startNode(ID::PixelTexture);
+  writer->setSFImage(ID::image, imageDataVec);
   if (!(aTexture->GetRepeat()))
     {
-		writer->SetSFBool(ID::repeatS, false);
-		writer->SetSFBool(ID::repeatT, false);
+		writer->setSFBool(ID::repeatS, false);
+		writer->setSFBool(ID::repeatT, false);
     }
-  writer->EndNode();
+  writer->endNode();
 }
 //----------------------------------------------------------------------------
 int vtkX3DExporterGeneric::HasHeadLight(vtkRenderer* ren)
@@ -933,11 +912,11 @@ static bool vtkX3DExporterWriterRenderFaceSet(
 
   if (representation == VTK_SURFACE)
     {
-    writer->StartNode(ID::IndexedFaceSet);
-    writer->SetSFBool(ID::solid, false);
-    writer->SetSFBool(ID::colorPerVertex, !cell_colors);
-    writer->SetSFBool(ID::normalPerVertex, !cell_normals);
-	writer->SetMFInt32(ID::coordIndex, coordIndexVector);
+    writer->startNode(ID::IndexedFaceSet);
+    writer->setSFBool(ID::solid, false);
+    writer->setSFBool(ID::colorPerVertex, !cell_colors);
+    writer->setSFBool(ID::normalPerVertex, !cell_normals);
+	  writer->setMFInt32(ID::coordIndex, coordIndexVector);
     }
   else
     {
@@ -945,19 +924,19 @@ static bool vtkX3DExporterWriterRenderFaceSet(
     normals = 0;
     tcoords = 0;
 
-    writer->StartNode(ID::IndexedLineSet);
-    writer->SetSFBool(ID::colorPerVertex, !cell_colors);
-	writer->SetMFInt32(ID::coordIndex, coordIndexVector);
+    writer->startNode(ID::IndexedLineSet);
+    writer->setSFBool(ID::colorPerVertex, !cell_colors);
+	  writer->setMFInt32(ID::coordIndex, coordIndexVector);
     }
 
   if (normals && cell_normals && representation == VTK_SURFACE)
     {
-		writer->SetMFInt32(ID::normalIndex, cellIndexVector);
+		writer->setMFInt32(ID::normalIndex, cellIndexVector);
     }
 
   if (colors && cell_colors)
     {
-		writer->SetMFInt32(ID::colorIndex, cellIndexVector);
+		writer->setMFInt32(ID::colorIndex, cellIndexVector);
     }
 
   // Now save Coordinate, Color, Normal TextureCoordinate nodes.
@@ -971,7 +950,7 @@ static bool vtkX3DExporterWriterRenderFaceSet(
     vtkX3DExporterUseData((normals != NULL), (tcoords != NULL), (colors!= NULL), index, writer);
     }
 
-  writer->EndNode(); // end IndexedFaceSet or IndexedLineSet
+  writer->endNode(); // end IndexedFaceSet or IndexedLineSet
   return true;
 }
 
@@ -985,82 +964,75 @@ static void vtkX3DExporterWriteData(vtkPoints *points,
   char indexString[100];
   sprintf(indexString, "%04d", index);
 
-  // Test SetField(..., ..., vector<float>)
-  std::vector<float> test;
-
-  test.clear();
-
+  std::vector<float> vec;
+  double t[3];
   for(int i = 0; i < points->GetData()->GetNumberOfTuples(); i++) {
-	  test.push_back(points->GetData()->GetTuple(i)[0]);
-	  test.push_back(points->GetData()->GetTuple(i)[1]);
-	  test.push_back(points->GetData()->GetTuple(i)[2]);
+    points->GetData()->GetTuple(i, t);
+	  vec.push_back(t[0]);
+	  vec.push_back(t[1]);
+	  vec.push_back(t[2]);
   }
   // write out the points
   vtkstd::string defString = "VTKcoordinates";
-  writer->StartNode(ID::Coordinate);
-  writer->SetSFString(ID::DEF, defString.append(indexString).c_str());
-  writer->SetMFVec3f(ID::point, test);
-  writer->EndNode();
+  writer->startNode(ID::Coordinate);
+  writer->setSFString(ID::DEF, defString.append(indexString).c_str());
+  writer->setMFVec3f(ID::point, vec);
+  writer->endNode();
+  vec.clear();
 
-  test.clear();
-
-  
-
-
-  // write out the point data
+  // write out the normals
   if (normals)
     {
-		for(int i = 0; i < (normals)->GetNumberOfTuples(); i++) {
-	  test.push_back((normals)->GetTuple(i)[0]);
-	  test.push_back((normals)->GetTuple(i)[1]);
-	  test.push_back((normals)->GetTuple(i)[2]);
-  }
+		for(int i = 0; i < normals->GetNumberOfTuples(); i++) 
+      {
+      normals->GetTuple(i, t);
+	    vec.push_back(t[0]);
+	    vec.push_back(t[1]);
+	    vec.push_back(t[2]);
+      }
     defString="VTKnormals";
-    writer->StartNode(ID::Normal);
-    writer->SetSFString(ID::DEF, defString.append(indexString).c_str());
-    writer->SetMFVec3f(ID::vector, test);
-    writer->EndNode();
-    }
-
-  test.clear();
-
+    writer->startNode(ID::Normal);
+    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
+    writer->setMFVec3f(ID::vector, vec);
+    writer->endNode();
+    vec.clear();
+    } // normals
   
 
-  
-  // write out the point data
+  // write out the texture coordinates
   if (tcoords)
     {
-		for(int i = 0; i < (tcoords)->GetNumberOfTuples(); i++) {
-	  test.push_back((tcoords)->GetTuple(i)[0]);
-	  test.push_back((tcoords)->GetTuple(i)[1]);
-	  test.push_back((tcoords)->GetTuple(i)[2]);
-  }
+		for(int i = 0; i < tcoords->GetNumberOfTuples(); i++)
+      {
+      tcoords->GetTuple(i, t);
+	    vec.push_back(t[0]);
+	    vec.push_back(t[1]);
+      }
     defString="VTKtcoords";
-    writer->StartNode(ID::TextureCoordinate);
-    writer->SetSFString(ID::DEF, defString.append(indexString).c_str());
-	writer->SetMFVec3f(ID::point, test);
-    writer->EndNode();
+    writer->startNode(ID::TextureCoordinate);
+    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
+	  writer->setMFVec2f(ID::point, vec);
+    writer->endNode();
+    vec.clear();
     }
 
-  test.clear();
-  // write out the point data
+  // write out the colors
   if (colors)
     {
-    defString="VTKcolors";
-    writer->StartNode(ID::Color);
-    writer->SetSFString(ID::DEF, defString.append(indexString).c_str());
-
-    std::vector<float> colorVec;
     unsigned char c[4];
-	for (int i = 0; i < colors->GetNumberOfComponents(); i++)
+    for (int i = 0; i < colors->GetNumberOfTuples(); i++)
       {
       colors->GetTupleValue(i,c);
-      colorVec.push_back(c[0]/255.0);
-      colorVec.push_back(c[1]/255.0);
-      colorVec.push_back(c[2]/255.0);
+      vec.push_back(c[0]/255.0f);
+      vec.push_back(c[1]/255.0f);
+      vec.push_back(c[2]/255.0f);
       }
-	writer->SetMFColor(ID::color, colorVec);
-    writer->EndNode();
+    defString="VTKcolors";
+    writer->startNode(ID::Color);
+    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
+    writer->setMFColor(ID::color, vec);
+    writer->endNode();
+    vec.clear();
     }
 }
 
@@ -1070,35 +1042,35 @@ static void vtkX3DExporterUseData(bool normals, bool tcoords, bool colors, int i
   char indexString[100];
   sprintf(indexString, "%04d", index);
   vtkstd::string defString = "VTKcoordinates";
-  writer->StartNode(ID::Coordinate);
-  writer->SetSFString(ID::USE, defString.append(indexString).c_str());
-  writer->EndNode();
+  writer->startNode(ID::Coordinate);
+  writer->setSFString(ID::USE, defString.append(indexString).c_str());
+  writer->endNode();
 
   // write out the point data
   if (normals)
     {
     defString = "VTKnormals";
-    writer->StartNode(ID::Normal);
-    writer->SetSFString(ID::USE, defString.append(indexString).c_str());
-    writer->EndNode();
+    writer->startNode(ID::Normal);
+    writer->setSFString(ID::USE, defString.append(indexString).c_str());
+    writer->endNode();
     }
 
   // write out the point data
   if (tcoords)
     {
     defString = "VTKtcoords";
-    writer->StartNode(ID::TextureCoordinate);
-    writer->SetSFString(ID::USE, defString.append(indexString).c_str());
-    writer->EndNode();
+    writer->startNode(ID::TextureCoordinate);
+    writer->setSFString(ID::USE, defString.append(indexString).c_str());
+    writer->endNode();
     }
 
   // write out the point data
   if (colors)
     {
     defString = "VTKcolors";
-    writer->StartNode(ID::Color);
-    writer->SetSFString(ID::USE, defString.append(indexString).c_str());
-    writer->EndNode();
+    writer->startNode(ID::Color);
+    writer->setSFString(ID::USE, defString.append(indexString).c_str());
+    writer->endNode();
     }
 }
 
@@ -1134,24 +1106,26 @@ static bool vtkX3DExporterWriterRenderVerts(
       }
     }
 
-  std::vector<float> test;
+  std::vector<float> vec;
 
-  test.clear();
-
+  vec.clear();
+  
+  double t[3];
   for(int i = 0; i < points->GetData()->GetNumberOfTuples(); i++) {
-	  test.push_back(points->GetData()->GetTuple(i)[0]);
-	  test.push_back(points->GetData()->GetTuple(i)[1]);
-	  test.push_back(points->GetData()->GetTuple(i)[2]);
+    points->GetData()->GetTuple(i, t);
+	  vec.push_back(t[0]);
+	  vec.push_back(t[1]);
+	  vec.push_back(t[2]);
   }
-  writer->StartNode(ID::PointSet);
-  writer->StartNode(ID::Coordinate);
-  writer->SetMFVec3f(ID::point, test);
-  writer->EndNode();
+  writer->startNode(ID::PointSet);
+  writer->startNode(ID::Coordinate);
+  writer->setMFVec3f(ID::point, vec);
+  writer->endNode();
   if (colors)
     {
-    writer->StartNode(ID::Color);
-	writer->SetMFColor(ID::point, colorVector);
-    writer->EndNode();
+    writer->startNode(ID::Color);
+	  writer->setMFColor(ID::point, colorVector);
+    writer->endNode();
     }
   return true; 
 }
@@ -1233,17 +1207,17 @@ static bool vtkX3DExporterWriterRenderPoints(
       }
     }
 
-  writer->StartNode(ID::PointSet);
-  writer->StartNode(ID::Coordinate);
-  writer->SetMFVec3f(ID::point, coordinateVec);
-  writer->EndNode(); // Coordinate
+  writer->startNode(ID::PointSet);
+  writer->startNode(ID::Coordinate);
+  writer->setMFVec3f(ID::point, coordinateVec);
+  writer->endNode(); // Coordinate
   if (colors)
     {
-    writer->StartNode(ID::Color);
-	writer->SetMFColor(ID::color, colorVec);
-    writer->EndNode(); // Color
+    writer->startNode(ID::Color);
+	writer->setMFColor(ID::color, colorVec);
+    writer->endNode(); // Color
     }
-  writer->EndNode(); // PointSet
+  writer->endNode(); // PointSet
   return true; 
 }
 

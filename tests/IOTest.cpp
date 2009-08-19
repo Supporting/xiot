@@ -119,30 +119,25 @@ int start()
 	{
 		X3DWriter* w = writer[i];
 		if (i == 0)
-			w->OpenFile("iotest.x3d");
+			w->openFile("iotest.x3d");
 		else 
-			w->OpenFile("iotest.x3db");
-		w->StartDocument();
-		w->StartNode(ID::X3D);
-		w->SetSFString(ID::profile, "Immersive");
-		w->SetSFString(ID::version, "3.0");
-
-		w->StartNode(ID::Scene);
-		w->StartNode(ID::Shape);
-		w->StartNode(ID::Appearance);
-		w->StartNode(ID::Material);
-		w->SetSFVec3f(ID::diffuseColor, 1.0f, 0.0f, 0.0f);
-		w->SetSFFloat(ID::transparency, 0.1f);
-		w->EndNode();
-		w->EndNode(); // Appearance
-		w->StartNode(ID::Box);
-		w->SetSFVec3f(ID::size, 0.5f, 0.5f, 0.5f);
-		w->EndNode(); // Box
-		w->EndNode();//Shape
-		w->EndNode(); // Scene
-		w->EndNode();
-		w->EndDocument();
-		w->CloseFile();
+			w->openFile("iotest.x3db");
+		w->startX3DDocument();
+		
+		w->startNode(ID::Scene);
+		w->startNode(ID::Shape);
+		w->startNode(ID::Appearance);
+		w->startNode(ID::Material);
+		w->setSFVec3f(ID::diffuseColor, 1.0f, 0.0f, 0.0f);
+		w->setSFFloat(ID::transparency, 0.1f);
+		w->endNode();
+		w->endNode(); // Appearance
+		w->startNode(ID::Box);
+		w->setSFVec3f(ID::size, 0.5f, 0.5f, 0.5f);
+		w->endNode(); // Box
+		w->endNode();//Shape
+		w->endX3DDocument();
+		w->closeFile();
 
 		delete w;
 	}

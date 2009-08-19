@@ -81,7 +81,6 @@ set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriter.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DFIEncoder.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFI.h
-	${XIOT_INCLUDE_DIR}/xiot/X3DWriterFIHelper.h
 	${XIOT_INCLUDE_DIR}/xiot/X3DWriterXML.h
 )
 
@@ -100,6 +99,7 @@ set(XIOT_SRC
 	X3DParserVocabulary.cpp
 	X3DFIEncodingAlgorithms.cpp
 	X3DWriterFI.cpp
+	X3DWriter.cpp
 	X3DFIEncoder.cpp
 	X3DWriterXML.cpp
 )

@@ -16,6 +16,28 @@ namespace XIOT {
 	  std::map<int, std::string>	X3DTypes::elementFromIDMap;
 	  std::map<int, std::string>	X3DTypes::attributeFromIDMap;
  
+  const char* X3DTypes::getProfileString(X3DProfile profile)
+    {
+    switch(profile) {
+      case Immersive: return "Immersive";
+      case Full: return "Full";
+      case Interactive: return "Interactive";
+      case Interchange: return "Interchange";
+      case Core: return "Core";
+      case MPEG4Interactive: return "MPEG4Interactive";
+      default: return "unknown";
+    }
+    }
+  const char* X3DTypes::getVersionString(X3DVersion version)
+    {
+     switch(version) {
+      case VERSION_3_0: return "3.0";
+      case VERSION_3_1: return "3.1";
+      case VERSION_3_2: return "3.2";
+      default: return "unknown";
+    }
+    }
+
 	  
 	  const char* X3DTypes::getAttributeByID(int id)
 	  {

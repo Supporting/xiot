@@ -22,16 +22,14 @@
 #ifndef X3DWRITER_H
 #define X3DWRITER_H
 
-#define DOUBLE_DEGTORAD 0.017453292519943295
-#define FLOAT_DEGTORAD 0.017453292519943295f
-
-#include <xiot/XIOTConfig.h>
+#include <xiot/X3DTypes.h>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <map>
 
 namespace XIOT {
 
@@ -44,53 +42,68 @@ public:
   // Description:
   // Opens the file specified with file
   // returns 1 if sucessfull otherwise 0
-  virtual int OpenFile(const char* file) = 0;
+  virtual int openFile(const char* file) = 0;
   // Closes the file if open
-  virtual void CloseFile() = 0;
+  virtual void closeFile() = 0;
   // Flush can be called optionally after some operations to
   // flush the buffer to the filestream. A writer not necessarily 
   // implements this function
-  virtual void Flush() {};
+  virtual void flush() {};
 
   // Description:
-  // Starts a document and sets all necessary informations, 
+  // Starts/Ends a document and sets all necessary informations, 
   // i.e. the header of the implemented encoding
-  virtual void StartDocument() = 0;
-  
+  virtual void startDocument() = 0;
+  virtual void endDocument() = 0;
+
   // Description:
-  // Ends a document and sets all necessary informations
-  // or necessary bytes to finish the encoding correctly
-  virtual void EndDocument() = 0;
+  // Starts/ends a typical X3D document including the root X3D tag,
+  // header information and the Scene tag. 
+  virtual void startX3DDocument(X3DProfile profile = Immersive, X3DVersion version = VERSION_3_0, const std::multimap<std::string, std::string>* const meta = NULL, bool writeDefault = true);
+  virtual void endX3DDocument();
 
   // Description:
   // Starts/ends a new X3D node specified via nodeID. The list of
   // nodeIds can be found in vtkX3DTypes.h. The EndNode
   // function closes the last open node. So there must be
   // corresponding Start/EndNode() calls for every node
-  virtual void StartNode(int nodeID) = 0;
-  virtual void EndNode() = 0;
+  virtual void startNode(int nodeID) = 0;
+  virtual void endNode() = 0;
 
   // Single Field
-  virtual void SetSFFloat(int attributeID, float) = 0;
-  virtual void SetSFInt32(int attributeID, int) = 0;
-  virtual void SetSFBool(int attributeID, bool) = 0;
+  virtual void setSFFloat(int attributeID, float) = 0;
+  virtual void setSFInt32(int attributeID, int) = 0;
+  virtual void setSFBool(int attributeID, bool) = 0;
 
-  virtual void SetSFVec3f(int attributeID, float x, float y, float z) = 0;
-  virtual void SetSFVec2f(int attributeID, float s, float t) = 0;
-  virtual void SetSFRotation(int attributeID, float x, float y, float z, float angle) = 0;
-  virtual void SetSFString(int attributeID, const std::string &s) = 0;
-  virtual void SetSFColor(int attributeID, float r, float g, float b) = 0;
-  virtual void SetSFImage(int attributeID, const std::vector<int>&) = 0; 
+  template <class C>
+  inline void setSFVec3f(int attributeID, const C& c) { setSFVec3f(attributeID, c[0], c[1], c[2]); };
+  virtual void setSFVec3f(int attributeID, float x, float y, float z) = 0;
+
+  template <class C>
+  inline void setSFVec2f(int attributeID, const C& c) { setSFVec2f(attributeID, c[0], c[1]); };
+  virtual void setSFVec2f(int attributeID, float s, float t) = 0;
+
+  template <class C>
+  inline void setSFRotation(int attributeID, const C& c) { setSFRotation(attributeID, c[0], c[1], c[2], c[3]); };
+  virtual void setSFRotation(int attributeID, float x, float y, float z, float angle) = 0;
+
+  virtual void setSFString(int attributeID, const std::string &s) = 0;
+
+  template <class C>
+  inline void setSFColor(int attributeID, const C& c) { setSFColor(attributeID, c[0], c[1], c[2]); };
+  virtual void setSFColor(int attributeID, float r, float g, float b) = 0;
+
+  virtual void setSFImage(int attributeID, const std::vector<int>&) = 0; 
 
   // Multi Field
-  virtual void SetMFFloat(int attributeID, const std::vector<float>&) = 0;
-  virtual void SetMFInt32(int attributeID, const std::vector<int>&) = 0;
+  virtual void setMFFloat(int attributeID, const std::vector<float>&) = 0;
+  virtual void setMFInt32(int attributeID, const std::vector<int>&) = 0;
 
-  virtual void SetMFVec3f(int attributeID, const std::vector<float>&) = 0;
-  virtual void SetMFVec2f(int attributeID, const std::vector<float>&) = 0;
-  virtual void SetMFRotation(int attributeID, const std::vector<float>&) = 0;
-  virtual void SetMFString(int attributeID, const std::vector<std::string>&) = 0;
-  virtual void SetMFColor(int attributeID, const std::vector<float>&) = 0;
+  virtual void setMFVec3f(int attributeID, const std::vector<float>&) = 0;
+  virtual void setMFVec2f(int attributeID, const std::vector<float>&) = 0;
+  virtual void setMFRotation(int attributeID, const std::vector<float>&) = 0;
+  virtual void setMFString(int attributeID, const std::vector<std::string>&) = 0;
+  virtual void setMFColor(int attributeID, const std::vector<float>&) = 0;
 
   /**
     * Set the value of any property in a X3DWriter.
