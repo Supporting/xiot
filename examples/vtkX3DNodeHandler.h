@@ -8,8 +8,6 @@
 #include "vtkRenderer.h"
 
 class vtkActor;
-class vtkAlgorithm;
-class vtkProperty;
 class vtkCamera;
 class vtkLight;
 class vtkTransform;
@@ -39,6 +37,8 @@ public:
 	vtkX3DNodeHandler(vtkRenderer* Renderer);
 	~vtkX3DNodeHandler();
 
+  void startDocument();
+
 	int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
 	
 	int startAppearance(const XIOT::X3DAttributes &attr);
@@ -56,9 +56,9 @@ public:
 	int startIndexedLineSet(const XIOT::X3DAttributes &attr);
 	int endIndexedLineSet();
 
-
 	int startIndexedFaceSet(const XIOT::X3DAttributes &attr);
 	int endIndexedFaceSet();
+
 
 	int startCoordinate(const XIOT::X3DAttributes &attr);
 	
@@ -79,44 +79,32 @@ public:
 	
 	int startDirectionalLight(const XIOT::X3DAttributes &attr);
 	
+  /// X3DBindables
+  int startNavigationInfo(const XIOT::X3DAttributes &attr);
 	int startBackground(const XIOT::X3DAttributes &attr);
+  int startViewpoint(const XIOT::X3DAttributes &attr);
 
 	void setVerbose(bool verbose);
 private:
 	vtkRenderer			*Renderer;
-
-	vtkActor			*actor;
-	vtkPolyDataMapper	*pmap;
+  vtkLight    *HeadLight;
 
 	vtkActor             *CurrentActor;
-	vtkProperty          *CurrentProperty;
-	vtkCamera            *CurrentCamera;
-	vtkLight             *CurrentLight;
 	vtkTransform         *CurrentTransform;
-	vtkAlgorithm         *CurrentSource;
 	vtkPoints            *CurrentPoints;
 	vtkFloatArray        *CurrentNormals;
 	vtkFloatArray        *CurrentTCoords;
-	vtkCellArray         *CurrentTCoordCells;
-	vtkLookupTable       *CurrentLut;
-	vtkFloatArray        *CurrentScalars;
-	vtkPolyDataMapper    *CurrentMapper;
 	vtkUnsignedCharArray *CurrentColors;
 	vtkX3DIndexedGeometrySource *CurrentIndexedGeometry;
+  int IsCurrentUnlit;
+  double CurrentEmissiveColor[3];
 
-	std::map<std::string,vtkActor*>			defShape;		// used for DEF/USE
-	std::map<std::string,vtkUnsignedCharArray*>		defColor;	// used for DEF/USE
-	std::map<std::string,vtkPoints*>		defCoordinate;	// used for DEF/USE
-	std::map<std::string,vtkFloatArray*>	defTextureCoordinates;	// used for DEF/USE
-	std::map<std::string,vtkFloatArray*>	defNormals;	// used for DEF/USE
+  int SeenBindables;
+  vtkObject *MapReferencer;
 
-	std::set<int>						_ignoreNodes;
-	std::string								defString; // current DEF (used for endShape())
-	
-	bool	bDEFCoordinate;
-	bool	bDEFTextureCoordinate;
-	bool	bDEFColor;
-	bool	bDEFNormal;
+	std::map<std::string,vtkObject*>			DefMap;		// used for DEF/USE
+	std::set<int> _ignoreNodes;
+
 	bool	_verbose;
 
 

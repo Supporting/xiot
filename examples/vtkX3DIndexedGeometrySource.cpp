@@ -188,11 +188,6 @@ void vtkX3DIndexedGeometrySource::SetCoords(vtkPoints * i)
 
 void vtkX3DIndexedGeometrySource::SetNormals(vtkFloatArray * i)
 {
-	if (i->GetNumberOfComponents() != 3)
-	{
-		vtkErrorMacro(<<"Number of components for Normals must be 3");
-		return;
-	}
 	if ( i != this->Normals)
 	{
 		if (this->Normals)
@@ -202,33 +197,41 @@ void vtkX3DIndexedGeometrySource::SetNormals(vtkFloatArray * i)
 		this->Normals = i;
 		if (this->Normals)
 		{
-			this->Normals->Register(this);
+    	if (this->Normals->GetNumberOfComponents() != 3)
+	      {
+		    vtkErrorMacro(<<"Number of components for Normals must be 3");
+        this->Normals = NULL;
+    	  }
+      else
+			  this->Normals->Register(this);
+
 		}
 		this->Modified();
 	}
 }
 
 void vtkX3DIndexedGeometrySource::SetTexCoords(vtkFloatArray * i)
-{
-	if (i->GetNumberOfComponents() != 2)
-	{
-		vtkErrorMacro(<<"Number of components for TexCoords must be 2");
-		return;
-	}
-	if ( i != this->TexCoords)
-	{
-		if (this->TexCoords)
-		{
-			this->TexCoords->UnRegister(this);
-		}
-		this->TexCoords = i;
-		if (this->TexCoords)
-		{
-			this->TexCoords->Register(this);
-		}
-		this->Modified();
-	}
-}
+  {
+  if ( i != this->TexCoords)
+    {
+    if (this->TexCoords)
+      {
+      this->TexCoords->UnRegister(this);
+      }
+    this->TexCoords = i;
+    if (this->TexCoords)
+      {
+      if (this->TexCoords->GetNumberOfComponents() != 2)
+        {
+        vtkErrorMacro(<<"Number of components for TexCoords must be 2");
+        this->TexCoords = NULL;
+        }
+      else
+        this->TexCoords->Register(this);
+      }
+    this->Modified();
+    }
+  }
 
 void vtkX3DIndexedGeometrySource::SetColors(vtkUnsignedCharArray * i)
 {
@@ -512,7 +515,7 @@ int vtkX3DIndexedGeometrySource::processIndexedFaceSet(vtkPolyData* pd, vtkCellA
     }
   else // TexCoords are alway per vertex
     {
-      assert(!this->TexCoordIndex); // Vertex split needed (T2)
+      // assert(!this->TexCoordIndex); // Vertex split needed (T2)
       // T3
       pd->GetPointData()->SetTCoords(this->TexCoords);
     }

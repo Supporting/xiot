@@ -25,15 +25,6 @@ bool testPerformance = false;
 int showScene(vtkImporter* importer)
 {
 	vtkRenderer *renderer = vtkRenderer::New();
-	renderer->SetBackground(0.0, 0.0, 0.0);
-	vtkLight* headLight = vtkLight::New();
-	headLight->SetLightTypeToHeadlight();
-	headLight->SetColor(1.0, 1.0, 1.0);
-	headLight->SetIntensity(1.0);
-	renderer->AddLight(headLight);
-	headLight->Delete();
-	renderer->SetAmbient(0.0, 0.0, 0.0);
-	renderer->SetLightFollowCamera(1);
 	vtkRenderWindow *renWin = vtkRenderWindow::New();
 	renWin->AddRenderer(renderer);
 	vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
@@ -47,7 +38,7 @@ int showScene(vtkImporter* importer)
 	timer->StopTimer();
 
 
-	renWin->SetSize(300,300);
+	renWin->SetSize(800,600);
 	renWin->Render();
 
 	if (dsr::verbose)
