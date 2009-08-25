@@ -19,5 +19,6 @@
             </Shape>
          </Transform>
       </Transform>
+	  <Background skyColor='1 0 0'></Background>
 </Scene>
 </X3D>
