@@ -74,7 +74,7 @@ int loadVRML(string input_filename)
 {
 	vtkVRMLImporter* importer = vtkVRMLImporter::New();
 	importer->SetFileName(input_filename.c_str());
-	importer->SetDebug(dsr::VERBOSE ? 1 : 0);
+	importer->SetDebug(dsr::verbose ? 1 : 0);
 	return showScene(importer);
 }
 
@@ -82,8 +82,7 @@ int loadX3D(string input_filename)
 {
 	vtkX3DImporter* importer = vtkX3DImporter::New();
 	importer->SetFileName(input_filename.c_str());
-	importer->SetDebug(dsr::VERBOSE ? 1 : 0);
-	importer->SetVerbose(dsr::verbose ? 1 : 0);
+  importer->SetDebug(dsr::verbose ? 1 : 0);
 	return showScene(importer);
 }
 

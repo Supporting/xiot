@@ -8,18 +8,15 @@
 #include "vtkRenderer.h"
 
 class vtkActor;
-class vtkCamera;
-class vtkLight;
 class vtkTransform;
-class vtkLookupTable;
 class vtkFloatArray;
 class vtkPolyDataMapper;
 class vtkPoints;
 class vtkIdTypeArray;
-class vtkVRMLImporterInternal;
 class vtkCellArray;
 class vtkX3DIndexedGeometrySource;
 class vtkUnsignedCharArray;
+class vtkX3DImporter;
 
 /**
  * Handler that fills a vtkRenderer from X3D callbacks.
@@ -34,7 +31,7 @@ class vtkX3DNodeHandler : public XIOT::X3DDefaultNodeHandler
 {
 public:
 	
-	vtkX3DNodeHandler(vtkRenderer* Renderer);
+  vtkX3DNodeHandler(vtkRenderer* Renderer, vtkX3DImporter* Importer);
 	~vtkX3DNodeHandler();
 
   void startDocument();
@@ -84,18 +81,19 @@ public:
 	int startBackground(const XIOT::X3DAttributes &attr);
   int startViewpoint(const XIOT::X3DAttributes &attr);
 
-	void setVerbose(bool verbose);
 private:
 	vtkRenderer			*Renderer;
-  vtkLight    *HeadLight;
+  vtkX3DImporter  *Importer;
+  vtkLight        *HeadLight;
 
-	vtkActor             *CurrentActor;
-	vtkTransform         *CurrentTransform;
-	vtkPoints            *CurrentPoints;
-	vtkFloatArray        *CurrentNormals;
-	vtkFloatArray        *CurrentTCoords;
-	vtkUnsignedCharArray *CurrentColors;
+	vtkActor                    *CurrentActor;
+	vtkTransform                *CurrentTransform;
+	vtkPoints                   *CurrentPoints;
+	vtkFloatArray               *CurrentNormals;
+	vtkFloatArray               *CurrentTCoords;
+	vtkUnsignedCharArray        *CurrentColors;
 	vtkX3DIndexedGeometrySource *CurrentIndexedGeometry;
+  
   int IsCurrentUnlit;
   double CurrentEmissiveColor[3];
 
@@ -104,9 +102,6 @@ private:
 
 	std::map<std::string,vtkObject*>			DefMap;		// used for DEF/USE
 	std::set<int> _ignoreNodes;
-
-	bool	_verbose;
-
 
 };
 

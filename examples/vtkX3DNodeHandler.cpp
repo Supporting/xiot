@@ -33,6 +33,7 @@
 #include "vtkTransform.h"
 #include "vtkX3DIndexedGeometrySource.h"
 #include "vtkPolyDataNormals.h"
+#include "vtkX3DImporter.h"
 
 using namespace std;
 using namespace XIOT;
@@ -40,14 +41,14 @@ using namespace XIOT;
 #define checkInShape(kind) \
   if(!this->CurrentActor) \
     { \
-    cerr << "Ingoring <" << #kind << "> found outside of <Shape>." << endl; \
+    vtkWarningWithObjectMacro(this->Importer, << "Ingoring <" << #kind << "> found outside of <Shape>."); \
     return SKIP_CHILDREN; \
     } 
 
 #define checkUSE(ptr, type, name) \
   if(!(ptr)) \
   { \
-    cerr << "Could not find node of type <" << (type) << "> with DEF=\"" << (name) << "\"." << endl; \
+    vtkWarningWithObjectMacro(this->Importer, << "Could not find node of type <" << (type) << "> with DEF=\"" << (name) << "\"."); \
     return SKIP_CHILDREN; \
   } else \
   {\
@@ -60,9 +61,10 @@ using namespace XIOT;
 
 
 
-vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer)
+vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer, vtkX3DImporter * Importer)
   {
   this->Renderer = Renderer;
+  this->Importer = Importer;
 
   this->CurrentActor = NULL;
   this->CurrentPoints = NULL;
@@ -81,8 +83,6 @@ vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer)
   _ignoreNodes.insert(ID::StaticGroup);
   _ignoreNodes.insert(ID::Group);
   _ignoreNodes.insert(ID::Switch);
-
-  _verbose = false;
   }
 
 vtkX3DNodeHandler::~vtkX3DNodeHandler()
@@ -463,14 +463,14 @@ int vtkX3DNodeHandler::endIndexedFaceSet()
   pmap->SetInput(pd);
   this->CurrentActor->SetMapper(pmap);
 
-  if (this->_verbose)
-    {
-    cout << "Generated IndexedFaceSet with " << pd->GetPolys()->GetNumberOfCells() << " faces, ";
-    cout << pd->GetNumberOfPoints() << " points and ";
-    cout << (pd->GetPointData()->GetNormals() ? pd->GetPointData()->GetNormals()->GetNumberOfTuples() 
-           : pd->GetCellData()->GetNormals()  ? pd->GetCellData()->GetNormals()->GetNumberOfTuples()
-           : 0) << " normals." << endl;
-    }
+  vtkDebugWithObjectMacro(this->Importer, 
+    << "Generated IndexedFaceSet with " << pd->GetPolys()->GetNumberOfCells() << " faces, "
+    << pd->GetNumberOfPoints() << " points and "
+    << (      pd->GetPointData()->GetNormals() ? pd->GetPointData()->GetNormals()->GetNumberOfTuples() 
+           :  pd->GetCellData()->GetNormals()  ? pd->GetCellData()->GetNormals()->GetNumberOfTuples()
+           :  0) 
+    << " normals.");
+    
   this->CurrentIndexedGeometry->Delete();
   this->CurrentIndexedGeometry = NULL;
   return CONTINUE;
@@ -801,12 +801,10 @@ int vtkX3DNodeHandler::endIndexedLineSet()
   pmap->SetInput(pd);
   this->CurrentActor->SetMapper(pmap);
 
-  if (this->_verbose)
-    {
-    vtkPolyData* p = this->CurrentIndexedGeometry->GetOutput();
-    cout << "Generated IndexedLineSet with " << p->GetLines()->GetNumberOfCells() << " lines and ";
-    cout << p->GetNumberOfPoints() << " points." << endl;
-    }
+  vtkDebugWithObjectMacro(this->Importer, 
+    << "Generated IndexedLineSet with " << pd->GetLines()->GetNumberOfCells() << " lines and "
+    << pd->GetNumberOfPoints() << " points.");
+
   this->CurrentIndexedGeometry->Delete();
   this->CurrentIndexedGeometry = NULL;
   
@@ -819,18 +817,17 @@ int vtkX3DNodeHandler::startDirectionalLight(const X3DAttributes &attr)
   this->Renderer->AddLight(light);
 
   // Check for ambientIntensity (SetIntensity does not really suit here)
-  int index = attr.getAttributeIndex(ID::ambientIntensity);
+  /*int index = attr.getAttributeIndex(ID::ambientIntensity);
   if(index != -1)
     {
     float ambientIntensity = attr.getSFFloat(index);
     light->SetIntensity(ambientIntensity);
     }
-  // Default value for ambientIntensity is '0', but then you won't see anything, as SetIntensity doesn't seem to be the same. 
   else
-    light->SetIntensity(1.0f);
+    light->SetIntensity(1.0f);*/
 
   // Check for color
-  index = attr.getAttributeIndex(ID::color);
+  int index = attr.getAttributeIndex(ID::color);
   if(index != -1)
     {
     SFColor color;
@@ -919,10 +916,6 @@ int vtkX3DNodeHandler::startViewpoint(const X3DAttributes &attr)
     return CONTINUE;
   
   vtkCamera* camera = this->Renderer->GetActiveCamera();
-  vtkSmartPointer<vtkTransform> pt = vtkSmartPointer<vtkTransform>::New();
-  pt->DeepCopy(this->CurrentTransform);
-  //pt->Translate(-2.0*this->CurrentTransform->GetPosition()[0],-2.0*this->CurrentTransform->GetPosition()[1],-2.0*this->CurrentTransform->GetPosition()[2]);
-  camera->SetUserTransform(pt);
   
   // FOV
   int index = attr.getAttributeIndex(ID::fieldOfView);
@@ -933,43 +926,39 @@ int vtkX3DNodeHandler::startViewpoint(const X3DAttributes &attr)
   else
     camera->SetViewAngle(45.0);
 
-  SFVec3f pos(0.0, 0.0, 10.0);
+  double pos[3] = { 0.0, 0.0, 10.0 };
   index = attr.getAttributeIndex(ID::position);
   if(index != -1)
     {
-    attr.getSFVec3f(index, pos);
+    SFVec3f p;
+    attr.getSFVec3f(index, p);
+    pos[0] = p[0];
+    pos[1] = p[1];
+    pos[2] = p[2];
     }
-  camera->SetPosition(pos.x, pos.y, pos.z);
+  this->CurrentTransform->TransformPoint(pos, pos);
+  camera->SetPosition(pos);
 
   index = attr.getAttributeIndex(ID::orientation);
   if (index != -1)
     {
     SFRotation ori;
     attr.getSFRotation(index, ori);
-    vtkTransform* t = vtkTransform::New();
+    vtkSmartPointer<vtkTransform> t = vtkSmartPointer<vtkTransform>::New();
+    t->DeepCopy(this->CurrentTransform);
     t->RotateWXYZ(vtkMath::DegreesFromRadians(ori.angle), ori.x, ori.y, ori.z);
     camera->SetViewUp(t->TransformDoubleNormal(up));
     double* dirVec = t->TransformDoubleNormal(dir);
-    camera->SetFocalPoint(pos.x + dirVec[0], pos.y + dirVec[1], pos.z + dirVec[2]);
+    camera->SetFocalPoint(pos[0] + dirVec[0], pos[1] + dirVec[1], pos[2] + dirVec[2]);
     }
   else
     {
     camera->SetViewUp(up);
-    camera->SetFocalPoint(pos.x, pos.y, pos.z - 10.0);
+    camera->SetFocalPoint(pos[0], pos[1], pos[2] - 10.0);
     }
 
-
-  camera->Print(cerr);
-  camera->GetViewTransformMatrix()->Print(cerr);
-  camera->GetUserTransform()->Print(cerr);
   this->SeenBindables |= X3D_VIEWPOINT;
   return CONTINUE;
-  
-  }
-
-void vtkX3DNodeHandler::setVerbose(bool verbose)
-  {
-  _verbose = verbose;
   }
 
 int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes &vtkNotUsed(attr))
@@ -978,11 +967,9 @@ int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes 
 
   if (_ignoreNodes.find(elementID) == _ignoreNodes.end())
     {
-    if (this->_verbose)
-      cout << "Ignoring node " << nodeName << " and all of it's children." << endl;
+    vtkDebugWithObjectMacro(this->Importer, << "Ignoring node " << nodeName << " and all of it's children.");
     return SKIP_CHILDREN;
     }
-  if (this->_verbose)
-    cout << "Ignoring node " << nodeName << endl;
+  vtkDebugWithObjectMacro(this->Importer, << "Ignoring node " << nodeName << ".");
   return CONTINUE;
   }

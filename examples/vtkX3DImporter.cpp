@@ -13,7 +13,6 @@ vtkStandardNewMacro(vtkX3DImporter);
 vtkX3DImporter::vtkX3DImporter()
 {
 	this->FileName = NULL;
-	this->Verbose = 0;
 }
 
 vtkX3DImporter::~vtkX3DImporter()
@@ -28,9 +27,8 @@ int vtkX3DImporter::ImportBegin()
 {
 	XIOT::X3DLoader loader;
 	XIOT::X3DTypes::initMaps();
-	vtkX3DNodeHandler handler(this->Renderer);
+	vtkX3DNodeHandler handler(this->Renderer, this);
 	loader.setNodeHandler(&handler);
-	handler.setVerbose(this->Verbose == 1);
 	try {
 		if (!loader.load(this->FileName))
 			return 0;

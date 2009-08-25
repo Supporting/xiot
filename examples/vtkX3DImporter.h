@@ -30,6 +30,8 @@
  * <li>DirectionalLight</li>
  * <li>PointSet</li>
  * <li>Background</li>
+ * <li>Viewpoint</li>
+ * <li>NavigationInfo</li>
  * </ul>
  * There is no event processing
  * @ingroup vtkX3DImporter
@@ -46,10 +48,6 @@ public:
   vtkSetStringMacro(FileName);
   vtkGetStringMacro(FileName);
 
-  vtkSetMacro(Verbose ,int);
-  vtkGetMacro(Verbose,int);
-  vtkBooleanMacro(Verbose,int);
-
   virtual int ImportBegin ();
   virtual void ImportEnd ();
 
@@ -58,7 +56,6 @@ protected:
   ~vtkX3DImporter();
  
   char *FileName;
-  int Verbose;
 
 private:
 

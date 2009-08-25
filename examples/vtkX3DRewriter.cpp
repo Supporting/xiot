@@ -79,8 +79,7 @@ void loadX3D(const std::string &input_filename, vtkRenderWindow *renWin)
 {
 	vtkX3DImporter* importer = vtkX3DImporter::New();
 	importer->SetFileName(input_filename.c_str());
-	importer->SetDebug(dsr::VERBOSE ? 1 : 0);
-	importer->SetVerbose(dsr::verbose ? 1 : 0);
+	importer->SetDebug(dsr::verbose ? 1 : 0);
   importer->SetRenderWindow(renWin);
 	importer->Read();
   importer->Delete();
