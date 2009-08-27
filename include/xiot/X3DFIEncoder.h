@@ -54,3 +54,4 @@ protected:
 } // namespace XIOT
 
 #endif // X3D_X3DFIENCODER_H
+

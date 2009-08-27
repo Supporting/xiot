@@ -4,6 +4,7 @@
 
 #include <sstream>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
 
@@ -13,17 +14,17 @@ using namespace std;
 namespace XIOT {
 
 	bool X3DDataTypeFactory::getSFBoolFromString(const std::string &s){
-    std::string lower(s);
-		std::transform(lower.begin(), lower.end(), lower.begin(), tolower);
+		std::string lower(s);
+		std::transform(lower.begin(), lower.end(), lower.begin(), (int(*)(int)) std::tolower);
 
-    if (lower == "true")
-      return true;
-    if (lower == "false")
-      return false;
+		if (lower == "true")
+			return true;
+		if (lower == "false")
+			return false;
 
-    std::stringstream reason("Unknown value for SFBool: ");
-    reason << s;
-    throw new X3DParseException(reason.str());
+		std::stringstream reason("Unknown value for SFBool: ");
+		reason << s;
+		throw X3DParseException(reason.str());
 	}
 
 	float X3DDataTypeFactory:: getSFFloatFromString(const std::string &s){

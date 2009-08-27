@@ -383,3 +383,4 @@ void X3DWriterFI::flush()
 }
 
 } // namespace XIOT
+

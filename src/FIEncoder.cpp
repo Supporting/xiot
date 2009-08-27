@@ -242,3 +242,4 @@ void FIEncoder::encodeAttributeIntegerArray(const int* values, size_t size)
 
 
 } // namespace FI
+

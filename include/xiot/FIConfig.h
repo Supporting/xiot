@@ -41,4 +41,4 @@
 #endif
 
 
-#endif FI_FICONFIG_H
+#endif // FI_FICONFIG_H

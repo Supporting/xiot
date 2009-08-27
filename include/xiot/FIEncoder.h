@@ -115,7 +115,7 @@ public:
 		_stream->write(reinterpret_cast<const char*>(bytes), length);
 	else {
 	    assert(false);
-		throw std::exception("Wrong position in FiEncode::PutBytes");
+		throw std::runtime_error("Wrong position in FiEncode::PutBytes");
     }
   }
   
@@ -184,3 +184,4 @@ private:
 } // namespace FI
 
 #endif // FI_FIENCODER_H
+

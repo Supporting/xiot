@@ -66,7 +66,7 @@ bool X3DFIAttributes::getSFBool(int index) const{
 	if(value._stringIndex == FI::INDEX_NOT_SET)
 		return X3DDataTypeFactory::getSFBoolFromString(_impl->_vocab->resolveAttributeValue(value)); 
 	
-	throw new X3DParseException("Unknown SFBool encoding");
+	throw X3DParseException("Unknown SFBool encoding");
 }
 
 float X3DFIAttributes::getSFFloat(int index) const {
@@ -77,7 +77,7 @@ float X3DFIAttributes::getSFFloat(int index) const {
 		return result[0];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFFloat");
+		throw X3DParseException("Wrong size for SFFloat");
 }
 int X3DFIAttributes::getSFInt32(int index) const {
 	std::vector<int> result;
@@ -87,7 +87,7 @@ int X3DFIAttributes::getSFInt32(int index) const {
 		return result[0];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFInt32");
+		throw X3DParseException("Wrong size for SFInt32");
 }
 
 void X3DFIAttributes::getSFVec3f(int index, SFVec3f &value) const {
@@ -100,7 +100,7 @@ void X3DFIAttributes::getSFVec3f(int index, SFVec3f &value) const {
 		value.z = result[2];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFVec3f");
+		throw X3DParseException("Wrong size for SFVec3f");
 }
 
 void X3DFIAttributes::getSFVec2f(int index, SFVec2f &value) const {
@@ -112,7 +112,7 @@ void X3DFIAttributes::getSFVec2f(int index, SFVec2f &value) const {
 		value.y = result[1];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFVec2f");
+		throw X3DParseException("Wrong size for SFVec2f");
 }
 
 void X3DFIAttributes::getSFRotation(int index, SFRotation &value) const {
@@ -126,7 +126,7 @@ void X3DFIAttributes::getSFRotation(int index, SFRotation &value) const {
 		value.angle = result[3];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFRotation");
+		throw X3DParseException("Wrong size for SFRotation");
 }
 
 void X3DFIAttributes::getSFString(int index, SFString& value) const {
@@ -143,7 +143,7 @@ void X3DFIAttributes::getSFColor(int index, SFColor &value) const {
 		value.b = result[2];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFColor");
+		throw X3DParseException("Wrong size for SFColor");
 }
 
 void X3DFIAttributes::getSFColorRGBA(int index, SFColorRGBA &value) const {
@@ -157,7 +157,7 @@ void X3DFIAttributes::getSFColorRGBA(int index, SFColorRGBA &value) const {
 		value.a = result[3];
 	}
 	else
-		throw new X3DParseException("Wrong size for SFColorRGBA");
+		throw X3DParseException("Wrong size for SFColorRGBA");
 }
 
 void X3DFIAttributes::getSFImage(int index, SFImage& value) const {
@@ -187,7 +187,7 @@ void X3DFIAttributes::getMFVec3f(int index, MFVec3f &value) const {
 		std::swap(result, value);
 	}
 	else
-		throw new X3DParseException("Wrong size for MFVec3f");
+		throw X3DParseException("Wrong size for MFVec3f");
 }
 
 void X3DFIAttributes::getMFVec2f(int index, MFVec2f &value) const {
@@ -205,7 +205,7 @@ void X3DFIAttributes::getMFVec2f(int index, MFVec2f &value) const {
 		std::swap(result, value);
 	}
 	else
-		throw new X3DParseException("Wrong size for MFVec2f");
+		throw X3DParseException("Wrong size for MFVec2f");
 }
 
 void X3DFIAttributes::getMFRotation(int index, MFRotation &value) const  {
@@ -223,7 +223,7 @@ void X3DFIAttributes::getMFRotation(int index, MFRotation &value) const  {
 		std::swap(result, value);
 	}
 	else
-		throw new X3DParseException("Wrong size for MFRotation");
+		throw X3DParseException("Wrong size for MFRotation");
 }
 
 void X3DFIAttributes::getMFString(int index, MFString &value) const {
@@ -245,7 +245,7 @@ void X3DFIAttributes::getMFColor(int index, MFColor &value) const {
 		std::swap(result, value);
 	}
 	else
-		throw new X3DParseException("Wrong size for MFColor");
+		throw X3DParseException("Wrong size for MFColor");
 }
 
 void X3DFIAttributes::getMFColorRGBA(int index, MFColorRGBA &value) const {
@@ -263,7 +263,7 @@ void X3DFIAttributes::getMFColorRGBA(int index, MFColorRGBA &value) const {
 		std::swap(result, value);
 	}
 	else
-		throw new X3DParseException("Wrong size for MFColorRGBA");
+		throw X3DParseException("Wrong size for MFColorRGBA");
 }
 
 void X3DFIAttributes::getFloatArray(const FI::NonIdentifyingStringOrIndex &value, std::vector<float> &vec) const
@@ -287,7 +287,7 @@ void X3DFIAttributes::getFloatArray(const FI::NonIdentifyingStringOrIndex &value
 				{
 				std::stringstream ss;
 				ss << "Encoding Algortihm with id <" << value._characterString._encodingAlgorithm << "> is not known for encoding of float arrays." << std::endl;
-				throw new X3DParseException(ss.str());
+				throw X3DParseException(ss.str());
 				}
 		}
 		return;
@@ -317,7 +317,7 @@ void X3DFIAttributes::getIntArray(const FI::NonIdentifyingStringOrIndex &value, 
 				{
 				std::stringstream ss;
 				ss << "Encoding Algortihm with id <" << value._characterString._encodingAlgorithm << "> is not known for encoding of int arrays." << std::endl;
-				throw new X3DParseException(ss.str());
+				throw X3DParseException(ss.str());
 				}
 		}
 		return;
