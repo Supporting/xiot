@@ -5,7 +5,9 @@
 #include <set>
 
 #include <xiot/X3DDefaultNodeHandler.h>
+#include <xiot/X3DAttributes.h>
 #include "vtkRenderer.h"
+#include "vtkX3DImporter.h"
 
 class vtkActor;
 class vtkTransform;

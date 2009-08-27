@@ -575,7 +575,6 @@ int vtkX3DNodeHandler::startColor(const X3DAttributes &attr)
     MFColor colors;
     attr.getMFColor(index, colors);
 
-    this->CurrentColors = vtkUnsignedCharArray::New();
     this->CurrentColors->SetNumberOfComponents(3);
 
     for(std::vector<SFColor>::iterator I = colors.begin(); I != colors.end(); I++)
@@ -1040,3 +1039,4 @@ int vtkX3DNodeHandler::endUnhandled(const char* nodeName)
   {
   return CONTINUE;
   }
+

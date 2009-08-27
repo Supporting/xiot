@@ -118,7 +118,7 @@ _exponentBits(exponentBits),
 _mantissaBits(mantissaBits)
 {
 	if (_exponentBits > 8) {		throw std::range_error("Exponent bits out of range, max 8" );	}
-	if (_mantissaBits > 23) {		throw new std::range_error("Too many mantissa bits, max: 23" );	}
+	if (_mantissaBits > 23) {		throw std::range_error("Too many mantissa bits, max: 23" );	}
 	_exponent_bias = (1 << (_exponentBits - 1)) - 1;	 _sign_shift = _exponentBits + _mantissaBits;	_sign_mask = 1 << _sign_shift;	 _exponent_mask = ((1 << _exponentBits) - 1) << _mantissaBits;	 _mantissa_mask = (1 << _mantissaBits) - 1;	_exponent_max = (1 << (_exponentBits - 1)) - 1;	_exponent_min = -_exponent_max - 1;
 }
 

@@ -15,6 +15,7 @@
 #include "vtkVRMLExporter.h"
 #include "vtkX3DExporterGeneric.h"
 #include "vtkX3DExporter.h"
+#include "vtkSmartPointer.h"
 
 using namespace std;
 
@@ -66,13 +67,14 @@ void exportFile(vtkRenderWindow *renWin)
 
 int showScene(vtkImporter* importer)
 {
-	vtkRenderer *renderer = vtkRenderer::New();
-	vtkRenderWindow *renWin = vtkRenderWindow::New();
+	vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
+	vtkSmartPointer<vtkRenderWindow> renWin = vtkSmartPointer<vtkRenderWindow>::New();
+	vtkSmartPointer<vtkRenderWindowInteractor> iren = vtkSmartPointer<vtkRenderWindowInteractor>::New();
+	vtkSmartPointer<vtkTimerLog> timer = vtkSmartPointer<vtkTimerLog>::New();
+
 	renWin->AddRenderer(renderer);
-	vtkRenderWindowInteractor *iren = vtkRenderWindowInteractor::New();
 	iren->SetRenderWindow(renWin);
 
-	vtkTimerLog* timer = vtkTimerLog::New();
 	timer->StartTimer();
 
 	importer->SetRenderWindow(renWin);
@@ -97,9 +99,6 @@ int showScene(vtkImporter* importer)
     }
 
 	importer->Delete();
-	renderer->Delete();
-	renWin->Delete();
-	iren->Delete();
 	return 0;
 }
 
