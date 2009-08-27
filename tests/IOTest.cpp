@@ -43,19 +43,19 @@ public:
 
 	virtual int startShape(const X3DAttributes& attr)
 	{
-		testEvent(3, "start Shape");
+		testEvent(9, "start Shape");
 		return CONTINUE;		
 	}
 
 	virtual int endShape()
 	{
-		testEvent(10, "end Shape");
+		testEvent(16, "end Shape");
 		return CONTINUE;		
 	}
 
 	virtual int startBox(const X3DAttributes& attr)
 	{
-		testEvent(8, "start Box");
+		testEvent(14, "start Box");
 		int index = attr.getAttributeIndex(ID::size);
 		assert(index != -1);
 		
@@ -64,13 +64,13 @@ public:
 	
 	virtual int endBox()
 	{
-		testEvent(9, "end Box");
+		testEvent(15, "end Box");
 		return CONTINUE;		
 	}
 	
 	virtual int startMaterial(const X3DAttributes& attr)
 	{
-		testEvent(5, "start Material");
+		testEvent(11, "start Material");
 		int index = attr.getAttributeIndex(ID::diffuseColor);
 		assert(index != -1);
 		
@@ -124,7 +124,6 @@ int start()
 			w->openFile("iotest.x3db");
 		w->startX3DDocument();
 		
-		w->startNode(ID::Scene);
 		w->startNode(ID::Shape);
 		w->startNode(ID::Appearance);
 		w->startNode(ID::Material);
