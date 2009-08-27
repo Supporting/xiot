@@ -45,21 +45,9 @@ using namespace XIOT;
     return SKIP_CHILDREN; \
     } 
 
-#define checkUSE(ptr, type, name) \
-  if(!(ptr)) \
-  { \
-    vtkWarningWithObjectMacro(this->Importer, << "Could not find node of type <" << (type) << "> with DEF=\"" << (name) << "\"."); \
-    return SKIP_CHILDREN; \
-  } else \
-  {\
-    (ptr)->Register(this->MapReferencer);\
-  }
-
 #define X3D_BACKGROUND      1
 #define X3D_VIEWPOINT       2
 #define X3D_NAVIGATIONINFO  4
-
-
 
 vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer, vtkX3DImporter * Importer)
   {
@@ -77,6 +65,7 @@ vtkX3DNodeHandler::vtkX3DNodeHandler(vtkRenderer* Renderer, vtkX3DImporter * Imp
 
   this->MapReferencer = vtkObject::New();
   this->IsCurrentUnlit = 0;
+  this->IsCurrentUSE = 0;
 
   _ignoreNodes.insert(ID::X3D);
   _ignoreNodes.insert(ID::Scene);
@@ -160,6 +149,7 @@ int vtkX3DNodeHandler::startTransform(const X3DAttributes &attr)
     attr.getSFVec3f(index, vec);
     this->CurrentTransform->Scale(vec.x, vec.y, vec.z);
     }
+
   return CONTINUE;
   }
 
@@ -173,9 +163,19 @@ int vtkX3DNodeHandler::startMaterial(const X3DAttributes &attr)
   {
   bool ambientSet = false;
 
-  checkInShape(Material)
-  
+  checkInShape(Material);
+
   vtkProperty* prop = this->CurrentActor->GetProperty();
+  if (checkReferencing(attr, &prop, false))
+    {
+    if (!prop)
+      return SKIP_CHILDREN;
+
+    vtkDebugWithObjectMacro(this->Importer, << " Reusing Material " << attr.getUSE());
+    this->CurrentActor->SetProperty(prop);
+    return CONTINUE;
+    }
+
   prop->LightingOn();
   // Check for ambientIntensity
   int index = attr.getAttributeIndex(ID::ambientIntensity);
@@ -259,9 +259,19 @@ int vtkX3DNodeHandler::startMaterial(const X3DAttributes &attr)
   return CONTINUE;
   }
 
-int vtkX3DNodeHandler::startAppearance(const X3DAttributes &vtkNotUsed(attr))
+int vtkX3DNodeHandler::startAppearance(const X3DAttributes &attr)
   {
   checkInShape(Appearance);
+  vtkProperty* p = this->CurrentActor->GetProperty();
+
+  if (checkReferencing(attr, &p, false))
+    {
+      if (!p)
+        return SKIP_CHILDREN;
+      vtkDebugWithObjectMacro(this->Importer, << " Reusing Appearance " << attr.getUSE());
+      this->CurrentActor->SetProperty(p);
+      return CONTINUE;
+    }
   this->CurrentActor->GetProperty()->SetInterpolationToPhong();
   return CONTINUE;
   }
@@ -269,24 +279,25 @@ int vtkX3DNodeHandler::startAppearance(const X3DAttributes &vtkNotUsed(attr))
 int vtkX3DNodeHandler::startShape(const X3DAttributes &attr)
   {
   this->CurrentActor = vtkActor::New();
-  // Lighting is off by default. An occurence of a Material
-  // node will enable lighting
-  this->CurrentActor->GetProperty()->LightingOff();
   // This saves the color for unlit geometry
   this->CurrentEmissiveColor[0] = this->CurrentEmissiveColor[1] = this->CurrentEmissiveColor[2] = 0.0;
   this->IsCurrentUnlit = 0;
 
   // Check for DEF
-  if(attr.isDEF())
+  if (checkReferencing(attr, &this->CurrentActor, true))
     {
-     this->CurrentActor->Register(this->MapReferencer); // Reference count array
-     this->DefMap[attr.getDEF()] = this->CurrentActor;
+      if(!this->CurrentActor)
+        return SKIP_CHILDREN;
+      
+      vtkActor* actor = vtkActor::New();
+      actor->ShallowCopy(this->CurrentActor);
+      this->CurrentActor = actor;
     }
-  else if(attr.isUSE()) // Check for USE
+  else
     {
-    vtkActor* copy = vtkActor::SafeDownCast(this->DefMap[attr.getUSE()]);
-    if (copy != NULL)
-      this->CurrentActor->ShallowCopy(copy);
+    // Lighting is off by default. An occurence of a Material
+    // node will enable lighting
+    this->CurrentActor->GetProperty()->LightingOff();
     }
 
   // This overrides the transformation derived by the "ShallowCopy(..)"
@@ -326,9 +337,11 @@ int vtkX3DNodeHandler::endShape()
     this->CurrentNormals->Delete();
     this->CurrentNormals = NULL;
     }
-
-  this->CurrentActor->Delete();
-  this->CurrentActor = NULL;
+  if (this->CurrentActor)
+    {
+    this->CurrentActor->Delete();
+    this->CurrentActor = NULL;
+    }
 
   return CONTINUE;
   }
@@ -362,8 +375,19 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr)
   {
   checkInShape(IndexedFaceSet);
 
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
+    {
+    this->CurrentActor->SetMapper(pmap);
+    return CONTINUE;
+    }
+  this->CurrentActor->SetMapper(pmap);
+  pmap->Delete();
+
   this->CurrentIndexedGeometry = vtkX3DIndexedGeometrySource::New();
   this->CurrentIndexedGeometry->SetGeometryFormatToIndexedFaceSet();
+  this->CurrentIndexedGeometry->SetDebug(this->Importer->GetDebug());
+  this->CurrentIndexedGeometry->SetCalculateNormals(this->Importer->GetCalculateNormals());
 
   // normal per vertex
   int index = attr.getAttributeIndex(ID::normalPerVertex);
@@ -442,15 +466,20 @@ int vtkX3DNodeHandler::startIndexedFaceSet(const X3DAttributes &attr)
   index = attr.getAttributeIndex(ID::creaseAngle);
   if (index != -1)
     {
-    this->CurrentIndexedGeometry->SetCreaseAngle(attr.getSFFloat(index));
+    this->CurrentIndexedGeometry->SetCreaseAngle(vtkMath::DegreesFromRadians(attr.getSFFloat(index)));
     }
+  else
+    this->CurrentIndexedGeometry->SetCreaseAngle(0.0);
+
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::endIndexedFaceSet()
   {
+  if (this->IsCurrentUSE)
+    return CONTINUE;
+
   vtkSmartPointer<vtkPolyData> pd = vtkSmartPointer<vtkPolyData>::New();
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
 
   this->CurrentIndexedGeometry->SetCoords(this->CurrentPoints);
   this->CurrentIndexedGeometry->SetColors(this->CurrentColors);
@@ -460,8 +489,7 @@ int vtkX3DNodeHandler::endIndexedFaceSet()
   
   // This is to disconnect the geometry from the source  
   pd->ShallowCopy(this->CurrentIndexedGeometry->GetOutput());
-  pmap->SetInput(pd);
-  this->CurrentActor->SetMapper(pmap);
+  ((vtkPolyDataMapper*)this->CurrentActor->GetMapper())->SetInput(pd);
 
   vtkDebugWithObjectMacro(this->Importer, 
     << "Generated IndexedFaceSet with " << pd->GetPolys()->GetNumberOfCells() << " faces, "
@@ -478,65 +506,70 @@ int vtkX3DNodeHandler::endIndexedFaceSet()
 
 int vtkX3DNodeHandler::startCoordinate(const X3DAttributes &attr) 
   {
+  this->CurrentPoints = vtkPoints::New();
+  if (checkReferencing(attr, &this->CurrentPoints, true))
+    {
+      if (!this->CurrentPoints)
+        return SKIP_CHILDREN;
+
+      this->CurrentPoints->Register(NULL);
+      return CONTINUE;
+    }
+
   int index = attr.getAttributeIndex(ID::point);
-  
   if(index != -1)
     {
     MFVec3f coords;
     attr.getMFVec3f(index, coords);
-
-    this->CurrentPoints = vtkPoints::New();
     for(std::vector<SFVec3f>::iterator I = coords.begin(); I != coords.end(); I++)
       {
       this->CurrentPoints->InsertNextPoint(&(*I).x);
       }
-    if(attr.isDEF())
-      {
-      this->CurrentPoints->Register(this->MapReferencer); // Reference count array
-      this->DefMap[attr.getDEF()] = this->CurrentPoints;
-      }
-    
-    }
-  else if(attr.isUSE())
-    {
-    this->CurrentPoints = vtkPoints::SafeDownCast(this->DefMap[attr.getUSE()]);
-    checkUSE(this->CurrentPoints, "Coordinate", attr.getUSE());
     }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startNormal(const X3DAttributes &attr)
   {
+  this->CurrentNormals = vtkFloatArray::New();
+  this->CurrentNormals->SetNumberOfComponents(3);
+
+  if (checkReferencing(attr, &this->CurrentNormals, true))
+    {
+      if (!this->CurrentNormals)
+        return SKIP_CHILDREN;
+
+      this->CurrentNormals->Register(NULL);
+      return CONTINUE;
+    }
+
   int index = attr.getAttributeIndex(ID::vector);
   if(index != -1)
     {
     MFVec3f normals;
     attr.getMFVec3f(index, normals);
-    this->CurrentNormals = vtkFloatArray::New();
-    this->CurrentNormals->SetNumberOfComponents(3);
     for(std::vector<SFVec3f>::iterator I = normals.begin(); I != normals.end(); I++)
       {
       this->CurrentNormals->InsertNextTupleValue(&(*I).x);
       }
-    // Check for DEF
-    if(attr.isDEF())
-      {
-      this->CurrentNormals->Register(this->MapReferencer); // Reference count array
-      this->DefMap[attr.getDEF()] = this->CurrentNormals;
-      }
-    }
-  else if(attr.isUSE())
-    {
-    this->CurrentNormals = vtkFloatArray::SafeDownCast(this->DefMap[attr.getUSE()]);
-    checkUSE(this->CurrentNormals, "Normal", attr.getUSE());
     }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startColor(const X3DAttributes &attr)
   {
-  int index = attr.getAttributeIndex(ID::color);
+  this->CurrentColors = vtkUnsignedCharArray::New();
+  this->CurrentColors->SetNumberOfComponents(3);
+  if (checkReferencing(attr, &this->CurrentColors, true))
+    {
+      if (!this->CurrentColors)
+        return SKIP_CHILDREN;
 
+      this->CurrentColors->Register(NULL);
+      return CONTINUE;
+    }
+
+  int index = attr.getAttributeIndex(ID::color);
   if(index != -1)
     {
     MFColor colors;
@@ -549,62 +582,55 @@ int vtkX3DNodeHandler::startColor(const X3DAttributes &attr)
       {
       this->CurrentColors->InsertNextTuple3((*I).r * 255, (*I).g * 255, (*I).b * 255);
       }
-    // Check for DEF
-    if(attr.isDEF())
-      {
-      this->CurrentColors->Register(this->MapReferencer); // Reference count array
-      this->DefMap[attr.getDEF()] = this->CurrentColors;
-      }
-    }
-  else if(attr.isUSE())
-    {
-    this->CurrentColors = vtkUnsignedCharArray::SafeDownCast(this->DefMap[attr.getUSE()]);
-    checkUSE(this->CurrentColors, "Color", attr.getUSE());
     }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startTextureCoordinate(const X3DAttributes &attr) 
   {
-  int index = attr.getAttributeIndex(ID::point);
+  this->CurrentTCoords = vtkFloatArray::New();
+  this->CurrentTCoords->SetNumberOfComponents(2);
+  if (checkReferencing(attr, &this->CurrentTCoords, true))
+    {
+      if (!this->CurrentTCoords)
+        return SKIP_CHILDREN;
 
+      this->CurrentTCoords->Register(NULL);
+      return CONTINUE;
+    }
+
+  int index = attr.getAttributeIndex(ID::point);
   if(index != -1)
     {
     MFVec2f normals;
     attr.getMFVec2f(index, normals);
 
-    this->CurrentTCoords = vtkFloatArray::New();
-    this->CurrentTCoords->SetNumberOfComponents(2);
     for(std::vector<SFVec2f>::iterator I = normals.begin(); I != normals.end(); I++)
       {
       this->CurrentTCoords->InsertNextTuple2((*I).x, (*I).y);
       }
-
-    // Check for DEF
-    if(attr.isDEF())
-      {
-      this->CurrentTCoords->Register(this->MapReferencer); // Reference count array
-      this->DefMap[attr.getDEF()] = this->CurrentTCoords;
-      }
-    }
-  else if(attr.isUSE())
-    {
-    this->CurrentTCoords = vtkFloatArray::SafeDownCast(this->DefMap[attr.getUSE()]);
-    checkUSE(this->CurrentTCoords, "TextureCoordinate", attr.getUSE());
     }
   return CONTINUE;
   }
 
-int vtkX3DNodeHandler::startPointSet(const X3DAttributes &vtkNotUsed(attr))
+int vtkX3DNodeHandler::startPointSet(const X3DAttributes &attr)
   {
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
-
   checkInShape(PointSet);
-
-  pmap->SetScalarVisibility(0);
-  this->CurrentActor->SetMapper(pmap);
-  this->IsCurrentUnlit = 1;
-
+  
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
+    {
+      if (!pmap)
+        return SKIP_CHILDREN;
+      this->CurrentActor->SetMapper(pmap);
+    }
+  else
+    {
+    pmap->SetScalarVisibility(0);
+    this->IsCurrentUnlit = 1;
+    this->CurrentActor->SetMapper(pmap);
+    pmap->Delete();
+    }
   return CONTINUE;
   }
 
@@ -635,114 +661,146 @@ int vtkX3DNodeHandler::endPointSet()
 
 int vtkX3DNodeHandler::startBox(const X3DAttributes &attr)
   {
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
-  vtkSmartPointer<vtkCubeSource> cube= vtkSmartPointer<vtkCubeSource>::New();
-  int index;
-
   checkInShape(Box);
 
-  // Check for size
-  index = attr.getAttributeIndex(ID::size);
-  if(index != -1)
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
     {
-    SFVec3f size;
-    attr.getSFVec3f(index, size);
-
-    cube->SetXLength(size.x);
-    cube->SetYLength(size.y);
-    cube->SetZLength(size.z);
+    this->CurrentActor->SetMapper(pmap);
     }
   else
     {
-    cube->SetXLength(2.0f);
-    cube->SetYLength(2.0f);
-    cube->SetZLength(2.0f);
-    }
+    // Check for size
+    vtkSmartPointer<vtkCubeSource> cube= vtkSmartPointer<vtkCubeSource>::New();
+    int index = attr.getAttributeIndex(ID::size);
+    if(index != -1)
+      {
+      SFVec3f size;
+      attr.getSFVec3f(index, size);
 
-  pmap->SetInput(cube->GetOutput());
-  this->CurrentActor->SetMapper(pmap);
+      cube->SetXLength(size.x);
+      cube->SetYLength(size.y);
+      cube->SetZLength(size.z);
+      }
+    else
+      {
+      cube->SetXLength(2.0f);
+      cube->SetYLength(2.0f);
+      cube->SetZLength(2.0f);
+      }
+    pmap->SetInput(cube->GetOutput());
+    this->CurrentActor->SetMapper(pmap);
+    pmap->Delete();
+    }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startCone(const X3DAttributes &attr) 
   {
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
-  vtkSmartPointer<vtkConeSource> cone= vtkSmartPointer<vtkConeSource>::New();
-  int index;
-
   checkInShape(Cone);
-
-  // Check for height
-  index = attr.getAttributeIndex(ID::height);
-  if(index != -1)
+  
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
     {
-    float height = attr.getSFFloat(index);
-    cone->SetHeight(height);
+    this->CurrentActor->SetMapper(pmap);
     }
   else
     {
-    cone->SetHeight(2.0f);
-    }
+    vtkSmartPointer<vtkConeSource> cone= vtkSmartPointer<vtkConeSource>::New();
+    // Check for height
+    int index = attr.getAttributeIndex(ID::height);
+    if(index != -1)
+      {
+      float height = attr.getSFFloat(index);
+      cone->SetHeight(height);
+      }
+    else
+      {
+      cone->SetHeight(2.0f);
+      }
 
-  // Check for bottomRadius
-  index = attr.getAttributeIndex(ID::bottomRadius);
-  if(index != -1)
-    {
-    float bottomRadius = attr.getSFFloat(index);
-    cone->SetRadius(bottomRadius);
-    }
-  else
-    {
-    cone->SetRadius(1.0f);
-    }
+    // Check for bottomRadius
+    index = attr.getAttributeIndex(ID::bottomRadius);
+    if(index != -1)
+      {
+      float bottomRadius = attr.getSFFloat(index);
+      cone->SetRadius(bottomRadius);
+      }
+    else
+      {
+      cone->SetRadius(1.0f);
+      }
 
-  // Connect everything and delete
-  pmap->SetInput(cone->GetOutput());
-  this->CurrentActor->SetMapper(pmap);
+    // Connect everything and delete
+    pmap->SetInput(cone->GetOutput());
+    this->CurrentActor->SetMapper(pmap);
+    pmap->Delete();
+    }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startCylinder(const X3DAttributes &attr) 
   {
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
-  vtkSmartPointer<vtkCylinderSource> cylinder = vtkSmartPointer<vtkCylinderSource>::New();
-  int index;
+  checkInShape(Cylinder);
 
-  // Check for height
-  index = attr.getAttributeIndex(ID::height);
-  if(index != -1)
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
     {
-    float height = attr.getSFFloat(index);
-    cylinder->SetHeight(height);
+    this->CurrentActor->SetMapper(pmap);
     }
   else
     {
-    cylinder->SetHeight(2.0f);
-    }
+    vtkSmartPointer<vtkCylinderSource> cylinder = vtkSmartPointer<vtkCylinderSource>::New();
+    // Check for height
+    int index = attr.getAttributeIndex(ID::height);
+    if(index != -1)
+      {
+      float height = attr.getSFFloat(index);
+      cylinder->SetHeight(height);
+      }
+    else
+      {
+      cylinder->SetHeight(2.0f);
+      }
 
-  // Check for radius
-  index = attr.getAttributeIndex(ID::radius);
-  if(index != -1)
-    {
-    float radius = attr.getSFFloat(index);
-    cylinder->SetRadius(radius);
-    }
-  else
-    {
-    cylinder->SetRadius(1.0f);
-    }
+    // Check for radius
+    index = attr.getAttributeIndex(ID::radius);
+    if(index != -1)
+      {
+      float radius = attr.getSFFloat(index);
+      cylinder->SetRadius(radius);
+      }
+    else
+      {
+      cylinder->SetRadius(1.0f);
+      }
 
-  pmap->SetInput(cylinder->GetOutput());
-  this->CurrentActor->SetMapper(pmap);
+    pmap->SetInput(cylinder->GetOutput());
+    this->CurrentActor->SetMapper(pmap);
+    pmap->Delete();
+    }
   return CONTINUE;
   }
 
 int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
   {
+  if (this->IsCurrentUSE)
+    return CONTINUE;
+
   checkInShape(IndexedLineSet);
+
+  vtkPolyDataMapper* pmap = vtkPolyDataMapper::New();
+  if (checkReferencing(attr, &pmap, true))
+    {
+    this->CurrentActor->SetMapper(pmap);
+    return CONTINUE;
+    }
+  this->CurrentActor->SetMapper(pmap);
+  pmap->Delete();
 
   this->CurrentIndexedGeometry = vtkX3DIndexedGeometrySource::New();
   this->CurrentIndexedGeometry->SetGeometryFormatToIndexedLineSet();
+  this->CurrentIndexedGeometry->SetDebug(this->Importer->GetDebug());
 
   this->IsCurrentUnlit = 1;
 
@@ -790,7 +848,6 @@ int vtkX3DNodeHandler::startIndexedLineSet(const X3DAttributes &attr)
 int vtkX3DNodeHandler::endIndexedLineSet()
   {
   vtkSmartPointer<vtkPolyData> pd = vtkSmartPointer<vtkPolyData>::New();
-  vtkSmartPointer<vtkPolyDataMapper> pmap = vtkSmartPointer<vtkPolyDataMapper>::New();
 
   this->CurrentIndexedGeometry->SetCoords(this->CurrentPoints);
   this->CurrentIndexedGeometry->SetColors(this->CurrentColors);
@@ -798,8 +855,7 @@ int vtkX3DNodeHandler::endIndexedLineSet()
 
  // This is to disconnect the geometry from the source  
   pd->ShallowCopy(this->CurrentIndexedGeometry->GetOutput());
-  pmap->SetInput(pd);
-  this->CurrentActor->SetMapper(pmap);
+  ((vtkPolyDataMapper*)this->CurrentActor->GetMapper())->SetInput(pd);
 
   vtkDebugWithObjectMacro(this->Importer, 
     << "Generated IndexedLineSet with " << pd->GetLines()->GetNumberOfCells() << " lines and "
@@ -813,8 +869,14 @@ int vtkX3DNodeHandler::endIndexedLineSet()
 
 int vtkX3DNodeHandler::startDirectionalLight(const X3DAttributes &attr)
   {
-  vtkSmartPointer<vtkLight> light = vtkSmartPointer<vtkLight>::New();
+  vtkLight* light = vtkLight::New();
+  if (checkReferencing(attr, &light, true))
+    {
+    this->Renderer->AddLight(light);
+    return CONTINUE;
+    }
   this->Renderer->AddLight(light);
+  light->Delete();
 
   // Check for ambientIntensity (SetIntensity does not really suit here)
   /*int index = attr.getAttributeIndex(ID::ambientIntensity);
@@ -971,5 +1033,10 @@ int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes 
     return SKIP_CHILDREN;
     }
   vtkDebugWithObjectMacro(this->Importer, << "Ignoring node " << nodeName << ".");
+  return CONTINUE;
+  }
+
+int vtkX3DNodeHandler::endUnhandled(const char* nodeName)
+  {
   return CONTINUE;
   }

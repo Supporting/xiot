@@ -13,14 +13,56 @@
 #include "vtkLight.h"
 #include "vtkTimerLog.h"
 #include "vtkVRMLExporter.h"
+#include "vtkX3DExporterGeneric.h"
 #include "vtkX3DExporter.h"
 
 using namespace std;
 
-#define PERFORMANCE_RUNS 15
 
-string input_filename;
-bool testPerformance = false;
+string input_filename, output_filename;
+bool no_normals = false, useOldExporter = false;
+
+void exportFile(vtkRenderWindow *renWin)
+  {
+  vtkExporter* exporter = NULL;
+  string extension = output_filename.substr(output_filename.find_last_of('.') + 1, output_filename.size());
+  if (extension == "x3d" || extension == "x3db")
+    {
+    if (useOldExporter)
+      {
+      vtkX3DExporter* e = vtkX3DExporter::New();
+      e->SetBinary(extension == "x3d" ? 0 : 1);
+      e->SetFastest(0);
+      e->SetFileName(output_filename.c_str());
+      exporter = e;
+      }
+    else
+      {
+      vtkX3DExporterGeneric* e = vtkX3DExporterGeneric::New();
+      e->SetBinary(extension == "x3d" ? 0 : 1);
+      e->SetFastest(0);
+      e->SetFileName(output_filename.c_str());
+      exporter = e;
+      }
+    }
+  else if (extension == "vrml" || extension == "wrl")
+    {
+    vtkVRMLExporter* e = vtkVRMLExporter::New();
+    e->SetFileName(output_filename.c_str());
+    exporter = e;
+    }
+  else
+    {
+ 		cerr << "Can't detect output filename from extension: " << extension << endl;
+		cerr << "Known extensions: wrl, vrml, x3d, x3db" << extension << endl;
+    }
+
+  exporter->SetRenderWindow(renWin);
+  exporter->Write();
+  exporter->Delete();
+
+ 
+  }
 
 int showScene(vtkImporter* importer)
 {
@@ -37,7 +79,6 @@ int showScene(vtkImporter* importer)
 	importer->Read();
 	timer->StopTimer();
 
-
 	renWin->SetSize(800,600);
 	renWin->Render();
 
@@ -46,12 +87,14 @@ int showScene(vtkImporter* importer)
 
 	iren->Start();
 
-  vtkX3DExporter* e = vtkX3DExporter::New();
-  e->SetRenderWindow(renWin);
-  e->SetFileName("tmp.x3d");
-  e->Write();
-  e->Delete();
-
+  if (!output_filename.empty())
+    {
+    timer->StartTimer();
+    exportFile(renWin);
+    timer->StopTimer();
+    if (dsr::verbose)
+  		cout << "Time to write file: " << timer->GetElapsedTime() << endl;
+    }
 
 	importer->Delete();
 	renderer->Delete();
@@ -60,21 +103,13 @@ int showScene(vtkImporter* importer)
 	return 0;
 }
 
-int performTest(vtkImporter* importer)
-{
-	vtkRenderWindow *renWin = vtkRenderWindow::New();
-	importer->SetRenderWindow(renWin);
-	importer->Read();
-	renWin->Delete();
-	importer->Delete();
-	return 0;
-}
+
 
 int loadVRML(string input_filename)
 {
 	vtkVRMLImporter* importer = vtkVRMLImporter::New();
 	importer->SetFileName(input_filename.c_str());
-	importer->SetDebug(dsr::verbose ? 1 : 0);
+	importer->SetDebug(dsr::VERBOSE ? 1 : 0);
 	return showScene(importer);
 }
 
@@ -82,7 +117,8 @@ int loadX3D(string input_filename)
 {
 	vtkX3DImporter* importer = vtkX3DImporter::New();
 	importer->SetFileName(input_filename.c_str());
-  importer->SetDebug(dsr::verbose ? 1 : 0);
+  importer->SetDebug(dsr::VERBOSE ? 1 : 0);
+  importer->SetCalculateNormals(no_normals ? 0 : 1);
 	return showScene(importer);
 }
 
@@ -105,6 +141,9 @@ int main(int argc, char *argv[])
 	dsr::Argument_helper ah;
 
 	ah.new_string("input_filename", "The name of the input file. Can be either VRML or X3D.", input_filename);
+  ah.new_flag('n', "no-normalCalculation", "Switch off the automatic calculation of vertex normals", no_normals);
+  ah.new_flag('o', "oldExporter", "Use the old non-XIOT vtkX3DImporter instead of XIOT version", useOldExporter);
+  ah.new_optional_string("outFile", "Write scene out to given file", output_filename);
 	
 	//ARGUMENT_HELPER_BASICS(ah);
 	ah.set_description("A demonstrator that allows loading of VRML or X3D scenes. It demonstrates the capabilities of the generic X3D loader library.");
@@ -129,7 +168,7 @@ int main(int argc, char *argv[])
 		}
 
 		cerr << "Can't detect filetype from extension: " << extension << endl;
-		cerr << "Known extensions: wrl, vrml, x3d" << extension << endl;
+		cerr << "Known extensions: wrl, vrml, x3d, x3db" << extension << endl;
 		return 1;
 	}
 

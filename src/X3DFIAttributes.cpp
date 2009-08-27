@@ -48,15 +48,14 @@ size_t X3DFIAttributes::getLength() const {
 	return _impl->_attributes->size();
 }
 
-std::string X3DFIAttributes::getAttributesAsString() const {
-	std::string sAttributes;
-	
-	for(size_t i = 0; i < getLength(); i++) {
-		sAttributes += X3DTypes::getAttributeByID(_impl->_attributes->at(i)._qualifiedName._nameSurrogateIndex -1);
-		sAttributes += " ";
-	}
-	return sAttributes;
+std::string X3DFIAttributes::getAttributeValue(int id) const {
+  return _impl->_vocab->resolveAttributeValue(_impl->_attributes->at(id)._normalizedValue);
 }
+
+std::string X3DFIAttributes::getAttributeName(int id) const {
+  return _impl->_vocab->resolveAttributeName(_impl->_attributes->at(id)._qualifiedName)._localName;
+}
+
 // Single fields
 bool X3DFIAttributes::getSFBool(int index) const{
 	FI::NonIdentifyingStringOrIndex value = getValueAt(index);

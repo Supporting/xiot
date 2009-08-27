@@ -852,6 +852,9 @@ static bool vtkX3DExporterWriterRenderFaceSet(
   vtkstd::vector<int> coordIndexVector;
   vtkstd::vector<int> cellIndexVector;
 
+  coordIndexVector.reserve(cells->GetNumberOfConnectivityEntries());
+  cellIndexVector.reserve(cells->GetNumberOfCells());
+
   vtkIdType npts = 0;
   vtkIdType *indx = 0;
 
@@ -964,13 +967,14 @@ static void vtkX3DExporterWriteData(vtkPoints *points,
   char indexString[100];
   sprintf(indexString, "%04d", index);
 
-  std::vector<float> vec;
+  std::vector<float> vec(points->GetNumberOfPoints()*3);
+  vtkDataArray* data = points->GetData();
   double t[3];
-  for(int i = 0; i < points->GetData()->GetNumberOfTuples(); i++) {
-    points->GetData()->GetTuple(i, t);
-	  vec.push_back(t[0]);
-	  vec.push_back(t[1]);
-	  vec.push_back(t[2]);
+  for(int i = 0, j = 0; i < data->GetNumberOfTuples(); i++) {
+    data->GetTuple(i, t);
+	  vec[j++] = t[0];
+    vec[j++] = t[1];
+    vec[j++] = t[2];
   }
   // write out the points
   vtkstd::string defString = "VTKcoordinates";
@@ -978,54 +982,55 @@ static void vtkX3DExporterWriteData(vtkPoints *points,
   writer->setSFString(ID::DEF, defString.append(indexString).c_str());
   writer->setMFVec3f(ID::point, vec);
   writer->endNode();
-  vec.clear();
+  
 
   // write out the normals
   if (normals)
     {
-		for(int i = 0; i < normals->GetNumberOfTuples(); i++) 
+    vec.resize(normals->GetNumberOfTuples()*3);
+    for(int i = 0, j = 0; i < normals->GetNumberOfTuples(); i++) 
       {
       normals->GetTuple(i, t);
-	    vec.push_back(t[0]);
-	    vec.push_back(t[1]);
-	    vec.push_back(t[2]);
+	    vec[j++] = t[0];
+      vec[j++] = t[1];
+      vec[j++] = t[2];
       }
     defString="VTKnormals";
     writer->startNode(ID::Normal);
     writer->setSFString(ID::DEF, defString.append(indexString).c_str());
     writer->setMFVec3f(ID::vector, vec);
     writer->endNode();
-    vec.clear();
     } // normals
   
 
   // write out the texture coordinates
   if (tcoords)
     {
-		for(int i = 0; i < tcoords->GetNumberOfTuples(); i++)
+    vec.resize(tcoords->GetNumberOfTuples()*2);
+		for(int i = 0, j = 0; i < tcoords->GetNumberOfTuples(); i++)
       {
       tcoords->GetTuple(i, t);
-	    vec.push_back(t[0]);
-	    vec.push_back(t[1]);
+	    vec[j++] = t[0];
+      vec[j++] = t[1];
       }
     defString="VTKtcoords";
     writer->startNode(ID::TextureCoordinate);
     writer->setSFString(ID::DEF, defString.append(indexString).c_str());
 	  writer->setMFVec2f(ID::point, vec);
     writer->endNode();
-    vec.clear();
     }
 
   // write out the colors
   if (colors)
     {
     unsigned char c[4];
-    for (int i = 0; i < colors->GetNumberOfTuples(); i++)
+    vec.resize(colors->GetNumberOfTuples()*3);
+    for (int i = 0, j = 0; i < colors->GetNumberOfTuples(); i++)
       {
       colors->GetTupleValue(i,c);
-      vec.push_back(c[0]/255.0f);
-      vec.push_back(c[1]/255.0f);
-      vec.push_back(c[2]/255.0f);
+      vec[j++] = c[0]/255.0f;
+      vec[j++] = c[1]/255.0f;
+      vec[j++] = c[2]/255.0f;
       }
     defString="VTKcolors";
     writer->startNode(ID::Color);

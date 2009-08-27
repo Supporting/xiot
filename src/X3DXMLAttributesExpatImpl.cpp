@@ -65,16 +65,14 @@ size_t X3DXMLAttributes::getLength() const {
 	return _impl->_attributes.size();
 }
 
-std::string X3DXMLAttributes::getAttributesAsString() const {
-	std::string sAttributes;
-	std::vector<ExpatAttribute>::iterator I = _impl->_attributes.begin();
-	while(I!=_impl->_attributes.end())
-	{
-		sAttributes += (*I)._name;
-		sAttributes += " ";
-	}
-	return sAttributes;
+std::string X3DXMLAttributes::getAttributeValue(int id) const {
+  return _impl->_attributes[id]._value;
 }
+
+std::string X3DXMLAttributes::getAttributeName(int id) const {
+  return _impl->_attributes[id]._name;
+}
+
 // Single fields
 bool X3DXMLAttributes::getSFBool(int index) const{
 	const char* sValue = _impl->_attributes.at(index)._value;

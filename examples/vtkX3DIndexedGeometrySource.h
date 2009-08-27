@@ -52,6 +52,10 @@ enum GeometryFormatEnum
   vtkSetMacro(CreaseAngle, double);
   vtkGetMacro(CreaseAngle, double);
 
+  vtkSetMacro(CalculateNormals  ,int);
+  vtkGetMacro(CalculateNormals ,int);
+  vtkBooleanMacro(CalculateNormals ,int);
+
 
   // Indices
 
@@ -99,6 +103,7 @@ protected:
 
   int NormalPerVertex;
   int ColorPerVertex;
+  int CalculateNormals;
 
   double CreaseAngle;
 

@@ -65,7 +65,8 @@ public:
 
   virtual int getAttributeIndex(int attributeID) const;
   virtual size_t getLength() const;
-  virtual std::string getAttributesAsString() const;
+  virtual std::string getAttributeValue(int attributeID) const;
+  virtual std::string getAttributeName(int attributeID) const;
 
 // Single fields
   virtual bool  getSFBool(int index) const;

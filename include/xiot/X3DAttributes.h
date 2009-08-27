@@ -53,6 +53,7 @@ public:
   /// Destructor.
   virtual ~X3DAttributes() {};
 
+
   /**
    * Checks whether there's a DEF attribute.
    * @return <code>true</code>, if there is a DEF attribute. Otherwise <code>false</code>
@@ -88,12 +89,14 @@ public:
    * @return Number of attributes in the node
    */
   virtual size_t getLength() const = 0;
-   /**
+   
+  /**
    * Returns a string representation of all attributes in the node (without values)
    *
    * @return std::string containing all attributes in the node
    */
-  virtual std::string getAttributesAsString() const = 0;
+  virtual std::string getAttributeValue(int attributeID) const = 0;
+  virtual std::string getAttributeName(int attributeID) const = 0;
 
   // Single fields
    /**

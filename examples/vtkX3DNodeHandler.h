@@ -37,6 +37,7 @@ public:
   void startDocument();
 
 	int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
+  int endUnhandled(const char* nodeName);
 	
 	int startAppearance(const XIOT::X3DAttributes &attr);
 	
@@ -81,6 +82,33 @@ public:
 	int startBackground(const XIOT::X3DAttributes &attr);
   int startViewpoint(const XIOT::X3DAttributes &attr);
 
+protected:
+  template<class T>
+  int checkReferencing(const XIOT::X3DAttributes &attr, T** obj, bool shouldDelete) {
+    if (attr.isUSE())
+      {
+      vtkObject* p = this->DefMap[attr.getUSE()];
+      if (shouldDelete)
+        {
+        (*obj)->Delete();
+        }
+      *obj = T::SafeDownCast(p);
+      if(!obj)
+        {
+        vtkWarningWithObjectMacro(this->Importer, << "Could not find node of type <" << (*obj)->GetClassName() << "> with DEF=\"" << attr.getUSE() << "\"."); \
+        }
+      this->IsCurrentUSE = true;
+      return true;
+      }
+    this->IsCurrentUSE = false;
+    if (attr.isDEF())
+      {
+      (*obj)->Register(this->MapReferencer); // Reference count array
+      this->DefMap[attr.getDEF()] = *obj;
+      }
+    return false;
+    }
+
 private:
 	vtkRenderer			*Renderer;
   vtkX3DImporter  *Importer;
@@ -95,9 +123,12 @@ private:
 	vtkX3DIndexedGeometrySource *CurrentIndexedGeometry;
   
   int IsCurrentUnlit;
+  int IsCurrentUSE;
+
   double CurrentEmissiveColor[3];
 
   int SeenBindables;
+
   vtkObject *MapReferencer;
 
 	std::map<std::string,vtkObject*>			DefMap;		// used for DEF/USE

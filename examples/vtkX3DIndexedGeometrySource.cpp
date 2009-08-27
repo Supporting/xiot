@@ -55,6 +55,7 @@ vtkX3DIndexedGeometrySource::vtkX3DIndexedGeometrySource()
 	this->TexCoords = NULL;
 	this->Colors = NULL;
 
+  this->CalculateNormals = 0;
 	this->SetNumberOfInputPorts(0);
 }
 
@@ -520,11 +521,12 @@ int vtkX3DIndexedGeometrySource::processIndexedFaceSet(vtkPolyData* pd, vtkCellA
       pd->GetPointData()->SetTCoords(this->TexCoords);
     }
 
-  if (calcVertexNormals) // N1
+  if (calcVertexNormals && this->CalculateNormals) // N1
 	  {
+      vtkDebugMacro(<< "Calculating Vertex Normals.");
 		  vtkPolyDataNormals* n = vtkPolyDataNormals::New();
 		  n->ComputePointNormalsOn();
-      n->SetFeatureAngle(vtkMath::DegreesFromRadians(this->CreaseAngle));
+      n->SetFeatureAngle(this->CreaseAngle);
 		  n->SetInput(pd);
 		  n->Update();
 		  pd->ShallowCopy(n->GetOutput());

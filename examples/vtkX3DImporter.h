@@ -48,6 +48,10 @@ public:
   vtkSetStringMacro(FileName);
   vtkGetStringMacro(FileName);
 
+  vtkSetMacro(CalculateNormals  ,int);
+  vtkGetMacro(CalculateNormals ,int);
+  vtkBooleanMacro(CalculateNormals ,int);
+
   virtual int ImportBegin ();
   virtual void ImportEnd ();
 
@@ -56,6 +60,7 @@ protected:
   ~vtkX3DImporter();
  
   char *FileName;
+  int CalculateNormals;
 
 private:
 

@@ -58,7 +58,7 @@ elseif(${XML_PARSER_SELECTION} STREQUAL "expat")
 	endif(EXPAT_FOUND)
 	
 	set(XML_PARSER_IMPL_SRC	${EXPAT_PARSER_IMPL_SRC})
-	add_definitions( -DXML_STATIC)
+	#add_definitions( -DXML_STATIC)
 	
 endif(${XML_PARSER_SELECTION} STREQUAL "xerces")
 

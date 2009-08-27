@@ -13,6 +13,7 @@ vtkStandardNewMacro(vtkX3DImporter);
 vtkX3DImporter::vtkX3DImporter()
 {
 	this->FileName = NULL;
+  this->CalculateNormals = 1;
 }
 
 vtkX3DImporter::~vtkX3DImporter()
@@ -27,7 +28,7 @@ int vtkX3DImporter::ImportBegin()
 {
 	XIOT::X3DLoader loader;
 	XIOT::X3DTypes::initMaps();
-	vtkX3DNodeHandler handler(this->Renderer, this);
+  vtkX3DNodeHandler handler(this->Renderer, this);
 	loader.setNodeHandler(&handler);
 	try {
 		if (!loader.load(this->FileName))
@@ -39,9 +40,7 @@ int vtkX3DImporter::ImportBegin()
 					  << " (Line: " << e.getLineNumber() << ", Column: " << e.getColumnNumber() << ")");
       return 0;
 	}
-	
 	return 1;
-
 }
 
 void vtkX3DImporter::ImportEnd ()
@@ -53,5 +52,7 @@ void vtkX3DImporter::PrintSelf(ostream& os, vtkIndent indent)
   this->Superclass::PrintSelf(os,indent);
   os << indent << "File Name: " 
      << (this->FileName ? this->FileName : "(none)") << "\n";
+  os << indent << "CalculateNormals: " 
+     << this->CalculateNormals << "\n";
 }
 

@@ -135,13 +135,14 @@ X3DXMLLoader::~X3DXMLLoader()
 
 bool X3DXMLLoader::load(std::string fileName, bool ) const
 {
-	assert(_handler);
-
-
+  static const int BUFF_SIZE = 2*1024*1024;
+	std::fstream fin;
+  
+  assert(_handler);
   _impl->setHandler(new X3DXMLContentHandler(_handler));
  
-  std::fstream fin;
   fin.open(fileName.c_str(),std::ios::in);
+  
   if( !fin.is_open() )
   {
 	  cerr << "Could not open file: " << fileName << endl;
@@ -149,8 +150,6 @@ bool X3DXMLLoader::load(std::string fileName, bool ) const
   }
 
   _handler->startDocument();
-
-  const int BUFF_SIZE = 10*1024;
   while(!fin.eof())
   {
     char* buffer = (char*)XML_GetBuffer(_impl->_parser, BUFF_SIZE);
@@ -158,17 +157,18 @@ bool X3DXMLLoader::load(std::string fileName, bool ) const
     {
       cerr << "Could not acquire expat buffer" << endl;
       return false;
-    } // if ...
+    } 
 
     fin.read(buffer, BUFF_SIZE);
-    if(XML_ParseBuffer(_impl->_parser, fin.gcount(), fin.eof()) == 0)
+    if(!XML_ParseBuffer(_impl->_parser, fin.gcount(), fin.eof()))
     {
       // error
       cerr << XML_ErrorString(XML_GetErrorCode(_impl->_parser)) << endl;
       return false;
-    } // if ...
-  } // while
+    } 
+    cout << "In line: " << XML_GetCurrentLineNumber(_impl->_parser) << endl;
 
+  } 
   _handler->endDocument();
   return true;
 }

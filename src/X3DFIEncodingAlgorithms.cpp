@@ -41,8 +41,8 @@ namespace XIOT {
 
 		std::vector<Bytef> temp_result(len);
 
-		//std::cout << "Start size: " << octets.size() << std::endl;
-		//std::cout << "desBuf size: " << temp_result.size() << std::endl;
+		//std::cout << "Number of floats to decode: " << numFloats << std::endl;
+    //std::cout << "Length: " << len / 1024.0 << "kb. " << std::endl;
 
 		uLong destSize = static_cast<uLong>(temp_result.size());
 		int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 10, static_cast<uLong>(octets.size())-10);
@@ -97,7 +97,7 @@ namespace XIOT {
 		Bytef* compressedData = new Bytef[compressedSize];
 
 		// Call zlib's compress function.
-		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(bytes), static_cast<unsigned long>(size*4), 5) != Z_OK)
+		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(bytes), static_cast<unsigned long>(size*4), Z_DEFAULT_COMPRESSION) != Z_OK)
 		{    
 			throw new X3DParseException("Error while encoding QuantizedzlibFloatArrayAlgorithm");
 		}
@@ -235,7 +235,7 @@ namespace XIOT {
 		Bytef* compressedData = new Bytef[compressedSize];
 
 		// Call zlib's compress function.
-		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), isImage ? 9 : 5) != Z_OK)
+		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), Z_DEFAULT_COMPRESSION) != Z_OK)
 		{    
 			throw new X3DParseException("Error while encoding DeltazlibIntArrayAlgorithm");
 		}
@@ -249,8 +249,7 @@ namespace XIOT {
 
 		for (i = 0; i < compressedSize; i++)
 		{
-			unsigned char c = compressedData[i];
-			octets.push_back(c);
+			octets.push_back(compressedData[i]);
 		}
 		delete[] compressedData;
 
