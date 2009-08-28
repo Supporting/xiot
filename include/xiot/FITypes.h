@@ -22,7 +22,7 @@
 #ifndef FI_FITYPES_H
 #define FI_FITYPES_H
 
-#include "FIConfig.h"
+#include <xiot/FIConfig.h>
 
 #include <vector>
 #include <sstream>

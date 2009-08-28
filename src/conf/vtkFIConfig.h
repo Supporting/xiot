@@ -22,18 +22,6 @@
 #ifndef FI_FICONFIG_H
 #define FI_FICONFIG_H
 
-#if defined(_WIN32)
-# if defined(vtkxiot_EXPORTS)
-#  define OPENFI_EXPORT __declspec(dllexport)
-# else
-#  define OPENFI_EXPORT __declspec(dllimport)
-# endif
-#else
-# define OPENFI_EXPORT
-#endif
-
-#if defined(_MSC_VER) 
-# pragma warning (disable: 4251) /* needs to have dll-interface to be used by clients */
-#endif
+#include <xiot/XIOTConfig.h>
 
 #endif // FI_FICONFIG_H
