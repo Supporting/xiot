@@ -43,16 +43,20 @@ size_t X3DXMLAttributes::getLength() const {
 	return static_cast<size_t>(_impl->_attributes->getLength());
 }
 
-std::string X3DXMLAttributes::getAttributesAsString() const {
-	std::string sAttributes;
-
-	for(size_t i = 0; i < _impl->_attributes->getLength(); i++) {
-		sAttributes += XMLString::transcode(_impl->_attributes->getQName(i));
-		sAttributes += " ";
-	}
-
-	return sAttributes;
+std::string X3DXMLAttributes::getAttributeValue(int id) const {
+  char* sValue = XMLString::transcode(_impl->_attributes->getValue(id));
+  std::string result(sValue);
+	XMLString::release(&sValue);
+	return result; 
 }
+
+std::string X3DXMLAttributes::getAttributeName(int id) const {
+	char* sValue = XMLString::transcode(_impl->_attributes->getQName(id));
+  std::string result(sValue);
+	XMLString::release(&sValue);
+	return result; 
+}
+
 // Single fields
 bool X3DXMLAttributes::getSFBool(int index) const{
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));

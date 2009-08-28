@@ -166,8 +166,6 @@ bool X3DXMLLoader::load(std::string fileName, bool ) const
       cerr << XML_ErrorString(XML_GetErrorCode(_impl->_parser)) << endl;
       return false;
     } 
-    cout << "In line: " << XML_GetCurrentLineNumber(_impl->_parser) << endl;
-
   } 
   _handler->endDocument();
   return true;

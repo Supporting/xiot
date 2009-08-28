@@ -122,10 +122,9 @@ namespace XIOT {
 
 	void X3DDataTypeFactory::getMFInt32FromString(const std::string &s, MFInt32 &value){
 		MFInt32 vec;
-		std::stringstream ss;
+    std::istringstream ss(s, istringstream::in);
 		int iTemp;
 
-		ss << s;
 
 		// in case of a parsing error, ss.fail() will return true
 		while(!(ss.eof() || ss.fail()))

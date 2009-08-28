@@ -27,6 +27,91 @@ class MyContentHandler : public X3DDefaultNodeHandler
 		cout << "End Document" << endl;
 	}
 
+  int startCoordinate(const X3DAttributes &attr)
+    {
+    cout << "Handling: Coordinate" << endl;
+    if (!no_attribute_values)
+       {
+    int index = attr.getAttributeIndex(ID::point);
+    if (index != -1)
+      {
+      MFVec3f value;
+      attr.getMFVec3f(index, value);
+      cout << "point: " << value.size() << endl;
+      }
+      }
+     return CONTINUE;
+    }
+
+  int startColor(const X3DAttributes &attr)
+    {
+    cout << "Handling: Color" << endl;
+    if (!no_attribute_values)
+       {
+    int index = attr.getAttributeIndex(ID::color);
+    if (index != -1)
+      {
+      MFColor value;
+      attr.getMFColor(index, value);
+      cout << "color: " << value.size() << endl;
+      }
+      }
+     return CONTINUE;
+    }
+
+  int startIndexedFaceSet(const X3DAttributes &attr)
+    {
+    cout << "Handling: IndexedFaceSet" << endl;
+    if (!no_attribute_values)
+       {
+          int index = attr.getAttributeIndex(ID::coordIndex);
+          if (index != -1)
+            {
+            MFInt32 value;
+            attr.getMFInt32(index, value);
+            cout << "coordIndex: " << value.size() << endl;
+            }
+          index = attr.getAttributeIndex(ID::normalIndex);
+          if (index != -1)
+            {
+            MFInt32 value;
+            attr.getMFInt32(index, value);
+            cout << "normalIndex: " << value.size() << endl;
+            }
+          index = attr.getAttributeIndex(ID::colorIndex);
+          if (index != -1)
+            {
+            MFInt32 value;
+            attr.getMFInt32(index, value);
+            cout << "colorIndex: " << value.size() << endl;
+            }
+      }
+     return CONTINUE;
+    }
+
+  int startIndexedLineSet(const X3DAttributes &attr)
+    {
+    cout << "Handling: IndexedLineSet" << endl;
+    if (!no_attribute_values)
+       {
+          int index = attr.getAttributeIndex(ID::coordIndex);
+          if (index != -1)
+            {
+            MFInt32 value;
+            attr.getMFInt32(index, value);
+            cout << "coordIndex: " << value.size() << endl;
+            }
+          index = attr.getAttributeIndex(ID::colorIndex);
+          if (index != -1)
+            {
+            MFInt32 value;
+            attr.getMFInt32(index, value);
+            cout << "colorIndex: " << value.size() << endl;
+            }
+      }
+     return CONTINUE;
+    }
+
   int startUnhandled(const char* nodeName, const X3DAttributes &attr)
     {
     cout << "Handling: " << nodeName << endl;
@@ -34,8 +119,13 @@ class MyContentHandler : public X3DDefaultNodeHandler
     {
       for(size_t i = 0; i < attr.getLength(); i++)
       {
-        cout << " -- " <<  attr.getAttributeName(i) << endl;
-        std::string s = attr.getAttributeValue(i);
+        cout << " -- " <<  attr.getAttributeName(i);
+        if (!no_attribute_values)
+          {
+          std::string s = attr.getAttributeValue(i);
+          s.append("1"); // Prevent form parser optimization
+          }
+        cout << endl;
       }
     }
     return CONTINUE;
@@ -51,14 +141,14 @@ int start(const std::string &filename)
 	
   
 	try {
-  time_t start,end;
-  time(&start);
+  clock_t start,end;
+  start = clock();
   for (int i = 0; i < 10; i++)
     {
     l.load(filename);
     }
-  time(&end);
-  double dif = difftime (end,start);
+  end = clock();
+  double dif = double(end-start) / CLOCKS_PER_SEC;
   printf ("Parsing took an average of %f seconds.\n", dif/10.0);
 
   }

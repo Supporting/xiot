@@ -263,6 +263,12 @@ int vtkX3DNodeHandler::startAppearance(const X3DAttributes &attr)
   {
   checkInShape(Appearance);
   vtkProperty* p = this->CurrentActor->GetProperty();
+ 
+  this->CurrentEmissiveColor[0] = 0.0;
+  this->CurrentEmissiveColor[1] = 0.0;
+  this->CurrentEmissiveColor[2] = 0.0;
+ 
+  this->IsCurrentUnlit = 0;
 
   if (checkReferencing(attr, &p, false))
     {
@@ -280,8 +286,9 @@ int vtkX3DNodeHandler::startShape(const X3DAttributes &attr)
   {
   this->CurrentActor = vtkActor::New();
   // This saves the color for unlit geometry
-  this->CurrentEmissiveColor[0] = this->CurrentEmissiveColor[1] = this->CurrentEmissiveColor[2] = 0.0;
-  this->IsCurrentUnlit = 0;
+  this->CurrentEmissiveColor[0] = this->CurrentEmissiveColor[1] = this->CurrentEmissiveColor[2] = 1.0;
+  // By default, everything is unlit
+  this->IsCurrentUnlit = 1;
 
   // Check for DEF
   if (checkReferencing(attr, &this->CurrentActor, true))
@@ -626,6 +633,7 @@ int vtkX3DNodeHandler::startPointSet(const X3DAttributes &attr)
   else
     {
     pmap->SetScalarVisibility(0);
+    // Points are alway unlit
     this->IsCurrentUnlit = 1;
     this->CurrentActor->SetMapper(pmap);
     pmap->Delete();
