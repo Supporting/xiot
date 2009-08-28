@@ -10,8 +10,8 @@ string(TOLOWER ${XML_PARSER_SELECTION} ${XML_PARSER_SELECTION})
 if (WIN32)
   # Hint to included zlib resources
   set(ZLIB_ROOT ${PROJECT_SOURCE_DIR}/contrib/zlib)
-  set(ZLIB_INCLUDE_DIR ${ZLIB_ROOT}/include)
-  set(ZLIB_LIBRARY ${ZLIB_ROOT}/${WIN_ARCH}/lib/zlib.lib)
+  set(ZLIB_INCLUDE_DIR ${ZLIB_ROOT}/include CACHE PATH "Include path of zlib")
+  set(ZLIB_LIBRARY ${ZLIB_ROOT}/${WIN_ARCH}/lib/zlib.lib CACHE FILEPATH  "z library" )
 endif (WIN32)
 find_package(ZLIB REQUIRED)
 
