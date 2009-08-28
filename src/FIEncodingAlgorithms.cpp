@@ -119,7 +119,7 @@ namespace FI {
 		return ss.str();*/
 	}
 
-	void BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &, std::vector<bool> &vec)
+	void BooleanEncodingAlgorithm::decodeToBoolArray(const FI::NonEmptyOctetString &, std::vector<bool> &)
 	{
 		throw std::runtime_error("BooleanEncodingAlgorithm not implemented (yet)");
 	}

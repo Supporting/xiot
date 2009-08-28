@@ -1043,8 +1043,4 @@ int vtkX3DNodeHandler::startUnhandled(const char* nodeName, const X3DAttributes 
   return CONTINUE;
   }
 
-int vtkX3DNodeHandler::endUnhandled(const char* nodeName)
-  {
-  return CONTINUE;
-  }
 

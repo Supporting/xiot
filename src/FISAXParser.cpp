@@ -31,7 +31,7 @@ void SAXParser::processDocument()
 	// Process children
 	while(!_terminated)
 	{
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get());
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			processElement();
 		}
@@ -67,7 +67,7 @@ void SAXParser::processElement()
 	_attributes.clear();
 
 	while(!_terminated) {
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get());
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			processElement();
 		}
@@ -93,7 +93,7 @@ void SAXParser::processElement()
 void SAXParser::processAttributes()
 {
 	do {
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get());
 		if (!checkBit(_b,1))
 		{
 			FI::Attribute attribute;

@@ -40,4 +40,7 @@
 # define XIOT_EXPORT
 #endif
 
+#define XIOT_EXPAT_HEADER "expat.h"
+#define XIOT_ZLIB_HEADER "zlib.h"
+
 #endif // __x3dexporterConfigure_h

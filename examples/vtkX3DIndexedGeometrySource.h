@@ -8,10 +8,10 @@ class vtkFloatArray;
 class vtkUnsignedCharArray;
 
 /**
- * Generate vtkPolyData from X3DIndexedFaceSet
+ * Generate vtkPolyData from X3D IndexedFaceSet / IndexedLineSet
  *
  * Helper class to generate a vtkPolyData structure from 
- * an IndexedFaceSet data structure. This class converts index
+ * an IndexedFaceSet or IndexedLineSet data structure. This class converts index
  * lists and resolves multiple used coordinate data.
  * @see <A href="http://www.vtk.org/doc/nightly/html/classvtkPolyDataAlgorithm.html"/>vtkPolyDataAlgorithm</A>
  * @see <A href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/components/geometry3D.html#IndexedFaceSet"/>IndexedFaceSet</A>

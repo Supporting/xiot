@@ -39,7 +39,6 @@ public:
   void startDocument();
 
 	int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
-  int endUnhandled(const char* nodeName);
 	
 	int startAppearance(const XIOT::X3DAttributes &attr);
 	

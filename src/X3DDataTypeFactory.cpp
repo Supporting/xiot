@@ -77,6 +77,7 @@ namespace XIOT {
 
 	void X3DDataTypeFactory::getSFColorRGBAFromString(const std::string &s, SFColorRGBA &col){
 		std::stringstream ss;
+    ss << s;
 		ss >> col.r >> col.g >> col.b >> col.a;
 	}
 

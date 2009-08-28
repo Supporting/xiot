@@ -7,6 +7,10 @@
 
 #include "vtkX3DNodeHandler.h"
 
+
+//-----------------------------------------------------------------------------
+// vtkX3DImporter
+//-----------------------------------------------------------------------------
 vtkCxxRevisionMacro(vtkX3DImporter, "$Revision: 1.19 $");
 vtkStandardNewMacro(vtkX3DImporter);
 

@@ -40,28 +40,28 @@ void Decoder::setStream(std::istream* stream)
 // C.1
 bool Decoder::detectFIDocument()
 {
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get());
 	// C.1.3 A fast infoset document may begin either with an XML declaration (see 12.3) followed by:
 	
 	// a) the sixteen bits '1110000000000000' (identification); followed by
 	if(_b != Constants::IDENT1) // equals 11100000
 		return false;
 	
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get());
 	if(_b != Constants::IDENT2) // equals 00000000
 		return false;
 
 	// b) the sixteen bits '0000000000000001' (version number); followed by
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get());
 	if(_b != Constants::VERSION1) // equals 00000000
 		return false;
 
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get());
 	if(_b != Constants::VERSION2) // equals 00000001
 		return false;
 
 	// c) the bit '0' (padding)
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get());
 	return checkBit(_b, 1) == 0;
 }
 
@@ -101,7 +101,7 @@ bool Decoder::readChildren()
 {
 	
 	do {
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get());
 		if(!checkBit(_b, 1)) { // 0 padding announcing element
 			Element element;
 			getElement(element);
@@ -181,7 +181,7 @@ void Decoder::getElement(FI::Element &element)
 	//_processor->processElementStart(element);
 
 	do {
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get());
 
 		if(!checkBit(_b, 1)) // 0 padding announcing element
 		{
@@ -211,7 +211,7 @@ void Decoder::getAttribute(FI::Attribute &attribute)
 	getQualifiedNameOrIndex2(attribute._qualifiedName);
 	
 	// NOTE – C.17 always ends on the eighth bit of the same or another octet.
-	_b = _stream->get(); // Get next byte
+	_b = static_cast<unsigned char>(_stream->get()); // Get next byte
 	
 	//C.4.4 The value of normalized-value is encoded as described in C.14.
 	getNonIdentifyingStringOrIndex1(attribute._normalizedValue);
@@ -232,7 +232,7 @@ void Decoder::getQualifiedNameOrIndex2(FI::QualifiedNameOrIndex& name)
 		bool isPrefixPresent = checkBit(_b, 7) != 0;
 		bool isNamespaceNamePresent = checkBit(_b, 8) != 0;
 		
-		_b = _stream->get(); // next byte
+		_b = static_cast<unsigned char>(_stream->get()); // next byte
 
 		// C.17.3.2 If the optional component prefix is present, it is encoded as described in C.13.
 		if(isPrefixPresent)
@@ -264,7 +264,7 @@ void Decoder::getQualifiedNameOrIndex3(FI::QualifiedNameOrIndex& name)
 		bool isPrefixPresent = checkBit(_b, 7) != 0;
 		bool isNamespaceNamePresent = checkBit(_b, 8) != 0;
 
-		_b = _stream->get(); // next byte
+		_b = static_cast<unsigned char>(_stream->get()); // next byte
 		
 		// C.18.3.2 If the optional component prefix is present, it is encoded as described in C.13.
 		if(isPrefixPresent)
@@ -586,7 +586,7 @@ unsigned int Decoder::getInteger4()
 unsigned int Decoder::getSmallInteger5()
 {
 	unsigned int result = (_b & Constants::LAST_FOUR_BITS) << 4;
-	_b = _stream->get();
+	_b = static_cast<unsigned char>(_stream->get()); // next byte
 	return result + ((_b & Constants::FOUR_BITS) >> 4) + 1;
 }
 
@@ -665,7 +665,7 @@ void Decoder::decodeInitialVocabulary()
 		&& b2 == 0 // 00000000
 		)
 	{
-		_b = _stream->get();
+		_b = static_cast<unsigned char>(_stream->get()); // next byte
 		decodeExternalVocabularyURI();
 		return;
 	}
