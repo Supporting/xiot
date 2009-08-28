@@ -19,7 +19,8 @@
 // 3D scenes (similar to VRML). Check out http://www.web3d.org/x3d/ for more
 // details.
 // .SECTION Thanks
-// X3DExporter is contributed by Christophe Mouton at EDF.
+// X3DExporter is contributed by Christophe Mouton at EDF and implemented 
+// by Kristian Sons at Supporting GmbH (xiot@supporting.com).
 #ifndef __vtkX3DExporterGeneric_h
 #define __vtkX3DExporterGeneric_h
 

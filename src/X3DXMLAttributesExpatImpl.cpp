@@ -55,7 +55,7 @@ int X3DXMLAttributes::getAttributeIndex(int attributeID) const{
 	while(I!=_impl->_attributes.end())
 	{
 		if(!strcmp(sAttribute, (*I)._name))
-			return I -  _impl->_attributes.begin();
+			return static_cast<int>(I -  _impl->_attributes.begin());
 		I++;
 	}
 	return -1;

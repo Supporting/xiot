@@ -160,7 +160,7 @@ bool X3DXMLLoader::load(std::string fileName, bool ) const
     } 
 
     fin.read(buffer, BUFF_SIZE);
-    if(!XML_ParseBuffer(_impl->_parser, fin.gcount(), fin.eof()))
+    if(!XML_ParseBuffer(_impl->_parser, static_cast<int>(fin.gcount()), fin.eof()))
     {
       // error
       cerr << XML_ErrorString(XML_GetErrorCode(_impl->_parser)) << endl;
