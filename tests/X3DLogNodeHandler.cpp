@@ -24,7 +24,7 @@ std::string X3DLogNodeHandler::getAttributesAsString(const X3DAttributes &attr)
   std::string result;
   for (size_t i = 0; i < attr.getLength(); i++)
   {
-    result.append(attr.getAttributeName(i));
+    result.append(attr.getAttributeName(static_cast<int>(i)));
     result.append(" ");
   }
   return result;

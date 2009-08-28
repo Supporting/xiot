@@ -93,7 +93,7 @@ namespace XIOT {
 
 
 		// Compress the data
-		unsigned long compressedSize = (size*4) + static_cast<unsigned long>(ceil((size*4)*0.001)) + 12;
+		unsigned long compressedSize = static_cast<unsigned long>(size*4) + static_cast<unsigned long>(ceil((size*4)*0.001)) + 12;
 		Bytef* compressedData = new Bytef[compressedSize];
 
 		// Call zlib's compress function.
@@ -231,7 +231,7 @@ namespace XIOT {
 			}
 		}
 
-		unsigned long compressedSize = deltas.size() + static_cast<unsigned long>(ceil(deltas.size()*0.001)) + 12;
+		unsigned long compressedSize = static_cast<unsigned long>(deltas.size() + ceil(deltas.size()*0.001)) + 12;
 		Bytef* compressedData = new Bytef[compressedSize];
 
 		// Call zlib's compress function.

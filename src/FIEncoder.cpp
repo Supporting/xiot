@@ -118,17 +118,17 @@ void FIEncoder::encodeNonEmptyOctetString2(const NonEmptyOctetString &value)
   if (length <= 64)
   {
     putBit(0);
-    putBits(length - 1, 6);
+    putBits(static_cast<int>(length) - 1, 6);
   }
   else if (length <= 320)
   {
     putBits("10");
-    putBits(length - 65, 8);
+    putBits(static_cast<int>(length) - 65, 8);
   }
   else
   {
     putBits("1100");
-    putBits(length - 321, 32);
+    putBits(static_cast<int>(length) - 321, 32);
   }
   writeOctet(value);
 }
@@ -146,17 +146,17 @@ void FIEncoder::encodeNonEmptyByteString5(const NonEmptyOctetString &value)
     if (length <= 8)
     {
       putBit(0);
-      putBits(length - 1, 3);
+      putBits(static_cast<int>(length) - 1, 3);
     }
     else if (length <= 264)
     {
       putBits("1000");
-      putBits(length - 9, 8);
+      putBits(static_cast<int>(length) - 9, 8);
     }
     else
     {
       putBits("1100");
-      putBits(length - 265, 32);
+      putBits(static_cast<int>(length) - 265, 32);
     }
 	writeOctet(value);
 }

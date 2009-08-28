@@ -119,10 +119,10 @@ class MyContentHandler : public X3DDefaultNodeHandler
     {
       for(size_t i = 0; i < attr.getLength(); i++)
       {
-        cout << " -- " <<  attr.getAttributeName(i);
+        cout << " -- " <<  attr.getAttributeName(static_cast<int>(i));
         if (!no_attribute_values)
           {
-          std::string s = attr.getAttributeValue(i);
+          std::string s = attr.getAttributeValue(static_cast<int>(i));
           s.append("1"); // Prevent form parser optimization
           }
         cout << endl;
