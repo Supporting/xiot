@@ -24,6 +24,7 @@
 #include <cstdio>
 //#include <limits>
 #include <cassert>
+#include <cstring>
 
 
 
@@ -572,7 +573,7 @@ namespace dsr {
     current_optional_unnamed_= optional_unnamed_arguments_.begin();
     
     for ( int i=0; i< argc; ++i){
-      if (strcmp(argv[i], "--help") == 0){
+      if (std::strcmp(argv[i], "--help") == 0){
 	write_usage(std::cout);
 	exit(0);
       }
