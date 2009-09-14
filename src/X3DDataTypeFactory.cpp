@@ -84,13 +84,26 @@ namespace XIOT {
 	void X3DDataTypeFactory::getSFImageFromString(const std::string &s, SFImage &value){
 		std::stringstream ss;
 		SFImage img;
-		int	index = 0;
+		unsigned int	tmp, index = 0;
 
+    
 		ss << s;
 
-		// in case of a parsing error, ss.fail() will return true
-		while(!(ss.eof() || ss.fail()))
-			ss >> img[index++];	
+		// read width, height and components
+		while(!(ss.eof() || ss.fail()) && index < 3)
+      {
+			ss >> tmp;	
+      img.push_back(tmp);
+      index++;
+      }
+
+     while(!(ss.eof() || ss.fail()))
+      {
+      ss >> std::hex >> tmp;	
+      if (!ss.fail())
+        img.push_back(tmp);
+      }
+
 
 		std::swap(img, value);
 	} 
@@ -211,26 +224,31 @@ namespace XIOT {
 	}
 
 	void X3DDataTypeFactory::getMFStringFromString(const std::string &s, MFString &value){
-		MFString vec;
+		
+    MFString result;
 
-		std::string tempString;
-		std::stringstream ss;
-		char c;
-
-		ss << s;
-
-		// in case of a parsing error, ss.fail() will return true
-		while(!(ss.eof() || ss.fail()))
-		{
-			ss >> tempString;
-			
-			c = static_cast<char>(ss.peek());	// look for ',' and skip it
-			if(c == ',')
-				ss.ignore();
-			
-			vec.push_back(tempString);
-		}		
-		std::swap(vec, value);
+    const char* rawStr = s.c_str();
+    while (*rawStr)
+      {
+      bool inStr = false;
+      std::string oneString;
+      while (*rawStr && !inStr)
+        {
+        inStr = *rawStr=='"';
+        rawStr++;
+        }
+      while(*rawStr && inStr)
+        {
+        inStr = *rawStr!='"';
+        if(inStr)
+          oneString.append(rawStr,1);
+        rawStr++;
+        }
+      if (!oneString.empty())
+        result.push_back(oneString);
+      }
+    
+		std::swap(result, value);
 	}
 
 	void X3DDataTypeFactory::getMFColorFromString(const std::string &s, MFColor &value){

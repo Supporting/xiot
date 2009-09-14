@@ -78,6 +78,9 @@ public:
 	
 	int startDirectionalLight(const XIOT::X3DAttributes &attr);
 	
+  int startPixelTexture(const XIOT::X3DAttributes &attr);
+  int startImageTexture(const XIOT::X3DAttributes &attr);
+
   /// X3DBindables
   int startNavigationInfo(const XIOT::X3DAttributes &attr);
 	int startBackground(const XIOT::X3DAttributes &attr);

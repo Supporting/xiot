@@ -161,7 +161,14 @@ void X3DFIAttributes::getSFColorRGBA(int index, SFColorRGBA &value) const {
 }
 
 void X3DFIAttributes::getSFImage(int index, SFImage& value) const {
-	getIntArray(getValueAt(index), value);
+  MFInt32 signedVector;
+  SFImage result;
+	getIntArray(getValueAt(index), signedVector);
+  for(MFInt32::const_iterator I = signedVector.begin(); I != signedVector.end(); I++)
+  {
+    result.push_back(static_cast<unsigned int>(*I));
+  }
+  std::swap(result, value);
 } 
 
 // Multi Field

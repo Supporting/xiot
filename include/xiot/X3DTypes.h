@@ -227,7 +227,7 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFImageAndMFImage">X3D spec 5.3.6</a>
    * @ingroup x3ddatatypes
    */
-  typedef std::vector<int> SFImage;
+  typedef std::vector<unsigned int> SFImage;
   typedef std::vector<SFImage> MFImage;
 
 

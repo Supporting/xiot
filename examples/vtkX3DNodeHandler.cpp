@@ -34,6 +34,9 @@
 #include "vtkX3DIndexedGeometrySource.h"
 #include "vtkPolyDataNormals.h"
 #include "vtkX3DImporter.h"
+#include "vtkImageReader2.h"
+#include "vtkImageReader2Factory.h"
+#include "vtkImageData.h"
 
 using namespace std;
 using namespace XIOT;
@@ -1027,6 +1030,131 @@ int vtkX3DNodeHandler::startViewpoint(const X3DAttributes &attr)
     }
 
   this->SeenBindables |= X3D_VIEWPOINT;
+  return CONTINUE;
+  }
+
+
+int  vtkX3DNodeHandler::startImageTexture(const XIOT::X3DAttributes &attr)
+  {
+  checkInShape(PixelTexture);
+  
+  vtkTexture* texture = vtkTexture::New();
+  if (checkReferencing(attr, &texture, true))
+    {
+    this->CurrentActor->SetTexture(texture);
+    return CONTINUE;
+    }
+  
+  int index = attr.getAttributeIndex(ID::url);
+  if (index != -1)
+    {
+    MFString url;
+    attr.getMFString(index, url);
+    if (url.size())
+      {
+      std::string fileName(this->Importer->GetFileName()), baseDir, fullName;
+      size_t found = fileName.find_last_of("/\\");
+      if (found != std::string::npos)
+        baseDir = fileName.substr(0,found+1);
+      
+      fullName = baseDir + url[0];
+      vtkDebugWithObjectMacro(this->Importer, << "Trying to load texture: " << fullName);
+      vtkSmartPointer<vtkImageReader2> imageReader = vtkImageReader2Factory::CreateImageReader2(fullName.c_str());
+      if (imageReader)
+        {
+        imageReader->SetFileName(fullName.c_str());
+        imageReader->Update();
+        texture->SetInputConnection(imageReader->GetOutputPort());
+        texture->SetBlendingMode(vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE);
+        texture->SetQualityTo32Bit();
+        texture->RepeatOn();
+        texture->InterpolateOn();
+
+        this->CurrentActor->SetTexture(texture);
+        }
+      else
+        {
+        vtkWarningWithObjectMacro(this->Importer, << "Can not read texture: " << fullName);
+        }
+      }
+    }
+  texture->Delete();
+  return CONTINUE;
+  }
+
+int  vtkX3DNodeHandler::startPixelTexture(const XIOT::X3DAttributes &attr)
+  {
+  checkInShape(PixelTexture);
+  
+  vtkTexture* texture = vtkTexture::New();
+  if (checkReferencing(attr, &texture, true))
+    {
+    this->CurrentActor->SetTexture(texture);
+    return CONTINUE;
+    }
+
+  int index = attr.getAttributeIndex(ID::image);
+  if (index != -1)
+    {
+    SFImage image;
+    attr.getSFImage(index, image);
+    SFImage::const_iterator I = image.begin();
+    int width = *(I++);
+    int height = *(I++);
+    int components = *(I++);
+    vtkDebugWithObjectMacro(this->Importer, << "Creating Texture: width=" << width << ", height="<< height<<", components="<<components);
+    if (image.size() != width*height+3)
+      {
+      vtkErrorWithObjectMacro(this->Importer, << "PixelTexture has wrong size. Expected="<< width*height << ",  Found="<< image.size()-3);
+      }
+    else
+      {
+      vtkSmartPointer<vtkUnsignedCharArray> scalars = vtkSmartPointer<vtkUnsignedCharArray>::New();
+      scalars->SetNumberOfComponents(components);
+      scalars->SetNumberOfValues(width*height*components);
+      vtkIdType i = 0;
+      while(I != image.end())
+        {
+          union conv
+		      {
+			    unsigned int ui;
+			    unsigned char ub[4]; 
+		      };
+          conv c;
+          c.ui = *I;
+          switch(components)
+            {
+            case 4:
+              scalars->SetValue(i++, c.ub[3]);
+            case 3:
+              scalars->SetValue(i++, c.ub[2]);
+            case 2:
+              scalars->SetValue(i++, c.ub[1]);
+            case 1:
+              scalars->SetValue(i++, c.ub[0]);
+              break;
+            default:
+              vtkErrorWithObjectMacro(this->Importer, << "Unsupported component size: " << components);
+              break;
+
+            };
+          I++;
+        }
+
+      vtkSmartPointer<vtkImageData> id = vtkSmartPointer<vtkImageData>::New();
+      id->SetDimensions(width, height, 1); // 1 is for 2D Texture
+      id->SetScalarTypeToUnsignedChar();
+      id->SetNumberOfScalarComponents(components);
+      id->GetPointData()->SetScalars(scalars);
+      texture->SetInput(id);
+      texture->SetQualityTo32Bit();
+      texture->RepeatOn();
+      texture->InterpolateOn();
+      texture->SetBlendingMode(vtkTexture::VTK_TEXTURE_BLENDING_MODE_REPLACE);
+      this->CurrentActor->SetTexture(texture);
+      }
+    }
+  texture->Delete();
   return CONTINUE;
   }
 
