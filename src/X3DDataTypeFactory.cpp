@@ -1,5 +1,10 @@
 #include <xiot/X3DDataTypeFactory.h>
+
+#include <xiot/X3DParseException.h>
+
 #include <sstream>
+#include <algorithm>
+#include <cctype>
 
 using namespace std;
 
@@ -9,13 +14,17 @@ using namespace std;
 namespace XIOT {
 
 	bool X3DDataTypeFactory::getSFBoolFromString(const std::string &s){
-		std::stringstream ss;
-		bool b;
-		
-		ss << s;
-		ss >> std::boolalpha >> b;
+		std::string lower(s);
+		std::transform(lower.begin(), lower.end(), lower.begin(), (int(*)(int)) std::tolower);
 
-		return b;
+		if (lower == "true")
+			return true;
+		if (lower == "false")
+			return false;
+
+		std::stringstream reason("Unknown value for SFBool: ");
+		reason << s;
+		throw X3DParseException(reason.str());
 	}
 
 	float X3DDataTypeFactory:: getSFFloatFromString(const std::string &s){
@@ -38,76 +47,69 @@ namespace XIOT {
 		return i;
 	}
 
-	SFVec3f X3DDataTypeFactory::getSFVec3fFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFVec3fFromString(const std::string &s, SFVec3f& vec){
 		std::stringstream ss;
-		SFVec3f vec;
-		
 		ss << s;
 		ss >> vec.x >> vec.y >> vec.z;
-
-		return vec;
 	}
 
-	SFVec2f X3DDataTypeFactory::getSFVec2fFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFVec2fFromString(const std::string &s, SFVec2f &vec){
 		std::stringstream ss;
-		SFVec2f vec;
-		
 		ss << s;
 		ss >> vec.x >> vec.y;
-
-		return vec;
 	}
 
-	SFRotation X3DDataTypeFactory::getSFRotationFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFRotationFromString(const std::string &s, SFRotation &rot){
 		std::stringstream ss;
-		SFRotation rot;
-		
 		ss << s;
 		ss >> rot.x >> rot.y >> rot.z >> rot.angle;
-
-		return rot;
 	}
 
-	std::string X3DDataTypeFactory::getSFStringFromString(const std::string &s){
-		return s;
+	void X3DDataTypeFactory::getSFStringFromString(const SFString &s, SFString &value){
+		value.assign(s);
 	}
 
-	SFColor X3DDataTypeFactory::getSFColorFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFColorFromString(const std::string &s, SFColor &col){
 		std::stringstream ss;
-		SFColor col;
-		
 		ss << s;
 		ss >> col.r >> col.g >> col.b;
-
-		return col;
 	}
 
-	SFColorRGBA X3DDataTypeFactory::getSFColorRGBAFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFColorRGBAFromString(const std::string &s, SFColorRGBA &col){
 		std::stringstream ss;
-		SFColorRGBA col;
-		
-		ss << s;
+    ss << s;
 		ss >> col.r >> col.g >> col.b >> col.a;
-
-		return col;
 	}
 
-	SFImage X3DDataTypeFactory::getSFImageFromString(const std::string &s){
+	void X3DDataTypeFactory::getSFImageFromString(const std::string &s, SFImage &value){
 		std::stringstream ss;
 		SFImage img;
-		int	index = 0;
+		unsigned int	tmp, index = 0;
 
+    
 		ss << s;
 
-		// in case of a parsing error, ss.fail() will return true
-		while(!(ss.eof() || ss.fail()))
-			ss >> img[index++];	
+		// read width, height and components
+		while(!(ss.eof() || ss.fail()) && index < 3)
+      {
+			ss >> tmp;	
+      img.push_back(tmp);
+      index++;
+      }
 
-		return img;
+     while(!(ss.eof() || ss.fail()))
+      {
+      ss >> std::hex >> tmp;	
+      if (!ss.fail())
+        img.push_back(tmp);
+      }
+
+
+		std::swap(img, value);
 	} 
 
 	// Multi Field
-	std::vector<float> X3DDataTypeFactory::getMFFloatFromString(const std::string &s){
+	void X3DDataTypeFactory::getMFFloatFromString(const std::string &s, MFFloat &value){
 		std::vector<float> vec;
 		std::stringstream ss;
 		
@@ -129,17 +131,14 @@ namespace XIOT {
 			}
 			vec.push_back(fTemp);
 		}		
-
-		return vec;
+		std::swap(vec, value);
 	}
 
-	std::vector<int> X3DDataTypeFactory::getMFInt32FromString(const std::string &s){
-		std::vector<int> vec;
-
-		std::stringstream ss;
+	void X3DDataTypeFactory::getMFInt32FromString(const std::string &s, MFInt32 &value){
+		MFInt32 vec;
+    std::istringstream ss(s, istringstream::in);
 		int iTemp;
 
-		ss << s;
 
 		// in case of a parsing error, ss.fail() will return true
 		while(!(ss.eof() || ss.fail()))
@@ -155,12 +154,11 @@ namespace XIOT {
 			
 			vec.push_back(iTemp);
 		}		
-
-		return vec;
+		std::swap(vec, value);
 	}
 
-	std::vector<SFVec3f> X3DDataTypeFactory::getMFVec3fFromString(const std::string &s){
-		std::vector<SFVec3f> vec;
+	void X3DDataTypeFactory::getMFVec3fFromString(const std::string &s, MFVec3f &value){
+		MFVec3f vec;
 		std::stringstream ss;
 		
 		SFVec3f tempVec;
@@ -173,45 +171,38 @@ namespace XIOT {
 
 			ss >> tempVec.x >> tempVec.y >> tempVec.z;
 			
-			int c = ss.peek();
+			char c = static_cast<char>(ss.peek());
 			while(isWhiteSpaceOrComma(c))
 			{
-				ss.ignore(1);
-				c = ss.peek();
+				ss.ignore();
+				c = static_cast<char>(ss.peek());
 			}
 						
 			vec.push_back(tempVec);
 		}		
-		
-		return vec;
+		std::swap(vec, value);
 	}
 
-	std::vector<SFVec2f> X3DDataTypeFactory::getMFVec2fFromString(const std::string &s){
-		std::vector<SFVec2f> vec;
-		std::stringstream ss;
+	void X3DDataTypeFactory::getMFVec2fFromString(const std::string &s, MFVec2f &value){
+		MFVec2f vec;
+		std::stringstream ss(s);
 		
-		SFVec2f tempVec;
 		char c;
-		 
-		ss << s;
-
 		// in case of a parsing error, ss.fail() will return true
 		while(!(ss.eof() || ss.fail()))
 		{
-			ss >> tempVec.x >> tempVec.y;
+			vec.resize(vec.size()+1);
+			ss >> vec.back().x >> vec.back().y;
 			
-			c = ss.peek();	// look for ',' and skip it
+			c = static_cast<char>(ss.peek());	// look for ',' and skip it
 			if(c == ',')
-				ss.ignore(1);
-
-			vec.push_back(tempVec);
+				ss.ignore();
 		}		
-		
-		return vec;
+		std::swap(vec, value);
 	}
 
-	std::vector<SFRotation> X3DDataTypeFactory::getMFRotationFromString(const std::string &s){
-		std::vector<SFRotation> vec;
+	void X3DDataTypeFactory::getMFRotationFromString(const std::string &s, MFRotation &value){
+		MFRotation vec;
 		std::stringstream ss;
 		SFRotation tempRot;
 		char c;
@@ -223,42 +214,45 @@ namespace XIOT {
 		{
 			ss >> tempRot.x >> tempRot.y >> tempRot.z >> tempRot.angle;
 			
-			c = ss.peek();	// look for ',' and skip it
+			c = static_cast<char>(ss.peek());	// look for ',' and skip it
 			if(c == ',')
-				ss.ignore(1);
+				ss.ignore();
 			
 			vec.push_back(tempRot);
 		}		
+		std::swap(vec, value);
+	}
+
+	void X3DDataTypeFactory::getMFStringFromString(const std::string &s, MFString &value){
 		
-		return vec;
+    MFString result;
+
+    const char* rawStr = s.c_str();
+    while (*rawStr)
+      {
+      bool inStr = false;
+      std::string oneString;
+      while (*rawStr && !inStr)
+        {
+        inStr = *rawStr=='"';
+        rawStr++;
+        }
+      while(*rawStr && inStr)
+        {
+        inStr = *rawStr!='"';
+        if(inStr)
+          oneString.append(rawStr,1);
+        rawStr++;
+        }
+      if (!oneString.empty())
+        result.push_back(oneString);
+      }
+    
+		std::swap(result, value);
 	}
 
-	std::vector<std::string> X3DDataTypeFactory::getMFStringFromString(const std::string &s){
-		std::vector<std::string> vec;
-
-		std::string tempString;
-		std::stringstream ss;
-		char c;
-
-		ss << s;
-
-		// in case of a parsing error, ss.fail() will return true
-		while(!(ss.eof() || ss.fail()))
-		{
-			ss >> tempString;
-			
-			c = ss.peek();	// look for ',' and skip it
-			if(c == ',')
-				ss.ignore(1);
-			
-			vec.push_back(tempString);
-		}		
-
-		return vec;
-	}
-
-	std::vector<SFColor> X3DDataTypeFactory::getMFColorFromString(const std::string &s){
-		std::vector<SFColor> vec;
+	void X3DDataTypeFactory::getMFColorFromString(const std::string &s, MFColor &value){
+		MFColor vec;
 		std::stringstream ss;
 		
 		SFColor tempColor;
@@ -279,12 +273,11 @@ namespace XIOT {
 			}
 			vec.push_back(tempColor);
 		}		
-		
-		return vec;
+		std::swap(vec, value);
 	}
 
-	std::vector<SFColorRGBA> X3DDataTypeFactory::getMFColorRGBAFromString(const std::string &s){
-		std::vector<SFColorRGBA> vec;
+	void X3DDataTypeFactory::getMFColorRGBAFromString(const std::string &s, MFColorRGBA &value){
+		MFColorRGBA vec;
 		std::stringstream ss;
 		
 		SFColorRGBA tempColor;
@@ -305,8 +298,7 @@ namespace XIOT {
 			}
 			vec.push_back(tempColor);
 		}		
-		
-		return vec;
+		std::swap(vec, value);
 	}
 
 }

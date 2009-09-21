@@ -5,7 +5,7 @@
 #include <xiot/X3DXMLAttributes.h>
 #include <xiot/X3DParseException.h>
 
-#include <expat.h>
+#include XIOT_EXPAT_HEADER 
 
 #include <iostream>
 #include <cassert>
@@ -76,25 +76,6 @@ private:
   X3DXMLContentHandler* _handler;
 };
 
-/*class X3DXMLContentHandler
-{
-public: 
-  X3DXMLContentHandler(X3DNodeHandler* nodeHandler);
-  ~X3DXMLContentHandler();
-  
-  void startDocument();
-  void startElement(const XMLCh* const uri, const XMLCh* const localname, const XMLCh* const qname, const XERCES_CPP_NAMESPACE_QUALIFIER Attributes &attrs);
-  void endElement(const XMLCh *const uri, const XMLCh *const localname, const XMLCh *const qname);  
-  void endDocument();
-  void fatalError(const XERCES_CPP_NAMESPACE_QUALIFIER SAXParseException& exception);
-  void error(const XERCES_CPP_NAMESPACE_QUALIFIER SAXParseException& exception);
-  
-private:
-  X3DNodeHandler* _nodeHandler;
-  X3DSwitch _switch;
-  int _skipCount;
-};*/
-
 X3DXMLContentHandler::X3DXMLContentHandler(X3DNodeHandler* nodeHandler) : _nodeHandler(nodeHandler), _skipCount(0)
 {
 	_switch.setNodeHandler(nodeHandler);
@@ -140,33 +121,11 @@ void X3DXMLContentHandler::endDocument()
 	_nodeHandler->endDocument();
 }
 
-/*void X3DXMLContentHandler::error(const SAXParseException& exception)
-{
-  char* message = XMLString::transcode(exception.getMessage());
-  cerr << "XercesLoader::error: " << message << " at line: " << exception.getLineNumber() << endl;
-}
 
-void X3DXMLContentHandler::fatalError(const SAXParseException& exception)
-{
-  char* message = XMLString::transcode(exception.getMessage());
-  throw X3DParseException(message, static_cast<int>(exception.getLineNumber()), static_cast<int>(exception.getColumnNumber()));
-}*/
 
 X3DXMLLoader::X3DXMLLoader()
 {
   _impl = new XMLParserImpl();
- /* try 
-  {
-    XMLPlatformUtils::Initialize();
-  }
-  catch (const XMLException& toCatch) 
-  {
-    char* message = XMLString::transcode(toCatch.getMessage());
-    cerr << "XercesLoader::Error during initialization: " << message << endl;
-    XMLString::release(&message);
-  }*/
-  
-  
 }
 
 X3DXMLLoader::~X3DXMLLoader()
@@ -174,15 +133,16 @@ X3DXMLLoader::~X3DXMLLoader()
   delete _impl;
 }
 
-bool X3DXMLLoader::load(std::string fileName, bool fileValidation) const
+bool X3DXMLLoader::load(std::string fileName, bool ) const
 {
-	assert(_handler);
-
-
+  static const int BUFF_SIZE = 2*1024*1024;
+	std::fstream fin;
+  
+  assert(_handler);
   _impl->setHandler(new X3DXMLContentHandler(_handler));
  
-  std::fstream fin;
   fin.open(fileName.c_str(),std::ios::in);
+  
   if( !fin.is_open() )
   {
 	  cerr << "Could not open file: " << fileName << endl;
@@ -190,8 +150,6 @@ bool X3DXMLLoader::load(std::string fileName, bool fileValidation) const
   }
 
   _handler->startDocument();
-
-  const int BUFF_SIZE = 10*1024;
   while(!fin.eof())
   {
     char* buffer = (char*)XML_GetBuffer(_impl->_parser, BUFF_SIZE);
@@ -199,17 +157,16 @@ bool X3DXMLLoader::load(std::string fileName, bool fileValidation) const
     {
       cerr << "Could not acquire expat buffer" << endl;
       return false;
-    } // if ...
+    } 
 
     fin.read(buffer, BUFF_SIZE);
-    if(XML_ParseBuffer(_impl->_parser, fin.gcount(), fin.eof()) == 0)
+    if(!XML_ParseBuffer(_impl->_parser, static_cast<int>(fin.gcount()), fin.eof()))
     {
       // error
       cerr << XML_ErrorString(XML_GetErrorCode(_impl->_parser)) << endl;
       return false;
-    } // if ...
-  } // while
-
+    } 
+  } 
   _handler->endDocument();
   return true;
 }

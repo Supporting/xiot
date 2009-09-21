@@ -2,13 +2,13 @@
 
 #include <cstring>
 
-#include <xiot/X3DZLibDataCompressor.h>
 #include <xiot/X3DTypes.h>
+#include <xiot/FIEncodingAlgorithms.h>
+#include <xiot/X3DFIEncodingAlgorithms.h>
 
-//#define ENCODEASSTRING 1
-
-using namespace XIOT;
 using namespace std;
+
+namespace XIOT {
 
 /*======================================================================== */
 struct NodeInfo 
@@ -24,571 +24,344 @@ struct NodeInfo
   bool isChecked;
 };
 
-/*======================================================================== */
-class X3DWriterFIByte
-{
-public:
-  ~X3DWriterFIByte();
-  X3DWriterFIByte() {};
-  // This is the current byte to fill
-  unsigned char CurrentByte;
-  // This is the current byte position. Range: 0-7
-  unsigned char CurrentBytePos;
-
-  // Opens the specified file in binary mode. Returns 0
-  // if failed
-  int OpenFile(const char* file);
-
-  // Puts a bitstring to the current byte bit by bit
-  void PutBits(const std::string &bitstring);
-  // Puts the integer value to the stream using count bits
-  // for encoding
-  void PutBits(unsigned int value, unsigned char count);
-  // Puts on bit to the current byte true = 1, false = 0
-  void PutBit(bool on);
-  // Puts whole bytes to the file stream. CurrentBytePos must
-  // be 0 for this
-  void PutBytes(const char* bytes, size_t length);
-  // Fills up the current byte with 0 values
-  void FillByte();
-
-private:
-  unsigned char Append(unsigned int value, unsigned char count);
-  void TryFlush();
-  std::ofstream FileStream;
-
-  X3DWriterFIByte(const X3DWriterFIByte&); // Not implemented
-  void operator=(const X3DWriterFIByte&); // Not implemented
-};
-
-//----------------------------------------------------------------------------
-X3DWriterFIByte::~X3DWriterFIByte()
-{
-  if (this->FileStream.is_open())
-    {
-    this->FileStream.close();
-    }
-}
-
-//----------------------------------------------------------------------------
-int X3DWriterFIByte::OpenFile(const char* file)
-{
-  this->CurrentByte = 0;
-  this->CurrentBytePos = 0;
-  this->FileStream.open (file, ios::out | ios::binary);
-  return this->FileStream.fail() ? 0 : 1;
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::TryFlush()
-{
-  if (this->CurrentBytePos == 8)
-    {
-    this->FileStream.write((char*)(&(this->CurrentByte)), 1);
-    this->CurrentByte = 0;
-    this->CurrentBytePos = 0;
-    }
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::FillByte()
-{
-  while (this->CurrentBytePos !=0)
-    {
-    this->PutBit(0);
-    }
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::PutBit(bool on)
-{
-  assert(this->CurrentBytePos < 8);
-  if (on)
-    {
-    unsigned char pos = this->CurrentBytePos;
-    unsigned char mask = (unsigned char)(0x80 >> pos);
-    this->CurrentByte |= mask;
-    }
-  this->CurrentBytePos++;
-  TryFlush();
-}
-
-//----------------------------------------------------------------------------
-unsigned char X3DWriterFIByte::Append(unsigned int value, unsigned char count)
-{
-  assert(this->CurrentBytePos < 8);
-  while ((this->CurrentBytePos < 8) && count > 0)
-    {
-    // Value and der Stelle i
-    unsigned int mask = 1;
-    bool isSet = !(((mask << (count - 1)) & value) == 0);
-    if (isSet)
-      {
-      this->CurrentByte |= static_cast<unsigned char>(0x80 >> this->CurrentBytePos);
-      }
-    this->CurrentBytePos++;
-    count--;
-    }
-  TryFlush();
-  return count;
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::PutBytes(const char* bytes, size_t length)
-{
-  if(this->CurrentBytePos == 0)
-    {
-    FileStream.write(bytes, length);
-    }
-  else
-    {
-    std::cerr << "Wrong position in X3DWriterFIByte::PutBytes" << std::endl;
-    assert(false);
-    }
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::PutBits(unsigned int value, unsigned char count)
-{
-  // Can be optimized
-  while (count > 0)
-    {
-    count = this->Append(value, count);
-    }
-}
-
-
-//----------------------------------------------------------------------------
-void X3DWriterFIByte::PutBits(const std::string &bitstring)
-{
-  std::string::const_iterator I = bitstring.begin();
-  while(I != bitstring.end())
-    {
-    this->PutBit((*I) == '1');
-    I++;
-    }
-}
-
-#include <xiot/X3DWriterFIHelper.h>
-
 //----------------------------------------------------------------------------
 X3DWriterFI::~X3DWriterFI()
 {
-  delete this->InfoStack;
-  delete this->Compressor;
+  delete this->_infoStack;
 }
 
 //----------------------------------------------------------------------------
 X3DWriterFI::X3DWriterFI()
 {
-  this->InfoStack = new std::vector<NodeInfo>;
-  this->Compressor = new X3DZLibDataCompressor();
-  this->Compressor->setCompressionLevel(5);
-  this->Writer = NULL;
-  this->IsLineFeedEncodingOn = true;
-  this->Fastest = 0;
+  this->_infoStack = new std::vector<NodeInfo>;
+  this->_isLineFeedEncodingOn = true;
+  this->_fastest = 0;
   this->type = X3DFI;
+  this->_encoder.setStream(_stream);
   X3DTypes::initMaps();
 }
 
 //----------------------------------------------------------------------------
-int X3DWriterFI::OpenFile(const char* file)
+bool X3DWriterFI::setProperty(const char* const name, void* value)
 {
-  std::string t(file);
-  this->CloseFile();
-
-  // Delegate to X3DWriterFIByte
-  this->Writer = new X3DWriterFIByte();
-  return this->Writer->OpenFile(file);
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFI::CloseFile()
-{
-  delete this->Writer;
-  this->Writer = 0;
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFI::StartDocument()
-{
-  const char* external_voc = "urn:external-vocabulary";
-  // ITU 12.6: 1110000000000000
-  this->Writer->PutBits("1110000000000000");
-  // ITU 12.7 / 12.9: Version of standard: 1 as 16bit
-  this->Writer->PutBits("0000000000000001");
-  // ITU 12.8: The bit '0' (padding) shall then be appended to the bit stream
-  this->Writer->PutBit(0);
-  // ITU C.2.3 
-  this->Writer->PutBit(0); // additional-data
-  this->Writer->PutBit(1); // initial-vocabulary
-  this->Writer->PutBit(0); // notations
-  this->Writer->PutBit(0); // unparsed-entities 
-  this->Writer->PutBit(0); // character-encoding-scheme
-  this->Writer->PutBit(0); // standalone
-  this->Writer->PutBit(0); // and version
-  // ITU C.2.5: padding '000' for optional component initial-vocabulary
-  this->Writer->PutBits("000");
-  // ITU C.2.5.1: For each of the thirteen optional components:
-  // presence ? 1 : 0
-  this->Writer->PutBits("1000000000000"); // 'external-vocabulary'
-  // ITU C.2.5.2: external-vocabulary is present
-  this->Writer->PutBit(0); 
-  // Write "urn:external-vocabulary"
-  // ITU C.22.3.1: Length is < 65
-  this->Writer->PutBit(0); 
-  //Writer->PutBits("010110"); // = strlen(external_voc) - 1
-  this->Writer->PutBits(
-    static_cast<unsigned int>(strlen(external_voc) - 1), 6);
-  this->Writer->PutBytes(external_voc, strlen(external_voc));
-}
-
-//----------------------------------------------------------------------------
-void X3DWriterFI::EndDocument()
-{
-  // ITU C.2.12: The four bits '1111' (termination) are appended
-  this->Writer->PutBits("1111");
+	if (name == Property::FloatEncodingAlgorithm)
+	{
+		if (value == Encoder::BuiltIn)
+			_encoder.setFloatAlgorithm(FI::FloatEncodingAlgorithm::ALGORITHM_ID);
+		else if (value == Encoder::QuantizedzlibFloatArrayEncoder)
+			_encoder.setFloatAlgorithm(QuantizedzlibFloatArrayAlgorithm::ALGORITHM_ID);
+		else
+			return false;
+		
+		return true;
+	}
+	else if (name == Property::IntEncodingAlgorithm)
+	{
+		if (value == Encoder::BuiltIn)
+			_encoder.setIntAlgorithm(FI::IntEncodingAlgorithm::ALGORITHM_ID);
+		else if (value == Encoder::DeltazlibIntArrayEncoder)
+			_encoder.setIntAlgorithm(DeltazlibIntArrayAlgorithm::ALGORITHM_ID);
+		else
+			return false;
+		return true;
+	}
+	return false;
 }
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::StartNode(int elementID)
+void* X3DWriterFI::getProperty(const char* const name) const
 {
-  if (!this->InfoStack->empty())
+	if (name == Property::FloatEncodingAlgorithm)
+	{
+		int algorithmID = _encoder.getFloatAlgorithm();
+		
+		if (algorithmID == FI::FloatEncodingAlgorithm::ALGORITHM_ID)
+			return (void*)Encoder::BuiltIn;
+		if (algorithmID == QuantizedzlibFloatArrayAlgorithm::ALGORITHM_ID)
+			return (void*)Encoder::QuantizedzlibFloatArrayEncoder;
+	
+		return NULL;
+	}
+	else if (name == Property::IntEncodingAlgorithm)
+	{
+		int algorithmID = _encoder.getIntAlgorithm();
+		
+		if (algorithmID == FI::IntEncodingAlgorithm::ALGORITHM_ID)
+			return (void*)Encoder::BuiltIn;
+		if (algorithmID == DeltazlibIntArrayAlgorithm::ALGORITHM_ID)
+			return (void*)Encoder::DeltazlibIntArrayEncoder;
+		
+		return NULL;		
+	}
+	return 0;
+}
+
+//----------------------------------------------------------------------------
+int X3DWriterFI::openFile(const char* file)
+{
+  this->closeFile();
+  
+  _stream.open (file, ios::out | ios::binary);
+  if(!_stream.fail())
+  {
+	  _encoder.reset();
+	  return 1;
+  }
+  return 0;
+}
+
+//----------------------------------------------------------------------------
+void X3DWriterFI::closeFile()
+{
+  if (_stream.is_open())
+	_stream.close();
+}
+
+//----------------------------------------------------------------------------
+void X3DWriterFI::startDocument()
+{
+  _encoder.reset();
+  _encoder.encodeHeader(false);
+  _encoder.encodeInitialVocabulary();
+}
+
+//----------------------------------------------------------------------------
+void X3DWriterFI::endDocument()
+{
+  _encoder.encodeDocumentTermination();
+}
+
+
+//----------------------------------------------------------------------------
+void X3DWriterFI::startNode(int elementID)
+{
+  if (!this->_infoStack->empty())
     {
-    this->CheckNode(false);
-    if (this->IsLineFeedEncodingOn)
+    this->checkNode(false);
+    if (this->_isLineFeedEncodingOn)
       {
-      X3DWriterFIHelper::EncodeLineFeed(this->Writer);
+        _encoder.encodeLineFeed();
       }
-    this->Writer->FillByte();
+     _encoder.fillByte();
     }
 
-  this->InfoStack->push_back(NodeInfo(elementID));
+  this->_infoStack->push_back(NodeInfo(elementID));
 
   // ITU C.3.7.2: element is present
-  this->Writer->PutBit(0);
+  _encoder.putBit(0);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::EndNode()
+void X3DWriterFI::endNode()
 {
-  assert(!this->InfoStack->empty());
-  this->CheckNode(false);
-  if (this->IsLineFeedEncodingOn)
+  assert(!this->_infoStack->empty());
+  this->checkNode(false);
+  if (this->_isLineFeedEncodingOn)
     {
-    X3DWriterFIHelper::EncodeLineFeed(this->Writer);
+    _encoder.encodeLineFeed();
     }
-  if(!this->InfoStack->back().attributesTerminated)
+  if(!this->_infoStack->back().attributesTerminated)
     {
     //cout << "Terminated in EndNode: could be wrong" << endl;
     // ITU C.3.6.2: End of attribute
-    this->Writer->PutBits("1111");
+    _encoder.putBits("1111");
     }
   // ITU C.3.8: The four bits '1111' (termination) are appended.
-  this->Writer->PutBits("1111");
-  this->InfoStack->pop_back();
+  _encoder.putBits("1111");
+  this->_infoStack->pop_back();
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::CheckNode(bool callerIsAttribute)
+void X3DWriterFI::checkNode(bool callerIsAttribute)
 {
-  if(!this->InfoStack->back().isChecked)
+  if(!this->_infoStack->back().isChecked)
     {
     if (callerIsAttribute) // Element has attributes
       {
       // ITU C.3.3: then the bit '1' (presence) is appended
-      this->Writer->PutBit(1);
-      this->InfoStack->back().attributesTerminated = false;
+      _encoder.putBit(1);
+      this->_infoStack->back().attributesTerminated = false;
       }
     else // Element has no attributes
       {
       // ITU C.3.3: otherwise, the bit '0' (absence) is appended
-      this->Writer->PutBit(0);
+      _encoder.putBit(0);
       }
     // Write Node name (starting at third bit)
     // ITU: C.18.4 If the alternative name-surrogate-index is present, 
     // it is encoded as described in C.27.
-    X3DWriterFIHelper::EncodeInteger3(this->Writer, this->InfoStack->back().nodeId + 1);
-    this->InfoStack->back().isChecked = true;
+    _encoder.encodeInteger3(this->_infoStack->back().nodeId + 1);
+    this->_infoStack->back().isChecked = true;
     }
   // Element has attributes and childs
-  else if (!callerIsAttribute && !this->InfoStack->back().attributesTerminated)
+  else if (!callerIsAttribute && !this->_infoStack->back().attributesTerminated)
     {
     // ITU C.3.6.2: End of attribute
-    this->Writer->PutBits("1111");
-    this->InfoStack->back().attributesTerminated = true;
+    _encoder.putBits("1111");
+    this->_infoStack->back().attributesTerminated = true;
     }
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::StartAttribute(int attributeID, bool literal, bool addToTable)
+void X3DWriterFI::startAttribute(int attributeID, bool literal, bool addToTable)
 {
-  this->CheckNode();
+  this->checkNode();
   // ITU C.3.6.1: Start of attribute
-  this->Writer->PutBit(0);
+  _encoder.putBit(0);
   // ITU C.4.3 The value of qualified-name is encoded as described in C.17.
-  X3DWriterFIHelper::EncodeInteger2(this->Writer, attributeID +1);
+  _encoder.encodeInteger2(attributeID +1);
 
   // ITU C.14.3: If the alternative literal-character-string is present,
   //then the bit '0' (discriminant) is appended
   // ITU C.14.4: If the alternative string-index is present, 
   // then the bit '1' (discriminant) is appended
-  this->Writer->PutBit(literal ? 0 : 1);
+  _encoder.putBit(literal ? 0 : 1);
   if (literal)
     {
     // ITU C.14.3.1 If the value of the component add-to-table is TRUE, 
     // then the bit '1' is appended to the bit stream;
-    this->Writer->PutBit(addToTable);
+    _encoder.putBit(addToTable);
     }
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::EndAttribute()
+void X3DWriterFI::endAttribute()
 {
+	// Nothign to be done here
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFVec3f(int attributeID, float x, float y, float z)
+void X3DWriterFI::setSFVec3f(int attributeID, float x, float y, float z)
 {
   std::ostringstream ss;
-
-  this->StartAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 3;
-  float temp[3];
-  temp[0] = x;
-  temp[1] = y;
-  temp[2] = z;
-
-  X3DWriterFIHelper::EncodeFloatFI(this->Writer, temp, size);
-
-#else
+  this->startAttribute(attributeID, true, false);
   ss << x << " " << y << " " << z;
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-#endif
+  _encoder.encodeCharacterString3(ss.str());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFVec2f(int attributeID, float s, float t)
+void X3DWriterFI::setSFVec2f(int attributeID, float s, float t)
 {
   std::ostringstream ss;
-
-  this->StartAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 2;
-  float temp[2];
-  temp[0] = s;
-  temp[1] = t;
-  
-  X3DWriterFIHelper::EncodeFloatFI(this->Writer, temp, size);
-
-#else
+  this->startAttribute(attributeID, true, false);
   ss << s << " " << t;
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-#endif
+  _encoder.encodeCharacterString3(ss.str());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFColor(int attributeID, float r, float g, float b)
+void X3DWriterFI::setSFColor(int attributeID, float r, float g, float b)
 {
-  this->SetSFVec3f(attributeID, r, g, b);
+  this->setSFVec3f(attributeID, r, g, b);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFRotation(int attributeID, float x, float y, float z, float angle)
+void X3DWriterFI::setSFRotation(int attributeID, float x, float y, float z, float angle)
 {
   std::ostringstream ss;
-
-  this->StartAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-  size_t size = 4;
-  float temp[4];
-  
-  size = 4;
-  temp[0] = x;
-  temp[1] = y;
-  temp[2] = z;
-  temp[3] = -angle * FLOAT_DEGTORAD;
-    
-  X3DWriterFIHelper::EncodeFloatFI(this->Writer, temp, size);
-
-#else
+  this->startAttribute(attributeID, true, false);
   ss << x << " " << y << " " << z << " " << angle;
-  
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-
-#endif
+  _encoder.encodeCharacterString3(ss.str());
 }
 
-//----------------------------------------------------------------------------
-// erneut 3er Teilung bei ENCODEASSTRING
-void X3DWriterFI::SetMFFloat(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFFloat(int attributeID, const std::vector<float>& values)
 {
-  
-  
-  this->StartAttribute(attributeID, true, false);
-
-#ifdef ENCODEASSTRING
-    unsigned int i = 0;
-	std::ostringstream ss;
-
-    while (i < values.size())
-      {
-      ss << values[i++] << " " << values[i++] << " " << values[i++] << ",";
-      }
-
-    X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-   
-#else
-  if (!this->Fastest && (values.size() > 15))
-    {
-    X3DEncoderFunctions::EncodeQuantizedzlibFloatArray(this->Writer, 
-      &(values.front()), values.size(), this->Compressor);
-    }
-  else
-    {
-    X3DWriterFIHelper::EncodeFloatFI(this->Writer, 
-      &(values.front()), values.size());
-    }
-
-#endif
-
+  this->startAttribute(attributeID, true, false);
+  _encoder.encodeAttributeFloatArray(&(values.front()), values.size());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFColor(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFColor(int attributeID, const std::vector<float>& values)
 {
-  this->SetMFFloat(attributeID, values);
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFRotation(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFRotation(int attributeID, const std::vector<float>& values)
 {
-#ifdef ENCODEASSTRING
-  std::ostringstream ss;
-  unsigned int i = 0;
-    while (i < values.size())
-      {
-      ss << values[i++] << " " << values[i++] << " " << values[i++] << " " << values[i++] << ",";
-      }
-
-    X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-#else
-  this->SetMFFloat(attributeID, values);
-#endif
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFVec3f(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFVec3f(int attributeID, const std::vector<float>& values)
 {
-  this->SetMFFloat(attributeID, values);
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFVec2f(int attributeID, const std::vector<float>& values)
+void X3DWriterFI::setMFVec2f(int attributeID, const std::vector<float>& values)
 {
-#ifdef ENCODEASSTRING
-  std::ostringstream ss;
-  unsigned int i = 0;
-    while (i < values.size())
-      {
-      ss << values[i++] << " " << values[i++] << ",";
-      }
-
-    X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
-#else
-  this->SetMFFloat(attributeID, values);
-#endif
+  this->setMFFloat(attributeID, values);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFImage(int attributeID, const std::vector<int>& values)
+void X3DWriterFI::setSFImage(int attributeID, const std::vector<int>& values)
 {
-  this->StartAttribute(attributeID, true, false);
-  if (values.size() > 15)
-    {
-    X3DEncoderFunctions::EncodeIntegerDeltaZ(this->Writer, &(values.front()), values.size(), 
-      this->Compressor, true);  
-    }
-  else
-    {
-    X3DWriterFIHelper::EncodeIntegerFI(this->Writer, &(values.front()), values.size());
-    }
+  this->startAttribute(attributeID, true, false);
+  _encoder.encodeAttributeIntegerArray(&values.front(), values.size());
 }
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFInt32(int attributeID, int iValue)
+void X3DWriterFI::setSFInt32(int attributeID, int iValue)
 {
   std::ostringstream ss;
-  this->StartAttribute(attributeID, true, false);
+  this->startAttribute(attributeID, true, false);
 
   // Xj3D writes out single value fields in string encoding. Expected:
   //FIEncoderFunctions::EncodeFloatFI<float>(this->Writer, &value, 1);
   ss << iValue;
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
+  _encoder.encodeCharacterString3(ss.str());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFInt32(int attributeID, const std::vector<int>& values)
+void X3DWriterFI::setMFInt32(int attributeID, const std::vector<int>& values)
 {
-  this->StartAttribute(attributeID, true, false);
-  if (values.size() > 15)
-    {
-    X3DEncoderFunctions::EncodeIntegerDeltaZ(this->Writer, &(values.front()), values.size(), 
-      this->Compressor, false);  
-    }
-  else
-    {
-    X3DWriterFIHelper::EncodeIntegerFI(this->Writer, &(values.front()), values.size());
-    }
+  this->startAttribute(attributeID, true, false);
+  _encoder.encodeAttributeIntegerArray(&values.front(), values.size());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFFloat(int attributeID, float fValue)
+void X3DWriterFI::setSFFloat(int attributeID, float fValue)
 {
   std::ostringstream ss;
 
-  this->StartAttribute(attributeID, true, false);
+  this->startAttribute(attributeID, true, false);
 
   // Xj3D writes out single value fields in string encoding. Expected:
   //FIEncoderFunctions::EncodeFloatFI<float>(this->Writer, &value, 1);
   ss << fValue;
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, ss.str());
+  _encoder.encodeCharacterString3(ss.str());
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFBool(int attributeID, bool bValue)
+void X3DWriterFI::setSFBool(int attributeID, bool bValue)
 {
-  this->StartAttribute(attributeID, false);
-  X3DWriterFIHelper::EncodeInteger2(this->Writer, bValue ? 2 : 1);
+  this->startAttribute(attributeID, false);
+  _encoder.encodeInteger2(bValue ? 2 : 1);
 }
 
 //----------------------------------------------------------------------------
-/*void X3DWriterFI::SetMFBool(int attributeID, std::vector<bool>& values)
+/*void X3DWriterFI::setMFBool(int attributeID, std::vector<bool>& values)
 {
   // ok?
-  this->StartAttribute(attributeID, false);
+  this->startAttribute(attributeID, false);
 
   // TODO: Implement standard FI boolean encoder (s FI 10.7)
   for(unsigned int i = 0; i < 1; i++)
-    X3DWriterFIHelper::EncodeInteger2(this->Writer, values[i] ? 2 : 1);
+    _encoder.EncodeInteger2(this->Writer, values[i] ? 2 : 1);
 
 }*/
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetSFString(int attributeID, const std::string &s)
+void X3DWriterFI::setSFString(int attributeID, const std::string &s)
 {
-  this->StartAttribute(attributeID, true, true);
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, s);
+  this->startAttribute(attributeID, true, true);
+  _encoder.encodeCharacterString3(s);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::SetMFString(int attributeID, const std::vector<std::string>& strings)
+void X3DWriterFI::setMFString(int attributeID, const std::vector<std::string>& strings)
 {
   std::ostringstream sTemp;
   
@@ -598,14 +371,16 @@ void X3DWriterFI::SetMFString(int attributeID, const std::vector<std::string>& s
 	if(i < (strings.size() - 1))
 		sTemp << " ";
   }
-  this->StartAttribute(attributeID, true, true);
-  X3DWriterFIHelper::EncodeCharacterString3(this->Writer, sTemp.str());
+  this->startAttribute(attributeID, true, true);
+  _encoder.encodeCharacterString3(sTemp.str());
 }
 
 
 //----------------------------------------------------------------------------
-void X3DWriterFI::Flush()
+void X3DWriterFI::flush()
 {
 
 }
+
+} // namespace XIOT
 

@@ -22,17 +22,26 @@ X3DWriterXML::X3DWriterXML()
   X3DTypes::initMaps();
 }
 
-
-int X3DWriterXML::OpenFile(const char* file)
+bool X3DWriterXML::setProperty(const char* const , void* )
 {
-  this->CloseFile();
+	return false;
+}
+
+void* X3DWriterXML::getProperty(const char* const ) const
+{
+	return 0;
+}
+
+int X3DWriterXML::openFile(const char* file)
+{
+  this->closeFile();
   this->OutputStream = fopen(file, "w");
   
   return ((this->OutputStream == NULL) ? 0 : 1);
 }
 
 //----------------------------------------------------------------------------
-void X3DWriterXML::CloseFile()
+void X3DWriterXML::closeFile()
 {
   if (this->OutputStream)
     {
@@ -41,21 +50,21 @@ void X3DWriterXML::CloseFile()
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::StartDocument()
+void X3DWriterXML::startDocument()
 {
   this->Depth = 0;
   fprintf(this->OutputStream, "<?xml version=\"1.0\" encoding =\"UTF-8\"?>\n\n");
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::EndDocument()
+void X3DWriterXML::endDocument()
 {
   assert(this->Depth == 0);
   
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::StartNode(int elementID)
+void X3DWriterXML::startNode(int elementID)
 {
   // End last tag, if this is the first child
   if (!this->InfoStack->empty())
@@ -70,14 +79,14 @@ void X3DWriterXML::StartNode(int elementID)
   this->InfoStack->push_back(XMLInfo(elementID));
    
   fprintf(this->OutputStream, "%s<%s", this->ActTab.c_str(), X3DTypes::getElementByID(elementID));
-  this->AddDepth();
+  this->addDepth();
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::EndNode()
+void X3DWriterXML::endNode()
 {
   assert(!this->InfoStack->empty());
-  this->SubDepth();
+  this->subDepth();
   int elementID = this->InfoStack->back().elementId;
 
   // There were no childs
@@ -94,38 +103,38 @@ void X3DWriterXML::EndNode()
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFFloat(int attributeID, float fValue)
+void X3DWriterXML::setSFFloat(int attributeID, float fValue)
 {
   fprintf(this->OutputStream, " %s=\"%g\"", X3DTypes::getAttributeByID(attributeID), fValue);
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFInt32(int attributeID, int iValue)
+void X3DWriterXML::setSFInt32(int attributeID, int iValue)
 {
   fprintf(this->OutputStream, " %s=\"%i\"", X3DTypes::getAttributeByID(attributeID), iValue);
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFBool(int attributeID, bool bValue)
+void X3DWriterXML::setSFBool(int attributeID, bool bValue)
 {
 	fprintf(this->OutputStream, " %s=\"%s\"", X3DTypes::getAttributeByID(attributeID), (bValue ? "true" : "false"));
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFVec3f(int attributeID, float x, float y, float z)
+void X3DWriterXML::setSFVec3f(int attributeID, float x, float y, float z)
 {
   fprintf(this->OutputStream, " %s=\"%g %g %g\"", X3DTypes::getAttributeByID(attributeID), x, y, z);
 
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFVec2f(int attributeID, float s, float t)
+void X3DWriterXML::setSFVec2f(int attributeID, float s, float t)
 {
   fprintf(this->OutputStream, " %s=\"%g %g\"", X3DTypes::getAttributeByID(attributeID), s, t);
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFImage(int attributeID, const std::vector<int>& values)
+void X3DWriterXML::setSFImage(int attributeID, const std::vector<int>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n%s", X3DTypes::getAttributeByID(attributeID), this->ActTab.c_str());
 
@@ -161,26 +170,26 @@ void X3DWriterXML::SetSFImage(int attributeID, const std::vector<int>& values)
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFColor(int attributeID, float r, float g, float b)
+void X3DWriterXML::setSFColor(int attributeID, float r, float g, float b)
 {
-  this->SetSFVec3f(attributeID, r, g, b);
+  this->setSFVec3f(attributeID, r, g, b);
 }
 
 //-----------------------------------------------------------------------------
 // wieso -angle?
-void X3DWriterXML::SetSFRotation(int attributeID, float x, float y, float z, float angle)
+void X3DWriterXML::setSFRotation(int attributeID, float x, float y, float z, float angle)
 {
   fprintf(this->OutputStream, " %s=\"%g %g %g %g\"", X3DTypes::getAttributeByID(attributeID), x, y, z, angle);
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetSFString(int attributeID, const std::string &s)
+void X3DWriterXML::setSFString(int attributeID, const std::string &s)
 {
   fprintf(this->OutputStream, " %s=\"%s\"", X3DTypes::getAttributeByID(attributeID), s.c_str());
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFFloat(int attributeID, const std::vector<float>& values)
+void X3DWriterXML::setMFFloat(int attributeID, const std::vector<float>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n%s", X3DTypes::getAttributeByID(attributeID), this->ActTab.c_str());
   
@@ -202,7 +211,7 @@ void X3DWriterXML::SetMFFloat(int attributeID, const std::vector<float>& values)
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFRotation(int attributeID, const std::vector<float>& values)
+void X3DWriterXML::setMFRotation(int attributeID, const std::vector<float>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n%s", X3DTypes::getAttributeByID(attributeID), this->ActTab.c_str());
 
@@ -225,14 +234,14 @@ void X3DWriterXML::SetMFRotation(int attributeID, const std::vector<float>& valu
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFColor(int attributeID, const std::vector<float>& values)
+void X3DWriterXML::setMFColor(int attributeID, const std::vector<float>& values)
 {
-  this->SetMFFloat(attributeID, values);
+  this->setMFFloat(attributeID, values);
 }
 
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFInt32(int attributeID, const std::vector<int>& values)
+void X3DWriterXML::setMFInt32(int attributeID, const std::vector<int>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n%s", X3DTypes::getAttributeByID(attributeID), this->ActTab.c_str());
   
@@ -250,7 +259,7 @@ void X3DWriterXML::SetMFInt32(int attributeID, const std::vector<int>& values)
 }
 
 // Not implemented for FI encoding yet
-/*void X3DWriterXML::SetMFBool(int attributeID, std::vector<bool>& values)
+/*void X3DWriterXML::setMFBool(int attributeID, std::vector<bool>& values)
 {
   fprintf(this->OutputStream, " %s=\"", X3DTypes::getAttributeByID(attributeID));
   for(unsigned int i = 0; i < values.size(); i++)
@@ -266,7 +275,7 @@ void X3DWriterXML::SetMFInt32(int attributeID, const std::vector<int>& values)
 }*/
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFVec2f(int attributeID, const std::vector<float>& values)
+void X3DWriterXML::setMFVec2f(int attributeID, const std::vector<float>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n", X3DTypes::getAttributeByID(attributeID));
   
@@ -281,7 +290,7 @@ void X3DWriterXML::SetMFVec2f(int attributeID, const std::vector<float>& values)
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFVec3f(int attributeID, const std::vector<float>& values)
+void X3DWriterXML::setMFVec3f(int attributeID, const std::vector<float>& values)
 {
   fprintf(this->OutputStream, " %s=\"\n", X3DTypes::getAttributeByID(attributeID));
   
@@ -296,7 +305,7 @@ void X3DWriterXML::SetMFVec3f(int attributeID, const std::vector<float>& values)
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SetMFString(int attributeID, const std::vector<std::string>& strings)
+void X3DWriterXML::setMFString(int attributeID, const std::vector<std::string>& strings)
 {
   fprintf(this->OutputStream, " %s='", X3DTypes::getAttributeByID(attributeID));
 
@@ -311,24 +320,24 @@ void X3DWriterXML::SetMFString(int attributeID, const std::vector<std::string>& 
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::Flush()
+void X3DWriterXML::flush()
 {
   fflush(this->OutputStream);
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::AddDepth()
+void X3DWriterXML::addDepth()
 {
   this->ActTab += "  ";
 }
 
 //-----------------------------------------------------------------------------
-void X3DWriterXML::SubDepth()
+void X3DWriterXML::subDepth()
 {
   this->ActTab.erase(0, 2);
 }
 
-void X3DWriterXML::printAttributeString(int attributeID)
+void X3DWriterXML::printAttributeString(int )
 {
   //this->OutputStream << " " << X3DTypes::getAttributeByID(attributeID) << "=\"" << this->GetNewline() << this->ActTab;
   //fprintf(this->OutputStream, " %s=\"\n%s", this->ActTab);

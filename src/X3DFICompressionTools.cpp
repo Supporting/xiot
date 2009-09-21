@@ -1,9 +1,9 @@
+#include <xiot/X3DFICompressionTools.h>
+
 #include <cassert>
 #include <string>
 #include <cstring>
 #include <stdexcept>
-
-#include <xiot/X3DFICompressionTools.h>
 
 #define EXPONENT_MASK_32 0x7f800000
 #define MANTISSA_MASK_32 0x007fffff
@@ -117,12 +117,12 @@ FloatPacker::FloatPacker(unsigned long exponentBits, unsigned long mantissaBits)
 _exponentBits(exponentBits),
 _mantissaBits(mantissaBits)
 {
-	if (_exponentBits > 8) {		throw std::range_error("Exponent bits out of range, max 8" );	}
-	if (_mantissaBits > 23) {		throw new std::range_error("Too many mantissa bits, max: 23" );	}
+	if (_exponentBits > 8) {		throw std::range_error("Exponent bits out of range, max 8" );	}
+	if (_mantissaBits > 23) {		throw std::range_error("Too many mantissa bits, max: 23" );	}
 	_exponent_bias = (1 << (_exponentBits - 1)) - 1;	 _sign_shift = _exponentBits + _mantissaBits;	_sign_mask = 1 << _sign_shift;	 _exponent_mask = ((1 << _exponentBits) - 1) << _mantissaBits;	 _mantissa_mask = (1 << _mantissaBits) - 1;	_exponent_max = (1 << (_exponentBits - 1)) - 1;	_exponent_min = -_exponent_max - 1;
 }
 
-float FloatPacker::decode(unsigned long src, bool isSigned)
+float FloatPacker::decode(unsigned long src, bool )
 {
 	if (src == 0)
 		return 0.0f;

@@ -15,15 +15,15 @@ void DefaultContentHandler::endDocument()
 {
 }
 
-void DefaultContentHandler::startElement(const ParserVocabulary* vocab, const Element &element, const Attributes &attributes)
+void DefaultContentHandler::startElement(const ParserVocabulary* , const Element &, const Attributes &)
 {
 }
 
-void DefaultContentHandler::endElement(const ParserVocabulary* vocab, const Element &element)
+void DefaultContentHandler::endElement(const ParserVocabulary* , const Element &)
 {
 }
 
-void DefaultContentHandler::characters(const ParserVocabulary* vocab, const CharacterChunk &chunk)
+void DefaultContentHandler::characters(const ParserVocabulary* , const CharacterChunk &)
 {
 }
 

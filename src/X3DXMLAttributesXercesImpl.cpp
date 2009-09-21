@@ -43,16 +43,20 @@ size_t X3DXMLAttributes::getLength() const {
 	return static_cast<size_t>(_impl->_attributes->getLength());
 }
 
-std::string X3DXMLAttributes::getAttributesAsString() const {
-	std::string sAttributes;
-
-	for(size_t i = 0; i < _impl->_attributes->getLength(); i++) {
-		sAttributes += XMLString::transcode(_impl->_attributes->getQName(i));
-		sAttributes += " ";
-	}
-
-	return sAttributes;
+std::string X3DXMLAttributes::getAttributeValue(int id) const {
+  char* sValue = XMLString::transcode(_impl->_attributes->getValue(id));
+  std::string result(sValue);
+	XMLString::release(&sValue);
+	return result; 
 }
+
+std::string X3DXMLAttributes::getAttributeName(int id) const {
+	char* sValue = XMLString::transcode(_impl->_attributes->getQName(id));
+  std::string result(sValue);
+	XMLString::release(&sValue);
+	return result; 
+}
+
 // Single fields
 bool X3DXMLAttributes::getSFBool(int index) const{
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
@@ -72,109 +76,96 @@ int X3DXMLAttributes::getSFInt32(int index) const {
 	int result = X3DDataTypeFactory::getSFInt32FromString(sValue);
 	XMLString::release(&sValue);
 	return result; 
-
 }
 
-SFVec3f X3DXMLAttributes::getSFVec3f(int index) const {
+void X3DXMLAttributes::getSFVec3f(int index, SFVec3f &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFVec3f result = X3DDataTypeFactory::getSFVec3fFromString(sValue);
+	X3DDataTypeFactory::getSFVec3fFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-SFVec2f X3DXMLAttributes::getSFVec2f(int index) const {
+void X3DXMLAttributes::getSFVec2f(int index, SFVec2f &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFVec2f result = X3DDataTypeFactory::getSFVec2fFromString(sValue);
+	X3DDataTypeFactory::getSFVec2fFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-SFRotation X3DXMLAttributes::getSFRotation(int index) const {
+void X3DXMLAttributes::getSFRotation(int index, SFRotation &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFRotation result = X3DDataTypeFactory::getSFRotationFromString(sValue);
+	X3DDataTypeFactory::getSFRotationFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
-}
-std::string X3DXMLAttributes::getSFString(int index) const {
-	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::string result(sValue);
-	XMLString::release(&sValue);
-	return result; 
 }
 
-SFColor X3DXMLAttributes::getSFColor(int index) const {
+void X3DXMLAttributes::getSFString(int index, SFString &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFColor result = X3DDataTypeFactory::getSFColorFromString(sValue);
+  value.assign(sValue);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-SFColorRGBA X3DXMLAttributes::getSFColorRGBA(int index) const {
+void X3DXMLAttributes::getSFColor(int index, SFColor &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFColorRGBA result = X3DDataTypeFactory::getSFColorRGBAFromString(sValue);
+	X3DDataTypeFactory::getSFColorFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-SFImage X3DXMLAttributes::getSFImage(int index) const {
+void X3DXMLAttributes::getSFColorRGBA(int index, SFColorRGBA &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	SFImage result = X3DDataTypeFactory::getSFImageFromString(sValue);
+	X3DDataTypeFactory::getSFColorRGBAFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
+}
+
+void X3DXMLAttributes::getSFImage(int index, SFImage &value) const {
+	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
+	X3DDataTypeFactory::getSFImageFromString(sValue, value);
+	XMLString::release(&sValue);
 } 
 
 // Multi Field
-std::vector<float> X3DXMLAttributes::getMFFloat(int index) const {
+void X3DXMLAttributes::getMFFloat(int index, MFFloat &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<float> result = X3DDataTypeFactory::getMFFloatFromString(sValue);
+	X3DDataTypeFactory::getMFFloatFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
-std::vector<int> X3DXMLAttributes::getMFInt32(int index) const {
+void X3DXMLAttributes::getMFInt32(int index, MFInt32 &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<int> result = X3DDataTypeFactory::getMFInt32FromString(sValue);
+	X3DDataTypeFactory::getMFInt32FromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-std::vector<SFVec3f> X3DXMLAttributes::getMFVec3f(int index) const {
+void X3DXMLAttributes::getMFVec3f(int index, MFVec3f &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<SFVec3f> result = X3DDataTypeFactory::getMFVec3fFromString(sValue);
+	X3DDataTypeFactory::getMFVec3fFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
-}
-std::vector<SFVec2f> X3DXMLAttributes::getMFVec2f(int index) const {
-	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<SFVec2f> result = X3DDataTypeFactory::getMFVec2fFromString(sValue);
-	XMLString::release(&sValue);
-	return result; 
-}
-std::vector<SFRotation> X3DXMLAttributes::getMFRotation(int index) const  {
-	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<SFRotation> result = X3DDataTypeFactory::getMFRotationFromString(sValue);
-	XMLString::release(&sValue);
-	return result; 
 }
 
-std::vector<std::string> X3DXMLAttributes::getMFString(int index) const {
+void X3DXMLAttributes::getMFVec2f(int index, MFVec2f &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<std::string> result = X3DDataTypeFactory::getMFStringFromString(sValue);
+	X3DDataTypeFactory::getMFVec2fFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-std::vector<SFColor> X3DXMLAttributes::getMFColor(int index) const {
+void X3DXMLAttributes::getMFRotation(int index, MFRotation &value) const  {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<SFColor> result = X3DDataTypeFactory::getMFColorFromString(sValue);
+	X3DDataTypeFactory::getMFRotationFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
 }
 
-std::vector<SFColorRGBA> X3DXMLAttributes::getMFColorRGBA(int index) const {
+void X3DXMLAttributes::getMFString(int index, MFString &value) const {
 	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
-	std::vector<SFColorRGBA> result = X3DDataTypeFactory::getMFColorRGBAFromString(sValue);
+	X3DDataTypeFactory::getMFStringFromString(sValue, value);
 	XMLString::release(&sValue);
-	return result; 
+}
+
+void X3DXMLAttributes::getMFColor(int index, MFColor &value) const {
+	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
+	X3DDataTypeFactory::getMFColorFromString(sValue, value);
+	XMLString::release(&sValue);
+}
+
+void X3DXMLAttributes::getMFColorRGBA(int index, MFColorRGBA &value) const {
+	char* sValue = XMLString::transcode(_impl->_attributes->getValue(index));
+	X3DDataTypeFactory::getMFColorRGBAFromString(sValue, value);
+	XMLString::release(&sValue);
 }
 }
 
