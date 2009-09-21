@@ -23,75 +23,73 @@
 #define X3DWRITERFI_H
 
 #include <xiot/X3DWriter.h>
+#include <xiot/X3DFIEncoder.h>
+
+namespace XIOT {
 
 class X3DWriterFIByte;
-class X3DZLibDataCompressor;
 struct NodeInfo;
 
 class XIOT_EXPORT X3DWriterFI : public X3DWriter
 {
 public:
     
-  virtual void CloseFile();
-  virtual int OpenFile(const char* file);
+  virtual void closeFile();
+  virtual int openFile(const char* file);
 
+  virtual void flush();
 
-  //void Write(const char* str);
-
-  virtual void Flush();
-
-  void StartDocument();
-  void EndDocument();
+  void startDocument();
+  void endDocument();
 
   // Elements
-  void StartNode(int elementID);
-  void EndNode();
+  void startNode(int elementID);
+  void endNode();
 
   // Single Field
-  virtual void SetSFFloat(int attributeID, float);
-  virtual void SetSFInt32(int attributeID, int);
-  virtual void SetSFBool(int attributeID, bool);
+  virtual void setSFFloat(int attributeID, float);
+  virtual void setSFInt32(int attributeID, int);
+  virtual void setSFBool(int attributeID, bool);
 
-  virtual void SetSFVec3f(int attributeID, float x, float y, float z);
-  virtual void SetSFVec2f(int attributeID, float s, float t);
-  virtual void SetSFRotation(int attributeID, float x, float y, float z, float angle);
-  virtual void SetSFString(int attributeID, const std::string &s);
-  virtual void SetSFColor(int attributeID, float r, float g, float b);
-  virtual void SetSFImage(int attributeID, const std::vector<int>&); 
+  virtual void setSFVec3f(int attributeID, float x, float y, float z);
+  virtual void setSFVec2f(int attributeID, float s, float t);
+  virtual void setSFRotation(int attributeID, float x, float y, float z, float angle);
+  virtual void setSFString(int attributeID, const std::string &s);
+  virtual void setSFColor(int attributeID, float r, float g, float b);
+  virtual void setSFImage(int attributeID, const std::vector<int>&); 
 
   // Multi Field
-  virtual void SetMFFloat(int attributeID, const std::vector<float>&);
-  virtual void SetMFInt32(int attributeID, const std::vector<int>&);
+  virtual void setMFFloat(int attributeID, const std::vector<float>&);
+  virtual void setMFInt32(int attributeID, const std::vector<int>&);
 
-  virtual void SetMFVec3f(int attributeID, const std::vector<float>&);
-  virtual void SetMFVec2f(int attributeID, const std::vector<float>&);
-  virtual void SetMFRotation(int attributeID, const std::vector<float>&);
-  virtual void SetMFString(int attributeID, const std::vector<std::string>&);
-  virtual void SetMFColor(int attributeID, const std::vector<float>&);
-
-  int GetEncodingMethod();
-
-  void SetFastest(int n_iFastest) {Fastest = n_iFastest;};
+  virtual void setMFVec3f(int attributeID, const std::vector<float>&);
+  virtual void setMFVec2f(int attributeID, const std::vector<float>&);
+  virtual void setMFRotation(int attributeID, const std::vector<float>&);
+  virtual void setMFString(int attributeID, const std::vector<std::string>&);
+  virtual void setMFColor(int attributeID, const std::vector<float>&);
 
   X3DWriterFI();
   ~X3DWriterFI();
 
+  virtual bool setProperty(const char* const name, void* value);
+  virtual void* getProperty(const char* const name) const;
+
 
 private:
-  void StartAttribute(int attributeID, bool literal, bool addToTable = false);
-  void EndAttribute();
+  void startAttribute(int attributeID, bool literal, bool addToTable = false);
+  void endAttribute();
 
-  void CheckNode(bool callerIsAttribute = true);
-  bool IsLineFeedEncodingOn;
+  void checkNode(bool callerIsAttribute = true);
 
-  //int Depth;
-  X3DWriterFIByte* Writer;
-  std::vector<NodeInfo>* InfoStack;
-  X3DZLibDataCompressor* Compressor;
+  std::vector<NodeInfo>* _infoStack;
+  X3DFIEncoder _encoder;
+  int _fastest;
+  std::ofstream _stream;
+  bool _isLineFeedEncodingOn;
 
-  int Fastest;
 
 };
 
+} // namespace XIOT
 #endif
 

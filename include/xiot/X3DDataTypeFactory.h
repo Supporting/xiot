@@ -72,51 +72,51 @@ public:
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFVec3f getSFVec3fFromString(const std::string &s);
+  static void getSFVec3fFromString(const std::string &s, SFVec3f &value);
   /**
    * Parses a given string and returns its value as a SFVec2f structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFVec2f getSFVec2fFromString(const std::string &s);
+  static void getSFVec2fFromString(const std::string &s, SFVec2f &value);
   /**
    * Parses a given string and returns its value as a SFRotation structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFRotation getSFRotationFromString(const std::string &s);
+  static void getSFRotationFromString(const std::string &s, SFRotation &value);
   /**
    * Returns the string itself.
    * @param const std::string &s The string to be parsed.
    * @return The string itself.
    */
-  static std::string getSFStringFromString(const std::string &s);
+  static void getSFStringFromString(const std::string &s, std::string& value);
   /**
    * Parses a given string and returns its value as a SFColor structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFColor getSFColorFromString(const std::string &s);
+  static void getSFColorFromString(const std::string &s, SFColor& value);
   
   /**
    * Parses a given string and returns its value as a SFColor structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFColor getSFColorFromBytes(const std::string &s);
+  //static SFColor getSFColorFromBytes(const std::string &s);
   
   /**
    * Parses a given string and returns its value as a SFColorRGBA structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFColorRGBA getSFColorRGBAFromString(const std::string &s);
+  static void getSFColorRGBAFromString(const std::string &s, SFColorRGBA &value);
   /**
    * Parses a given string and returns its value as a SFImage structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static SFImage getSFImageFromString(const std::string &s); 
+  static void getSFImageFromString(const std::string &s, SFImage &value); 
   
   // Multi Field
   /**
@@ -124,49 +124,49 @@ public:
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<float> getMFFloatFromString(const std::string &s);
+  static void getMFFloatFromString(const std::string &s, MFFloat &value);
   /**
    * Parses a given string and returns its value as a std::vector<int>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<int> getMFInt32FromString(const std::string &s);
+  static void getMFInt32FromString(const std::string &s, MFInt32 &value);
   /**
    * Parses a given string and returns its value as a std::vector<SFVec3f>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<SFVec3f> getMFVec3fFromString(const std::string &s);
+  static void getMFVec3fFromString(const std::string &s, MFVec3f &value);
   /**
    * Parses a given string and returns its value as a std::vector<SFVec2f>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<SFVec2f> getMFVec2fFromString(const std::string &s);
+  static void getMFVec2fFromString(const std::string &s, MFVec2f &value);
   /**
    * Parses a given string and returns its value as a std::vector<SFRotation>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<SFRotation> getMFRotationFromString(const std::string &s);
+  static void getMFRotationFromString(const std::string &s, MFRotation &value);
   /**
    * Parses a given string and returns its value as a std::vector<std::string>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<std::string> getMFStringFromString(const std::string &s);
+  static void getMFStringFromString(const std::string &s, MFString &value);
   /**
    * Parses a given string and returns its value as a std::vector<SFColor>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<SFColor> getMFColorFromString(const std::string &s);
+  static void getMFColorFromString(const std::string &s, MFColor &value);
   /**
    * Parses a given string and returns its value as a std::vector<SFColorRGBA>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static std::vector<SFColorRGBA> getMFColorRGBAFromString(const std::string &s);	
+  static void getMFColorRGBAFromString(const std::string &s, MFColorRGBA &value);	
 };
 
 }

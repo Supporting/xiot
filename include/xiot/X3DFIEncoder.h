@@ -19,57 +19,39 @@
      Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
      MA 02110-1301  USA
 =========================================================================*/
-#ifndef FI_SAXPARSER_H
-#define FI_SAXPARSER_H
+#ifndef X3D_X3DFIENCODER_H
+#define X3D_X3DFIENCODER_H
 
-#include <xiot/FITypes.h>
-#include <xiot/FIDecoder.h>
-#include <string>
-#include <fstream>
-#include <map>
+#include <xiot/XIOTConfig.h>
+#include <xiot/FIEncoder.h>
 
-namespace FI {
+namespace XIOT {
 
-class ContentHandler;
-class ParserVocabulary;
-
-/**
- * The SAXParser is a specialization of the Decoder that implements callback
- * at those states defined by the SAX mechanism. The given ContentHandler can
- * process those callbacks. The Parser also gives a reference to the current 
- * vocabulary.
- *
- * @see ContentHandler
+/**  
+ *  Decoder for FI files. 
  */
-class OPENFI_EXPORT SAXParser : public Decoder
+class XIOT_EXPORT X3DFIEncoder : public FI::FIEncoder
 {
 public:
-  /// Constructor.
-  SAXParser() {};
-  /// Destructor.
-  virtual ~SAXParser();
+  X3DFIEncoder(void);
+  virtual ~X3DFIEncoder(void);
 
-  virtual void parse();
+  virtual void encodeAttributeIntegerArray(const int* values, size_t size);
+  virtual void encodeAttributeFloatArray(const float* values, size_t size);
 
-  void setContentHandler(ContentHandler* handler);
+  void setFloatAlgorithm(int algorithmID);
+  void setIntAlgorithm(int algorithmID);
+  
+  int getFloatAlgorithm() const;
+  int getIntAlgorithm() const;
+
 
 protected:
-  virtual void processDocument();
-  virtual void processElement();
-  virtual void processAttributes();
-  virtual void processCharacterChunk();
-
-  /**
-    * Reference to content handler.
-    */
-  ContentHandler* _contentHandler;
-
-private:
-  bool _terminated;
-  bool _doubleTerminated;
-  Attributes _attributes;
+  int _floatAlgorithm;
+  int _intAlgorithm;
 };
 
-}
+} // namespace XIOT
 
-#endif
+#endif // X3D_X3DFIENCODER_H
+

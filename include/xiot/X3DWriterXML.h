@@ -24,6 +24,8 @@
 
 #include <xiot/X3DWriter.h>
 
+namespace XIOT {
+
 struct XMLInfo {
 
 XMLInfo(int _elementId)
@@ -40,41 +42,43 @@ class XIOT_EXPORT X3DWriterXML : public X3DWriter
 
 public:
     
-  virtual void CloseFile();
-  virtual int OpenFile(const char* file);
-  virtual void Flush();
+  virtual void closeFile();
+  virtual int openFile(const char* file);
+  virtual void flush();
 
 
-  void StartDocument();
-  void EndDocument();
+  void startDocument();
+  void endDocument();
 
   // Elements
-  void StartNode(int elementID);
-  void EndNode();
+  void startNode(int elementID);
+  void endNode();
   
   
   // Single Field
-  virtual void SetSFFloat(int attributeID, float);
-  virtual void SetSFInt32(int attributeID, int);
-  virtual void SetSFBool(int attributeID, bool);
+  virtual void setSFFloat(int attributeID, float);
+  virtual void setSFInt32(int attributeID, int);
+  virtual void setSFBool(int attributeID, bool);
 
-  virtual void SetSFVec3f(int attributeID, float x, float y, float z);
-  virtual void SetSFVec2f(int attributeID, float s, float t);
-  virtual void SetSFRotation(int attributeID, float x, float y, float z, float angle);
-  virtual void SetSFString(int attributeID, const std::string &s);
-  virtual void SetSFColor(int attributeID, float r, float g, float b);
-  virtual void SetSFImage(int attributeID, const std::vector<int>&); 
+  virtual void setSFVec3f(int attributeID, float x, float y, float z);
+  virtual void setSFVec2f(int attributeID, float s, float t);
+  virtual void setSFRotation(int attributeID, float x, float y, float z, float angle);
+  virtual void setSFString(int attributeID, const std::string &s);
+  virtual void setSFColor(int attributeID, float r, float g, float b);
+  virtual void setSFImage(int attributeID, const std::vector<int>&); 
 
   // Multi Field
-  virtual void SetMFFloat(int attributeID, const std::vector<float>&);
-  virtual void SetMFInt32(int attributeID, const std::vector<int>&);
+  virtual void setMFFloat(int attributeID, const std::vector<float>&);
+  virtual void setMFInt32(int attributeID, const std::vector<int>&);
 
-  virtual void SetMFVec3f(int attributeID, const std::vector<float>&);
-  virtual void SetMFVec2f(int attributeID, const std::vector<float>&);
-  virtual void SetMFRotation(int attributeID, const std::vector<float>&);
-  virtual void SetMFString(int attributeID, const std::vector<std::string>&);
-  virtual void SetMFColor(int attributeID, const std::vector<float>&);
+  virtual void setMFVec3f(int attributeID, const std::vector<float>&);
+  virtual void setMFVec2f(int attributeID, const std::vector<float>&);
+  virtual void setMFRotation(int attributeID, const std::vector<float>&);
+  virtual void setMFString(int attributeID, const std::vector<std::string>&);
+  virtual void setMFColor(int attributeID, const std::vector<float>&);
   
+  virtual bool setProperty(const char* const name, void* value);
+  virtual void* getProperty(const char* const name) const;
 
 public:
   X3DWriterXML();
@@ -82,9 +86,9 @@ public:
 
 private:
  
-  const char* GetNewline() { return "\n"; };
-  void AddDepth();
-  void SubDepth();
+  const char* getNewline() { return "\n"; };
+  void addDepth();
+  void subDepth();
   void printAttributeString(int attributeID);
 
   std::string ActTab;
@@ -93,5 +97,7 @@ private:
   std::vector<XMLInfo> *InfoStack;
 
 };
+
+}
 
 #endif

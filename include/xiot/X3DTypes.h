@@ -23,7 +23,7 @@
 #ifndef X3DTYPES_H
 #define X3DTYPES_H
 
-#include <xiot/XIOTConfigure.h>
+#include <xiot/XIOTConfig.h>
 #include <string>
 #include <vector>
 #include <map>
@@ -52,10 +52,43 @@ namespace XIOT {
    */
   static const int SKIP_CHILDREN = 3;
 
+  struct XIOT_EXPORT Property {
+		static const char* FloatEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/FloatEncodingAlgorithm";
+		static const char* IntEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/IntEncodingAlgorithm";
+  };
+
+  struct XIOT_EXPORT Encoder {
+		static const char* BuiltIn; // 0;
+		static const char* DeltazlibIntArrayEncoder; // "encoder://web3d.org/DeltazlibIntArrayEncoder";
+		static const char* QuantizedzlibFloatArrayEncoder; // "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
+  };
+
+  enum X3DProfile {
+      Core = 0,
+      Full,
+      Immersive,
+      Interactive,
+      Interchange,
+      MPEG4Interactive
+    };
+
+  enum X3DVersion {
+      VERSION_3_0,
+      VERSION_3_1,
+      VERSION_3_2,
+    };
+
 
   /**
    * \defgroup x3ddatatypes X3D Data Types
    */
+
+  typedef std::vector<float> MFFloat;
+  typedef std::vector<int> MFInt32;
+  
+  
+  typedef std::string SFString;
+  typedef std::vector<SFString> MFString;
 
 
   /**
@@ -71,7 +104,13 @@ namespace XIOT {
 	  SFVec2f(float X, float Y) : x(X), y(Y) {};
 	  template <class C>
 		explicit SFVec2f(const C& c) : x(c[0]), y(c[1]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
   };
+
+  typedef std::vector<SFVec2f> MFVec2f;
 
   /**
    * The SFVec3f field specifies a three-dimensional (3D) vector.
@@ -86,8 +125,14 @@ namespace XIOT {
 	  SFVec3f(float X, float Y, float Z) : x(X), y(Y), z(Z) {};
   	  template <class C>
 		explicit SFVec3f(const C& c) : x(c[0]), y(c[1]), z(c[2]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
+
   };
 
+  typedef std::vector<SFVec3f> MFVec3f;
   
   /**
    * The SFRotation field specifies one arbitrary rotation. 
@@ -106,7 +151,15 @@ namespace XIOT {
 	  SFRotation(float X, float Y, float Z, float Angle) : x(X), y(Y), z(Z), angle(Angle) {};
 	  template <class C>
 		explicit SFRotation(const C& c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&x)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&x)[i];};
+
   };
+
+  typedef std::vector<SFRotation> MFRotation;
+
 
   /**
    * The SFColor field specifies one RGB (red-green-blue) colour triple. 
@@ -131,7 +184,14 @@ namespace XIOT {
 		explicit SFColor(const C& c) : r(c[0]), g(c[1]), b(c[2]) {
 			//std::cout << "Creating SFColor" << std::endl;
 		}
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&r)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&r)[i];};
+
   };
+
+  typedef std::vector<SFColor> MFColor;
 
   /**
    * The SFColorRGBA field specifies one RGBA (red-green-blue-alpha) colour
@@ -145,11 +205,18 @@ namespace XIOT {
    */
   struct SFColorRGBA {
 	  float r, g, b, a;	  
-   	  SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
+ 	  SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
 	  SFColorRGBA(float R, float G, float B, float A) : r(R), g(G), b(B), a(A) {};
 	  template <class C>
-		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {}
+		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {};
+    /// Bracket operator.
+    inline float &operator[](int i) {return (&r)[i];};
+    /// Bracket operator.
+    inline const float &operator[](int i) const {return (&r)[i];};
+
   };
+
+  typedef std::vector<SFColorRGBA> MFColorRGBA;
 
   /**
    * The SFImage field specifies a single uncompressed 2-dimensional pixel image. 
@@ -160,7 +227,8 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFImageAndMFImage">X3D spec 5.3.6</a>
    * @ingroup x3ddatatypes
    */
-  typedef std::vector<int> SFImage;
+  typedef std::vector<unsigned int> SFImage;
+  typedef std::vector<SFImage> MFImage;
 
 
   /**
@@ -180,6 +248,9 @@ namespace XIOT {
 	  static int getAttributeID(const std::string &attributeStr);
 
 	  static void initMaps();
+
+    static const char* getProfileString(X3DProfile profile);
+    static const char* getVersionString(X3DVersion version);
 
   private:
 	  static std::map<std::string, int>	elementFromStringMap;
@@ -718,7 +789,12 @@ namespace XIOT {
 	matrix = 345,
 	X3DATTRIBUTE_COUNT
     };
+	
 	}; // namespace ID
+	
+
+
+
 };
 
 #endif

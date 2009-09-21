@@ -65,35 +65,35 @@ public:
 
   virtual int getAttributeIndex(int attributeID) const;
   virtual size_t getLength() const;
-  virtual std::string getAttributesAsString() const;
+  virtual std::string getAttributeValue(int attributeID) const;
+  virtual std::string getAttributeName(int attributeID) const;
 
-  // Single fields
-  virtual bool getSFBool(int index) const;
+// Single fields
+  virtual bool  getSFBool(int index) const;
   virtual float getSFFloat(int index) const;
-  virtual int getSFInt32(int index) const;
+  virtual int   getSFInt32(int index) const;
 
-  virtual SFVec3f getSFVec3f(int index) const;
-  virtual SFVec2f getSFVec2f(int index) const;
-  virtual SFRotation getSFRotation(int index) const;
-  virtual std::string getSFString(int index) const;
-  virtual SFColor getSFColor(int index) const;
-  virtual SFColorRGBA getSFColorRGBA(int index) const;
-  virtual SFImage getSFImage(int index) const; 
+  virtual void getSFVec3f(int index, SFVec3f &value) const;
+  virtual void getSFVec2f(int index, SFVec2f &value) const;
+  virtual void getSFRotation(int index, SFRotation &value) const;
+  virtual void getSFString(int index, SFString &value) const;
+  virtual void getSFColor(int index, SFColor &value) const;
+  virtual void getSFColorRGBA(int index,SFColorRGBA &value) const;
+  virtual void getSFImage(int index, SFImage &value) const; 
 
   // Multi Field
-  virtual std::vector<float> getMFFloat(int index) const;
-  virtual std::vector<int> getMFInt32(int index) const;
-
-  virtual std::vector<SFVec3f> getMFVec3f(int index) const;
-  virtual std::vector<SFVec2f> getMFVec2f(int index) const;
-  virtual std::vector<SFRotation> getMFRotation(int index) const;
-  virtual std::vector<std::string> getMFString(int index) const;
-  virtual std::vector<SFColor> getMFColor(int index) const;
-  virtual std::vector<SFColorRGBA> getMFColorRGBA(int index) const;
+  virtual void getMFFloat(int index, MFFloat &value) const;
+  virtual void getMFInt32(int index, MFInt32 &value) const;
+  virtual void getMFVec3f(int index, MFVec3f &value) const;
+  virtual void getMFVec2f(int index, MFVec2f &value) const;
+  virtual void getMFRotation(int index, MFRotation &value) const;
+  virtual void getMFString(int index, MFString &value) const;
+  virtual void getMFColor(int index, MFColor &value) const;
+  virtual void getMFColorRGBA(int index, MFColorRGBA &value) const;
 
 protected:
-  std::vector<float> getFloatArray(const FI::NonIdentifyingStringOrIndex &value) const;
-  std::vector<int>   getIntArray(const FI::NonIdentifyingStringOrIndex &value) const;
+  void getFloatArray(const FI::NonIdentifyingStringOrIndex &value, std::vector<float> &vec) const;
+  void   getIntArray(const FI::NonIdentifyingStringOrIndex &value, std::vector<int> &vec) const;
 
   FIAttributeImpl* _impl;
 };

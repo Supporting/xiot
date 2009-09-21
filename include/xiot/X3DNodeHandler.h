@@ -22,7 +22,7 @@
 #ifndef X3D_X3DNODEHANDLER_H
 #define X3D_X3DNODEHANDLER_H
 
-#include <xiot/XIOTConfigure.h>
+#include <xiot/XIOTConfig.h>
 #include <string> 
 
 namespace XIOT {

@@ -31,6 +31,7 @@
 
 namespace FI {
 
+typedef std::vector<IEncodingAlgorithm*> AlgorithmTable;
 
 /**
  * Abstract class that defines a ParserVocabulary
@@ -105,7 +106,7 @@ protected:
 	std::vector<std::string> _localNames;
 	std::vector<std::string> _attributeValues;
 	std::vector<std::string> _characterChunks;
-	std::vector<IEncodingAlgorithm*> _encodingAlgorithms;
+	AlgorithmTable _encodingAlgorithms;
 	
 	IntEncodingAlgorithm _intEncodingAlgorithm;
 	FloatEncodingAlgorithm _floatEncodingAlgorithm;

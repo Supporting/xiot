@@ -22,22 +22,7 @@
 #ifndef FI_FITYPES_H
 #define FI_FITYPES_H
 
-#if defined(_WIN32)
-# if defined(openFI_EXPORTS)
-#  define OPENFI_EXPORT __declspec(dllexport)
-# else
-#  define OPENFI_EXPORT __declspec(dllimport)
-# endif
-#else
-# define OPENFI_EXPORT
-#endif
-
-#if defined(_MSC_VER) 
-# pragma warning (disable: 4275) /* non-DLL-interface base class used */
-# pragma warning (disable: 4251) /* needs to have dll-interface to be used by clients */
-/* No warning for safe windows only functions */
-# define _CRT_SECURE_NO_WARNINGS
-#endif
+#include <xiot/FIConfig.h>
 
 #include <vector>
 #include <sstream>
@@ -71,7 +56,7 @@ namespace FI {
 	 * <code>NonEmptyOctetString ::= OCTET STRING (SIZE(1-four-gig))</code>
 	 * @ingroup ASN1Types
      */
-	typedef std::vector<char> NonEmptyOctetString;
+	typedef std::basic_string<unsigned char> NonEmptyOctetString;
 	
 	/**
      * 7.17 The EncodedCharacterString type
