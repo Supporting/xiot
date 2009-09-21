@@ -59,4 +59,4 @@ else(WIN32 AND NOT UNIX)
   set(CPACK_GENERATOR "STGZ;TGZ;")
 endif(WIN32 AND NOT UNIX)
 
-include(cpack)
+include(CPack)
