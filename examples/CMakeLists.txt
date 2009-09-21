@@ -9,7 +9,7 @@ set (VTKIMPORTER_SRC
 )
 
 find_package(VTK 5.3 REQUIRED)
-#include(${VTK_USE_FILE})
+include(${VTK_USE_FILE})
 
 include_directories(. ${PROJECT_SOURCE_DIR}/include ${VTK_INCLUDE_DIRS})
 

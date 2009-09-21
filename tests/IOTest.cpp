@@ -43,19 +43,19 @@ public:
 
 	virtual int startShape(const X3DAttributes& attr)
 	{
-		testEvent(3, "start Shape");
+		testEvent(9, "start Shape");
 		return CONTINUE;		
 	}
 
 	virtual int endShape()
 	{
-		testEvent(10, "end Shape");
+		testEvent(16, "end Shape");
 		return CONTINUE;		
 	}
 
 	virtual int startBox(const X3DAttributes& attr)
 	{
-		testEvent(8, "start Box");
+		testEvent(14, "start Box");
 		int index = attr.getAttributeIndex(ID::size);
 		assert(index != -1);
 		
@@ -64,17 +64,18 @@ public:
 	
 	virtual int endBox()
 	{
-		testEvent(9, "end Box");
+		testEvent(15, "end Box");
 		return CONTINUE;		
 	}
 	
 	virtual int startMaterial(const X3DAttributes& attr)
 	{
-		testEvent(5, "start Material");
+		testEvent(11, "start Material");
 		int index = attr.getAttributeIndex(ID::diffuseColor);
 		assert(index != -1);
 		
-		SFColor diffuseColor = attr.getSFColor(index);
+		SFColor diffuseColor;
+		attr.getSFColor(index, diffuseColor);
 		assert(diffuseColor.r == 1.0);
 		assert(diffuseColor.g == 0.0);
 		assert(diffuseColor.b == 0.0);
@@ -118,27 +119,24 @@ int start()
 	{
 		X3DWriter* w = writer[i];
 		if (i == 0)
-			w->OpenFile("iotest.x3d");
+			w->openFile("iotest.x3d");
 		else 
-			w->OpenFile("iotest.x3db");
-		w->StartDocument();
-		w->StartNode(ID::X3D);
-		w->StartNode(ID::Scene);
-		w->StartNode(ID::Shape);
-		w->StartNode(ID::Appearance);
-		w->StartNode(ID::Material);
-		w->SetSFVec3f(ID::diffuseColor, 1.0f, 0.0f, 0.0f);
-		w->SetSFFloat(ID::transparency, 0.1f);
-		w->EndNode();
-		w->EndNode(); // Appearance
-		w->StartNode(ID::Box);
-		w->SetSFVec3f(ID::size, 0.5f, 0.5f, 0.5f);
-		w->EndNode(); // Box
-		w->EndNode();//Shape
-		w->EndNode(); // Scene
-		w->EndNode();
-		w->EndDocument();
-		w->CloseFile();
+			w->openFile("iotest.x3db");
+		w->startX3DDocument();
+		
+		w->startNode(ID::Shape);
+		w->startNode(ID::Appearance);
+		w->startNode(ID::Material);
+		w->setSFVec3f(ID::diffuseColor, 1.0f, 0.0f, 0.0f);
+		w->setSFFloat(ID::transparency, 0.1f);
+		w->endNode();
+		w->endNode(); // Appearance
+		w->startNode(ID::Box);
+		w->setSFVec3f(ID::size, 0.5f, 0.5f, 0.5f);
+		w->endNode(); // Box
+		w->endNode();//Shape
+		w->endX3DDocument();
+		w->closeFile();
 
 		delete w;
 	}

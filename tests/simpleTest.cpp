@@ -39,7 +39,8 @@ int MyNodeHandler::startMaterial(const X3DAttributes &attr)
 	index = attr.getAttributeIndex(ID::diffuseColor);
 	if (index != -1)
 	{
-		SFColor diffuseColor = attr.getSFColor(index);
+		SFColor diffuseColor;
+		attr.getSFColor(index, diffuseColor);
 		cout << "Diffuse Color is set as: " << diffuseColor.r << " " << diffuseColor.g << " " << diffuseColor.b << endl;
 	}
 	return CONTINUE;

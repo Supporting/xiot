@@ -19,6 +19,17 @@ X3DLogNodeHandler::~X3DLogNodeHandler()
 	fclose(fp);
 }
 
+std::string X3DLogNodeHandler::getAttributesAsString(const X3DAttributes &attr)
+{
+  std::string result;
+  for (size_t i = 0; i < static_cast<int>(attr.getLength()); i++)
+  {
+    result.append(attr.getAttributeName(static_cast<int>(i)));
+    result.append(" ");
+  }
+  return result;
+}
+
 void X3DLogNodeHandler::startDocument()
 {
   fprintf(fp, "Event %4i - Start Document\n", iCounter++);
@@ -30,7 +41,7 @@ void X3DLogNodeHandler::endDocument()
 }
 
 int X3DLogNodeHandler::startShape(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Shape with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Shape with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -40,7 +51,7 @@ int X3DLogNodeHandler::endShape() {
 }
 
 int X3DLogNodeHandler::startAppearance(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Appearance with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Appearance with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -50,7 +61,7 @@ int X3DLogNodeHandler::endAppearance() {
 }
 
 int X3DLogNodeHandler::startMaterial(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Material with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Material with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -60,7 +71,7 @@ int X3DLogNodeHandler::endMaterial() {
 }
 
 int X3DLogNodeHandler::startIndexedFaceSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedFaceSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedFaceSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -70,7 +81,7 @@ int X3DLogNodeHandler::endIndexedFaceSet() {
 }
 
 int X3DLogNodeHandler::startProtoInstance(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProtoInstance with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProtoInstance with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -80,7 +91,7 @@ int X3DLogNodeHandler::endProtoInstance() {
 }
 
 int X3DLogNodeHandler::startTransform(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Transform with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Transform with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -90,7 +101,7 @@ int X3DLogNodeHandler::endTransform() {
 }
 
 int X3DLogNodeHandler::startImageTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ImageTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ImageTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -100,7 +111,7 @@ int X3DLogNodeHandler::endImageTexture() {
 }
 
 int X3DLogNodeHandler::startTextureTransform(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureTransform with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureTransform with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -110,7 +121,7 @@ int X3DLogNodeHandler::endTextureTransform() {
 }
 
 int X3DLogNodeHandler::startCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Coordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Coordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -120,7 +131,7 @@ int X3DLogNodeHandler::endCoordinate() {
 }
 
 int X3DLogNodeHandler::startNormal(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Normal with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Normal with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -130,7 +141,7 @@ int X3DLogNodeHandler::endNormal() {
 }
 
 int X3DLogNodeHandler::startColor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Color with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Color with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -140,7 +151,7 @@ int X3DLogNodeHandler::endColor() {
 }
 
 int X3DLogNodeHandler::startColorRGBA(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ColorRGBA with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ColorRGBA with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -150,7 +161,7 @@ int X3DLogNodeHandler::endColorRGBA() {
 }
 
 int X3DLogNodeHandler::startTextureCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureCoordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureCoordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -160,7 +171,7 @@ int X3DLogNodeHandler::endTextureCoordinate() {
 }
 
 int X3DLogNodeHandler::startROUTE(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ROUTE with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ROUTE with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -170,7 +181,7 @@ int X3DLogNodeHandler::endROUTE() {
 }
 
 int X3DLogNodeHandler::startfieldValue(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node fieldValue with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node fieldValue with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -180,7 +191,7 @@ int X3DLogNodeHandler::endfieldValue() {
 }
 
 int X3DLogNodeHandler::startGroup(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Group with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Group with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -190,7 +201,7 @@ int X3DLogNodeHandler::endGroup() {
 }
 
 int X3DLogNodeHandler::startLOD(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node LOD with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node LOD with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -200,7 +211,7 @@ int X3DLogNodeHandler::endLOD() {
 }
 
 int X3DLogNodeHandler::startSwitch(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Switch with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Switch with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -210,7 +221,7 @@ int X3DLogNodeHandler::endSwitch() {
 }
 
 int X3DLogNodeHandler::startScript(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Script with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Script with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -220,7 +231,7 @@ int X3DLogNodeHandler::endScript() {
 }
 
 int X3DLogNodeHandler::startIndexedTriangleFanSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedTriangleFanSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedTriangleFanSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -230,7 +241,7 @@ int X3DLogNodeHandler::endIndexedTriangleFanSet() {
 }
 
 int X3DLogNodeHandler::startIndexedTriangleSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedTriangleSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedTriangleSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -240,7 +251,7 @@ int X3DLogNodeHandler::endIndexedTriangleSet() {
 }
 
 int X3DLogNodeHandler::startIndexedTriangleStripSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedTriangleStripSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedTriangleStripSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -250,7 +261,7 @@ int X3DLogNodeHandler::endIndexedTriangleStripSet() {
 }
 
 int X3DLogNodeHandler::startMultiTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MultiTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MultiTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -260,7 +271,7 @@ int X3DLogNodeHandler::endMultiTexture() {
 }
 
 int X3DLogNodeHandler::startMultiTextureCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MultiTextureCoordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MultiTextureCoordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -270,7 +281,7 @@ int X3DLogNodeHandler::endMultiTextureCoordinate() {
 }
 
 int X3DLogNodeHandler::startMultiTextureTransform(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MultiTextureTransform with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MultiTextureTransform with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -280,7 +291,7 @@ int X3DLogNodeHandler::endMultiTextureTransform() {
 }
 
 int X3DLogNodeHandler::startIndexedLineSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedLineSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedLineSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -290,7 +301,7 @@ int X3DLogNodeHandler::endIndexedLineSet() {
 }
 
 int X3DLogNodeHandler::startPointSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PointSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PointSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -300,7 +311,7 @@ int X3DLogNodeHandler::endPointSet() {
 }
 
 int X3DLogNodeHandler::startStaticGroup(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node StaticGroup with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node StaticGroup with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -310,7 +321,7 @@ int X3DLogNodeHandler::endStaticGroup() {
 }
 
 int X3DLogNodeHandler::startSphere(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Sphere with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Sphere with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -320,7 +331,7 @@ int X3DLogNodeHandler::endSphere() {
 }
 
 int X3DLogNodeHandler::startBox(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Box with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Box with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -330,7 +341,7 @@ int X3DLogNodeHandler::endBox() {
 }
 
 int X3DLogNodeHandler::startCone(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Cone with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Cone with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -340,7 +351,7 @@ int X3DLogNodeHandler::endCone() {
 }
 
 int X3DLogNodeHandler::startAnchor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Anchor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Anchor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -350,7 +361,7 @@ int X3DLogNodeHandler::endAnchor() {
 }
 
 int X3DLogNodeHandler::startArc2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Arc2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Arc2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -360,7 +371,7 @@ int X3DLogNodeHandler::endArc2D() {
 }
 
 int X3DLogNodeHandler::startArcClose2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ArcClose2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ArcClose2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -370,7 +381,7 @@ int X3DLogNodeHandler::endArcClose2D() {
 }
 
 int X3DLogNodeHandler::startAudioClip(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node AudioClip with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node AudioClip with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -380,7 +391,7 @@ int X3DLogNodeHandler::endAudioClip() {
 }
 
 int X3DLogNodeHandler::startBackground(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Background with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Background with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -390,7 +401,7 @@ int X3DLogNodeHandler::endBackground() {
 }
 
 int X3DLogNodeHandler::startBillboard(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Billboard with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Billboard with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -400,7 +411,7 @@ int X3DLogNodeHandler::endBillboard() {
 }
 
 int X3DLogNodeHandler::startBooleanFilter(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node BooleanFilter with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node BooleanFilter with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -410,7 +421,7 @@ int X3DLogNodeHandler::endBooleanFilter() {
 }
 
 int X3DLogNodeHandler::startBooleanSequencer(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node BooleanSequencer with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node BooleanSequencer with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -420,7 +431,7 @@ int X3DLogNodeHandler::endBooleanSequencer() {
 }
 
 int X3DLogNodeHandler::startBooleanToggle(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node BooleanToggle with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node BooleanToggle with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -430,7 +441,7 @@ int X3DLogNodeHandler::endBooleanToggle() {
 }
 
 int X3DLogNodeHandler::startBooleanTrigger(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node BooleanTrigger with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node BooleanTrigger with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -440,7 +451,7 @@ int X3DLogNodeHandler::endBooleanTrigger() {
 }
 
 int X3DLogNodeHandler::startCircle2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Circle2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Circle2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -450,7 +461,7 @@ int X3DLogNodeHandler::endCircle2D() {
 }
 
 int X3DLogNodeHandler::startCollision(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Collision with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Collision with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -460,7 +471,7 @@ int X3DLogNodeHandler::endCollision() {
 }
 
 int X3DLogNodeHandler::startColorInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ColorInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ColorInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -470,7 +481,7 @@ int X3DLogNodeHandler::endColorInterpolator() {
 }
 
 int X3DLogNodeHandler::startContour2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Contour2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Contour2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -480,7 +491,7 @@ int X3DLogNodeHandler::endContour2D() {
 }
 
 int X3DLogNodeHandler::startContourPolyline2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ContourPolyline2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ContourPolyline2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -490,7 +501,7 @@ int X3DLogNodeHandler::endContourPolyline2D() {
 }
 
 int X3DLogNodeHandler::startCoordinateDouble(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CoordinateDouble with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CoordinateDouble with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -500,7 +511,7 @@ int X3DLogNodeHandler::endCoordinateDouble() {
 }
 
 int X3DLogNodeHandler::startCoordinateInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CoordinateInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CoordinateInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -510,7 +521,7 @@ int X3DLogNodeHandler::endCoordinateInterpolator() {
 }
 
 int X3DLogNodeHandler::startCoordinateInterpolator2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CoordinateInterpolator2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CoordinateInterpolator2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -520,7 +531,7 @@ int X3DLogNodeHandler::endCoordinateInterpolator2D() {
 }
 
 int X3DLogNodeHandler::startCylinder(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Cylinder with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Cylinder with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -530,7 +541,7 @@ int X3DLogNodeHandler::endCylinder() {
 }
 
 int X3DLogNodeHandler::startCylinderSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CylinderSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CylinderSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -540,7 +551,7 @@ int X3DLogNodeHandler::endCylinderSensor() {
 }
 
 int X3DLogNodeHandler::startDirectionalLight(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node DirectionalLight with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node DirectionalLight with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -550,7 +561,7 @@ int X3DLogNodeHandler::endDirectionalLight() {
 }
 
 int X3DLogNodeHandler::startDisk2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Disk2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Disk2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -560,7 +571,7 @@ int X3DLogNodeHandler::endDisk2D() {
 }
 
 int X3DLogNodeHandler::startEXPORT(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node EXPORT with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node EXPORT with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -570,7 +581,7 @@ int X3DLogNodeHandler::endEXPORT() {
 }
 
 int X3DLogNodeHandler::startElevationGrid(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ElevationGrid with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ElevationGrid with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -580,7 +591,7 @@ int X3DLogNodeHandler::endElevationGrid() {
 }
 
 int X3DLogNodeHandler::startEspduTransform(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node EspduTransform with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node EspduTransform with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -590,7 +601,7 @@ int X3DLogNodeHandler::endEspduTransform() {
 }
 
 int X3DLogNodeHandler::startExternProtoDeclare(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ExternProtoDeclare with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ExternProtoDeclare with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -600,7 +611,7 @@ int X3DLogNodeHandler::endExternProtoDeclare() {
 }
 
 int X3DLogNodeHandler::startExtrusion(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Extrusion with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Extrusion with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -610,7 +621,7 @@ int X3DLogNodeHandler::endExtrusion() {
 }
 
 int X3DLogNodeHandler::startFillProperties(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node FillProperties with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node FillProperties with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -620,7 +631,7 @@ int X3DLogNodeHandler::endFillProperties() {
 }
 
 int X3DLogNodeHandler::startFog(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Fog with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Fog with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -630,7 +641,7 @@ int X3DLogNodeHandler::endFog() {
 }
 
 int X3DLogNodeHandler::startFontStyle(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node FontStyle with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node FontStyle with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -640,7 +651,7 @@ int X3DLogNodeHandler::endFontStyle() {
 }
 
 int X3DLogNodeHandler::startGeoCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoCoordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoCoordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -650,7 +661,7 @@ int X3DLogNodeHandler::endGeoCoordinate() {
 }
 
 int X3DLogNodeHandler::startGeoElevationGrid(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoElevationGrid with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoElevationGrid with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -660,7 +671,7 @@ int X3DLogNodeHandler::endGeoElevationGrid() {
 }
 
 int X3DLogNodeHandler::startGeoLOD(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoLOD with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoLOD with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -670,7 +681,7 @@ int X3DLogNodeHandler::endGeoLOD() {
 }
 
 int X3DLogNodeHandler::startGeoLocation(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoLocation with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoLocation with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -680,7 +691,7 @@ int X3DLogNodeHandler::endGeoLocation() {
 }
 
 int X3DLogNodeHandler::startGeoMetadata(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoMetadata with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoMetadata with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -690,7 +701,7 @@ int X3DLogNodeHandler::endGeoMetadata() {
 }
 
 int X3DLogNodeHandler::startGeoOrigin(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoOrigin with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoOrigin with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -700,7 +711,7 @@ int X3DLogNodeHandler::endGeoOrigin() {
 }
 
 int X3DLogNodeHandler::startGeoPositionInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoPositionInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoPositionInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -710,7 +721,7 @@ int X3DLogNodeHandler::endGeoPositionInterpolator() {
 }
 
 int X3DLogNodeHandler::startGeoTouchSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoTouchSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoTouchSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -720,7 +731,7 @@ int X3DLogNodeHandler::endGeoTouchSensor() {
 }
 
 int X3DLogNodeHandler::startGeoViewpoint(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeoViewpoint with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeoViewpoint with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -730,7 +741,7 @@ int X3DLogNodeHandler::endGeoViewpoint() {
 }
 
 int X3DLogNodeHandler::startHAnimDisplacer(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node HAnimDisplacer with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node HAnimDisplacer with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -740,7 +751,7 @@ int X3DLogNodeHandler::endHAnimDisplacer() {
 }
 
 int X3DLogNodeHandler::startHAnimHumanoid(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node HAnimHumanoid with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node HAnimHumanoid with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -750,7 +761,7 @@ int X3DLogNodeHandler::endHAnimHumanoid() {
 }
 
 int X3DLogNodeHandler::startHAnimJoint(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node HAnimJoint with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node HAnimJoint with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -760,7 +771,7 @@ int X3DLogNodeHandler::endHAnimJoint() {
 }
 
 int X3DLogNodeHandler::startHAnimSegment(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node HAnimSegment with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node HAnimSegment with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -770,7 +781,7 @@ int X3DLogNodeHandler::endHAnimSegment() {
 }
 
 int X3DLogNodeHandler::startHAnimSite(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node HAnimSite with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node HAnimSite with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -780,7 +791,7 @@ int X3DLogNodeHandler::endHAnimSite() {
 }
 
 int X3DLogNodeHandler::startIMPORT(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IMPORT with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IMPORT with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -790,7 +801,7 @@ int X3DLogNodeHandler::endIMPORT() {
 }
 
 int X3DLogNodeHandler::startIS(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IS with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IS with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -800,7 +811,7 @@ int X3DLogNodeHandler::endIS() {
 }
 
 int X3DLogNodeHandler::startInline(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Inline with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Inline with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -810,7 +821,7 @@ int X3DLogNodeHandler::endInline() {
 }
 
 int X3DLogNodeHandler::startIntegerSequencer(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IntegerSequencer with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IntegerSequencer with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -820,7 +831,7 @@ int X3DLogNodeHandler::endIntegerSequencer() {
 }
 
 int X3DLogNodeHandler::startIntegerTrigger(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IntegerTrigger with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IntegerTrigger with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -830,7 +841,7 @@ int X3DLogNodeHandler::endIntegerTrigger() {
 }
 
 int X3DLogNodeHandler::startKeySensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node KeySensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node KeySensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -840,7 +851,7 @@ int X3DLogNodeHandler::endKeySensor() {
 }
 
 int X3DLogNodeHandler::startLineProperties(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node LineProperties with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node LineProperties with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -850,7 +861,7 @@ int X3DLogNodeHandler::endLineProperties() {
 }
 
 int X3DLogNodeHandler::startLineSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node LineSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node LineSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -860,7 +871,7 @@ int X3DLogNodeHandler::endLineSet() {
 }
 
 int X3DLogNodeHandler::startLoadSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node LoadSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node LoadSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -870,7 +881,7 @@ int X3DLogNodeHandler::endLoadSensor() {
 }
 
 int X3DLogNodeHandler::startMetadataDouble(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MetadataDouble with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MetadataDouble with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -880,7 +891,7 @@ int X3DLogNodeHandler::endMetadataDouble() {
 }
 
 int X3DLogNodeHandler::startMetadataFloat(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MetadataFloat with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MetadataFloat with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -890,7 +901,7 @@ int X3DLogNodeHandler::endMetadataFloat() {
 }
 
 int X3DLogNodeHandler::startMetadataInteger(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MetadataInteger with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MetadataInteger with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -900,7 +911,7 @@ int X3DLogNodeHandler::endMetadataInteger() {
 }
 
 int X3DLogNodeHandler::startMetadataSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MetadataSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MetadataSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -910,7 +921,7 @@ int X3DLogNodeHandler::endMetadataSet() {
 }
 
 int X3DLogNodeHandler::startMetadataString(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MetadataString with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MetadataString with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -920,7 +931,7 @@ int X3DLogNodeHandler::endMetadataString() {
 }
 
 int X3DLogNodeHandler::startMovieTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node MovieTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node MovieTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -930,7 +941,7 @@ int X3DLogNodeHandler::endMovieTexture() {
 }
 
 int X3DLogNodeHandler::startNavigationInfo(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NavigationInfo with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NavigationInfo with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -940,7 +951,7 @@ int X3DLogNodeHandler::endNavigationInfo() {
 }
 
 int X3DLogNodeHandler::startNormalInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NormalInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NormalInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -950,7 +961,7 @@ int X3DLogNodeHandler::endNormalInterpolator() {
 }
 
 int X3DLogNodeHandler::startNurbsCurve(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsCurve with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsCurve with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -960,7 +971,7 @@ int X3DLogNodeHandler::endNurbsCurve() {
 }
 
 int X3DLogNodeHandler::startNurbsCurve2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsCurve2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsCurve2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -970,7 +981,7 @@ int X3DLogNodeHandler::endNurbsCurve2D() {
 }
 
 int X3DLogNodeHandler::startNurbsOrientationInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsOrientationInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsOrientationInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -980,7 +991,7 @@ int X3DLogNodeHandler::endNurbsOrientationInterpolator() {
 }
 
 int X3DLogNodeHandler::startNurbsPatchSurface(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsPatchSurface with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsPatchSurface with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -990,7 +1001,7 @@ int X3DLogNodeHandler::endNurbsPatchSurface() {
 }
 
 int X3DLogNodeHandler::startNurbsPositionInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsPositionInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsPositionInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1000,7 +1011,7 @@ int X3DLogNodeHandler::endNurbsPositionInterpolator() {
 }
 
 int X3DLogNodeHandler::startNurbsSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1010,7 +1021,7 @@ int X3DLogNodeHandler::endNurbsSet() {
 }
 
 int X3DLogNodeHandler::startNurbsSurfaceInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsSurfaceInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsSurfaceInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1020,7 +1031,7 @@ int X3DLogNodeHandler::endNurbsSurfaceInterpolator() {
 }
 
 int X3DLogNodeHandler::startNurbsSweptSurface(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsSweptSurface with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsSweptSurface with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1030,7 +1041,7 @@ int X3DLogNodeHandler::endNurbsSweptSurface() {
 }
 
 int X3DLogNodeHandler::startNurbsSwungSurface(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsSwungSurface with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsSwungSurface with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1040,7 +1051,7 @@ int X3DLogNodeHandler::endNurbsSwungSurface() {
 }
 
 int X3DLogNodeHandler::startNurbsTextureCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsTextureCoordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsTextureCoordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1050,7 +1061,7 @@ int X3DLogNodeHandler::endNurbsTextureCoordinate() {
 }
 
 int X3DLogNodeHandler::startNurbsTrimmedSurface(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node NurbsTrimmedSurface with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node NurbsTrimmedSurface with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1060,7 +1071,7 @@ int X3DLogNodeHandler::endNurbsTrimmedSurface() {
 }
 
 int X3DLogNodeHandler::startOrientationInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node OrientationInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node OrientationInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1070,7 +1081,7 @@ int X3DLogNodeHandler::endOrientationInterpolator() {
 }
 
 int X3DLogNodeHandler::startPixelTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PixelTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PixelTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1080,7 +1091,7 @@ int X3DLogNodeHandler::endPixelTexture() {
 }
 
 int X3DLogNodeHandler::startPlaneSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PlaneSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PlaneSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1090,7 +1101,7 @@ int X3DLogNodeHandler::endPlaneSensor() {
 }
 
 int X3DLogNodeHandler::startPointLight(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PointLight with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PointLight with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1100,7 +1111,7 @@ int X3DLogNodeHandler::endPointLight() {
 }
 
 int X3DLogNodeHandler::startPolyline2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Polyline2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Polyline2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1110,7 +1121,7 @@ int X3DLogNodeHandler::endPolyline2D() {
 }
 
 int X3DLogNodeHandler::startPolypoint2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Polypoint2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Polypoint2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1120,7 +1131,7 @@ int X3DLogNodeHandler::endPolypoint2D() {
 }
 
 int X3DLogNodeHandler::startPositionInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PositionInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PositionInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1130,7 +1141,7 @@ int X3DLogNodeHandler::endPositionInterpolator() {
 }
 
 int X3DLogNodeHandler::startPositionInterpolator2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PositionInterpolator2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PositionInterpolator2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1140,7 +1151,7 @@ int X3DLogNodeHandler::endPositionInterpolator2D() {
 }
 
 int X3DLogNodeHandler::startProtoBody(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProtoBody with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProtoBody with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1150,7 +1161,7 @@ int X3DLogNodeHandler::endProtoBody() {
 }
 
 int X3DLogNodeHandler::startProtoDeclare(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProtoDeclare with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProtoDeclare with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1160,7 +1171,7 @@ int X3DLogNodeHandler::endProtoDeclare() {
 }
 
 int X3DLogNodeHandler::startProtoInterface(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProtoInterface with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProtoInterface with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1170,7 +1181,7 @@ int X3DLogNodeHandler::endProtoInterface() {
 }
 
 int X3DLogNodeHandler::startProximitySensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProximitySensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProximitySensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1180,7 +1191,7 @@ int X3DLogNodeHandler::endProximitySensor() {
 }
 
 int X3DLogNodeHandler::startReceiverPdu(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ReceiverPdu with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ReceiverPdu with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1190,7 +1201,7 @@ int X3DLogNodeHandler::endReceiverPdu() {
 }
 
 int X3DLogNodeHandler::startRectangle2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Rectangle2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Rectangle2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1200,7 +1211,7 @@ int X3DLogNodeHandler::endRectangle2D() {
 }
 
 int X3DLogNodeHandler::startScalarInterpolator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ScalarInterpolator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ScalarInterpolator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1210,7 +1221,7 @@ int X3DLogNodeHandler::endScalarInterpolator() {
 }
 
 int X3DLogNodeHandler::startScene(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Scene with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Scene with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1220,7 +1231,7 @@ int X3DLogNodeHandler::endScene() {
 }
 
 int X3DLogNodeHandler::startSignalPdu(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node SignalPdu with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node SignalPdu with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1230,7 +1241,7 @@ int X3DLogNodeHandler::endSignalPdu() {
 }
 
 int X3DLogNodeHandler::startSound(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Sound with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Sound with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1240,7 +1251,7 @@ int X3DLogNodeHandler::endSound() {
 }
 
 int X3DLogNodeHandler::startSphereSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node SphereSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node SphereSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1250,7 +1261,7 @@ int X3DLogNodeHandler::endSphereSensor() {
 }
 
 int X3DLogNodeHandler::startSpotLight(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node SpotLight with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node SpotLight with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1260,7 +1271,7 @@ int X3DLogNodeHandler::endSpotLight() {
 }
 
 int X3DLogNodeHandler::startStringSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node StringSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node StringSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1270,7 +1281,7 @@ int X3DLogNodeHandler::endStringSensor() {
 }
 
 int X3DLogNodeHandler::startText(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Text with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Text with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1280,7 +1291,7 @@ int X3DLogNodeHandler::endText() {
 }
 
 int X3DLogNodeHandler::startTextureBackground(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureBackground with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureBackground with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1290,7 +1301,7 @@ int X3DLogNodeHandler::endTextureBackground() {
 }
 
 int X3DLogNodeHandler::startTextureCoordinateGenerator(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureCoordinateGenerator with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureCoordinateGenerator with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1300,7 +1311,7 @@ int X3DLogNodeHandler::endTextureCoordinateGenerator() {
 }
 
 int X3DLogNodeHandler::startTimeSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TimeSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TimeSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1310,7 +1321,7 @@ int X3DLogNodeHandler::endTimeSensor() {
 }
 
 int X3DLogNodeHandler::startTimeTrigger(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TimeTrigger with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TimeTrigger with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1320,7 +1331,7 @@ int X3DLogNodeHandler::endTimeTrigger() {
 }
 
 int X3DLogNodeHandler::startTouchSensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TouchSensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TouchSensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1330,7 +1341,7 @@ int X3DLogNodeHandler::endTouchSensor() {
 }
 
 int X3DLogNodeHandler::startTransmitterPdu(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TransmitterPdu with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TransmitterPdu with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1340,7 +1351,7 @@ int X3DLogNodeHandler::endTransmitterPdu() {
 }
 
 int X3DLogNodeHandler::startTriangleFanSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TriangleFanSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TriangleFanSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1350,7 +1361,7 @@ int X3DLogNodeHandler::endTriangleFanSet() {
 }
 
 int X3DLogNodeHandler::startTriangleSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TriangleSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TriangleSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1360,7 +1371,7 @@ int X3DLogNodeHandler::endTriangleSet() {
 }
 
 int X3DLogNodeHandler::startTriangleSet2D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TriangleSet2D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TriangleSet2D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1370,7 +1381,7 @@ int X3DLogNodeHandler::endTriangleSet2D() {
 }
 
 int X3DLogNodeHandler::startTriangleStripSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TriangleStripSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TriangleStripSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1380,7 +1391,7 @@ int X3DLogNodeHandler::endTriangleStripSet() {
 }
 
 int X3DLogNodeHandler::startViewpoint(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Viewpoint with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Viewpoint with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1390,7 +1401,7 @@ int X3DLogNodeHandler::endViewpoint() {
 }
 
 int X3DLogNodeHandler::startVisibilitySensor(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node VisibilitySensor with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node VisibilitySensor with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1400,7 +1411,7 @@ int X3DLogNodeHandler::endVisibilitySensor() {
 }
 
 int X3DLogNodeHandler::startWorldInfo(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node WorldInfo with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node WorldInfo with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1410,7 +1421,7 @@ int X3DLogNodeHandler::endWorldInfo() {
 }
 
 int X3DLogNodeHandler::startX3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node X3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node X3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1420,7 +1431,7 @@ int X3DLogNodeHandler::endX3D() {
 }
 
 int X3DLogNodeHandler::startcomponent(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node component with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node component with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1430,7 +1441,7 @@ int X3DLogNodeHandler::endcomponent() {
 }
 
 int X3DLogNodeHandler::startconnect(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node connect with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node connect with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1440,7 +1451,7 @@ int X3DLogNodeHandler::endconnect() {
 }
 
 int X3DLogNodeHandler::startfield(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node field with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node field with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1450,7 +1461,7 @@ int X3DLogNodeHandler::endfield() {
 }
 
 int X3DLogNodeHandler::starthead(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node head with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node head with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1460,7 +1471,7 @@ int X3DLogNodeHandler::endhead() {
 }
 
 int X3DLogNodeHandler::starthumanoidBodyType(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node humanoidBodyType with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node humanoidBodyType with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1470,7 +1481,7 @@ int X3DLogNodeHandler::endhumanoidBodyType() {
 }
 
 int X3DLogNodeHandler::startmeta(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node meta with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node meta with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1480,7 +1491,7 @@ int X3DLogNodeHandler::endmeta() {
 }
 
 int X3DLogNodeHandler::startCADAssembly(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CADAssembly with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CADAssembly with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1490,7 +1501,7 @@ int X3DLogNodeHandler::endCADAssembly() {
 }
 
 int X3DLogNodeHandler::startCADFace(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CADFace with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CADFace with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1500,7 +1511,7 @@ int X3DLogNodeHandler::endCADFace() {
 }
 
 int X3DLogNodeHandler::startCADLayer(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CADLayer with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CADLayer with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1510,7 +1521,7 @@ int X3DLogNodeHandler::endCADLayer() {
 }
 
 int X3DLogNodeHandler::startCADPart(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node CADPart with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node CADPart with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1520,7 +1531,7 @@ int X3DLogNodeHandler::endCADPart() {
 }
 
 int X3DLogNodeHandler::startComposedCubeMapTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ComposedCubeMapTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ComposedCubeMapTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1530,7 +1541,7 @@ int X3DLogNodeHandler::endComposedCubeMapTexture() {
 }
 
 int X3DLogNodeHandler::startComposedShader(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ComposedShader with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ComposedShader with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1540,7 +1551,7 @@ int X3DLogNodeHandler::endComposedShader() {
 }
 
 int X3DLogNodeHandler::startComposedTexture3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ComposedTexture3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ComposedTexture3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1550,7 +1561,7 @@ int X3DLogNodeHandler::endComposedTexture3D() {
 }
 
 int X3DLogNodeHandler::startFloatVertexAttribute(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node FloatVertexAttribute with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node FloatVertexAttribute with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1560,7 +1571,7 @@ int X3DLogNodeHandler::endFloatVertexAttribute() {
 }
 
 int X3DLogNodeHandler::startFogCoordinate(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node FogCoordinate with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node FogCoordinate with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1570,7 +1581,7 @@ int X3DLogNodeHandler::endFogCoordinate() {
 }
 
 int X3DLogNodeHandler::startGeneratedCubeMapTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node GeneratedCubeMapTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node GeneratedCubeMapTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1580,7 +1591,7 @@ int X3DLogNodeHandler::endGeneratedCubeMapTexture() {
 }
 
 int X3DLogNodeHandler::startImageCubeMapTexture(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ImageCubeMapTexture with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ImageCubeMapTexture with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1590,7 +1601,7 @@ int X3DLogNodeHandler::endImageCubeMapTexture() {
 }
 
 int X3DLogNodeHandler::startImageTexture3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ImageTexture3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ImageTexture3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1600,7 +1611,7 @@ int X3DLogNodeHandler::endImageTexture3D() {
 }
 
 int X3DLogNodeHandler::startIndexedQuadSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node IndexedQuadSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node IndexedQuadSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1610,7 +1621,7 @@ int X3DLogNodeHandler::endIndexedQuadSet() {
 }
 
 int X3DLogNodeHandler::startLocalFog(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node LocalFog with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node LocalFog with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1620,7 +1631,7 @@ int X3DLogNodeHandler::endLocalFog() {
 }
 
 int X3DLogNodeHandler::startMatrix3VertexAttribute(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Matrix3VertexAttribute with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Matrix3VertexAttribute with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1630,7 +1641,7 @@ int X3DLogNodeHandler::endMatrix3VertexAttribute() {
 }
 
 int X3DLogNodeHandler::startMatrix4VertexAttribute(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node Matrix4VertexAttribute with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node Matrix4VertexAttribute with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1640,7 +1651,7 @@ int X3DLogNodeHandler::endMatrix4VertexAttribute() {
 }
 
 int X3DLogNodeHandler::startPackagedShader(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PackagedShader with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PackagedShader with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1650,7 +1661,7 @@ int X3DLogNodeHandler::endPackagedShader() {
 }
 
 int X3DLogNodeHandler::startPixelTexture3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node PixelTexture3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node PixelTexture3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1660,7 +1671,7 @@ int X3DLogNodeHandler::endPixelTexture3D() {
 }
 
 int X3DLogNodeHandler::startProgramShader(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ProgramShader with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ProgramShader with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1670,7 +1681,7 @@ int X3DLogNodeHandler::endProgramShader() {
 }
 
 int X3DLogNodeHandler::startQuadSet(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node QuadSet with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node QuadSet with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1680,7 +1691,7 @@ int X3DLogNodeHandler::endQuadSet() {
 }
 
 int X3DLogNodeHandler::startShaderPart(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ShaderPart with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ShaderPart with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1690,7 +1701,7 @@ int X3DLogNodeHandler::endShaderPart() {
 }
 
 int X3DLogNodeHandler::startShaderProgram(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node ShaderProgram with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node ShaderProgram with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1700,7 +1711,7 @@ int X3DLogNodeHandler::endShaderProgram() {
 }
 
 int X3DLogNodeHandler::startTextureCoordinate3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureCoordinate3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureCoordinate3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1710,7 +1721,7 @@ int X3DLogNodeHandler::endTextureCoordinate3D() {
 }
 
 int X3DLogNodeHandler::startTextureCoordinate4D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureCoordinate4D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureCoordinate4D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1720,7 +1731,7 @@ int X3DLogNodeHandler::endTextureCoordinate4D() {
 }
 
 int X3DLogNodeHandler::startTextureTransform3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureTransform3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureTransform3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1730,7 +1741,7 @@ int X3DLogNodeHandler::endTextureTransform3D() {
 }
 
 int X3DLogNodeHandler::startTextureTransformMatrix3D(const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start node TextureTransformMatrix3D with %i attribute(s): %s\n", iCounter++, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start node TextureTransformMatrix3D with %i attribute(s): %s\n", iCounter++, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 
@@ -1740,7 +1751,7 @@ int X3DLogNodeHandler::endTextureTransformMatrix3D() {
 }
 
 int X3DLogNodeHandler::startUnknown(const char* nodeName, const X3DAttributes &attr) {
-  fprintf(fp, "Event %4i - Start unknown node %s with %i attribute(s): %s\n", iCounter++, nodeName, attr.getLength(), attr.getAttributesAsString().c_str());
+  fprintf(fp, "Event %4i - Start unknown node %s with %i attribute(s): %s\n", iCounter++, nodeName, static_cast<int>(attr.getLength()), getAttributesAsString(attr).c_str());
   return 1;
 }
 

@@ -22,6 +22,8 @@ public:
   X3DLogNodeHandler(std::string fileName);
   ~X3DLogNodeHandler();
 
+  std::string getAttributesAsString(const X3DAttributes &attr);
+
   void startDocument();
   void endDocument();
 

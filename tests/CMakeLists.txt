@@ -18,6 +18,10 @@ target_link_libraries(fitest xiot)
 add_executable (ioTest IOTest.cpp Argument_helper.cpp)
 target_link_libraries(ioTest xiot)
 
+#ParserPerformance
+add_executable (parserPerformance parserPerformance.cpp Argument_helper.cpp)
+target_link_libraries(parserPerformance xiot)
+
 
 #createEventLog
 add_executable (createEventLog createEventLog.cpp Argument_helper.cpp X3DLogNodeHandler.cpp X3DLogNodeHandler.h)
