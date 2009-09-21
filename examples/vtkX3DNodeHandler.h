@@ -5,24 +5,20 @@
 #include <set>
 
 #include <xiot/X3DDefaultNodeHandler.h>
+#include <xiot/X3DAttributes.h>
 #include "vtkRenderer.h"
+#include "vtkX3DImporter.h"
 
 class vtkActor;
-class vtkAlgorithm;
-class vtkProperty;
-class vtkCamera;
-class vtkLight;
 class vtkTransform;
-class vtkLookupTable;
 class vtkFloatArray;
 class vtkPolyDataMapper;
 class vtkPoints;
 class vtkIdTypeArray;
-class vtkVRMLImporterInternal;
 class vtkCellArray;
-class vtkX3DIndexedFaceSetSource;
-class vtkX3DIndexedLineSetSource;
+class vtkX3DIndexedGeometrySource;
 class vtkUnsignedCharArray;
+class vtkX3DImporter;
 
 /**
  * Handler that fills a vtkRenderer from X3D callbacks.
@@ -37,8 +33,10 @@ class vtkX3DNodeHandler : public XIOT::X3DDefaultNodeHandler
 {
 public:
 	
-	vtkX3DNodeHandler(vtkRenderer* Renderer);
+  vtkX3DNodeHandler(vtkRenderer* Renderer, vtkX3DImporter* Importer);
 	~vtkX3DNodeHandler();
+
+  void startDocument();
 
 	int startUnhandled(const char* nodeName, const XIOT::X3DAttributes &attr);
 	
@@ -57,9 +55,9 @@ public:
 	int startIndexedLineSet(const XIOT::X3DAttributes &attr);
 	int endIndexedLineSet();
 
-
 	int startIndexedFaceSet(const XIOT::X3DAttributes &attr);
 	int endIndexedFaceSet();
+
 
 	int startCoordinate(const XIOT::X3DAttributes &attr);
 	
@@ -80,47 +78,65 @@ public:
 	
 	int startDirectionalLight(const XIOT::X3DAttributes &attr);
 	
-	int startBackground(const XIOT::X3DAttributes &attr);
+  int startPixelTexture(const XIOT::X3DAttributes &attr);
+  int startImageTexture(const XIOT::X3DAttributes &attr);
 
-	void setVerbose(bool verbose);
+  /// X3DBindables
+  int startNavigationInfo(const XIOT::X3DAttributes &attr);
+	int startBackground(const XIOT::X3DAttributes &attr);
+  int startViewpoint(const XIOT::X3DAttributes &attr);
+
+protected:
+  template<class T>
+  int checkReferencing(const XIOT::X3DAttributes &attr, T** obj, bool shouldDelete) {
+    if (attr.isUSE())
+      {
+      vtkObject* p = this->DefMap[attr.getUSE()];
+      if (shouldDelete)
+        {
+        (*obj)->Delete();
+        }
+      *obj = T::SafeDownCast(p);
+      if(!obj)
+        {
+        vtkWarningWithObjectMacro(this->Importer, << "Could not find node of type <" << (*obj)->GetClassName() << "> with DEF=\"" << attr.getUSE() << "\"."); \
+        }
+      this->IsCurrentUSE = true;
+      return true;
+      }
+    this->IsCurrentUSE = false;
+    if (attr.isDEF())
+      {
+      (*obj)->Register(this->MapReferencer); // Reference count array
+      this->DefMap[attr.getDEF()] = *obj;
+      }
+    return false;
+    }
+
 private:
 	vtkRenderer			*Renderer;
+  vtkX3DImporter  *Importer;
+  vtkLight        *HeadLight;
 
-	vtkActor			*actor;
-	vtkPolyDataMapper	*pmap;
+	vtkActor                    *CurrentActor;
+	vtkTransform                *CurrentTransform;
+	vtkPoints                   *CurrentPoints;
+	vtkFloatArray               *CurrentNormals;
+	vtkFloatArray               *CurrentTCoords;
+	vtkUnsignedCharArray        *CurrentColors;
+	vtkX3DIndexedGeometrySource *CurrentIndexedGeometry;
+  
+  int IsCurrentUnlit;
+  int IsCurrentUSE;
 
-	vtkActor             *CurrentActor;
-	vtkProperty          *CurrentProperty;
-	vtkCamera            *CurrentCamera;
-	vtkLight             *CurrentLight;
-	vtkTransform         *CurrentTransform;
-	vtkAlgorithm         *CurrentSource;
-	vtkPoints            *CurrentPoints;
-	vtkFloatArray        *CurrentNormals;
-	vtkFloatArray        *CurrentTCoords;
-	vtkCellArray         *CurrentTCoordCells;
-	vtkLookupTable       *CurrentLut;
-	vtkFloatArray        *CurrentScalars;
-	vtkPolyDataMapper    *CurrentMapper;
-	vtkUnsignedCharArray *CurrentColors;
+  double CurrentEmissiveColor[3];
 
-	std::map<std::string,vtkActor*>			defShape;		// used for DEF/USE
-	std::map<std::string,vtkUnsignedCharArray*>		defColor;	// used for DEF/USE
-	std::map<std::string,vtkPoints*>		defCoordinate;	// used for DEF/USE
-	std::map<std::string,vtkFloatArray*>	defTextureCoordinates;	// used for DEF/USE
-	std::map<std::string,vtkFloatArray*>	defNormals;	// used for DEF/USE
+  int SeenBindables;
 
-	std::set<int>						_ignoreNodes;
-	std::string								defString; // current DEF (used for endShape())
-	
-	bool	bDEFCoordinate;
-	bool	bDEFTextureCoordinate;
-	bool	bDEFColor;
-	bool	bDEFNormal;
-	bool	_verbose;
+  vtkObject *MapReferencer;
 
-	vtkX3DIndexedFaceSetSource *CurrentIndexedFaceSet;
-	vtkX3DIndexedLineSetSource *CurrentIndexedLineSet;
+	std::map<std::string,vtkObject*>			DefMap;		// used for DEF/USE
+	std::set<int> _ignoreNodes;
 
 };
 
