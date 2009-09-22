@@ -49,7 +49,12 @@ if(BUILD_PARAVIEW_PLUGIN)
   add_subdirectory(plugins)
 endif(BUILD_PARAVIEW_PLUGIN)
 
+install(FILES README COPYING DESTINATION .)
+
+
 #CPack
+include(InstallRequiredSystemLibraries)
+
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "0")

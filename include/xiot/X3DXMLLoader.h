@@ -56,7 +56,7 @@ public:
   * @return True, if loading was successful.
   * @exception X3DParseException If a parsing error occures that cannot be handled.
   */
-  bool load(std::string fileName, bool fileValidation = true) const;
+  bool load(const char* fileStr, bool fileValidation = true) const;
   
 protected:
 	XMLParserImpl *_impl;

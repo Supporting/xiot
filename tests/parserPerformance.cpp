@@ -145,7 +145,7 @@ int start(const std::string &filename)
   start = clock();
   for (int i = 0; i < 10; i++)
     {
-    l.load(filename);
+    l.load(filename.c_str());
     }
   end = clock();
   double dif = double(end-start) / CLOCKS_PER_SEC;

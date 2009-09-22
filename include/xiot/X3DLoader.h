@@ -239,7 +239,7 @@ public:
    * verified and messages will be written if the file is invalid. 
    * @return <code>true</code>, if the loading process was successful
    */
-  bool load(std::string fileName, bool fileValidation = false) const;
+  bool load(const char* fileName, bool fileValidation = false) const;
   
   /**
    * Sets the X3DNodeHandler which processes the callbacks. If there is already

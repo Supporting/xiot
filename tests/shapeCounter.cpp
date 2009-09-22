@@ -43,7 +43,7 @@ int start(const string &input_filename, const string &output_filename)
 	MyShapeCounter* handler = new MyShapeCounter();
 	loader.setNodeHandler(handler);
 	try {
-		loader.load(input_filename);
+    loader.load(input_filename.c_str());
 	} catch (XIOT::X3DParseException& e)
 	{	
 	  cerr << "Error while parsing file " << input_filename << ":" << endl;

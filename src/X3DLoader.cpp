@@ -20,22 +20,23 @@ X3DLoader::~X3DLoader()
 {
 }
 
-bool X3DLoader::load(std::string fileName, bool fileValidation) const
+bool X3DLoader::load(const char* fileStr, bool fileValidation) const
 {
 	assert(_handler);
 	X3DTypes::initMaps();
+  std::string fileName(fileStr);
 	std::string extensionStr = fileName.substr(fileName.find_last_of('.') + 1, fileName.size());
 	if (extensionStr == "x3d")
 	{
 		X3DXMLLoader xmlLoader;
 		xmlLoader.setNodeHandler(_handler);
-		return xmlLoader.load(fileName, fileValidation);
+		return xmlLoader.load(fileStr, fileValidation);
 	}
 	else if  (extensionStr == "x3db")
 	{
 		X3DFILoader fiLoader;
 		fiLoader.setNodeHandler(_handler);
-		return fiLoader.load(fileName, fileValidation);
+		return fiLoader.load(fileStr, fileValidation);
 	}
 	return false;
 }

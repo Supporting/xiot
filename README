@@ -55,8 +55,9 @@ Package directory layout
    
 Prerequisites
 =============
-	X3DLoader requires XercesC XML parser and zlib compression library to
-	build.
+	XIOT requires XercesC or Expat XML parser and zlib compression library to
+	build. You can choose your favourite XML parser using the
+	XML_PARSER_SELECTION option for CMake.
 	
 	XercesC
 	=======
@@ -71,6 +72,20 @@ Prerequisites
 	http://xerces.apache.org/xerces-c/
 	
 	The library has been tested with Xerces versions 2.7.0 and 3.0.0.
+
+	Expat
+	=======
+	The Expat XML parser library is contained in the contrib directory for
+	win32 build with VC9. On Linux system, Expat can easily be 
+	obtained using the package system, i.e. via:
+	
+	sudo apt-get install libexpat1 libexpat-dev
+	
+	If not, consult the following URI to get binaries or the source for 
+	Expat:
+	http://expat.sourceforge.net/
+	
+	The library has been tested with Expat version 2.0.1
 	
 	zlib
 	====

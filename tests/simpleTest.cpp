@@ -70,7 +70,7 @@ int start(const string &input_filename)
 	MyNodeHandler handler;
 	loader.setNodeHandler(&handler);
 	try {
-		loader.load(input_filename);
+    loader.load(input_filename.c_str());
 	} catch (X3DParseException& e)
 	{	
 	  cerr << "Error while parsing file " << input_filename << ":" << endl;

@@ -142,7 +142,7 @@ X3DXMLLoader::~X3DXMLLoader()
 
 }
 
-bool X3DXMLLoader::load(std::string fileName, bool fileValidation) const
+bool X3DXMLLoader::load(const char* fileStr, bool fileValidation) const
 {
 	assert(_handler);
 
@@ -167,7 +167,7 @@ bool X3DXMLLoader::load(std::string fileName, bool fileValidation) const
       
   try 
   {
-	  _impl->_parser->parse(fileName.c_str());
+	  _impl->_parser->parse(fileStr);
   }
   catch (SAXException& e) 
   {

@@ -18,7 +18,7 @@ int start(const std::string &input_filename, const std::string &output_filename)
 	X3DTypes::initMaps();
 	X3DLogNodeHandler* handler = new X3DLogNodeHandler(input_filename);
 	loader.setNodeHandler(handler);
-	loader.load(input_filename);
+  loader.load(input_filename.c_str());
 	
 	delete handler;
 	return 0;

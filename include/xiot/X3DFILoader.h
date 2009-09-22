@@ -52,7 +52,7 @@ public:
   /**
    * @see X3DLoader::load()
    */ 
-  bool load(std::string fileName, bool fileValidation = true); // C.2
+  bool load(const char* fileStr, bool fileValidation = true); // C.2
 
   
 protected:

@@ -133,7 +133,7 @@ X3DXMLLoader::~X3DXMLLoader()
   delete _impl;
 }
 
-bool X3DXMLLoader::load(std::string fileName, bool ) const
+bool X3DXMLLoader::load(const char* fileStr, bool ) const
 {
   static const int BUFF_SIZE = 2*1024*1024;
 	std::fstream fin;
@@ -141,11 +141,11 @@ bool X3DXMLLoader::load(std::string fileName, bool ) const
   assert(_handler);
   _impl->setHandler(new X3DXMLContentHandler(_handler));
  
-  fin.open(fileName.c_str(),std::ios::in);
+  fin.open(fileStr,std::ios::in);
   
   if( !fin.is_open() )
   {
-	  cerr << "Could not open file: " << fileName << endl;
+	  cerr << "Could not open file: " << fileStr << endl;
     return false;
   }
 

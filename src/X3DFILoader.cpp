@@ -83,7 +83,7 @@ X3DFILoader::~X3DFILoader()
 	file.close();
 }
 
-bool X3DFILoader::load(std::string filename, bool )
+bool X3DFILoader::load(const char* fileStr, bool )
 {
   assert(_handler);
   x3dswitch.setNodeHandler(_handler);
@@ -91,7 +91,7 @@ bool X3DFILoader::load(std::string filename, bool )
   FI::ContentHandler* handler = new X3DFIContentHandler(_handler);
   FI::SAXParser parser;
   
-  std::ifstream fs(filename.c_str(),  std::istream::binary |  std::istream::in);
+  std::ifstream fs(fileStr,  std::istream::binary |  std::istream::in);
   
   parser.setStream(&fs);
   parser.setContentHandler(handler);
