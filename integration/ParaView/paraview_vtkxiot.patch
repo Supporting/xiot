@@ -1,0 +1,1544 @@
+? Servers/Filters/vtkNetworkImageDataSource.cxx
+? Servers/Filters/vtkNetworkImageDataSource.h
+? Servers/Filters/vtkX3DSource.cxx
+? Servers/Filters/vtkX3DSource.h
+? Servers/Filters/vtkX3DTextureSource.cxx.alt
+? Servers/Filters/vtkX3DTextureSource.h.alt
+? Servers/ServerManager/vtkSMImageDataToTextureProxy.cxx
+? Servers/ServerManager/vtkSMImageDataToTextureProxy.h
+? Servers/ServerManager/vtkSMNetworkImageDataSourceProxy.cxx
+? Servers/ServerManager/vtkSMNetworkImageDataSourceProxy.h
+? Servers/ServerManager/vtkSMX3DImporterProxy.cxx
+? Servers/ServerManager/vtkSMX3DImporterProxy.h
+? VTK/vtkxiot_all.patch
+? VTK/Hybrid/vtkX3DImporter.cxx
+? VTK/Hybrid/vtkX3DImporter.h
+? VTK/Utilities/vtkxiot
+Index: Applications/StreamingParaView/XML/ParaViewReaders.xml
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Applications/StreamingParaView/XML/ParaViewReaders.xml,v
+retrieving revision 1.3
+diff -u -r1.3 ParaViewReaders.xml
+--- Applications/StreamingParaView/XML/ParaViewReaders.xml	17 Jul 2009 20:05:08 -0000	1.3
++++ Applications/StreamingParaView/XML/ParaViewReaders.xml	29 Aug 2009 11:43:40 -0000
+@@ -118,6 +118,10 @@
+           extensions="wrl"
+           file_description="VRML 2 Files">
+   </Reader>
++  <Reader name="x3dreader"
++          extensions="x3d x3db"
++          file_description="X3D Files (XML and binary)">
++  </Reader>
+   <Reader name="plyreader"
+           extensions="ply"
+           file_description="PLY Polygonal File Format">
+Index: Qt/Components/Resources/XML/ParaViewReaders.xml
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Qt/Components/Resources/XML/ParaViewReaders.xml,v
+retrieving revision 1.33
+diff -u -r1.33 ParaViewReaders.xml
+--- Qt/Components/Resources/XML/ParaViewReaders.xml	25 Aug 2009 17:18:16 -0000	1.33
++++ Qt/Components/Resources/XML/ParaViewReaders.xml	29 Aug 2009 12:11:24 -0000
+@@ -119,6 +119,10 @@
+           extensions="wrl vrml"
+           file_description="VRML 2 Files">
+   </Reader>
++    <Reader name="x3dreader"
++          extensions="x3d x3db"
++          file_description="X3D Files">
++  </Reader>
+   <Reader name="plyreader"
+           extensions="ply"
+           file_description="PLY Polygonal File Format">
+Index: Servers/Filters/CMakeLists.txt
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/Filters/CMakeLists.txt,v
+retrieving revision 1.200
+diff -u -r1.200 CMakeLists.txt
+--- Servers/Filters/CMakeLists.txt	7 Aug 2009 12:20:04 -0000	1.200
++++ Servers/Filters/CMakeLists.txt	23 Oct 2009 10:06:45 -0000
+@@ -163,6 +163,8 @@
+   vtkXMLCollectionReader.cxx
+   vtkXMLPVAnimationWriter.cxx
+   vtkXMLPVDWriter.cxx
++  vtkX3DSource.cxx
++  vtkNetworkImageDataSource.cxx
+   )
+ 
+ SET_SOURCE_FILES_PROPERTIES(
+Index: Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx,v
+retrieving revision 1.39
+diff -u -r1.39 ServersFiltersPrintSelf.cxx
+--- Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	21 May 2009 14:20:42 -0000	1.39
++++ Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	29 Aug 2009 12:03:13 -0000
+@@ -99,6 +99,7 @@
+ #include "vtkTransferFunctionViewer.h"
+ #include "vtkUpdateSuppressorPipeline.h"
+ #include "vtkVRMLSource.h"
++#include "vtkX3DSource.h"
+ #include "vtkXMLCollectionReader.h"
+ #include "vtkXMLPVAnimationWriter.h"
+ #include "vtkXMLPVDWriter.h"
+@@ -211,6 +212,7 @@
+   c = vtkTransferFunctionViewer::New(); c->Print(cout); c->Delete();
+   c = vtkUpdateSuppressorPipeline::New(); c->Print(cout); c->Delete();
+   c = vtkVRMLSource::New(); c->Print(cout); c->Delete();
++  c = vtkX3DSource::New(); c->Print(cout); c->Delete();
+   c = vtkXMLCollectionReader::New(); c->Print(cout); c->Delete();
+   c = vtkXMLPVAnimationWriter::New(); c->Print(cout); c->Delete();
+   c = vtkXMLPVDWriter::New(); c->Print(cout); c->Delete();
+Index: Servers/ServerManager/CMakeLists.txt
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/CMakeLists.txt,v
+retrieving revision 1.256
+diff -u -r1.256 CMakeLists.txt
+--- Servers/ServerManager/CMakeLists.txt	10 Aug 2009 14:30:56 -0000	1.256
++++ Servers/ServerManager/CMakeLists.txt	19 Oct 2009 14:49:13 -0000
+@@ -214,6 +214,9 @@
+   vtkSMXMLPVAnimationWriterProxy.cxx
+   vtkSMXYPlotRepresentationProxy.cxx
+   vtkSMDataSourceProxy.cxx
++  vtkSMX3DImporterProxy.cxx
++  vtkSMImageDataToTextureProxy.cxx
++  vtkSMNetworkImageDataSourceProxy.cxx
+   )
+ 
+ IF (VTK_USE_QVTK)
+Index: Servers/ServerManager/Resources/readers.xml
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/readers.xml,v
+retrieving revision 1.165
+diff -u -r1.165 readers.xml
+--- Servers/ServerManager/Resources/readers.xml	25 Aug 2009 14:50:52 -0000	1.165
++++ Servers/ServerManager/Resources/readers.xml	23 Oct 2009 10:11:37 -0000
+@@ -4759,5 +4759,42 @@
+       <!-- End of CSVReader -->
+    </FileSeriesReaderProxy>
+ 
++    <X3DImporterProxy name="x3dreader" class="vtkX3DSource" label="X3D Reader">
++      <Documentation
++        short_help="Read X3D files."
++        long_help="Load the geometry from a X3D file.">
++        The X3D reader loads the geometry from a X3D file. The expected file extension is .x3d or .x3db for binary encoded files. The output of this reader is a polygonal dataset.
++      </Documentation>
++    
++      <StringVectorProperty
++             name="FileName"
++             animateable="0"
++             command="SetFileName"
++             number_of_elements="1">
++        <FileListDomain name="files"/>
++        <Documentation>
++          This property specifies the file name for the X3D reader.
++        </Documentation>
++      </StringVectorProperty>
++      <IntVectorProperty
++           name="Material Color"
++           command="SetColor"
++           number_of_elements="1"
++           default_values="0" >
++        <BooleanDomain name="bool"/>
++        <Documentation>
++          This property indicates if the reader should convert  the material color to scalar values.
++        </Documentation>
++      </IntVectorProperty>
++	   <StringVectorProperty
++             name="TextureInfo"
++             animateable="0"
++             command="GetTextureInfo"
++             information_only="1">
++		<StringArrayHelper />
++      </StringVectorProperty>
++      <!-- End x3dreader -->    
++    </X3DImporterProxy>
++    
+   </ProxyGroup>
+ </ServerManagerConfiguration>
+Index: Servers/ServerManager/Resources/rendering.xml
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/rendering.xml,v
+retrieving revision 1.366
+diff -u -r1.366 rendering.xml
+--- Servers/ServerManager/Resources/rendering.xml	28 Aug 2009 14:44:28 -0000	1.366
++++ Servers/ServerManager/Resources/rendering.xml	22 Oct 2009 09:00:54 -0000
+@@ -1298,6 +1298,40 @@
+         <BooleanDomain name="bool" />
+       </IntVectorProperty>
+     </ImageTextureProxy>
++  
++  <ImageDataToTextureProxy name="ImageDataTexture" class="vtkTexture">
++    <Documentation>
++      This is a proxy for a vtkTexture which also includes an image file
++      reader. This reader can read an image of client/data server or render
++      server and then transmit it to the client/render server where it will be
++      used for texturing.
++    </Documentation>
++	<InputProperty name="Input" command="not-used">
++        <ProxyGroupDomain name="groups">
++          <Group name="sources"/>
++          <Group name="filters"/>
++        </ProxyGroupDomain>
++        <DataTypeDomain name="input_type">
++          <DataType value="vtkImageData"/>
++        </DataTypeDomain>
++    </InputProperty>
++    
++	<SubProxy>
++        <Proxy name="Source" 
++          proxygroup="sources" proxyname="NetworkImageDataSource" />
++        <ExposedProperties>
++          <Property name="SourceProcess" />
++        </ExposedProperties>
++    </SubProxy>
++    <IntVectorProperty
++        name="RestrictPowerOf2ImageSmaller"
++        command="SetRestrictPowerOf2ImageSmaller"
++        number_of_elements="1"
++        default_values="0"
++        animateable="1">
++        <BooleanDomain name="bool" />
++    </IntVectorProperty>
++  </ImageDataToTextureProxy>
+   </ProxyGroup>
+ 
+   <ProxyGroup name="props">
+Index: Servers/ServerManager/Resources/sources.xml
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/sources.xml,v
+retrieving revision 1.99
+diff -u -r1.99 sources.xml
+--- Servers/ServerManager/Resources/sources.xml	31 Jul 2009 18:48:05 -0000	1.99
++++ Servers/ServerManager/Resources/sources.xml	23 Oct 2009 10:14:32 -0000
+@@ -1834,6 +1834,41 @@
+      <!-- End of NetworkImageSource -->
+    </NetworkImageSourceProxy>
+ 
++      <!-- ==================================================================== -->
++   <NetworkImageDataSourceProxy name="NetworkImageDataSource"
++     class="vtkNetworkImageDataSource">
++    <InputProperty
++       name="Input"
++       command="SetImage">
++          <ProxyGroupDomain name="groups">
++            <Group name="sources"/>
++            <Group name="filters"/>
++          </ProxyGroupDomain>
++          <DataTypeDomain name="input_type">
++            <DataType value="vtkImageData"/>
++          </DataTypeDomain>
++          <Documentation>
++            The Image Data to copy to the Servers of this proxy
++          </Documentation>
++     </InputProperty>
++
++     <IntVectorProperty name="SourceProcess"
++      command="SetSourceProcess"
++      number_of_elements="1"
++      update_self="1"
++      default_values="0">
++      <EnumerationDomain name="enum" >
++        <Entry value="2" text="DataServer" /> 
++        <Entry value="8" text="RenderServer" /> 
++        <Entry value="16" text="Client" /> 
++      </EnumerationDomain>
++      <Documentation>
++        Set the process on which the image is available.
++      </Documentation>
++     </IntVectorProperty>
++
++     <!-- End of NetworkImageSource -->
++   </NetworkImageDataSourceProxy>
+    <!-- ==================================================================== -->
+    <SourceProxy name="SplineSource"
+     class="vtkParametricFunctionSource">
+Index: VTK/vtkIncludeDirectories.cmake
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/vtkIncludeDirectories.cmake,v
+retrieving revision 1.55
+diff -u -r1.55 vtkIncludeDirectories.cmake
+--- VTK/vtkIncludeDirectories.cmake	10 Jul 2009 19:55:35 -0000	1.55
++++ VTK/vtkIncludeDirectories.cmake	16 Sep 2009 08:03:08 -0000
+@@ -194,6 +194,7 @@
+ VTK_THIRD_PARTY_INCLUDE(Exodus2 vtkexodus2/include)
+ VTK_THIRD_PARTY_INCLUDE(MATERIALLIBRARY MaterialLibrary)
+ VTK_THIRD_PARTY_INCLUDE(VERDICT verdict)
++VTK_THIRD_PARTY_INCLUDE(XIOT vtkxiot/include)
+ 
+ # Include UTF-8 support
+ SET(VTK_INCLUDE_DIRS_SOURCE_TREE ${VTK_INCLUDE_DIRS_SOURCE_TREE}
+Index: VTK/Hybrid/CMakeLists.txt
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/CMakeLists.txt,v
+retrieving revision 1.152
+diff -u -r1.152 CMakeLists.txt
+--- VTK/Hybrid/CMakeLists.txt	31 Jul 2009 18:55:22 -0000	1.152
++++ VTK/Hybrid/CMakeLists.txt	16 Sep 2009 08:03:08 -0000
+@@ -4,7 +4,8 @@
+ SET(KIT_TCL_LIBS vtkRenderingTCL vtkIOTCL)
+ SET(KIT_PYTHON_LIBS vtkRenderingPythonD vtkIOPythonD)
+ SET(KIT_JAVA_LIBS vtkRenderingJava vtkIOJava)
+-SET(KIT_INTERFACE_LIBRARIES vtkRendering vtkIO)
++SET(KIT_INTERFACE_LIBRARIES vtkRendering vtkIO vtkxiot)
++SET(KIT_LIBS ${KIT_LIBS} vtkxiot)
+ IF(VTK_HAS_EXODUS)
+   SET(KIT_LIBS ${KIT_LIBS} vtkexoIIc)
+ ENDIF(VTK_HAS_EXODUS)
+@@ -70,11 +71,8 @@
+ vtkVideoSource.cxx
+ vtkWeightedTransformFilter.cxx
+ vtkXYPlotActor.cxx
+-vtkX3D.cxx
+ vtkX3DExporter.cxx
+-vtkX3DExporterWriter.cxx
+-vtkX3DExporterXMLWriter.cxx
+-vtkX3DExporterFIWriter.cxx
++vtkX3DImporter.cxx
+ )
+ 
+ IF(VTK_HAS_EXODUS)
+@@ -108,10 +106,6 @@
+ 
+ SET_SOURCE_FILES_PROPERTIES(
+ vtkVRML
+-vtkX3D
+-vtkX3DExporterWriter
+-vtkX3DExporterFIWriter
+-vtkX3DExporterXMLWriter
+ vtkExodusIIReaderParser
+ WRAP_EXCLUDE)
+ 
+Index: VTK/Hybrid/vtkX3DExporter.cxx
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/vtkX3DExporter.cxx,v
+retrieving revision 1.20
+diff -u -r1.20 vtkX3DExporter.cxx
+--- VTK/Hybrid/vtkX3DExporter.cxx	15 Nov 2008 01:22:24 -0000	1.20
++++ VTK/Hybrid/vtkX3DExporter.cxx	16 Sep 2009 08:03:08 -0000
+@@ -3,7 +3,7 @@
+   Program:   Visualization Toolkit
+   Module:    $RCSfile: vtkX3DExporter.cxx,v $
+ 
+-  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen, Kristian Sons
++  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+   All rights reserved.
+   See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+ 
+@@ -38,14 +38,16 @@
+ #include "vtkTextProperty.h"
+ #include "vtkTexture.h"
+ #include "vtkTransform.h"
+-#include "vtkX3DExporterFIWriter.h"
+-#include "vtkX3DExporterXMLWriter.h"
+-#include "vtkX3D.h"
++#include "vtkDataArray.h"
++
++#include "xiot/X3DWriterXML.h"
++#include "xiot/X3DWriterFI.h"
++#include "xiot/X3DTypes.h"
+ 
+ #include <vtksys/ios/sstream>
+ #include <cassert>
+ 
+-using namespace vtkX3D;
++using namespace XIOT;
+ 
+ // forward declarations
+ static bool vtkX3DExporterWriterUsingCellColors(vtkActor* anActor);
+@@ -58,46 +60,53 @@
+   vtkUnsignedCharArray* colors, bool cell_colors,
+   vtkDataArray* normals, bool cell_normals, 
+   vtkDataArray* tcoords, 
+-  bool common_data_written, int index, vtkX3DExporterWriter* writer);
++  bool common_data_written, int index, X3DWriter* writer);
+ static void vtkX3DExporterWriteData(vtkPoints *points, 
+   vtkDataArray *normals,
+   vtkDataArray *tcoords, 
+   vtkUnsignedCharArray *colors,
+-  int index, vtkX3DExporterWriter* writer);
++  int index, X3DWriter* writer);
+ static void vtkX3DExporterUseData(bool normals, bool tcoords, bool colors, int index, 
+-  vtkX3DExporterWriter* writer);
++  X3DWriter* writer);
+ static bool vtkX3DExporterWriterRenderVerts(
+   vtkPoints* points, vtkCellArray* cells,
+-  vtkUnsignedCharArray* colors, bool cell_colors,  vtkX3DExporterWriter* writer);
++  vtkUnsignedCharArray* colors, bool cell_colors,  X3DWriter* writer);
+ static bool vtkX3DExporterWriterRenderPoints(
+   vtkPolyData* pd, 
+   vtkUnsignedCharArray* colors,
+   bool cell_colors,  
+-  vtkX3DExporterWriter* writer);
++  X3DWriter* writer);
+ 
+-//----------------------------------------------------------------------------
+-vtkCxxRevisionMacro(vtkX3DExporter, "$Revision: 1.20 $");
++vtkCxxRevisionMacro(vtkX3DExporter, "$Revision: 1.19 $");
+ vtkStandardNewMacro(vtkX3DExporter);
+ 
++class vtkX3DWriter {
++public:
++	XIOT::X3DWriter* Impl;
++};
++
+ //----------------------------------------------------------------------------
+ vtkX3DExporter::vtkX3DExporter()
+-{
++  {
+   this->Speed = 4.0;
+   this->FileName = NULL;
++  this->FakeFileName = NULL;
+   this->Binary = 0;
+   this->Fastest = 0;
+-}
++  }
+ //----------------------------------------------------------------------------
+ vtkX3DExporter::~vtkX3DExporter()
+-{
++  {
+   this->SetFileName(0);
+-}
++  this->SetFakeFileName(0);
++  }
+ 
+ 
+ //----------------------------------------------------------------------------
+ void vtkX3DExporter::WriteData()
+-{
+-  vtkSmartPointer<vtkX3DExporterWriter> writer;
++  {
++  vtkX3DWriter wrapper;
++
+   vtkRenderer *ren;
+   vtkActorCollection *ac;
+   vtkActor2DCollection *a2Dc;
+@@ -135,17 +144,24 @@
+   // try opening the files
+   if (this->Binary)
+     {
+-    vtkX3DExporterFIWriter* temp = vtkX3DExporterFIWriter::New();
+-    temp->SetFastest(this->GetFastest());
+-    writer.TakeReference(temp);
++
++    X3DWriterFI* temp = new X3DWriterFI();
++    temp->setProperty(Property::IntEncodingAlgorithm, (void*)Encoder::DeltazlibIntArrayEncoder);
++    if (this->GetFastest())
++      temp->setProperty(Property::FloatEncodingAlgorithm, (void*)Encoder::BuiltIn);
++    else
++      temp->setProperty(Property::FloatEncodingAlgorithm, (void*)Encoder::QuantizedzlibFloatArrayEncoder);
++
++    wrapper.Impl = temp;
++
+     }
+   else
+     {
+-    writer = vtkSmartPointer<vtkX3DExporterXMLWriter>::New();
++    wrapper.Impl = new X3DWriterXML();
+     }
+ 
+-
+-  if (!writer->OpenFile(this->FileName))
++  X3DWriter* writer = wrapper.Impl;
++  if (!writer->openFile(this->FileName))
+     {
+     vtkErrorMacro(<< "unable to open X3D file " << this->FileName);
+     return;
+@@ -156,81 +172,70 @@
+   //
+   vtkDebugMacro("Writing X3D file");
+ 
+-  writer->StartDocument();
+-
+-  writer->StartNode(X3D);
+-  writer->SetField(profile, "Immersive");
+-  writer->SetField(vtkX3D::version, "3.0");
+-
+-  writer->StartNode(head);
+-
+-  writer->StartNode(meta);
+-  writer->SetField(name, "filename");
+-  writer->SetField(content, this->FileName);
+-  writer->EndNode();
+-
+-  writer->StartNode(meta);
+-  writer->SetField(name, "generator");
+-  writer->SetField(content, "Visualization ToolKit X3D exporter v0.9.1");
+-  writer->EndNode();
+-
+-  writer->StartNode(meta);
+-  writer->SetField(name, "numberofelements");
+   vtksys_ios::ostringstream ss;
+   ss << ren->GetActors()->GetNumberOfItems();
+-  writer->SetField(content, ss.str().c_str());
+-  writer->EndNode();
+-
+-  writer->EndNode(); // head
+ 
+-  writer->StartNode(Scene);
++  std::multimap<std::string, std::string> meta;
++  meta.insert(std::pair<std::string, std::string>("filename", this->FakeFileName ? this->FakeFileName : this->FileName));
++  meta.insert(std::pair<std::string, std::string>("generator", "Visualization ToolKit X3D exporter v0.9.2"));
++  meta.insert(std::pair<std::string, std::string>("numberofelements", ss.str()));
++  writer->startX3DDocument(Immersive, VERSION_3_0, &meta, false);
+ 
++  double *dp;
+   // Start write the Background
+-  writer->StartNode(Background);
+-  writer->SetField(skyColor, SFVEC3F, ren->GetBackground());
+-  writer->EndNode();
++  writer->startNode(ID::Background);
++  writer->setSFColor(ID::skyColor, ren->GetBackground());
++  writer->endNode();
+   // End of Background
+ 
+   // Start write the Camera
+   cam = ren->GetActiveCamera();
+-  writer->StartNode(Viewpoint);
+-  writer->SetField( fieldOfView,static_cast<float>( vtkMath::RadiansFromDegrees( cam->GetViewAngle() ) ) );
+-  writer->SetField(position, SFVEC3F, cam->GetPosition());
+-  writer->SetField(description, "Default View");
+-  writer->SetField(orientation, SFROTATION, cam->GetOrientationWXYZ());
+-  writer->SetField(centerOfRotation, SFVEC3F, cam->GetFocalPoint());
+-  writer->EndNode();
++  writer->startNode(ID::Viewpoint);
++  writer->setSFFloat(ID::fieldOfView, vtkMath::RadiansFromDegrees(cam->GetViewAngle()));
++
++  writer->setSFVec3f(ID::position, cam->GetPosition());
++  writer->setSFString(ID::description, "Default View");
++  dp = cam->GetOrientationWXYZ();
++  SFRotation orientation(dp[1], dp[2], dp[3], vtkMath::RadiansFromDegrees(-dp[0]));
++  writer->setSFRotation(ID::orientation, orientation);
++  writer->setSFVec3f(ID::centerOfRotation, cam->GetFocalPoint());
++  writer->endNode();
+   // End of Camera
+ 
+-  // do the lights first the ambient then the others
+-  writer->StartNode(NavigationInfo);
+-  writer->SetField(type, "\"EXAMINE\" \"FLY\" \"ANY\"", true);
+-  writer->SetField(speed,static_cast<float>(this->Speed));
+-  writer->SetField(headlight, this->HasHeadLight(ren) ? true : false);
+-  writer->EndNode();
+-
+-  writer->StartNode(DirectionalLight);
+-  writer->SetField(ambientIntensity, 1.0f);
+-  writer->SetField(intensity, 0.0f);
+-  writer->SetField(color, SFCOLOR, ren->GetAmbient());
+-  writer->EndNode();
++  MFString navigationTypes;
++  writer->startNode(ID::NavigationInfo);
++  navigationTypes.push_back("EXAMINE");
++  navigationTypes.push_back("FLY");
++  navigationTypes.push_back("ANY");
++  writer->setMFString(ID::type, navigationTypes);
++
++  writer->setSFFloat(ID::speed, this->Speed);
++  writer->setSFBool(ID::headlight, this->HasHeadLight(ren) ? true : false);
++  writer->endNode();
+ 
++  // do the lights first the ambient then the others
++  writer->startNode(ID::DirectionalLight);
++  writer->setSFFloat(ID::ambientIntensity, 1.0f);
++  writer->setSFFloat(ID::intensity, 0.0f);
++  dp = ren->GetAmbient();
++  writer->setSFColor(ID::color, dp[0], dp[1], dp[2]);
++  writer->endNode();
+ 
+   // label ROOT
+   static double n[] = {0.0, 0.0, 0.0};
+-  writer->StartNode(Transform);
+-  writer->SetField(DEF, "ROOT");
+-  writer->SetField(translation, SFVEC3F, n);
++  writer->startNode(ID::Transform);
++  writer->setSFString(ID::DEF, "ROOT");
++  writer->setSFVec3f(ID::translation, n[0], n[1], n[2]);
+ 
+-  // make sure we have a default light
+-  // if we dont then use a headlight
++
++  // Write out the lights now
+   lc = ren->GetLights();
+   vtkCollectionSimpleIterator lsit;
+   for (lc->InitTraversal(lsit); (aLight = lc->GetNextLight(lsit)); )
+     {
+     if (!aLight->LightTypeIsHeadlight())
+       {
+-      this->WriteALight(aLight, writer);
++      this->WriteALight(aLight, &wrapper);
+       }
+     }
+ 
+@@ -246,12 +251,12 @@
+       if(anActor->GetVisibility()!=0)
+         {
+         aPart=static_cast<vtkActor *>(apath->GetLastNode()->GetViewProp());
+-        this->WriteAnActor(aPart, writer, index);
++        this->WriteAnActor(aPart, &wrapper, index);
+         index++;
+         }
+       }
+     }
+-  writer->EndNode(); // ROOT Transform
++  writer->endNode(); // ROOT Transform
+ 
+ 
+   //////////////////////////////////////////////
+@@ -261,18 +266,18 @@
+   if(a2Dc->GetNumberOfItems()!=0)
+     {
+     static double s[] = {1000000.0, 1000000.0, 1000000.0};
+-    writer->StartNode(ProximitySensor);
+-    writer->SetField(DEF, "PROX_LABEL");
+-    writer->SetField(size, SFVEC3F, s);
+-    writer->EndNode();
++    writer->startNode(ID::ProximitySensor);
++    writer->setSFString(ID::DEF, "PROX_LABEL");
++    writer->setSFVec3f(ID::size, s[0], s[1], s[2]);
++    writer->endNode();
+ 
+     //disable collision for the text annotations
+-    writer->StartNode(Collision);
+-    writer->SetField(enabled, false);
++    writer->startNode(ID::Collision);
++    writer->setSFBool(ID::enabled, false);
+ 
+     //add a Label TRANS_LABEL for the text annotations and the sensor
+-    writer->StartNode(Transform);
+-    writer->SetField(DEF, "TRANS_LABEL");
++    writer->startNode(ID::Transform);
++    writer->setSFString(ID::DEF, "TRANS_LABEL");
+ 
+     vtkAssemblyPath *apath2D;
+     vtkCollectionSimpleIterator ait2D;
+@@ -284,42 +289,42 @@
+         (apath2D=anTextActor2D->GetNextPath()); )
+         {
+         aPart2D=
+-              static_cast<vtkActor2D *>(apath2D->GetLastNode()->GetViewProp());
+-        this->WriteATextActor2D(aPart2D, writer);
++          static_cast<vtkActor2D *>(apath2D->GetLastNode()->GetViewProp());
++        this->WriteATextActor2D(aPart2D, &wrapper);
+         }
+       }
+-    writer->EndNode(); // Transform
+-    writer->EndNode(); // Collision
++    writer->endNode(); // Transform
++    writer->endNode(); // Collision
+ 
+-    writer->StartNode(ROUTE);
+-    writer->SetField(fromNode, "PROX_LABEL");
+-    writer->SetField(fromField, "position_changed");
+-    writer->SetField(toNode, "TRANS_LABEL");
+-    writer->SetField(toField, "set_translation");
+-    writer->EndNode(); // Route
+-
+-    writer->StartNode(ROUTE);
+-    writer->SetField(fromNode, "PROX_LABEL");
+-    writer->SetField(fromField, "orientation_changed");
+-    writer->SetField(toNode, "TRANS_LABEL");
+-    writer->SetField(toField, "set_rotation");
+-    writer->EndNode(); // Route
++    writer->startNode(ID::ROUTE);
++    writer->setSFString(ID::fromNode, "PROX_LABEL");
++    writer->setSFString(ID::fromField, "position_changed");
++    writer->setSFString(ID::toNode, "TRANS_LABEL");
++    writer->setSFString(ID::toField, "set_translation");
++    writer->endNode(); // Route
++
++    writer->startNode(ID::ROUTE);
++    writer->setSFString(ID::fromNode, "PROX_LABEL");
++    writer->setSFString(ID::fromField, "orientation_changed");
++    writer->setSFString(ID::toNode, "TRANS_LABEL");
++    writer->setSFString(ID::toField, "set_rotation");
++    writer->endNode(); // Route
+     }
+   /////////////////////////////////////////////////
+ 
+-  writer->EndNode(); // Scene
+-  writer->EndNode(); // X3D
+-  writer->Flush();
+-  writer->EndDocument();
+-  writer->CloseFile();
+-}
++  writer->endX3DDocument();
++  writer->closeFile();
++  delete writer;
++  }
+ 
+ 
+ //----------------------------------------------------------------------------
+ void vtkX3DExporter::WriteALight(vtkLight *aLight,
+-  vtkX3DExporterWriter* writer)
+-{
++                                 vtkX3DWriter* wrapper)
++  {
++  X3DWriter* writer = wrapper->Impl;
+   double *pos, *focus, *colord;
++  double *dp;
+   double dir[3];
+ 
+   pos = aLight->GetPosition();
+@@ -335,36 +340,38 @@
+     {
+     if (aLight->GetConeAngle() >= 180.0)
+       {
+-      writer->StartNode(PointLight);
++      writer->startNode(ID::PointLight);
+       }
+     else
+       { 
+-      writer->StartNode(SpotLight);
+-      writer->SetField(direction, SFVEC3F, dir);
+-      writer->SetField(cutOffAngle,static_cast<float>(aLight->GetConeAngle()));
++      writer->startNode(ID::SpotLight);
++      writer->setSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
++      writer->setSFFloat(ID::cutOffAngle,aLight->GetConeAngle());
+       }
+-    writer->SetField(location, SFVEC3F, pos);
+-    writer->SetField(attenuation, SFVEC3F, aLight->GetAttenuationValues());
++    writer->setSFVec3f(ID::location, pos[0], pos[1], pos[2]);
++    dp = aLight->GetAttenuationValues();
++    writer->setSFVec3f(ID::attenuation, dp[0], dp[1], dp[2]);
+ 
+     }
+   else
+     {
+-    writer->StartNode(DirectionalLight);
+-    writer->SetField(direction, SFVEC3F, dir);
++    writer->startNode(ID::DirectionalLight);
++    writer->setSFVec3f(ID::direction, dir[0], dir[1], dir[2]);
+     }
+ 
+   // TODO: Check correct color
+-  writer->SetField(color, SFCOLOR, colord);
+-  writer->SetField(intensity, static_cast<float>(aLight->GetIntensity()));
+-  writer->SetField(on, aLight->GetSwitch() ? true : false); 
+-  writer->EndNode();
+-  writer->Flush();
+-}
++  writer->setSFColor(ID::color, colord[0], colord[1], colord[2]);
++  writer->setSFFloat(ID::intensity, aLight->GetIntensity());
++  writer->setSFBool(ID::on, aLight->GetSwitch() ? true : false); 
++  writer->endNode();
++  writer->flush();
++  }
+ 
+ //----------------------------------------------------------------------------
+ void vtkX3DExporter::WriteAnActor(vtkActor *anActor,
+-  vtkX3DExporterWriter* writer, int index)
+-{
++                                  vtkX3DWriter* wrapper, int index)
++  {
++  X3DWriter* writer = wrapper->Impl;
+   vtkDataSet *ds;
+   vtkPolyData *pd;
+   vtkSmartPointer<vtkGeometryFilter> gf;
+@@ -396,10 +403,14 @@
+   trans = vtkSmartPointer<vtkTransform>::New();
+   trans->SetMatrix(anActor->vtkProp3D::GetMatrix());
+ 
+-  writer->StartNode(Transform);
+-  writer->SetField(translation, SFVEC3F, trans->GetPosition());
+-  writer->SetField(rotation, SFROTATION, trans->GetOrientationWXYZ());
+-  writer->SetField(scale, SFVEC3F, trans->GetScale());
++  double *dp;
++  writer->startNode(ID::Transform);
++  dp = trans->GetPosition();
++  writer->setSFVec3f(ID::translation, dp[0], dp[1], dp[2]);
++  dp = trans->GetOrientationWXYZ();
++  writer->setSFRotation(ID::rotation, dp[1], dp[2], dp[3], vtkMath::RadiansFromDegrees(-dp[0]));
++  dp = trans->GetScale();
++  writer->setSFVec3f(ID::scale, dp[0], dp[1], dp[2]);
+ 
+   // get the mappers input and matrix
+   ds = anActor->GetMapper()->GetInput();
+@@ -454,10 +465,10 @@
+     // types in separate shapes, since the cells type no longer matter.
+     if (true)
+       {
+-      writer->StartNode(Shape);
+-      this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
++      writer->startNode(ID::Shape);
++      this->WriteAnAppearance(anActor, writeEmissiveColor, wrapper);
+       vtkX3DExporterWriterRenderPoints(pd, colors, cell_colors, writer);
+-      writer->EndNode();
++      writer->endNode();
+       }
+     }
+   else
+@@ -480,66 +491,66 @@
+     bool common_data_written = false;
+     if (numPolys > 0)
+       {
+-      writer->StartNode(Shape);
++      writer->startNode(ID::Shape);
+       // Write Appearance
+-      this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
++      this->WriteAnAppearance(anActor, writeEmissiveColor, wrapper);
+       // Write Geometry
+       vtkX3DExporterWriterRenderFaceSet(VTK_POLYGON, representation, points,
+         (numVerts+numLines), polys, 
+         colors, cell_colors, normals, cell_normals, 
+         tcoords, common_data_written, index, writer);
+-      writer->EndNode();  // close the  Shape
++      writer->endNode();  // close the  Shape
+       common_data_written = true;
+       }
+ 
+     if (numStrips > 0)
+       {
+-      writer->StartNode(Shape);
++      writer->startNode(ID::Shape);
+       // Write Appearance
+-      this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
++      this->WriteAnAppearance(anActor, writeEmissiveColor, wrapper);
+       // Write Geometry
+       vtkX3DExporterWriterRenderFaceSet(VTK_TRIANGLE_STRIP,
+         representation, points,
+         (numVerts+numLines+numPolys), tstrips, 
+         colors, cell_colors, normals, cell_normals, 
+         tcoords, common_data_written, index, writer);
+-      writer->EndNode();  // close the  Shape
++      writer->endNode();  // close the  Shape
+       common_data_written = true;
+       }
+ 
+     if (numLines > 0)
+       {
+-      writer->StartNode(Shape);
++      writer->startNode(ID::Shape);
+       // Write Appearance
+-      this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
++      this->WriteAnAppearance(anActor, writeEmissiveColor, wrapper);
+       // Write Geometry
+       vtkX3DExporterWriterRenderFaceSet(VTK_POLY_LINE,
+         (representation==VTK_SURFACE? VTK_WIREFRAME:representation), 
+         points, (numVerts), lines, 
+         colors, cell_colors, normals, cell_normals, 
+         tcoords, common_data_written, index, writer);
+-      writer->EndNode();  // close the  Shape
++      writer->endNode();  // close the  Shape
+       common_data_written = true;
+       }      
+ 
+     if (numVerts > 0)
+       {
+-      writer->StartNode(Shape);
+-      this->WriteAnAppearance(anActor, writeEmissiveColor, writer);
++      writer->startNode(ID::Shape);
++      this->WriteAnAppearance(anActor, writeEmissiveColor, wrapper);
+       vtkX3DExporterWriterRenderVerts(
+         points, verts,
+         colors, cell_normals, writer);
+-      writer->EndNode();  // close the  Shape
++      writer->endNode();  // close the  Shape
+       }
+ 
+     }
+-  writer->EndNode(); // close the original transform
++  writer->endNode(); // close the original transform
+   anActor->GetMapper()->SetInterpolateScalarsBeforeMapping(isbm);
+-}
++  }
+ 
+ //----------------------------------------------------------------------------
+ void vtkX3DExporter::PrintSelf(ostream& os, vtkIndent indent)
+-{
++  {
+   this->Superclass::PrintSelf(os,indent);
+ 
+   if (this->FileName)
+@@ -553,15 +564,16 @@
+   os << indent << "Speed: " << this->Speed << "\n";
+   os << indent << "Binary: " << this->Binary << "\n";
+   os << indent << "Fastest: " << this->Fastest << endl;
+-}
++  }
+ 
+ 
+ 
+ 
+ //----------------------------------------------------------------------------
+ void vtkX3DExporter::WriteATextActor2D(vtkActor2D *anTextActor2D,
+-  vtkX3DExporterWriter* writer)
+-{
++                                       vtkX3DWriter* wrapper)
++  {
++  X3DWriter* writer = wrapper->Impl;
+   char *ds;
+   vtkTextActor *ta;
+   vtkTextProperty *tp;
+@@ -583,81 +595,82 @@
+ 
+   double temp[3];
+ 
+-  writer->StartNode(Transform);
++  writer->startNode(ID::Transform);
+   temp[0] = ((ta->GetPosition()[0])/(this->RenderWindow->GetSize()[0])) - 0.5;
+   temp[1] = ((ta->GetPosition()[1])/(this->RenderWindow->GetSize()[1])) - 0.5;
+   temp[2] = -2.0;
+-  writer->SetField(translation, SFVEC3F, temp);
++  writer->setSFVec3f(ID::translation, temp[0], temp[1], temp[2]);
+   temp[0] = temp[1] = temp[2] = 0.002;
+-  writer->SetField(scale, SFVEC3F, temp);
++  writer->setSFVec3f(ID::scale, temp[0], temp[1], temp[2]);
+ 
+-  writer->StartNode(Shape);
++  writer->startNode(ID::Shape);
+ 
+-  writer->StartNode(Appearance);
++  writer->startNode(ID::Appearance);
+ 
+-  writer->StartNode(Material);
++  writer->startNode(ID::Material);
+   temp[0] = 0.0; temp[1] = 0.0; temp[2] = 1.0;
+-  writer->SetField(diffuseColor, SFCOLOR, temp);
++  writer->setSFColor(ID::diffuseColor, temp[0], temp[1], temp[2]);
+   tp->GetColor(temp);
+-  writer->SetField(emissiveColor, SFCOLOR, temp);
+-  writer->EndNode(); // Material
++  writer->setSFColor(ID::emissiveColor, temp[0], temp[1], temp[2]);
++  writer->endNode(); // Material
+ 
+-  writer->EndNode(); // Appearance
++  writer->endNode(); // Appearance
+ 
+-  writer->StartNode(Text);
+-  writer->SetField(vtkX3D::string, ds);
++  writer->startNode(ID::Text);
++  writer->setSFString(ID::string, ds);
+ 
+   vtkstd::string familyStr;
+   switch(tp->GetFontFamily())
+     {
+-  case 0:
+-  default:
+-    familyStr = "\"SANS\"";
+-    break;
+-  case 1:
+-    familyStr = "\"TYPEWRITER\"";
+-    break;
+-  case 2:
+-    familyStr = "\"SERIF\"";
+-    break;
++    case 0:
++    default:
++      familyStr = "\"SANS\"";
++      break;
++    case 1:
++      familyStr = "\"TYPEWRITER\"";
++      break;
++    case 2:
++      familyStr = "\"SERIF\"";
++      break;
+     }
+ 
+   vtkstd::string justifyStr;
+   switch  (tp->GetJustification())
+     {
+-  case 0:
+-  default:
+-    justifyStr += "\"BEGIN\"";
+-    break;
+-  case 2:
+-    justifyStr += "\"END\"";
+-    break;
++    case 0:
++    default:
++      justifyStr += "\"BEGIN\"";
++      break;
++    case 2:
++      justifyStr += "\"END\"";
++      break;
+     }
+ 
+   justifyStr += " \"BEGIN\"";
+ 
+-  writer->StartNode(FontStyle);
+-  writer->SetField(family, familyStr.c_str(), true);
+-  writer->SetField(topToBottom, tp->GetVerticalJustification() == 2);
+-  writer->SetField(justify, justifyStr.c_str(), true);
+-  writer->SetField(size, tp->GetFontSize());
+-  writer->EndNode(); // FontStyle
+-  writer->EndNode(); // Text
+-  writer->EndNode(); // Shape
+-  writer->EndNode(); // Transform
+-}
++  writer->startNode(ID::FontStyle);
++  writer->setSFString(ID::family, familyStr);
++  writer->setSFBool(ID::topToBottom, tp->GetVerticalJustification() == 2);
++  writer->setSFString(ID::justify, justifyStr);
++  writer->setSFInt32(ID::size, tp->GetFontSize());
++  writer->endNode(); // FontStyle
++  writer->endNode(); // Text
++  writer->endNode(); // Shape
++  writer->endNode(); // Transform
++  }
+ 
+ void vtkX3DExporter::WriteAnAppearance(vtkActor *anActor, bool emissive,
+-  vtkX3DExporterWriter* writer)
+-{
++                                       vtkX3DWriter* wrapper)
++  {
++  X3DWriter* writer = wrapper->Impl;
+   double tempd[3];
+   double tempf2;
+ 
+   vtkProperty* prop = anActor->GetProperty();
+ 
+-  writer->StartNode(Appearance);
+-  writer->StartNode(Material);
+-  writer->SetField(ambientIntensity,static_cast<float>(prop->GetAmbient()));
++  writer->startNode(ID::Appearance);
++  writer->startNode(ID::Material);
++  writer->setSFFloat(ID::ambientIntensity,prop->GetAmbient());
+ 
+   if (emissive)
+     {
+@@ -671,7 +684,7 @@
+     {
+     tempd[0] = tempd[1] = tempd[2] = 0.0f;
+     }
+-  writer->SetField(emissiveColor, SFCOLOR, tempd);
++  writer->setSFColor(ID::emissiveColor, tempd[0], tempd[1], tempd[2]);
+ 
+   // Set diffuse color
+   tempf2 = prop->GetDiffuse();
+@@ -679,7 +692,7 @@
+   tempd[0]*=tempf2;
+   tempd[1]*=tempf2;
+   tempd[2]*=tempf2;
+-  writer->SetField(diffuseColor, SFCOLOR, tempd);
++  writer->setSFColor(ID::diffuseColor, tempd[0], tempd[1], tempd[2]);
+ 
+   // Set specular color
+   tempf2 = prop->GetSpecular();
+@@ -687,25 +700,26 @@
+   tempd[0]*=tempf2;
+   tempd[1]*=tempf2;
+   tempd[2]*=tempf2;
+-  writer->SetField(specularColor, SFCOLOR, tempd);  
++  writer->setSFColor(ID::specularColor, tempd[0], tempd[1], tempd[2]);  
+ 
+   // Material shininess
+-  writer->SetField(shininess,static_cast<float>(prop->GetSpecularPower()/128.0));
++  writer->setSFFloat(ID::shininess,prop->GetSpecularPower()/128.0);
+   // Material transparency
+-  writer->SetField(transparency,static_cast<float>(1.0 - prop->GetOpacity()));
+-  writer->EndNode(); // close material
++  writer->setSFFloat(ID::transparency,1.0 - prop->GetOpacity());
++  writer->endNode(); // close material
+ 
+   // is there a texture map
+   if (anActor->GetTexture())
+     {
+-    this->WriteATexture(anActor, writer);
++    this->WriteATexture(anActor, wrapper);
+     }
+-  writer->EndNode(); // close appearance
+-}
++  writer->endNode(); // close appearance
++  }
+ 
+ void vtkX3DExporter::WriteATexture(vtkActor *anActor,
+-  vtkX3DExporterWriter* writer)
+-{
++                                   vtkX3DWriter* wrapper)
++  {
++  X3DWriter* writer = wrapper->Impl;
+   vtkTexture *aTexture = anActor->GetTexture();
+   int *size, xsize, ysize;
+   vtkDataArray *scalars;
+@@ -790,18 +804,18 @@
+ 
+ 
+ 
+-  writer->StartNode(PixelTexture);
+-  writer->SetField(image, &(imageDataVec.front()), imageDataVec.size(), true);
++  writer->startNode(ID::PixelTexture);
++  writer->setSFImage(ID::image, imageDataVec);
+   if (!(aTexture->GetRepeat()))
+     {
+-    writer->SetField(repeatS, false);
+-    writer->SetField(repeatT, false);
++    writer->setSFBool(ID::repeatS, false);
++    writer->setSFBool(ID::repeatT, false);
+     }
+-  writer->EndNode();
+-}
++  writer->endNode();
++  }
+ //----------------------------------------------------------------------------
+ int vtkX3DExporter::HasHeadLight(vtkRenderer* ren)
+-{
++  {
+   // make sure we have a default light
+   // if we dont then use a headlight
+   vtkLightCollection* lc = ren->GetLights();
+@@ -815,10 +829,10 @@
+       }
+     }
+   return 0;
+-}
++  }
+ 
+ static bool vtkX3DExporterWriterUsingCellColors(vtkActor* anActor)
+-{
++  {
+   int cellFlag = 0;
+   vtkMapper* mapper = anActor->GetMapper();
+   vtkAbstractMapper::GetScalars(
+@@ -828,7 +842,7 @@
+     mapper->GetArrayId(),
+     mapper->GetArrayName(), cellFlag);
+   return (cellFlag == 1);
+-}
++  }
+ 
+ //----------------------------------------------------------------------------
+ static bool vtkX3DExporterWriterRenderFaceSet(
+@@ -840,11 +854,14 @@
+   vtkUnsignedCharArray* colors, bool cell_colors,
+   vtkDataArray* normals, bool cell_normals, 
+   vtkDataArray* tcoords, 
+-  bool common_data_written, int index, vtkX3DExporterWriter* writer)
+-{
++  bool common_data_written, int index, X3DWriter* writer)
++  {
+   vtkstd::vector<int> coordIndexVector;
+   vtkstd::vector<int> cellIndexVector;
+ 
++  coordIndexVector.reserve(cells->GetNumberOfConnectivityEntries());
++  cellIndexVector.reserve(cells->GetNumberOfCells());
++
+   vtkIdType npts = 0;
+   vtkIdType *indx = 0;
+ 
+@@ -893,7 +910,7 @@
+         if (representation == VTK_WIREFRAME)
+           {
+           // close the polygon when drawing lines
+-            coordIndexVector.push_back(static_cast<int>(indx[i1]));
++          coordIndexVector.push_back(static_cast<int>(indx[i1]));
+           }
+         coordIndexVector.push_back(-1);
+ 
+@@ -905,11 +922,11 @@
+ 
+   if (representation == VTK_SURFACE)
+     {
+-    writer->StartNode(IndexedFaceSet);
+-    writer->SetField(solid, false);
+-    writer->SetField(colorPerVertex, !cell_colors);
+-    writer->SetField(normalPerVertex, !cell_normals);
+-    writer->SetField(coordIndex, &(coordIndexVector.front()), coordIndexVector.size());
++    writer->startNode(ID::IndexedFaceSet);
++    writer->setSFBool(ID::solid, false);
++    writer->setSFBool(ID::colorPerVertex, !cell_colors);
++    writer->setSFBool(ID::normalPerVertex, !cell_normals);
++    writer->setMFInt32(ID::coordIndex, coordIndexVector);
+     }
+   else
+     {
+@@ -917,19 +934,19 @@
+     normals = 0;
+     tcoords = 0;
+ 
+-    writer->StartNode(IndexedLineSet);
+-    writer->SetField(colorPerVertex, !cell_colors);
+-    writer->SetField(coordIndex, &(coordIndexVector.front()), coordIndexVector.size());
++    writer->startNode(ID::IndexedLineSet);
++    writer->setSFBool(ID::colorPerVertex, !cell_colors);
++    writer->setMFInt32(ID::coordIndex, coordIndexVector);
+     }
+ 
+   if (normals && cell_normals && representation == VTK_SURFACE)
+     {
+-    writer->SetField(normalIndex, &(cellIndexVector.front()), cellIndexVector.size());
++    writer->setMFInt32(ID::normalIndex, cellIndexVector);
+     }
+ 
+   if (colors && cell_colors)
+     {
+-    writer->SetField(colorIndex, &(cellIndexVector.front()), cellIndexVector.size());
++    writer->setMFInt32(ID::colorIndex, cellIndexVector);
+     }
+ 
+   // Now save Coordinate, Color, Normal TextureCoordinate nodes.
+@@ -943,111 +960,137 @@
+     vtkX3DExporterUseData((normals != NULL), (tcoords != NULL), (colors!= NULL), index, writer);
+     }
+ 
+-  writer->EndNode(); // end IndexedFaceSet or IndexedLineSet
++  writer->endNode(); // end IndexedFaceSet or IndexedLineSet
+   return true;
+-}
++  }
+ 
+ static void vtkX3DExporterWriteData(vtkPoints *points, 
+-  vtkDataArray *normals,
+-  vtkDataArray *tcoords, 
+-  vtkUnsignedCharArray *colors,
+-  int index, 
+-  vtkX3DExporterWriter* writer)
+-{
++                                    vtkDataArray *normals,
++                                    vtkDataArray *tcoords, 
++                                    vtkUnsignedCharArray *colors,
++                                    int index, 
++                                    X3DWriter* writer)
++  {
+   char indexString[100];
+   sprintf(indexString, "%04d", index);
+ 
++  std::vector<float> vec(points->GetNumberOfPoints()*3);
++  vtkDataArray* data = points->GetData();
++  double t[3];
++  for(int i = 0, j = 0; i < data->GetNumberOfTuples(); i++) {
++    data->GetTuple(i, t);
++    vec[j++] = t[0];
++    vec[j++] = t[1];
++    vec[j++] = t[2];
++    }
+   // write out the points
+   vtkstd::string defString = "VTKcoordinates";
+-  writer->StartNode(Coordinate);
+-  writer->SetField(DEF, defString.append(indexString).c_str());
+-  writer->SetField(point, MFVEC3F, points->GetData());
+-  writer->EndNode();
++  writer->startNode(ID::Coordinate);
++  writer->setSFString(ID::DEF, defString.append(indexString).c_str());
++  writer->setMFVec3f(ID::point, vec);
++  writer->endNode();
+ 
+-  // write out the point data
++
++  // write out the normals
+   if (normals)
+     {
++    vec.resize(normals->GetNumberOfTuples()*3);
++    for(int i = 0, j = 0; i < normals->GetNumberOfTuples(); i++) 
++      {
++      normals->GetTuple(i, t);
++      vec[j++] = t[0];
++      vec[j++] = t[1];
++      vec[j++] = t[2];
++      }
+     defString="VTKnormals";
+-    writer->StartNode(Normal);
+-    writer->SetField(DEF, defString.append(indexString).c_str());
+-    writer->SetField(vtkX3D::vector, MFVEC3F, normals);
+-    writer->EndNode();
+-    }
++    writer->startNode(ID::Normal);
++    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
++    writer->setMFVec3f(ID::vector, vec);
++    writer->endNode();
++    } // normals
+ 
+-  // write out the point data
++
++  // write out the texture coordinates
+   if (tcoords)
+     {
++    vec.resize(tcoords->GetNumberOfTuples()*2);
++    for(int i = 0, j = 0; i < tcoords->GetNumberOfTuples(); i++)
++      {
++      tcoords->GetTuple(i, t);
++      vec[j++] = t[0];
++      vec[j++] = t[1];
++      }
+     defString="VTKtcoords";
+-    writer->StartNode(TextureCoordinate);
+-    writer->SetField(DEF, defString.append(indexString).c_str());
+-    writer->SetField(point, MFVEC2F, tcoords);
+-    writer->EndNode();
++    writer->startNode(ID::TextureCoordinate);
++    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
++    writer->setMFVec2f(ID::point, vec);
++    writer->endNode();
+     }
+ 
+-  // write out the point data
++  // write out the colors
+   if (colors)
+     {
+-    defString="VTKcolors";
+-    writer->StartNode(Color);
+-    writer->SetField(DEF, defString.append(indexString).c_str());
+-
+-    vtkstd::vector<double> colorVec;
+     unsigned char c[4];
+-    for (int i = 0; i < colors->GetNumberOfTuples(); i++)
++    vec.resize(colors->GetNumberOfTuples()*3);
++    for (int i = 0, j = 0; i < colors->GetNumberOfTuples(); i++)
+       {
+       colors->GetTupleValue(i,c);
+-      colorVec.push_back(c[0]/255.0);
+-      colorVec.push_back(c[1]/255.0);
+-      colorVec.push_back(c[2]/255.0);
++      vec[j++] = c[0]/255.0f;
++      vec[j++] = c[1]/255.0f;
++      vec[j++] = c[2]/255.0f;
+       }
+-    writer->SetField(color, &(colorVec.front()), colorVec.size());
+-    writer->EndNode();
++    defString="VTKcolors";
++    writer->startNode(ID::Color);
++    writer->setSFString(ID::DEF, defString.append(indexString).c_str());
++    writer->setMFColor(ID::color, vec);
++    writer->endNode();
++    vec.clear();
+     }
+-}
++  }
+ 
+ static void vtkX3DExporterUseData(bool normals, bool tcoords, bool colors, int index, 
+-  vtkX3DExporterWriter* writer)
+-{
++                                  X3DWriter* writer)
++  {
+   char indexString[100];
+   sprintf(indexString, "%04d", index);
+   vtkstd::string defString = "VTKcoordinates";
+-  writer->StartNode(Coordinate);
+-  writer->SetField(USE, defString.append(indexString).c_str());
+-  writer->EndNode();
++  writer->startNode(ID::Coordinate);
++  writer->setSFString(ID::USE, defString.append(indexString).c_str());
++  writer->endNode();
+ 
+   // write out the point data
+   if (normals)
+     {
+     defString = "VTKnormals";
+-    writer->StartNode(Normal);
+-    writer->SetField(USE, defString.append(indexString).c_str());
+-    writer->EndNode();
++    writer->startNode(ID::Normal);
++    writer->setSFString(ID::USE, defString.append(indexString).c_str());
++    writer->endNode();
+     }
+ 
+   // write out the point data
+   if (tcoords)
+     {
+     defString = "VTKtcoords";
+-    writer->StartNode(TextureCoordinate);
+-    writer->SetField(USE, defString.append(indexString).c_str());
+-    writer->EndNode();
++    writer->startNode(ID::TextureCoordinate);
++    writer->setSFString(ID::USE, defString.append(indexString).c_str());
++    writer->endNode();
+     }
+ 
+   // write out the point data
+   if (colors)
+     {
+     defString = "VTKcolors";
+-    writer->StartNode(Color);
+-    writer->SetField(USE, defString.append(indexString).c_str());
+-    writer->EndNode();
++    writer->startNode(ID::Color);
++    writer->setSFString(ID::USE, defString.append(indexString).c_str());
++    writer->endNode();
+     }
+-}
++  }
+ 
+ static bool vtkX3DExporterWriterRenderVerts(
+   vtkPoints* points, vtkCellArray* cells,
+-  vtkUnsignedCharArray* colors, bool cell_colors,  vtkX3DExporterWriter* writer)
+-{
+-  vtkstd::vector<double> colorVector;
++  vtkUnsignedCharArray* colors, bool cell_colors,  X3DWriter* writer)
++  {
++  vtkstd::vector<float> colorVector;
+ 
+   if (colors)
+     {
+@@ -1075,32 +1118,43 @@
+       }
+     }
+ 
+-  writer->StartNode(PointSet);
+-  writer->StartNode(Coordinate);
+-  writer->SetField(point, MFVEC3F, points->GetData());
+-  writer->EndNode();
++  std::vector<float> vec;
++
++  vec.clear();
++
++  double t[3];
++  for(int i = 0; i < points->GetData()->GetNumberOfTuples(); i++) {
++    points->GetData()->GetTuple(i, t);
++    vec.push_back(t[0]);
++    vec.push_back(t[1]);
++    vec.push_back(t[2]);
++    }
++  writer->startNode(ID::PointSet);
++  writer->startNode(ID::Coordinate);
++  writer->setMFVec3f(ID::point, vec);
++  writer->endNode();
+   if (colors)
+     {
+-    writer->StartNode(Color);
+-    writer->SetField(point, &(colorVector.front()), colorVector.size());
+-    writer->EndNode();
++    writer->startNode(ID::Color);
++    writer->setMFColor(ID::point, colorVector);
++    writer->endNode();
+     }
+   return true; 
+-}
++  }
+ 
+ static bool vtkX3DExporterWriterRenderPoints(
+   vtkPolyData* pd, 
+   vtkUnsignedCharArray* colors,
+   bool cell_colors
+-  ,  vtkX3DExporterWriter* writer)
+-{
++  ,  X3DWriter* writer)
++  {
+   if (pd->GetNumberOfCells() == 0)
+     {
+     return false;
+     }
+ 
+-  vtkstd::vector<double> colorVec;
+-  vtkstd::vector<double> coordinateVec;
++  vtkstd::vector<float> colorVec;
++  vtkstd::vector<float> coordinateVec;
+ 
+   vtkPoints* points = pd->GetPoints();
+ 
+@@ -1165,17 +1219,17 @@
+       }
+     }
+ 
+-  writer->StartNode(PointSet);
+-  writer->StartNode(Coordinate);
+-  writer->SetField(point, &(coordinateVec.front()), coordinateVec.size());
+-  writer->EndNode(); // Coordinate
++  writer->startNode(ID::PointSet);
++  writer->startNode(ID::Coordinate);
++  writer->setMFVec3f(ID::point, coordinateVec);
++  writer->endNode(); // Coordinate
+   if (colors)
+     {
+-    writer->StartNode(Color);
+-    writer->SetField(color, &(colorVec.front()), colorVec.size());
+-    writer->EndNode(); // Color
++    writer->startNode(ID::Color);
++    writer->setMFColor(ID::color, colorVec);
++    writer->endNode(); // Color
+     }
+-  writer->EndNode(); // PointSet
++  writer->endNode(); // PointSet
+   return true; 
+-}
++  }
+ 
+Index: VTK/Hybrid/vtkX3DExporter.h
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/vtkX3DExporter.h,v
+retrieving revision 1.5
+diff -u -r1.5 vtkX3DExporter.h
+--- VTK/Hybrid/vtkX3DExporter.h	1 Jul 2008 12:39:31 -0000	1.5
++++ VTK/Hybrid/vtkX3DExporter.h	16 Sep 2009 08:03:08 -0000
+@@ -19,7 +19,8 @@
+ // 3D scenes (similar to VRML). Check out http://www.web3d.org/x3d/ for more
+ // details.
+ // .SECTION Thanks
+-// X3DExporter is contributed by Christophe Mouton at EDF.
++// vtkX3DExporter is contributed by Christophe Mouton at EDF and implemented 
++// by Kristian Sons at Supporting GmbH (xiot@supporting.com).
+ #ifndef __vtkX3DExporter_h
+ #define __vtkX3DExporter_h
+ 
+@@ -33,6 +34,8 @@
+ class vtkUnsignedCharArray;
+ class vtkX3DExporterWriter;
+ class vtkRenderer;
++class vtkX3DWriter;
++
+ 
+ class VTK_HYBRID_EXPORT vtkX3DExporter : public vtkExporter
+ {
+@@ -47,6 +50,14 @@
+   vtkGetStringMacro(FileName);
+ 
+   // Description:
++  // Set/Get the file name written to the file
++  // This is for comparision with other exporter
++  // version
++  vtkSetStringMacro(FakeFileName);
++  vtkGetStringMacro(FakeFileName);
++
++
++  // Description:
+   // Specify the Speed of navigation. Default is 4.
+   vtkSetMacro(Speed,double);
+   vtkGetMacro(Speed,double);
+@@ -71,18 +82,19 @@
+   // Write data to output.
+   void WriteData();
+ 
+-  void WriteALight(vtkLight *aLight, vtkX3DExporterWriter* writer);
+-  void WriteAnActor(vtkActor *anActor, vtkX3DExporterWriter* writer,
++  void WriteALight(vtkLight *aLight, vtkX3DWriter* writer);
++  void WriteAnActor(vtkActor *anActor, vtkX3DWriter* writer,
+     int index);
+   void WritePointData(vtkPoints *points, vtkDataArray *normals,
+     vtkDataArray *tcoords, vtkUnsignedCharArray *colors,
+-    vtkX3DExporterWriter* writer, int index);
++   vtkX3DWriter* writer, int index);
+   void WriteATextActor2D(vtkActor2D *anTextActor2D,
+-    vtkX3DExporterWriter* writer);
+-  void WriteATexture(vtkActor *anActor, vtkX3DExporterWriter* writer);
+-  void WriteAnAppearance(vtkActor *anActor, bool writeEmissiveColor, vtkX3DExporterWriter* writer);
++    vtkX3DWriter* writer);
++  void WriteATexture(vtkActor *anActor, vtkX3DWriter* writer);
++  void WriteAnAppearance(vtkActor *anActor, bool writeEmissiveColor, vtkX3DWriter* writer);
+   int HasHeadLight(vtkRenderer* ren);
+   char *FileName;
++  char *FakeFileName;
+   double Speed;
+   int Binary;
+   int Fastest;
+Index: VTK/Hybrid/Testing/Cxx/X3DTest.cxx
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/Testing/Cxx/X3DTest.cxx,v
+retrieving revision 1.1
+diff -u -r1.1 X3DTest.cxx
+--- VTK/Hybrid/Testing/Cxx/X3DTest.cxx	23 Oct 2006 18:55:15 -0000	1.1
++++ VTK/Hybrid/Testing/Cxx/X3DTest.cxx	16 Sep 2009 08:03:08 -0000
+@@ -70,7 +70,11 @@
+   exporter->SetInput(renWin);
+   exporter->SetFileName("testX3DExporter.x3d");
+   exporter->Update();
+-  exporter->Write();
++
++  exporter->SetFileName("testX3DExporter.x3db");
++  exporter->SetBinary(1);
++  exporter->Update();
++  
+   
+ 
+   int retVal = vtkRegressionTestImage( renWin );
+Index: VTK/Utilities/CMakeLists.txt
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/VTK/Utilities/CMakeLists.txt,v
+retrieving revision 1.77
+diff -u -r1.77 CMakeLists.txt
+--- VTK/Utilities/CMakeLists.txt	18 Jun 2009 14:03:33 -0000	1.77
++++ VTK/Utilities/CMakeLists.txt	16 Sep 2009 08:03:08 -0000
+@@ -14,6 +14,7 @@
+ VTK_THIRD_PARTY_SUBDIR(MATERIALLIBRARY MaterialLibrary)
+ VTK_THIRD_PARTY_SUBDIR(LIBPROJ4 vtklibproj4)
+ VTK_THIRD_PARTY_SUBDIR(MRMPI mrmpi)
++VTK_THIRD_PARTY_SUBDIR(XIOT vtkxiot)
+ 
+ # Force build options for verdict
+ SET( VERDICT_USE_FLOAT OFF CACHE BOOL "VTK requires doubles" FORCE )
