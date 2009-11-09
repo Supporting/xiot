@@ -20,22 +20,28 @@
 #include "vtkProcessModule.h"
 #include "vtkSMSourceProxy.h"
 #include "vtkSMIntVectorProperty.h"
+#include "vtkSMProxyProperty.h"
+#include "vtkSMInputProperty.h"
 #include "vtkImageData.h"
 #include "vtkSMOutputPort.h"
 #include "vtkSMNetworkImageDataSourceProxy.h"
 
 vtkStandardNewMacro(vtkSMImageDataToTextureProxy);
 vtkCxxRevisionMacro(vtkSMImageDataToTextureProxy, "$Revision: 1.2 $");
+vtkCxxSetObjectMacro(vtkSMImageDataToTextureProxy,Copier,vtkSMNetworkImageDataSourceProxy);
+
 //----------------------------------------------------------------------------
 vtkSMImageDataToTextureProxy::vtkSMImageDataToTextureProxy()
 {
   this->SetServers(vtkProcessModule::CLIENT |
     vtkProcessModule::RENDER_SERVER);
+  this->Copier = NULL;
 }
 
 //----------------------------------------------------------------------------
 vtkSMImageDataToTextureProxy::~vtkSMImageDataToTextureProxy()
 {
+  this->SetCopier(0);
 }
 
 void vtkSMImageDataToTextureProxy::AddInput(unsigned int inputPort,
@@ -47,28 +53,26 @@ void vtkSMImageDataToTextureProxy::AddInput(unsigned int inputPort,
     {
     return;
     }
-
-  input->CreateOutputPorts();
-
   this->CreateVTKObjects();
-  
-  
-  vtkClientServerStream stream;
-  stream  << vtkClientServerStream::Invoke
-          << input->GetID()
-          << "GetActiveImage"
-          << vtkClientServerStream::End;
-  stream  << vtkClientServerStream::Invoke
-          << this->Copier->GetID()
-          << "SetImage"
-          << vtkClientServerStream::LastResult
-          << vtkClientServerStream::End;
-  vtkProcessModule::GetProcessModule()->SendStream(this->ConnectionID, 
-    input->GetServers() & this->Copier->GetServers(), 
-                 stream);
 
-  
-  
+  // This proxy delegates it's input to the input of the
+  // copier sub-proxy
+  vtkSMInputProperty* inputProp = vtkSMInputProperty::SafeDownCast(this->Copier->GetProperty("Input"));
+  inputProp->AddInputConnection(input, outputPort);
+
+}
+
+
+
+//----------------------------------------------------------------------------
+void vtkSMImageDataToTextureProxy::UpdateVTKObjects()
+{
+  this->Superclass::UpdateVTKObjects();
+}
+
+void vtkSMImageDataToTextureProxy::UpdateImage()
+{
+  this->Copier->UpdateImage();
 }
 
 //----------------------------------------------------------------------------
@@ -79,10 +83,10 @@ void vtkSMImageDataToTextureProxy::CreateVTKObjects()
     return;
     }
 
-  this->Superclass::CreateVTKObjects();
-
-  this->Copier = this->GetSubProxy("Source");
+  this->SetCopier(vtkSMNetworkImageDataSourceProxy::SafeDownCast(this->GetSubProxy("Source")));
   this->Copier->SetServers(vtkProcessModule::CLIENT_AND_SERVERS);
+
+  this->Superclass::CreateVTKObjects();
   
   vtkClientServerStream stream;
   stream  << vtkClientServerStream::Invoke

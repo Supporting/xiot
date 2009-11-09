@@ -24,6 +24,7 @@
 #include "vtkSMSourceProxy.h"
 
 class vtkImageData;
+class vtkSMNetworkImageDataSourceProxy;
 
 class VTK_EXPORT vtkSMImageDataToTextureProxy : public vtkSMSourceProxy
 {
@@ -35,6 +36,8 @@ public:
   // Description:
   // Returns the client side image if one has been loaded successfully.
   vtkImageData* GetLoadedImage();
+  void UpdateImage();
+  virtual void UpdateVTKObjects();
 
  virtual void AddInput(unsigned int inputPort,
                         vtkSMSourceProxy* input,
@@ -47,8 +50,9 @@ protected:
   ~vtkSMImageDataToTextureProxy();
 
   virtual void CreateVTKObjects();
-
-  vtkSMProxy* Copier;
+  
+  virtual void SetCopier(vtkSMNetworkImageDataSourceProxy *);
+  vtkSMNetworkImageDataSourceProxy* Copier;
 
 private:
   vtkSMImageDataToTextureProxy(const vtkSMImageDataToTextureProxy&); // Not implemented

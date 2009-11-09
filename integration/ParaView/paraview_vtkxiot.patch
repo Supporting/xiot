@@ -1,5 +1,7 @@
 ? Servers/Filters/vtkNetworkImageDataSource.cxx
 ? Servers/Filters/vtkNetworkImageDataSource.h
+? Servers/Filters/vtkX3DShapeFilter.cxx
+? Servers/Filters/vtkX3DShapeFilter.h
 ? Servers/Filters/vtkX3DSource.cxx
 ? Servers/Filters/vtkX3DSource.h
 ? Servers/Filters/vtkX3DTextureSource.cxx.alt
@@ -13,6 +15,7 @@
 ? VTK/vtkxiot_all.patch
 ? VTK/Hybrid/vtkX3DImporter.cxx
 ? VTK/Hybrid/vtkX3DImporter.h
+? VTK/Utilities/vtk_xiot.h
 ? VTK/Utilities/vtkxiot
 Index: Applications/StreamingParaView/XML/ParaViewReaders.xml
 ===================================================================
@@ -56,7 +59,7 @@ RCS file: /cvsroot/ParaView3/ParaView3/Servers/Filters/CMakeLists.txt,v
 retrieving revision 1.200
 diff -u -r1.200 CMakeLists.txt
 --- Servers/Filters/CMakeLists.txt	7 Aug 2009 12:20:04 -0000	1.200
-+++ Servers/Filters/CMakeLists.txt	23 Oct 2009 10:06:45 -0000
++++ Servers/Filters/CMakeLists.txt	8 Nov 2009 23:55:50 -0000
 @@ -163,6 +163,8 @@
    vtkXMLCollectionReader.cxx
    vtkXMLPVAnimationWriter.cxx
@@ -106,25 +109,51 @@ diff -u -r1.256 CMakeLists.txt
    )
  
  IF (VTK_USE_QVTK)
+Index: Servers/ServerManager/vtkSMProxyManager.cxx
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMProxyManager.cxx,v
+retrieving revision 1.83
+diff -u -r1.83 vtkSMProxyManager.cxx
+--- Servers/ServerManager/vtkSMProxyManager.cxx	29 Jul 2009 13:23:08 -0000	1.83
++++ Servers/ServerManager/vtkSMProxyManager.cxx	6 Nov 2009 15:18:15 -0000
+@@ -860,6 +860,7 @@
+   if (proxy_list.Contains(proxy))
+     {
+     return;
++
+     }
+ 
+   vtkSMProxyManagerProxyInfo* proxyInfo = vtkSMProxyManagerProxyInfo::New();
+Index: Servers/ServerManager/vtkSMSourceProxy.h
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMSourceProxy.h,v
+retrieving revision 1.39
+diff -u -r1.39 vtkSMSourceProxy.h
+--- Servers/ServerManager/vtkSMSourceProxy.h	5 Dec 2008 18:03:03 -0000	1.39
++++ Servers/ServerManager/vtkSMSourceProxy.h	9 Nov 2009 00:04:28 -0000
+@@ -192,7 +192,7 @@
+ 
+   // Description:
+   // Returns the number of output ports provided by the algorithm.
+-  unsigned int GetNumberOfAlgorithmOutputPorts();
++  virtual unsigned int GetNumberOfAlgorithmOutputPorts();
+ 
+   // Description:
+   // Returns the number of non-optional input ports required by the algorithm.
 Index: Servers/ServerManager/Resources/readers.xml
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/readers.xml,v
-retrieving revision 1.165
-diff -u -r1.165 readers.xml
---- Servers/ServerManager/Resources/readers.xml	25 Aug 2009 14:50:52 -0000	1.165
-+++ Servers/ServerManager/Resources/readers.xml	23 Oct 2009 10:11:37 -0000
-@@ -4759,5 +4759,42 @@
+retrieving revision 1.174
+diff -u -r1.174 readers.xml
+--- Servers/ServerManager/Resources/readers.xml	30 Oct 2009 17:43:35 -0000	1.174
++++ Servers/ServerManager/Resources/readers.xml	9 Nov 2009 00:06:54 -0000
+@@ -5225,6 +5225,73 @@
        <!-- End of CSVReader -->
     </FileSeriesReaderProxy>
  
-+    <X3DImporterProxy name="x3dreader" class="vtkX3DSource" label="X3D Reader">
-+      <Documentation
-+        short_help="Read X3D files."
-+        long_help="Load the geometry from a X3D file.">
-+        The X3D reader loads the geometry from a X3D file. The expected file extension is .x3d or .x3db for binary encoded files. The output of this reader is a polygonal dataset.
-+      </Documentation>
-+    
-+      <StringVectorProperty
++   
++   <X3DImporterProxy name="x3dreader" class="vtkX3DSource">
++		<StringVectorProperty
 +             name="FileName"
 +             animateable="0"
 +             command="SetFileName"
@@ -133,7 +162,7 @@ diff -u -r1.165 readers.xml
 +        <Documentation>
 +          This property specifies the file name for the X3D reader.
 +        </Documentation>
-+      </StringVectorProperty>
++      </StringVectorProperty>   
 +      <IntVectorProperty
 +           name="Material Color"
 +           command="SetColor"
@@ -144,16 +173,52 @@ diff -u -r1.165 readers.xml
 +          This property indicates if the reader should convert  the material color to scalar values.
 +        </Documentation>
 +      </IntVectorProperty>
-+	   <StringVectorProperty
-+             name="TextureInfo"
-+             animateable="0"
-+             command="GetTextureInfo"
-+             information_only="1">
-+		<StringArrayHelper />
-+      </StringVectorProperty>
-+      <!-- End x3dreader -->    
-+    </X3DImporterProxy>
-+    
++	  <IntVectorProperty
++        name="NumberOfShapes"
++        command="GetNumberOfShapes"
++		information_only="1"
++		number_of_elements="1"
++		default_values="0">
++		<SimpleIntInformationHelper />
++        <Documentation>
++          Receive the number of available Shapes in X3D file.
++        </Documentation>
++		</IntVectorProperty>
++		
++		<IntVectorProperty
++        name="ShapeRange"
++        command="GetShapeRange"
++		information_only="1"
++		number_of_elements="2"
++		default_values="0 0">
++		<SimpleIntInformationHelper />
++        <Documentation>
++          Receive the valid range of Shapes in X3D file
++        </Documentation>
++		</IntVectorProperty>
++		
++		<IntVectorProperty
++		  name="ShapeNumber"
++		  command="SetShapeNumber"
++		  information_property="NumberOfShapes"
++		  number_of_elements="1"
++		  immediate_update="1"
++		  default_values="0">
++		  <IntRangeDomain name="range">
++		    <RequiredProperties>
++		      <Property name="ShapeRange" function="RangeInfo"/>
++			</RequiredProperties> 
++		  </IntRangeDomain>
++		</IntVectorProperty>
++		
++		<ProxyProperty name="Texture" information_only="1" update_self="1" is_internal="1">
++        <Documentation>
++          
++        </Documentation>
++        </ProxyProperty>
++	   <!-- End of x3dreader -->
++   </X3DImporterProxy>
+ 
    </ProxyGroup>
  </ServerManagerConfiguration>
 Index: Servers/ServerManager/Resources/rendering.xml
@@ -210,7 +275,7 @@ RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/sources.x
 retrieving revision 1.99
 diff -u -r1.99 sources.xml
 --- Servers/ServerManager/Resources/sources.xml	31 Jul 2009 18:48:05 -0000	1.99
-+++ Servers/ServerManager/Resources/sources.xml	23 Oct 2009 10:14:32 -0000
++++ Servers/ServerManager/Resources/sources.xml	8 Nov 2009 10:36:29 -0000
 @@ -1834,6 +1834,41 @@
       <!-- End of NetworkImageSource -->
     </NetworkImageSourceProxy>
@@ -220,7 +285,7 @@ diff -u -r1.99 sources.xml
 +     class="vtkNetworkImageDataSource">
 +    <InputProperty
 +       name="Input"
-+       command="SetImage">
++       command="not-used">
 +          <ProxyGroupDomain name="groups">
 +            <Group name="sources"/>
 +            <Group name="filters"/>
@@ -237,9 +302,9 @@ diff -u -r1.99 sources.xml
 +      command="SetSourceProcess"
 +      number_of_elements="1"
 +      update_self="1"
-+      default_values="0">
++      default_values="1">
 +      <EnumerationDomain name="enum" >
-+        <Entry value="2" text="DataServer" /> 
++        <Entry value="1" text="DataServer" /> 
 +        <Entry value="8" text="RenderServer" /> 
 +        <Entry value="16" text="Client" /> 
 +      </EnumerationDomain>
@@ -248,7 +313,7 @@ diff -u -r1.99 sources.xml
 +      </Documentation>
 +     </IntVectorProperty>
 +
-+     <!-- End of NetworkImageSource -->
++     <!-- End of NetworkImageDataSource -->
 +   </NetworkImageDataSourceProxy>
     <!-- ==================================================================== -->
     <SourceProxy name="SplineSource"

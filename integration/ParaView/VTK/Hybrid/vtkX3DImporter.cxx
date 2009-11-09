@@ -2095,6 +2095,37 @@ void vtkX3DImporter::ImportEnd ()
 {
 }
 
+class ShapeCounter : public XIOT::X3DDefaultNodeHandler {
+  public:
+    virtual void startDocument() 
+    {
+      _count = 0;
+    }
+
+    virtual int startShape(const XIOT::X3DAttributes &)
+    {
+      _count++;
+	    return XIOT::CONTINUE;
+    }
+
+    int _count;  
+};
+
+int vtkX3DImporter::GetNumberOfShapes(char* FileName)
+{
+  XIOT::X3DLoader loader;
+	ShapeCounter handler;
+	loader.setNodeHandler(&handler);
+	try {
+    loader.load(FileName);
+	} catch (XIOT::X3DParseException&)
+	{	
+      return -1;
+	}
+	return handler._count;
+}
+
+
 void vtkX3DImporter::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os,indent);

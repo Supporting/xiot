@@ -17,6 +17,7 @@
 #include "vtkObjectFactory.h"
 #include "vtkClientServerStream.h"
 #include "vtkImageData.h"
+#include "vtkSMOutputPort.h"
 
 #include <vtksys/SystemTools.hxx>
 
@@ -26,41 +27,31 @@ vtkCxxRevisionMacro(vtkSMNetworkImageDataSourceProxy, "$Revision: 1.8 $");
 //----------------------------------------------------------------------------
 vtkSMNetworkImageDataSourceProxy::vtkSMNetworkImageDataSourceProxy()
 {
-  this->Image = NULL;
   this->SourceProcess = CLIENT;
-  this->UpdateNeeded = true;
   this->SetServers(vtkProcessModule::CLIENT_AND_SERVERS);
-  this->ForceNoUpdates = false;
+  this->InputProxy = NULL;
 }
 
 //----------------------------------------------------------------------------
 vtkSMNetworkImageDataSourceProxy::~vtkSMNetworkImageDataSourceProxy()
 {
-  this->SetImage(0);
 }
 
-//----------------------------------------------------------------------------
-void vtkSMNetworkImageDataSourceProxy::SetImage(vtkImageData* aImage)
+
+void vtkSMNetworkImageDataSourceProxy::AddInput(unsigned int inputPort,
+                                vtkSMSourceProxy *input, 
+                                unsigned int outputPort,
+                                const char* method)
 {
-  if (this->Image == aImage)
+  if (!input)
     {
     return;
     }
-  
-  vtkImageData* oldImage = this->Image;
-  this->Image = aImage;
-
-  if (this->Image != NULL)
-    {
-    this->Image->Register(this);
-    }
-  if (oldImage != NULL)
-    {
-    oldImage->UnRegister(this);
-    }
-
-  this->Modified();
-  this->UpdateNeeded = true;
+  this->CreateVTKObjects();
+  // Just save the information here, we will receive the
+  // info just on demand.
+  this->InputProxy = input;
+  this->OutputPort = outputPort;
 }
 
 //----------------------------------------------------------------------------
@@ -70,18 +61,13 @@ void vtkSMNetworkImageDataSourceProxy::SetSourceProcess(int proc)
     {
     this->SourceProcess = proc;
     this->Modified();
-    this->UpdateNeeded = true;
     }
 }
 
 //----------------------------------------------------------------------------
-void vtkSMNetworkImageDataSourceProxy::UpdateVTKObjects(vtkClientServerStream& stream)
+/*void vtkSMNetworkImageDataSourceProxy::UpdateVTKObjects(vtkClientServerStream& stream)
 {
   this->Superclass::UpdateVTKObjects(stream);
-  if (this->UpdateNeeded && !this->ForceNoUpdates)
-    {
-    this->UpdateImage();
-    }
 }
 
 //----------------------------------------------------------------------------
@@ -90,7 +76,7 @@ void vtkSMNetworkImageDataSourceProxy::ReviveVTKObjects()
   this->Superclass::ReviveVTKObjects();
   // When loading revival state, assume that the image is loaded correctly.
   this->ForceNoUpdates = true;
-}
+}*/
 
 //----------------------------------------------------------------------------
 void vtkSMNetworkImageDataSourceProxy::UpdateImage()
@@ -102,15 +88,28 @@ void vtkSMNetworkImageDataSourceProxy::UpdateImage()
     return;
     }
 
-  cout << "UpdateImage" << endl;
+  if (!this->InputProxy)
+    {
+    return;
+    }
+
+  vtkWarningMacro(<< "vtkSMNetworkImageDataSourceProxy::UpdateImage" << this->GetServers());
+
   vtkProcessModule* pm = vtkProcessModule::GetProcessModule();
   vtkClientServerStream stream;
-  /*stream  << vtkClientServerStream::Invoke
-          << this->GetID() << "SetImage"
-          << this->Image 
+
+  stream  << vtkClientServerStream::Invoke
+          << this->InputProxy->GetID()
+          << "GetOutputDataObject" << this->OutputPort
           << vtkClientServerStream::End;
-  pm->SendStream(this->ConnectionID, 
-    vtkProcessModule::GetRootId(this->SourceProcess), stream);
+  stream  << vtkClientServerStream::Invoke
+          << this->GetID()
+          << "SetImage"
+          << vtkClientServerStream::LastResult
+          << vtkClientServerStream::End;
+  vtkProcessModule::GetProcessModule()->SendStream(this->ConnectionID, 
+    vtkProcessModule::GetRootId(this->SourceProcess),
+                 stream);
 
   int readable = 0;
   if(!pm->GetLastResult(this->ConnectionID,
@@ -119,7 +118,7 @@ void vtkSMNetworkImageDataSourceProxy::UpdateImage()
     {
     vtkErrorMacro("Cannot copy image data on the process indicated.");
     return;
-    }*/
+    }
 
   stream  << vtkClientServerStream::Invoke
           << this->GetID() << "GetImageAsString"
@@ -153,7 +152,6 @@ void vtkSMNetworkImageDataSourceProxy::UpdateImage()
 
   pm->SendStream(this->ConnectionID, this->Servers, stream);
 
-  this->UpdateNeeded = false;
 }
 
 //----------------------------------------------------------------------------
@@ -161,14 +159,6 @@ void vtkSMNetworkImageDataSourceProxy::PrintSelf(ostream& os, vtkIndent indent)
 {
   this->Superclass::PrintSelf(os, indent);
   
-  if (this->Image)
-    {
-    os << indent << "Image: " << this->Image;
-    }
-  else
-    {
-    os << indent << "Image: (none)" << endl;
-    }
 }
 
 

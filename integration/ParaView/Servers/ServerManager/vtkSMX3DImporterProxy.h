@@ -24,6 +24,8 @@
 #include "vtkSMSourceProxy.h"
 
 class vtkImageData;
+class vtkSMImageDataToTextureProxy;
+class vtkSMNetworkImageDataSourceProxy;
 
 class VTK_EXPORT vtkSMX3DImporterProxy : public vtkSMSourceProxy
 {
@@ -32,6 +34,14 @@ public:
   vtkTypeRevisionMacro(vtkSMX3DImporterProxy, vtkSMSourceProxy);
   void PrintSelf(ostream& os, vtkIndent indent);
 
+  // Description:
+  // Creates the output port proxiess for this filter. 
+  // Only the first algorithm output is exposed
+ virtual unsigned int GetNumberOfAlgorithmOutputPorts();
+
+  virtual vtkPVXMLElement *SaveState (vtkPVXMLElement *root);
+  virtual int 	LoadState (vtkPVXMLElement *element, vtkSMProxyLocator *locator);
+
 //BTX
 protected:
   vtkSMX3DImporterProxy();
@@ -39,14 +49,19 @@ protected:
 
   virtual void CreateVTKObjects();
   virtual void UpdateVTKObjects();
-  
   virtual void PostUpdateData();
 
-  int HasTextures();
+  virtual void UnRegisterTexture();
+  virtual void RegisterTexture();
 
-  int NeedsTextureUpdate;
+  virtual void SetActiveTexture(vtkSMImageDataToTextureProxy *);
+  //virtual void SetCopier(vtkSMNetworkImageDataSourceProxy *);
+  vtkSMImageDataToTextureProxy *CreateOrFindTextureProxy();
+  int GetTextureStatus();
 
-  vtkSMProxy* ActiveTexture;
+  int TextureStatus;
+  vtkSMImageDataToTextureProxy* ActiveTexture;
+  //vtkSMNetworkImageDataSourceProxy* Copier;
 
 private:
   vtkSMX3DImporterProxy(const vtkSMX3DImporterProxy&); // Not implemented

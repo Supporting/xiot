@@ -12,13 +12,13 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-#include "vtkObjectFactory.h"
+#include "vtkNetworkImageDataSource.h"
 
+#include "vtkObjectFactory.h"
 #include "vtkCharArray.h"
 #include "vtkClientServerStream.h"
 #include "vtkInformation.h"
 #include "vtkInformationVector.h"
-#include "vtkNetworkImageDataSource.h"
 #include "vtkStreamingDemandDrivenPipeline.h"
 #include "vtkStructuredPoints.h"
 #include "vtkStructuredPointsReader.h"
@@ -57,11 +57,15 @@ int vtkNetworkImageDataSource::SetImage(vtkImageData* image)
     vtkErrorMacro("Image must not be null.");
     return 0;
     }
-
-  
   this->Buffer->ShallowCopy(image);
   this->Modified();
   return 1;
+}
+
+//----------------------------------------------------------------------------
+int vtkNetworkImageDataSource::GetDataDimension()
+{
+  return this->Buffer->GetDataDimension();
 }
 
 //----------------------------------------------------------------------------

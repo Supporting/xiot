@@ -27,6 +27,8 @@ class vtkX3DImporter;
 class vtkStringArray;
 class vtkDataSetCollection;
 class vtkImageData;
+class vtkActorCollection;
+class vtkActor; 
 
 class VTK_EXPORT vtkX3DSource : public vtkMultiBlockDataSetAlgorithm
 {
@@ -46,19 +48,17 @@ public:
   vtkGetMacro(Color,int);
   vtkBooleanMacro(Color,int);
 
-  // Description:
-  // This method allows all parts to be put into a single output.
-  // By default this flag is on.
-  vtkSetMacro(Append,int);
-  vtkGetMacro(Append,int);
-  vtkBooleanMacro(Append,int);
+  vtkGetObjectMacro(Texture, vtkImageData);
+  //virtual void SetTexture(vtkImageData *);
 
-  vtkGetObjectMacro(TextureInfo, vtkStringArray);
-  vtkGetObjectMacro(ImageCollection, vtkDataSetCollection);
+  virtual int GetNumberOfShapes();
+  vtkGetVector2Macro(ShapeRange, int);
 
-  vtkImageData* GetActiveImage();
-  int HasTextures();
-  
+  vtkGetMacro(ShapeNumber,int);
+  vtkSetMacro(ShapeNumber,int);
+
+  vtkGetMacro(TextureStatus,int);
+
   static int CanReadFile(const char *filename);
 
 protected:
@@ -70,14 +70,21 @@ protected:
                   vtkInformationVector*);
 
   void InitializeImporter();
-  void CopyImporterToOutputs(vtkMultiBlockDataSet*);
+  void CopyImporterToOutputs(vtkMultiBlockDataSet*, vtkImageData* texture);
+  virtual int FillOutputPortInformation(int port, vtkInformation* info);
 
   char* FileName;
   vtkX3DImporter *Importer;
   int Color;
-  int Append;
-  vtkStringArray* TextureInfo;
-  vtkDataSetCollection* ImageCollection;
+
+  // Shape related properties
+  int NumberOfShapes;
+  int ShapeRange[2];
+  int ShapeNumber;
+
+  // Texture related properties
+  vtkImageData* Texture;
+  int TextureStatus;
 
 
 private:

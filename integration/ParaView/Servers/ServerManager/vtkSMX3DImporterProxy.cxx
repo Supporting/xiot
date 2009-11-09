@@ -20,6 +20,7 @@
 #include "vtkProcessModule.h"
 #include "vtkSMSourceProxy.h"
 #include "vtkSMProxyManager.h"
+#include "vtkSMProxyProperty.h"
 #include "vtkImageData.h"
 #include "vtkX3DSource.h"
 #include "vtkDataSetCollection.h"
@@ -30,23 +31,31 @@
 #include "vtkUnsignedCharArray.h"
 #include "vtkPointData.h"
 #include "vtkX3DSource.h"
+#include "vtkSMOutputPort.h"
+#include "vtkSMImageDataToTextureProxy.h"
+#include "vtkSMNetworkImageDataSourceProxy.h"
 
 #define TEXTURESGROUP "textures"
 
 vtkStandardNewMacro(vtkSMX3DImporterProxy);
 vtkCxxRevisionMacro(vtkSMX3DImporterProxy, "$Revision: 1.2 $");
+vtkCxxSetObjectMacro(vtkSMX3DImporterProxy,ActiveTexture,vtkSMImageDataToTextureProxy);
+//vtkCxxSetObjectMacro(vtkSMX3DImporterProxy,Copier,vtkSMNetworkImageDataSourceProxy);
+
 //----------------------------------------------------------------------------
 vtkSMX3DImporterProxy::vtkSMX3DImporterProxy()
 {
-  this->NeedsTextureUpdate = 0; // Not until VTK object is updated
   this->ActiveTexture = NULL;
+  //this->Copier = NULL;
+  this->TextureStatus = -1;
 }
 
 //----------------------------------------------------------------------------
 vtkSMX3DImporterProxy::~vtkSMX3DImporterProxy()
 {
- vtkSMProxyManager* pxm = vtkSMProxyManager::GetProxyManager();
- pxm->UnRegisterProxy(TEXTURESGROUP, "X3D Image");
+  this->UnRegisterTexture();
+  this->SetActiveTexture(NULL);
+  //this->SetCopier(NULL);
 }
 
 //----------------------------------------------------------------------------
@@ -57,13 +66,47 @@ void vtkSMX3DImporterProxy::CreateVTKObjects()
     return;
     }
   this->Superclass::CreateVTKObjects();
-  
-  vtkSMProxyManager* pxm = vtkSMProxyManager::GetProxyManager();
-  this->ActiveTexture = pxm->NewProxy("textures", "ImageDataTexture");
-  this->ActiveTexture->SetConnectionID(this->GetConnectionID());
-
 
 }
+
+//----------------------------------------------------------------------------
+vtkSMImageDataToTextureProxy* vtkSMX3DImporterProxy::CreateOrFindTextureProxy()
+{
+  vtkSMImageDataToTextureProxy* result = NULL;
+  
+  for (unsigned int i = 0; i < this->GetNumberOfConsumers(); i++)
+    {
+    //vtkWarningMacro ( << this->GetConsumerProxy(i)->GetXMLName() );
+    result = vtkSMImageDataToTextureProxy::SafeDownCast(this->GetConsumerProxy(i));
+    if (result)
+      break;
+    }
+  if (!result)
+    {
+    result = vtkSMImageDataToTextureProxy::SafeDownCast(
+      vtkSMProxyManager::GetProxyManager()->NewProxy("textures", "ImageDataTexture"));
+    result->SetConnectionID(this->GetConnectionID());
+    result->SetServers(vtkProcessModule::CLIENT|vtkProcessModule::RENDER_SERVER);
+    result->UpdateVTKObjects();
+    vtkSMInputProperty* input = vtkSMInputProperty::SafeDownCast(result->GetProperty("Input"));
+    input->AddInputConnection(this, 1);
+    }
+  
+  //this->SetCopier(vtkSMNetworkImageDataSourceProxy::SafeDownCast(pxm->NewProxy("sources", "NetworkImageDataSource")));
+  //vtkSMInputProperty* input = vtkSMInputProperty::SafeDownCast(this->Copier->GetProperty("Input"));
+  //input->AddInputConnection(this, 1);
+  return result;
+}
+
+vtkPVXMLElement* vtkSMX3DImporterProxy::SaveState (vtkPVXMLElement *root)
+{
+  return this->Superclass::SaveState(root);
+}
+
+int	vtkSMX3DImporterProxy::LoadState (vtkPVXMLElement *element, vtkSMProxyLocator *locator)
+  {
+  return this->Superclass::LoadState(element, locator);
+  }
 
 //----------------------------------------------------------------------------
 void vtkSMX3DImporterProxy::UpdateVTKObjects()
@@ -74,34 +117,40 @@ void vtkSMX3DImporterProxy::UpdateVTKObjects()
 //----------------------------------------------------------------------------
 void vtkSMX3DImporterProxy::PostUpdateData()
 {
+ //vtkWarningMacro(<< "PostUpdateData")
  vtkSMProxyManager* pxm = vtkSMProxyManager::GetProxyManager();
-
- vtkDataSetCollection* collection = vtkDataSetCollection::New();
- pxm->GetProxies(TEXTURESGROUP, "X3D Image", collection);
- if (!collection->GetNumberOfItems() && this->HasTextures())
+ int textureStatus = GetTextureStatus();
+ if (textureStatus != this->TextureStatus || textureStatus == 2)
    {
-   pxm->RegisterProxy(TEXTURESGROUP, "X3D Image", this->ActiveTexture);
-   // Set up the texture proxy
-   vtkSMInputProperty* input = vtkSMInputProperty::SafeDownCast(
-     this->ActiveTexture->GetProperty("Input"));
-   input->AddProxy(this,1);
+   if (!this->ActiveTexture)
+       this->SetActiveTexture(this->CreateOrFindTextureProxy());
 
-   vtkSMIntVectorProperty* sp = vtkSMIntVectorProperty::SafeDownCast(
-     this->ActiveTexture->GetProperty("SourceProcess"));
-   sp->SetElement(0, vtkProcessModule::DATA_SERVER); // Data Server
+   switch (textureStatus)
+      {
+      case 0: // Shape has no texture
+        UnRegisterTexture();
+        break;
+      case 1: // Shape has a texture now
+        this->ActiveTexture->UpdateImage();
+        RegisterTexture();
+        break;
+      case 2: // Shape's texture has changed
+        this->ActiveTexture->UpdateImage();
+        break;
+     }
+    }
+ this->TextureStatus = textureStatus;
  
-   this->ActiveTexture->UpdateVTKObjects();
-   }
- collection->Delete();
  this->Superclass::PostUpdateData();
 }
 
-int vtkSMX3DImporterProxy::HasTextures()
+
+int vtkSMX3DImporterProxy::GetTextureStatus()
   {
   vtkClientServerStream stream;
   stream  << vtkClientServerStream::Invoke
   << this->GetID()
-  << "HasTextures"
+  << "GetTextureStatus"
   << vtkClientServerStream::End;
   vtkProcessModule::GetProcessModule()->SendStream(this->ConnectionID, 
   this->GetServers(), stream);
@@ -110,10 +159,40 @@ int vtkSMX3DImporterProxy::HasTextures()
   int retVal = vtkProcessModule::GetProcessModule()->GetLastResult(this->ConnectionID,
   vtkProcessModule::GetRootId(this->Servers)).GetArgument(0, 0, &reply);
   
-  return retVal && reply;
+  return retVal ? reply : 0;
   }
 
 
+//----------------------------------------------------------------------------
+void vtkSMX3DImporterProxy::RegisterTexture()
+{
+  vtkSMProxyProperty* textureProperty = vtkSMProxyProperty::SafeDownCast(this->GetProperty("Texture"));
+  if (textureProperty)
+    {
+    textureProperty->SetProxy(0, this->ActiveTexture);
+    }
+  vtkSMProxyManager::GetProxyManager()->RegisterProxy(TEXTURESGROUP, "X3D Image", this->ActiveTexture);
+}
+
+//----------------------------------------------------------------------------
+void vtkSMX3DImporterProxy::UnRegisterTexture()
+{
+  vtkSMProxyProperty* textureProperty = vtkSMProxyProperty::SafeDownCast(this->GetProperty("Texture"));
+  if (textureProperty)
+    {
+    textureProperty->RemoveAllProxies();
+    }
+  if (vtkSMProxyManager::GetProxyManager()->IsProxyInGroup(this->ActiveTexture, TEXTURESGROUP))
+    {
+    vtkSMProxyManager::GetProxyManager()->UnRegisterProxy(this->ActiveTexture);
+    }
+}
+
+//----------------------------------------------------------------------------
+unsigned int vtkSMX3DImporterProxy::GetNumberOfAlgorithmOutputPorts()
+{
+  return 1;
+}
 
 //----------------------------------------------------------------------------
 void vtkSMX3DImporterProxy::PrintSelf(ostream& os, vtkIndent indent)

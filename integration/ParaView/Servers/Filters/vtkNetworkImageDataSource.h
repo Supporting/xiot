@@ -41,7 +41,9 @@ public:
 
   // Description:
   // Read the image from a file.
-  int SetImage(vtkImageData* image);
+  int SetImage(vtkImageData* image); 
+
+  int GetDataDimension();
 
   // Description:
   // Returns the image data as a string.

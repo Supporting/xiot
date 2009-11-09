@@ -76,6 +76,12 @@ public:
   virtual int ImportBegin ();
   virtual void ImportEnd ();
 
+  // Description:
+  // Returns the number of shapes inside the file
+  // without actually creating any geometry, or -1
+  // if an error occurs
+  static int GetNumberOfShapes(char* FileName);
+
 protected:
   vtkX3DImporter();
   ~vtkX3DImporter();

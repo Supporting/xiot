@@ -25,6 +25,7 @@
 
 #include "vtkSMSourceProxy.h"
 #include "vtkProcessModule.h" //for flags.
+#include "vtkWeakPointer.h"
 
 class vtkImageData;
 
@@ -34,11 +35,6 @@ public:
   static vtkSMNetworkImageDataSourceProxy* New();
   vtkTypeRevisionMacro(vtkSMNetworkImageDataSourceProxy, vtkSMSourceProxy);
   void PrintSelf(ostream& os, vtkIndent indent);
-
-  // Description:
-  // Get/Set the file name of the image to load.
-  void SetImage(vtkImageData* data);
-  vtkGetObjectMacro(Image, vtkImageData);
 
 
   //BTX
@@ -62,20 +58,24 @@ public:
   virtual void UpdateVTKObjects()
     { this->Superclass::UpdateVTKObjects(); }
 
+  
+ virtual void AddInput(unsigned int inputPort,
+                        vtkSMSourceProxy* input,
+                        unsigned int outputPort,
+                        const char* method);
+
+ void UpdateImage();
 
 //BTX
 protected:
   vtkSMNetworkImageDataSourceProxy();
   ~vtkSMNetworkImageDataSourceProxy();
 
-  void UpdateImage();
-  virtual void ReviveVTKObjects();
-  virtual void UpdateVTKObjects(vtkClientServerStream& stream);
-
-  vtkImageData* Image;
   int SourceProcess;
-  bool ForceNoUpdates;
-  bool UpdateNeeded;
+
+  vtkWeakPointer<vtkSMProxy> InputProxy;
+  int OutputPort;
+
 private:
   vtkSMNetworkImageDataSourceProxy(const vtkSMNetworkImageDataSourceProxy&); // Not implemented
   void operator=(const vtkSMNetworkImageDataSourceProxy&); // Not implemented
