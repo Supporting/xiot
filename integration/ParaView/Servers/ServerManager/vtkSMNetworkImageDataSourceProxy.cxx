@@ -47,6 +47,7 @@ void vtkSMNetworkImageDataSourceProxy::AddInput(unsigned int inputPort,
     {
     return;
     }
+
   this->CreateVTKObjects();
   // Just save the information here, we will receive the
   // info just on demand.
@@ -65,20 +66,6 @@ void vtkSMNetworkImageDataSourceProxy::SetSourceProcess(int proc)
 }
 
 //----------------------------------------------------------------------------
-/*void vtkSMNetworkImageDataSourceProxy::UpdateVTKObjects(vtkClientServerStream& stream)
-{
-  this->Superclass::UpdateVTKObjects(stream);
-}
-
-//----------------------------------------------------------------------------
-void vtkSMNetworkImageDataSourceProxy::ReviveVTKObjects()
-{
-  this->Superclass::ReviveVTKObjects();
-  // When loading revival state, assume that the image is loaded correctly.
-  this->ForceNoUpdates = true;
-}*/
-
-//----------------------------------------------------------------------------
 void vtkSMNetworkImageDataSourceProxy::UpdateImage()
 {
   if ((this->SourceProcess & this->Servers) == 0)
@@ -93,7 +80,7 @@ void vtkSMNetworkImageDataSourceProxy::UpdateImage()
     return;
     }
 
-  vtkWarningMacro(<< "vtkSMNetworkImageDataSourceProxy::UpdateImage" << this->GetServers());
+  //vtkWarningMacro(<< "vtkSMNetworkImageDataSourceProxy::UpdateImage" << this->GetServers());
 
   vtkProcessModule* pm = vtkProcessModule::GetProcessModule();
   vtkClientServerStream stream;

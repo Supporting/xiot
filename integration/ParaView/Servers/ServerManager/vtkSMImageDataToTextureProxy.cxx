@@ -14,17 +14,12 @@
 =========================================================================*/
 #include "vtkSMImageDataToTextureProxy.h"
 
+#include "vtkObjectFactory.h"
+#include "vtkSMNetworkImageDataSourceProxy.h"
+#include "vtkSMInputProperty.h"
 #include "vtkAlgorithm.h"
 #include "vtkClientServerStream.h"
-#include "vtkObjectFactory.h"
-#include "vtkProcessModule.h"
-#include "vtkSMSourceProxy.h"
-#include "vtkSMIntVectorProperty.h"
-#include "vtkSMProxyProperty.h"
-#include "vtkSMInputProperty.h"
 #include "vtkImageData.h"
-#include "vtkSMOutputPort.h"
-#include "vtkSMNetworkImageDataSourceProxy.h"
 
 vtkStandardNewMacro(vtkSMImageDataToTextureProxy);
 vtkCxxRevisionMacro(vtkSMImageDataToTextureProxy, "$Revision: 1.2 $");
@@ -54,21 +49,14 @@ void vtkSMImageDataToTextureProxy::AddInput(unsigned int inputPort,
     return;
     }
   this->CreateVTKObjects();
-
+ 
   // This proxy delegates it's input to the input of the
   // copier sub-proxy
   vtkSMInputProperty* inputProp = vtkSMInputProperty::SafeDownCast(this->Copier->GetProperty("Input"));
-  inputProp->AddInputConnection(input, outputPort);
-
+  if (inputProp->GetNumberOfProxies() == 0 || inputProp->GetProxy(0) != input)
+    inputProp->SetInputConnection(0, input, outputPort);
 }
 
-
-
-//----------------------------------------------------------------------------
-void vtkSMImageDataToTextureProxy::UpdateVTKObjects()
-{
-  this->Superclass::UpdateVTKObjects();
-}
 
 void vtkSMImageDataToTextureProxy::UpdateImage()
 {

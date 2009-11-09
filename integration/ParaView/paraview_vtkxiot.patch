@@ -38,11 +38,11 @@ diff -u -r1.3 ParaViewReaders.xml
 Index: Qt/Components/Resources/XML/ParaViewReaders.xml
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Qt/Components/Resources/XML/ParaViewReaders.xml,v
-retrieving revision 1.33
-diff -u -r1.33 ParaViewReaders.xml
---- Qt/Components/Resources/XML/ParaViewReaders.xml	25 Aug 2009 17:18:16 -0000	1.33
-+++ Qt/Components/Resources/XML/ParaViewReaders.xml	29 Aug 2009 12:11:24 -0000
-@@ -119,6 +119,10 @@
+retrieving revision 1.40
+diff -u -r1.40 ParaViewReaders.xml
+--- Qt/Components/Resources/XML/ParaViewReaders.xml	4 Nov 2009 14:53:53 -0000	1.40
++++ Qt/Components/Resources/XML/ParaViewReaders.xml	9 Nov 2009 00:28:38 -0000
+@@ -123,6 +123,10 @@
            extensions="wrl vrml"
            file_description="VRML 2 Files">
    </Reader>
@@ -56,11 +56,11 @@ diff -u -r1.33 ParaViewReaders.xml
 Index: Servers/Filters/CMakeLists.txt
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/Filters/CMakeLists.txt,v
-retrieving revision 1.200
-diff -u -r1.200 CMakeLists.txt
---- Servers/Filters/CMakeLists.txt	7 Aug 2009 12:20:04 -0000	1.200
-+++ Servers/Filters/CMakeLists.txt	8 Nov 2009 23:55:50 -0000
-@@ -163,6 +163,8 @@
+retrieving revision 1.203
+diff -u -r1.203 CMakeLists.txt
+--- Servers/Filters/CMakeLists.txt	22 Sep 2009 18:00:21 -0000	1.203
++++ Servers/Filters/CMakeLists.txt	9 Nov 2009 00:28:39 -0000
+@@ -169,6 +169,8 @@
    vtkXMLCollectionReader.cxx
    vtkXMLPVAnimationWriter.cxx
    vtkXMLPVDWriter.cxx
@@ -72,11 +72,11 @@ diff -u -r1.200 CMakeLists.txt
 Index: Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx,v
-retrieving revision 1.39
-diff -u -r1.39 ServersFiltersPrintSelf.cxx
---- Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	21 May 2009 14:20:42 -0000	1.39
-+++ Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	29 Aug 2009 12:03:13 -0000
-@@ -99,6 +99,7 @@
+retrieving revision 1.40
+diff -u -r1.40 ServersFiltersPrintSelf.cxx
+--- Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	14 Sep 2009 17:17:45 -0000	1.40
++++ Servers/Filters/Testing/Cxx/ServersFiltersPrintSelf.cxx	9 Nov 2009 00:28:40 -0000
+@@ -98,6 +98,7 @@
  #include "vtkTransferFunctionViewer.h"
  #include "vtkUpdateSuppressorPipeline.h"
  #include "vtkVRMLSource.h"
@@ -84,7 +84,7 @@ diff -u -r1.39 ServersFiltersPrintSelf.cxx
  #include "vtkXMLCollectionReader.h"
  #include "vtkXMLPVAnimationWriter.h"
  #include "vtkXMLPVDWriter.h"
-@@ -211,6 +212,7 @@
+@@ -209,6 +210,7 @@
    c = vtkTransferFunctionViewer::New(); c->Print(cout); c->Delete();
    c = vtkUpdateSuppressorPipeline::New(); c->Print(cout); c->Delete();
    c = vtkVRMLSource::New(); c->Print(cout); c->Delete();
@@ -95,10 +95,10 @@ diff -u -r1.39 ServersFiltersPrintSelf.cxx
 Index: Servers/ServerManager/CMakeLists.txt
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/CMakeLists.txt,v
-retrieving revision 1.256
-diff -u -r1.256 CMakeLists.txt
---- Servers/ServerManager/CMakeLists.txt	10 Aug 2009 14:30:56 -0000	1.256
-+++ Servers/ServerManager/CMakeLists.txt	19 Oct 2009 14:49:13 -0000
+retrieving revision 1.257
+diff -u -r1.257 CMakeLists.txt
+--- Servers/ServerManager/CMakeLists.txt	2 Oct 2009 21:13:18 -0000	1.257
++++ Servers/ServerManager/CMakeLists.txt	9 Nov 2009 00:26:08 -0000
 @@ -214,6 +214,9 @@
    vtkSMXMLPVAnimationWriterProxy.cxx
    vtkSMXYPlotRepresentationProxy.cxx
@@ -109,28 +109,13 @@ diff -u -r1.256 CMakeLists.txt
    )
  
  IF (VTK_USE_QVTK)
-Index: Servers/ServerManager/vtkSMProxyManager.cxx
-===================================================================
-RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMProxyManager.cxx,v
-retrieving revision 1.83
-diff -u -r1.83 vtkSMProxyManager.cxx
---- Servers/ServerManager/vtkSMProxyManager.cxx	29 Jul 2009 13:23:08 -0000	1.83
-+++ Servers/ServerManager/vtkSMProxyManager.cxx	6 Nov 2009 15:18:15 -0000
-@@ -860,6 +860,7 @@
-   if (proxy_list.Contains(proxy))
-     {
-     return;
-+
-     }
- 
-   vtkSMProxyManagerProxyInfo* proxyInfo = vtkSMProxyManagerProxyInfo::New();
 Index: Servers/ServerManager/vtkSMSourceProxy.h
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMSourceProxy.h,v
 retrieving revision 1.39
 diff -u -r1.39 vtkSMSourceProxy.h
 --- Servers/ServerManager/vtkSMSourceProxy.h	5 Dec 2008 18:03:03 -0000	1.39
-+++ Servers/ServerManager/vtkSMSourceProxy.h	9 Nov 2009 00:04:28 -0000
++++ Servers/ServerManager/vtkSMSourceProxy.h	9 Nov 2009 00:24:03 -0000
 @@ -192,7 +192,7 @@
  
    // Description:
@@ -146,7 +131,7 @@ RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/readers.x
 retrieving revision 1.174
 diff -u -r1.174 readers.xml
 --- Servers/ServerManager/Resources/readers.xml	30 Oct 2009 17:43:35 -0000	1.174
-+++ Servers/ServerManager/Resources/readers.xml	9 Nov 2009 00:06:54 -0000
++++ Servers/ServerManager/Resources/readers.xml	9 Nov 2009 00:24:03 -0000
 @@ -5225,6 +5225,73 @@
        <!-- End of CSVReader -->
     </FileSeriesReaderProxy>
@@ -224,11 +209,11 @@ diff -u -r1.174 readers.xml
 Index: Servers/ServerManager/Resources/rendering.xml
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/rendering.xml,v
-retrieving revision 1.366
-diff -u -r1.366 rendering.xml
---- Servers/ServerManager/Resources/rendering.xml	28 Aug 2009 14:44:28 -0000	1.366
-+++ Servers/ServerManager/Resources/rendering.xml	22 Oct 2009 09:00:54 -0000
-@@ -1298,6 +1298,40 @@
+retrieving revision 1.378
+diff -u -r1.378 rendering.xml
+--- Servers/ServerManager/Resources/rendering.xml	6 Oct 2009 12:44:36 -0000	1.378
++++ Servers/ServerManager/Resources/rendering.xml	9 Nov 2009 00:24:03 -0000
+@@ -1326,6 +1326,40 @@
          <BooleanDomain name="bool" />
        </IntVectorProperty>
      </ImageTextureProxy>
@@ -272,11 +257,11 @@ diff -u -r1.366 rendering.xml
 Index: Servers/ServerManager/Resources/sources.xml
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/Resources/sources.xml,v
-retrieving revision 1.99
-diff -u -r1.99 sources.xml
---- Servers/ServerManager/Resources/sources.xml	31 Jul 2009 18:48:05 -0000	1.99
-+++ Servers/ServerManager/Resources/sources.xml	8 Nov 2009 10:36:29 -0000
-@@ -1834,6 +1834,41 @@
+retrieving revision 1.100
+diff -u -r1.100 sources.xml
+--- Servers/ServerManager/Resources/sources.xml	9 Sep 2009 16:59:40 -0000	1.100
++++ Servers/ServerManager/Resources/sources.xml	9 Nov 2009 00:24:03 -0000
+@@ -1830,6 +1830,41 @@
       <!-- End of NetworkImageSource -->
     </NetworkImageSourceProxy>
  
@@ -321,11 +306,11 @@ diff -u -r1.99 sources.xml
 Index: VTK/vtkIncludeDirectories.cmake
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/VTK/vtkIncludeDirectories.cmake,v
-retrieving revision 1.55
-diff -u -r1.55 vtkIncludeDirectories.cmake
---- VTK/vtkIncludeDirectories.cmake	10 Jul 2009 19:55:35 -0000	1.55
-+++ VTK/vtkIncludeDirectories.cmake	16 Sep 2009 08:03:08 -0000
-@@ -194,6 +194,7 @@
+retrieving revision 1.57
+diff -u -r1.57 vtkIncludeDirectories.cmake
+--- VTK/vtkIncludeDirectories.cmake	28 Oct 2009 18:28:33 -0000	1.57
++++ VTK/vtkIncludeDirectories.cmake	9 Nov 2009 00:28:55 -0000
+@@ -197,6 +197,7 @@
  VTK_THIRD_PARTY_INCLUDE(Exodus2 vtkexodus2/include)
  VTK_THIRD_PARTY_INCLUDE(MATERIALLIBRARY MaterialLibrary)
  VTK_THIRD_PARTY_INCLUDE(VERDICT verdict)
@@ -380,7 +365,7 @@ RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/vtkX3DExporter.cxx,v
 retrieving revision 1.20
 diff -u -r1.20 vtkX3DExporter.cxx
 --- VTK/Hybrid/vtkX3DExporter.cxx	15 Nov 2008 01:22:24 -0000	1.20
-+++ VTK/Hybrid/vtkX3DExporter.cxx	16 Sep 2009 08:03:08 -0000
++++ VTK/Hybrid/vtkX3DExporter.cxx	9 Nov 2009 21:49:38 -0000
 @@ -3,7 +3,7 @@
    Program:   Visualization Toolkit
    Module:    $RCSfile: vtkX3DExporter.cxx,v $
@@ -411,7 +396,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
  // forward declarations
  static bool vtkX3DExporterWriterUsingCellColors(vtkActor* anActor);
-@@ -58,46 +60,53 @@
+@@ -58,46 +60,51 @@
    vtkUnsignedCharArray* colors, bool cell_colors,
    vtkDataArray* normals, bool cell_normals, 
    vtkDataArray* tcoords, 
@@ -453,7 +438,6 @@ diff -u -r1.20 vtkX3DExporter.cxx
 +  {
    this->Speed = 4.0;
    this->FileName = NULL;
-+  this->FakeFileName = NULL;
    this->Binary = 0;
    this->Fastest = 0;
 -}
@@ -464,7 +448,6 @@ diff -u -r1.20 vtkX3DExporter.cxx
 +  {
    this->SetFileName(0);
 -}
-+  this->SetFakeFileName(0);
 +  }
  
  
@@ -478,7 +461,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    vtkRenderer *ren;
    vtkActorCollection *ac;
    vtkActor2DCollection *a2Dc;
-@@ -135,17 +144,24 @@
+@@ -135,17 +142,24 @@
    // try opening the files
    if (this->Binary)
      {
@@ -509,7 +492,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
      {
      vtkErrorMacro(<< "unable to open X3D file " << this->FileName);
      return;
-@@ -156,81 +172,70 @@
+@@ -156,81 +170,70 @@
    //
    vtkDebugMacro("Writing X3D file");
  
@@ -542,7 +525,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
 -  writer->StartNode(Scene);
 +  std::multimap<std::string, std::string> meta;
-+  meta.insert(std::pair<std::string, std::string>("filename", this->FakeFileName ? this->FakeFileName : this->FileName));
++  meta.insert(std::pair<std::string, std::string>("filename", this->FileName));
 +  meta.insert(std::pair<std::string, std::string>("generator", "Visualization ToolKit X3D exporter v0.9.2"));
 +  meta.insert(std::pair<std::string, std::string>("numberofelements", ss.str()));
 +  writer->startX3DDocument(Immersive, VERSION_3_0, &meta, false);
@@ -633,7 +616,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
        }
      }
  
-@@ -246,12 +251,12 @@
+@@ -246,12 +249,12 @@
        if(anActor->GetVisibility()!=0)
          {
          aPart=static_cast<vtkActor *>(apath->GetLastNode()->GetViewProp());
@@ -648,7 +631,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
  
    //////////////////////////////////////////////
-@@ -261,18 +266,18 @@
+@@ -261,18 +264,18 @@
    if(a2Dc->GetNumberOfItems()!=0)
      {
      static double s[] = {1000000.0, 1000000.0, 1000000.0};
@@ -675,7 +658,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
      vtkAssemblyPath *apath2D;
      vtkCollectionSimpleIterator ait2D;
-@@ -284,42 +289,42 @@
+@@ -284,42 +287,42 @@
          (apath2D=anTextActor2D->GetNextPath()); )
          {
          aPart2D=
@@ -743,7 +726,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    double dir[3];
  
    pos = aLight->GetPosition();
-@@ -335,36 +340,38 @@
+@@ -335,36 +338,38 @@
      {
      if (aLight->GetConeAngle() >= 180.0)
        {
@@ -798,7 +781,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    vtkDataSet *ds;
    vtkPolyData *pd;
    vtkSmartPointer<vtkGeometryFilter> gf;
-@@ -396,10 +403,14 @@
+@@ -396,10 +401,14 @@
    trans = vtkSmartPointer<vtkTransform>::New();
    trans->SetMatrix(anActor->vtkProp3D::GetMatrix());
  
@@ -817,7 +800,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    // get the mappers input and matrix
    ds = anActor->GetMapper()->GetInput();
-@@ -454,10 +465,10 @@
+@@ -454,10 +463,10 @@
      // types in separate shapes, since the cells type no longer matter.
      if (true)
        {
@@ -831,7 +814,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
        }
      }
    else
-@@ -480,66 +491,66 @@
+@@ -480,66 +489,66 @@
      bool common_data_written = false;
      if (numPolys > 0)
        {
@@ -913,7 +896,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    this->Superclass::PrintSelf(os,indent);
  
    if (this->FileName)
-@@ -553,15 +564,16 @@
+@@ -553,15 +562,16 @@
    os << indent << "Speed: " << this->Speed << "\n";
    os << indent << "Binary: " << this->Binary << "\n";
    os << indent << "Fastest: " << this->Fastest << endl;
@@ -933,7 +916,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    char *ds;
    vtkTextActor *ta;
    vtkTextProperty *tp;
-@@ -583,81 +595,82 @@
+@@ -583,81 +593,82 @@
  
    double temp[3];
  
@@ -1060,7 +1043,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    if (emissive)
      {
-@@ -671,7 +684,7 @@
+@@ -671,7 +682,7 @@
      {
      tempd[0] = tempd[1] = tempd[2] = 0.0f;
      }
@@ -1069,7 +1052,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    // Set diffuse color
    tempf2 = prop->GetDiffuse();
-@@ -679,7 +692,7 @@
+@@ -679,7 +690,7 @@
    tempd[0]*=tempf2;
    tempd[1]*=tempf2;
    tempd[2]*=tempf2;
@@ -1078,7 +1061,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    // Set specular color
    tempf2 = prop->GetSpecular();
-@@ -687,25 +700,26 @@
+@@ -687,25 +698,26 @@
    tempd[0]*=tempf2;
    tempd[1]*=tempf2;
    tempd[2]*=tempf2;
@@ -1114,7 +1097,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    vtkTexture *aTexture = anActor->GetTexture();
    int *size, xsize, ysize;
    vtkDataArray *scalars;
-@@ -790,18 +804,18 @@
+@@ -790,18 +802,18 @@
  
  
  
@@ -1140,7 +1123,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    // make sure we have a default light
    // if we dont then use a headlight
    vtkLightCollection* lc = ren->GetLights();
-@@ -815,10 +829,10 @@
+@@ -815,10 +827,10 @@
        }
      }
    return 0;
@@ -1153,7 +1136,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    int cellFlag = 0;
    vtkMapper* mapper = anActor->GetMapper();
    vtkAbstractMapper::GetScalars(
-@@ -828,7 +842,7 @@
+@@ -828,7 +840,7 @@
      mapper->GetArrayId(),
      mapper->GetArrayName(), cellFlag);
    return (cellFlag == 1);
@@ -1162,7 +1145,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
  //----------------------------------------------------------------------------
  static bool vtkX3DExporterWriterRenderFaceSet(
-@@ -840,11 +854,14 @@
+@@ -840,11 +852,14 @@
    vtkUnsignedCharArray* colors, bool cell_colors,
    vtkDataArray* normals, bool cell_normals, 
    vtkDataArray* tcoords, 
@@ -1179,7 +1162,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
    vtkIdType npts = 0;
    vtkIdType *indx = 0;
  
-@@ -893,7 +910,7 @@
+@@ -893,7 +908,7 @@
          if (representation == VTK_WIREFRAME)
            {
            // close the polygon when drawing lines
@@ -1188,7 +1171,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
            }
          coordIndexVector.push_back(-1);
  
-@@ -905,11 +922,11 @@
+@@ -905,11 +920,11 @@
  
    if (representation == VTK_SURFACE)
      {
@@ -1205,7 +1188,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
      }
    else
      {
-@@ -917,19 +934,19 @@
+@@ -917,19 +932,19 @@
      normals = 0;
      tcoords = 0;
  
@@ -1230,7 +1213,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
      }
  
    // Now save Coordinate, Color, Normal TextureCoordinate nodes.
-@@ -943,111 +960,137 @@
+@@ -943,111 +958,137 @@
      vtkX3DExporterUseData((normals != NULL), (tcoords != NULL), (colors!= NULL), index, writer);
      }
  
@@ -1422,7 +1405,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    if (colors)
      {
-@@ -1075,32 +1118,43 @@
+@@ -1075,32 +1116,43 @@
        }
      }
  
@@ -1478,7 +1461,7 @@ diff -u -r1.20 vtkX3DExporter.cxx
  
    vtkPoints* points = pd->GetPoints();
  
-@@ -1165,17 +1219,17 @@
+@@ -1165,17 +1217,17 @@
        }
      }
  
@@ -1511,7 +1494,7 @@ RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/vtkX3DExporter.h,v
 retrieving revision 1.5
 diff -u -r1.5 vtkX3DExporter.h
 --- VTK/Hybrid/vtkX3DExporter.h	1 Jul 2008 12:39:31 -0000	1.5
-+++ VTK/Hybrid/vtkX3DExporter.h	16 Sep 2009 08:03:08 -0000
++++ VTK/Hybrid/vtkX3DExporter.h	9 Nov 2009 21:49:06 -0000
 @@ -19,7 +19,8 @@
  // 3D scenes (similar to VRML). Check out http://www.web3d.org/x3d/ for more
  // details.
@@ -1531,22 +1514,7 @@ diff -u -r1.5 vtkX3DExporter.h
  
  class VTK_HYBRID_EXPORT vtkX3DExporter : public vtkExporter
  {
-@@ -47,6 +50,14 @@
-   vtkGetStringMacro(FileName);
- 
-   // Description:
-+  // Set/Get the file name written to the file
-+  // This is for comparision with other exporter
-+  // version
-+  vtkSetStringMacro(FakeFileName);
-+  vtkGetStringMacro(FakeFileName);
-+
-+
-+  // Description:
-   // Specify the Speed of navigation. Default is 4.
-   vtkSetMacro(Speed,double);
-   vtkGetMacro(Speed,double);
-@@ -71,18 +82,19 @@
+@@ -71,16 +74,16 @@
    // Write data to output.
    void WriteData();
  
@@ -1568,10 +1536,7 @@ diff -u -r1.5 vtkX3DExporter.h
 +  void WriteAnAppearance(vtkActor *anActor, bool writeEmissiveColor, vtkX3DWriter* writer);
    int HasHeadLight(vtkRenderer* ren);
    char *FileName;
-+  char *FakeFileName;
    double Speed;
-   int Binary;
-   int Fastest;
 Index: VTK/Hybrid/Testing/Cxx/X3DTest.cxx
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/VTK/Hybrid/Testing/Cxx/X3DTest.cxx,v
@@ -1595,11 +1560,11 @@ diff -u -r1.1 X3DTest.cxx
 Index: VTK/Utilities/CMakeLists.txt
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/VTK/Utilities/CMakeLists.txt,v
-retrieving revision 1.77
-diff -u -r1.77 CMakeLists.txt
---- VTK/Utilities/CMakeLists.txt	18 Jun 2009 14:03:33 -0000	1.77
-+++ VTK/Utilities/CMakeLists.txt	16 Sep 2009 08:03:08 -0000
-@@ -14,6 +14,7 @@
+retrieving revision 1.79
+diff -u -r1.79 CMakeLists.txt
+--- VTK/Utilities/CMakeLists.txt	28 Oct 2009 18:28:35 -0000	1.79
++++ VTK/Utilities/CMakeLists.txt	9 Nov 2009 00:29:05 -0000
+@@ -17,6 +17,7 @@
  VTK_THIRD_PARTY_SUBDIR(MATERIALLIBRARY MaterialLibrary)
  VTK_THIRD_PARTY_SUBDIR(LIBPROJ4 vtklibproj4)
  VTK_THIRD_PARTY_SUBDIR(MRMPI mrmpi)

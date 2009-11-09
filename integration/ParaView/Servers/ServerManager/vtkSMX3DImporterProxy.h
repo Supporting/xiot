@@ -39,29 +39,22 @@ public:
   // Only the first algorithm output is exposed
  virtual unsigned int GetNumberOfAlgorithmOutputPorts();
 
-  virtual vtkPVXMLElement *SaveState (vtkPVXMLElement *root);
-  virtual int 	LoadState (vtkPVXMLElement *element, vtkSMProxyLocator *locator);
-
 //BTX
 protected:
   vtkSMX3DImporterProxy();
   ~vtkSMX3DImporterProxy();
 
-  virtual void CreateVTKObjects();
-  virtual void UpdateVTKObjects();
   virtual void PostUpdateData();
 
-  virtual void UnRegisterTexture();
   virtual void RegisterTexture();
+  virtual void UnRegisterTexture();
 
   virtual void SetActiveTexture(vtkSMImageDataToTextureProxy *);
-  //virtual void SetCopier(vtkSMNetworkImageDataSourceProxy *);
   vtkSMImageDataToTextureProxy *CreateOrFindTextureProxy();
   int GetTextureStatus();
 
   int TextureStatus;
   vtkSMImageDataToTextureProxy* ActiveTexture;
-  //vtkSMNetworkImageDataSourceProxy* Copier;
 
 private:
   vtkSMX3DImporterProxy(const vtkSMX3DImporterProxy&); // Not implemented

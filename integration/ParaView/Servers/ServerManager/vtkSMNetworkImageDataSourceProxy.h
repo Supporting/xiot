@@ -13,12 +13,11 @@
 
 =========================================================================*/
 // .NAME vtkSMNetworkImageDataSourceProxy - proxy for an image reader that can read
-// an image file from any process and make the data available on all processes.
+// an image file from an vtkImageData and make the data available on all processes.
 // .SECTION Description
-// vtkSMNetworkImageDataSourceProxy is a proxy for an image reader that can read
-// an image file from any process and make the data available on all rendering 
-// processes i.e. render server and client.
-// It is used to load small images such as those used as textures.
+// vtkSMNetworkImageDataSourceProxy is a proxy for an vtkImageData copier. It is possible
+// to use the standard input proxy mechanism. But there is not pipeline update handling
+// so you have to call UpdateImage() to distribute the image data again.
 
 #ifndef __vtkSMNetworkImageDataSourceProxy_h
 #define __vtkSMNetworkImageDataSourceProxy_h

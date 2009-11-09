@@ -126,6 +126,7 @@ void vtkNetworkImageDataSource::ReadImageFromString(vtkClientServerStream& css)
   // shallow copy the output of the vtkStructuredPointsReader to an
   // internal buffer
   this->Buffer->ShallowCopy(reader->GetOutput());
+  this->Modified();
 
   inputArray->Delete();
   reader->Delete();

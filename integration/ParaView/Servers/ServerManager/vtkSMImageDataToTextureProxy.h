@@ -37,7 +37,6 @@ public:
   // Returns the client side image if one has been loaded successfully.
   vtkImageData* GetLoadedImage();
   void UpdateImage();
-  virtual void UpdateVTKObjects();
 
  virtual void AddInput(unsigned int inputPort,
                         vtkSMSourceProxy* input,
