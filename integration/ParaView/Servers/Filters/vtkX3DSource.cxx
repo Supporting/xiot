@@ -47,7 +47,6 @@ vtkX3DSource::vtkX3DSource()
   this->Importer = NULL;
   this->Color = 1;
 
-  this->Texture = vtkImageData::New();
   this->TextureStatus = -1;
 
   this->NumberOfShapes = 0;
@@ -68,15 +67,13 @@ vtkX3DSource::~vtkX3DSource()
     this->Importer->Delete();
     this->Importer = NULL;
     }
-  if (this->Texture)
-    this->Texture->Delete();
 }
 
 
 //------------------------------------------------------------------------------
 int vtkX3DSource::GetNumberOfShapes()
 {
-  if (!this->FileName)
+  if (!this->FileName || !CanReadFile(this->FileName))
     {
     return -1;
     }
@@ -93,6 +90,8 @@ int vtkX3DSource::CanReadFile(const char *filename)
   if (!fd) return 0;
 
   // TODO: File detection
+
+  fclose(fd);
   return 1;
 }
 
@@ -168,7 +167,6 @@ void vtkX3DSource::CopyImporterToOutputs(vtkMultiBlockDataSet* mbOutput, vtkImag
   if (actor->GetTexture())
     {
     texture->ShallowCopy(actor->GetTexture()->GetInput());
-    this->Texture->ShallowCopy(actor->GetTexture()->GetInput());
     this->TextureStatus = this->TextureStatus == -1 ? 1 : 2;
     }
   else

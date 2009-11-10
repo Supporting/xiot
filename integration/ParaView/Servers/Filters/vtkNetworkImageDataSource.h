@@ -12,7 +12,8 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkNetworkImageDataSource - an image source that whose data is encoded in a vtkClientServerStream
+// .NAME vtkNetworkImageDataSource - an image data
+// source that whose data is encoded in a vtkClientServerStream
 // .SECTION Description
 // vtkNetworkImageDataSource is a subclass of vtkImageAlgorithm that takes a
 // vtkClientServerStream with a message whose only argument is a string

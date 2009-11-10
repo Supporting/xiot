@@ -12,10 +12,12 @@
      PURPOSE.  See the above copyright notice for more information.
 
 =========================================================================*/
-// .NAME vtkX3DSource - Converts importer to a source.
+// .NAME vtkX3DSource - Extracts one geometry from a collection imported 
+// with vtkX3DImporter
 // .SECTION Description
-// Since paraview can only use vtkSources, I am wrapping the X3D importer
-// as a source.  I will loose lights, texture maps and colors,
+// Extracts one geometry - in terms of X3D this is one Shape node - and makes
+// it's geometry available as vtkMultiBlockDataSet at port 0 and it's texture
+// as vtkImageData at port 1
 
 #ifndef __vtkX3DSource_h
 #define __vtkX3DSource_h
@@ -43,20 +45,30 @@ public:
   vtkGetStringMacro(FileName);
 
   // Description: 
-  // Descided whether to generate color arrays or not.
+  // Descide whether to generate color arrays from material description
+  // or not.
   vtkSetMacro(Color,int);
   vtkGetMacro(Color,int);
   vtkBooleanMacro(Color,int);
 
-  vtkGetObjectMacro(Texture, vtkImageData);
-  //virtual void SetTexture(vtkImageData *);
-
+  // Description: 
+  // Calculates the number of Shape nodes in the X3D file. 
+  // This independs on the current FileName only, no update
+  // is performed
   virtual int GetNumberOfShapes();
-  vtkGetVector2Macro(ShapeRange, int);
 
+  // Description: 
+  // Set the n'th shape node to extract the geometry/texture from
   vtkGetMacro(ShapeNumber,int);
   vtkSetMacro(ShapeNumber,int);
+  vtkGetVector2Macro(ShapeRange, int);
 
+  // Description: 
+  // Get the status at port 1 for the texture. Returns:
+  // -1 - uninitalized
+  //  0 - not texture available
+  //  1 - texture available
+  //  2 - texture data has changed
   vtkGetMacro(TextureStatus,int);
 
   static int CanReadFile(const char *filename);
@@ -83,7 +95,6 @@ protected:
   int ShapeNumber;
 
   // Texture related properties
-  vtkImageData* Texture;
   int TextureStatus;
 
 

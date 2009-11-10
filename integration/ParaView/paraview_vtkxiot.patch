@@ -109,6 +109,22 @@ diff -u -r1.257 CMakeLists.txt
    )
  
  IF (VTK_USE_QVTK)
+Index: Servers/ServerManager/vtkSMProxyManager.cxx
+===================================================================
+RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMProxyManager.cxx,v
+retrieving revision 1.84
+diff -u -r1.84 vtkSMProxyManager.cxx
+--- Servers/ServerManager/vtkSMProxyManager.cxx	2 Sep 2009 15:43:43 -0000	1.84
++++ Servers/ServerManager/vtkSMProxyManager.cxx	10 Nov 2009 09:05:02 -0000
+@@ -807,7 +807,7 @@
+   for (; it != this->Internals->RegisteredProxyMap.end(); it++)
+     {
+     vtkSMProxyManagerProxyMapType::iterator it2;
+-    for (it->second.begin(); it2 != it->second.end(); ++it2)
++    for (it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+       {
+       if (it2->second.Contains(proxy))
+         {
 Index: Servers/ServerManager/vtkSMSourceProxy.h
 ===================================================================
 RCS file: /cvsroot/ParaView3/ParaView3/Servers/ServerManager/vtkSMSourceProxy.h,v

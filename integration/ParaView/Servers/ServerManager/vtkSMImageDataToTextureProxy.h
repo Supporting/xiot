@@ -36,6 +36,9 @@ public:
   // Description:
   // Returns the client side image if one has been loaded successfully.
   vtkImageData* GetLoadedImage();
+  
+  // Description:
+  // Updates the images and distributes the data to the texture processes.
   void UpdateImage();
 
  virtual void AddInput(unsigned int inputPort,

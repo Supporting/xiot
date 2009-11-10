@@ -24,7 +24,8 @@
 
 #include "vtkSMSourceProxy.h"
 #include "vtkProcessModule.h" //for flags.
-#include "vtkWeakPointer.h"
+#include "vtkWeakPointer.h" // weak pointer to input cause the input might
+							// reference to this class, prevent cycle
 
 class vtkImageData;
 
@@ -63,6 +64,9 @@ public:
                         unsigned int outputPort,
                         const char* method);
 
+						
+  // Description:
+  // This actually distributes the data
  void UpdateImage();
 
 //BTX
@@ -72,6 +76,7 @@ protected:
 
   int SourceProcess;
 
+  // Cache input and port, used in the update process
   vtkWeakPointer<vtkSMProxy> InputProxy;
   int OutputPort;
 
