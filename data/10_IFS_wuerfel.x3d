@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <X3D version = '3.1' profile='Immersive'>
 	<head>
-		<meta name='created_with' content='RawKee an open source X3D plug-in for Maya'/>
+		<meta name='created_with' content='Actor3D'/>
 	</head>
 	<Scene>
 		<Transform DEF='pCube1'>
@@ -38,6 +38,5 @@
 			</Shape> <!-- end of pCubeShape1 -->
 		</Transform> <!-- end of pCube1 -->
 		<DirectionalLight DEF='directionalLightShape1' direction='-0.59768 -0.634059 -0.49066' intensity='0.1'/>
-		<Transform DEF='directionalLight1' rotation='0.00468655 0.623567 0.781756 1.885816' translation='0.918061 -2.953795 0.527326'/>
 	</Scene>
 </X3D>

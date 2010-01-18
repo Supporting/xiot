@@ -11,6 +11,7 @@ using namespace std;
 
 string input_filename;
 string output_filename;
+bool attribute_index, element_index, attribute_values_index;
 
 class MyContentHandler : public FI::DefaultContentHandler
 {
@@ -21,16 +22,41 @@ class MyContentHandler : public FI::DefaultContentHandler
 
 	void startElement(const FI::ParserVocabulary* vocab, const FI::Element &element, const FI::Attributes &attributes)
 	{
-		cout << "<" << vocab->resolveElementName(element._qualifiedName);
-		FI::Attributes::const_iterator I = attributes.begin();
-		while(I!=attributes.end())
-		{
-			cout << " " << vocab->resolveAttributeName((*I)._qualifiedName);
-			cout << "=\"" << vocab->resolveAttributeValue((*I)._normalizedValue) << "\"";
-			I++;
-		}
-		cout <<">";
-	}
+
+    cout << "<";
+    if (element_index)
+      cout << element._qualifiedName._nameSurrogateIndex;  
+    else
+      cout << vocab->resolveElementName(element._qualifiedName);
+
+    FI::Attributes::const_iterator I = attributes.begin();
+    while(I!=attributes.end())
+      {
+      cout << " ";
+      if (attribute_index)
+        cout << (*I)._qualifiedName._nameSurrogateIndex;  
+      else
+        cout << vocab->resolveAttributeName((*I)._qualifiedName);
+
+      if (attribute_values_index)
+        {
+        if ((*I)._normalizedValue._stringIndex != 0)
+          {
+          cout <<  "=" << (*I)._normalizedValue._stringIndex;
+          }
+        else if ((*I)._normalizedValue._characterString._encodingFormat == FI::ENCODINGFORMAT_ENCODING_ALGORITHM)
+          {
+          cout << "=ALG:" << (*I)._normalizedValue._characterString._encodingAlgorithm;
+          }
+        else
+          cout << "=\"" << vocab->resolveAttributeValue((*I)._normalizedValue) << "\"";
+        }
+      else
+        cout << "=\"" << vocab->resolveAttributeValue((*I)._normalizedValue) << "\"";
+      I++;
+      }
+    cout <<">";
+    }
 
 	void characters(const FI::ParserVocabulary* vocab, const FI::CharacterChunk &chunk)
 	{
@@ -40,7 +66,12 @@ class MyContentHandler : public FI::DefaultContentHandler
 
 	void endElement(const FI::ParserVocabulary* vocab, const FI::Element &element)
 	{
-		cout << "</" << vocab->resolveElementName(element._qualifiedName) << ">";
+		cout << "</";
+     if (element_index)
+      cout << element._qualifiedName._nameSurrogateIndex;  
+    else
+      cout << vocab->resolveElementName(element._qualifiedName);
+    cout << ">";
 	}
 
 
@@ -90,8 +121,12 @@ bool fileExists(const std::string& fileName)
 int main(int argc, char *argv[])
 {
   dsr::Argument_helper ah;
+  element_index = attribute_index = attribute_values_index = false;
 
   ah.new_string("input_filename", "The name of the input file", input_filename);
+  ah.new_flag('e', "element-as-index", "Print element index instead of name", element_index);
+  ah.new_flag('a', "attribute-as-index", "Print attribute index instead of name", attribute_index);
+  ah.new_flag('f', "attribute-values-as-index", "Print attribute index instead of name", attribute_values_index);
   //ah.new_string("output_filename", "The name of the output file", output_filename);
   
   //ARGUMENT_HELPER_BASICS(ah);

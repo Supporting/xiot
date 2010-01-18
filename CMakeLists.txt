@@ -67,7 +67,7 @@ else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME 
  "xiot-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-src")
-set(CPACK_SOURCE_IGNORE_FILES "/CVS/;/\\\\.svn/;\\\\.swp$;\\\\.#;/#;/_build/;/contrib/;/integration/;/data/")
+set(CPACK_SOURCE_IGNORE_FILES "/CVS/;/\\\\.svn/;.tex;\\\\.swp$;\\\\.#;/#;/_build/;/contrib/;/integration/;/data/")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${xiot_SOURCE_DIR}/README")
 set(CPACK_RESOURCE_FILE_LICENSE "${xiot_SOURCE_DIR}/COPYING")
 

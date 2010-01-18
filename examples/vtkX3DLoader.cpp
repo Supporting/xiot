@@ -79,10 +79,11 @@ int showScene(vtkImporter* importer)
 
 	importer->SetRenderWindow(renWin);
 	importer->Read();
-	timer->StopTimer();
+	
 
 	renWin->SetSize(800,600);
 	renWin->Render();
+  timer->StopTimer();
 
 	if (dsr::verbose)
 		cout << "Time to load file: " << timer->GetElapsedTime() << endl;

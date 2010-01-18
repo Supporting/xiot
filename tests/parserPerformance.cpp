@@ -14,6 +14,7 @@ using namespace XIOT;
 
 string input_filename;
 bool no_attributes, no_attribute_values;
+unsigned int nr_iter;
 
 class MyContentHandler : public X3DDefaultNodeHandler
 {
@@ -143,13 +144,13 @@ int start(const std::string &filename)
 	try {
   clock_t start,end;
   start = clock();
-  for (int i = 0; i < 10; i++)
+  for (unsigned int i = 0; i < nr_iter; i++)
     {
     l.load(filename.c_str());
     }
   end = clock();
   double dif = double(end-start) / CLOCKS_PER_SEC;
-  printf ("Parsing took an average of %f seconds.\n", dif/10.0);
+  printf ("Parsing took an average of %f seconds.\n", dif/(double)nr_iter);
 
   }
   catch (std::exception& e)
@@ -176,9 +177,12 @@ int main(int argc, char *argv[])
 {
   dsr::Argument_helper ah;
 
+  nr_iter = 10;
+
   ah.new_string("input_filename", "The name of the input file", input_filename);
   ah.new_flag('a', "skip-attributes", "Do not process attributes", no_attributes);
   ah.new_flag('b', "skip-attributes-values", "Do not process attribute values", no_attribute_values);
+  ah.new_optional_unsigned_int("iterations", "Number of iterations", nr_iter);
 
   //ARGUMENT_HELPER_BASICS(ah);
   ah.set_description("A simple test application for the parser performance");
