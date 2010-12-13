@@ -2,7 +2,7 @@
 
 set(XIOT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
-set(XML_PARSER_SELECTION "XERCES" CACHE STRING "External XML parser to use. One of (XERCES | EXPAT)")
+set(XML_PARSER_SELECTION "XERCES" CACHE STRING "External XML parser to use. One of (XERCES | EXPAT | QT)")
 
 string(TOLOWER ${XML_PARSER_SELECTION} ${XML_PARSER_SELECTION})
 
@@ -15,7 +15,6 @@ if (WIN32)
 endif (WIN32)
 find_package(ZLIB REQUIRED)
 
-set(EXPAT_PARSER_IMPL_SRC X3DXMLLoaderExpatImpl.cpp X3DXMLAttributesExpatImpl.cpp)
 	
 # Set up the chosen XML parser library
 if(${XML_PARSER_SELECTION} STREQUAL "xerces")
@@ -57,10 +56,24 @@ elseif(${XML_PARSER_SELECTION} STREQUAL "expat")
 		message(SEND_ERROR "Expat is chosen as external XML parser, but library is not found.")
 	endif(EXPAT_FOUND)
 	
-	set(XML_PARSER_IMPL_SRC	${EXPAT_PARSER_IMPL_SRC})
+	set(XML_PARSER_IMPL_SRC	X3DXMLLoaderExpatImpl.cpp X3DXMLAttributesExpatImpl.cpp)
 	#add_definitions( -DXML_STATIC)
+
+elseif(${XML_PARSER_SELECTION} STREQUAL "qt")
 	
+	find_package(Qt4 4.4.3 COMPONENTS QtCore QtXml REQUIRED )
+	
+	if (QT4_FOUND)
+		include(${QT_USE_FILE})
+		set (XML_PARSER_LIBRARY ${QT_LIBRARIES})
+	else (QT4_FOUND)
+		message(SEND_ERROR "Qt XML is chosen as external XML parser, but library is not found.")
+	endif(QT4_FOUND)
+	
+	set(XML_PARSER_IMPL_SRC	X3DXMLLoaderQtImpl.cpp X3DXMLAttributesQtImpl.cpp)
+
 endif(${XML_PARSER_SELECTION} STREQUAL "xerces")
+
 
 set(XIOT_HEADER
 	${XIOT_INCLUDE_DIR}/xiot/X3DTypes.h
