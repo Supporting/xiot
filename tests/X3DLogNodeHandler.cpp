@@ -1,6 +1,7 @@
 #include "X3DLogNodeHandler.h"
 #include <xiot/X3DAttributes.h>
 #include <cassert>
+#include <stdio.h>
 
 X3DLogNodeHandler::X3DLogNodeHandler(std::string fileName)
 {
