@@ -37,6 +37,7 @@
 #include "vtkImageReader2.h"
 #include "vtkImageReader2Factory.h"
 #include "vtkImageData.h"
+#include <vtksys/SystemTools.hxx>
 
 using namespace std;
 using namespace XIOT;
@@ -1052,12 +1053,18 @@ int  vtkX3DNodeHandler::startImageTexture(const XIOT::X3DAttributes &attr)
     attr.getMFString(index, url);
     if (url.size())
       {
-      std::string fileName(this->Importer->GetFileName()), baseDir, fullName;
-      size_t found = fileName.find_last_of("/\\");
-      if (found != std::string::npos)
-        baseDir = fileName.substr(0,found+1);
+      vtkDebugWithObjectMacro(this->Importer, << "URL: " << url[0]);
+      std::string fullName;
+      if (!vtksys::SystemTools::FileIsFullPath(url[0].c_str()))
+        {
+        std::string relativeTo = vtksys::SystemTools::CollapseFullPath(vtksys::SystemTools::GetFilenamePath(this->Importer->GetFileName()).c_str());
+        vtkDebugWithObjectMacro(this->Importer, << "Path: " << relativeTo);
+        fullName = vtksys::SystemTools::CollapseFullPath(url[0].c_str(), 
+          relativeTo.c_str());
+        }
+      else
+        fullName = url[0];
       
-      fullName = baseDir + url[0];
       vtkDebugWithObjectMacro(this->Importer, << "Trying to load texture: " << fullName);
       vtkSmartPointer<vtkImageReader2> imageReader = vtkImageReader2Factory::CreateImageReader2(fullName.c_str());
       if (imageReader)
