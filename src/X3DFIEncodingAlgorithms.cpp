@@ -29,14 +29,13 @@ namespace XIOT {
 
 	void QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec)
 	{
-    // The format for encoding the custom float format is : (-S)0000EEE|000MMMMM.
+    // The format for encoding the custom float format is : (-S)000EEEE|000MMMMM.
     bool sign = !static_cast<bool>(octets[0] & 0x80);
     unsigned char exponent = octets[0] & FI::Constants::LAST_FOUR_BITS;
 		unsigned char mantissa = octets[1]  & FI::Constants::LAST_FIVE_BITS;
 
     int numBits = exponent + mantissa + (sign ? 1 : 0);
 
-    
 		const unsigned char* pStr = octets.c_str();
 
 		unsigned int len = FI::Tools::readUInt(pStr+2);
@@ -55,7 +54,7 @@ namespace XIOT {
 		FITools::FloatPacker fp(exponent, mantissa);
 		for(unsigned int i=0; i < numFloats; i++) {
 			unsigned long val = bu.unpack(numBits);
-			result[i] = fp.decode(val);
+			result[i] = fp.decode(val, sign);
 		}
 		std::swap(result, vec);
 	}

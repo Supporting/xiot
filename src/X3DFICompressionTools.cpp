@@ -133,7 +133,7 @@ _mantissaBits(mantissaBits)
 	_exponent_min = -_exponent_max - 1;
 }
 
-float FloatPacker::decode(unsigned long src, bool )
+float FloatPacker::decode(unsigned long src, bool isSigned)
 {
 	if (src == 0)
 		return 0.0f;
@@ -146,9 +146,11 @@ float FloatPacker::decode(unsigned long src, bool )
 	exponent += EXPONENT_BIAS_32;
 	
 	mantissa = mantissa << (MANTISSA_BITS_32 - _mantissaBits);
-	unsigned int result = (sign << SIGN_SHIFT_32) | (exponent << MANTISSA_BITS_32) | (mantissa);
-
-	union float_to_unsigned_int_to_bytes
+	unsigned int result = isSigned ? 
+                                (sign << SIGN_SHIFT_32) | (exponent << MANTISSA_BITS_32) | (mantissa)
+                             :  (exponent << MANTISSA_BITS_32) | (mantissa);
+	
+  union float_to_unsigned_int_to_bytes
 		{
 			float f;
 			unsigned int ui;
