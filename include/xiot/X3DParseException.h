@@ -24,6 +24,7 @@
 
 #include <xiot/XIOTConfig.h>
 #include <string>
+#include <exception>
 
 namespace XIOT {
 
@@ -34,15 +35,17 @@ namespace XIOT {
  * in the original X3D document.
  * @ingroup x3dloader
  */
-class XIOT_EXPORT X3DParseException
+class XIOT_EXPORT X3DParseException : public std::exception
 {
 public:
   /// Constructor.
 	X3DParseException(const std::string &message, int lineNumber, int columnNumber);
   /// Constructor.
 	X3DParseException(const std::string &message);
+  virtual ~X3DParseException();
 
-  
+  const char* what(void) const { return _message.c_str(); };
+
   /**
    *  Get the reason for the parse exception 
    */

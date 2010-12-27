@@ -56,7 +56,7 @@ namespace FI {
 	 * <code>NonEmptyOctetString ::= OCTET STRING (SIZE(1-four-gig))</code>
 	 * @ingroup ASN1Types
      */
-	typedef std::basic_string<unsigned char> NonEmptyOctetString;
+	typedef std::vector<unsigned char> NonEmptyOctetString;
 	
 	/**
      * 7.17 The EncodedCharacterString type

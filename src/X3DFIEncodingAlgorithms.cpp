@@ -36,17 +36,21 @@ namespace XIOT {
 
     int numBits = exponent + mantissa + (sign ? 1 : 0);
 
-		const unsigned char* pStr = octets.c_str();
+		const unsigned char* pStr = &octets.front();
 
 		unsigned int len = FI::Tools::readUInt(pStr+2);
 		unsigned int numFloats = FI::Tools::readUInt(pStr+6); // = (len * 8) / (exponent + mantissa + sign); 
 
 		std::vector<Bytef> temp_result(len);
-
+    uLong sourceLen = static_cast<uLong>(octets.size()-10);
 		uLong destSize = static_cast<uLong>(temp_result.size());
-		int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 10, static_cast<uLong>(octets.size())-10);
-		if (result_code != Z_OK)
-			throw X3DParseException("Error while decoding QuantizedzlibFloatArray");
+		
+    int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 10, sourceLen);
+    if (result_code != Z_OK) {
+      std::stringstream ss;
+      ss << "Error while decoding QuantizedzlibFloatArray. ZLIB error code: " << result_code;
+      throw X3DParseException(ss.str());
+    }
 
 		std::vector<float> result(numFloats);
 
@@ -103,26 +107,28 @@ namespace XIOT {
 
 		unsigned char *s;
 		// Put the number of bits for exponent
-		octets += static_cast<unsigned char>(8);
+    octets.push_back(static_cast<unsigned char>(8));
 		// Put the number of bits for mantissa
-		octets += static_cast<unsigned char>(23);
+    octets.push_back(static_cast<unsigned char>(23));
 		
 		// Put the length
 		int length = static_cast<int>(size*4);
 		int length_reversed = FI::Tools::reverseBytes(&length);
 		s = reinterpret_cast <unsigned char*> (&length_reversed);
-		octets.append(s, 4);
+    octets.insert(octets.end(), s, s+3);
 
 		// Put the number of floats
 		int numFloats = static_cast<int>(size);
 		int numFloats_reversed = FI::Tools::reverseBytes(&numFloats);;
 		s = reinterpret_cast <unsigned char*> (&numFloats_reversed);
-		octets.append(s, 4);
+    octets.insert(octets.end(), s, s+3);
+    //octets.insert(octets.end(), s[0], s[3]);
+		//octets.append(s, 4);
 
 		for (i = 0; i < compressedSize; i++)
 		{
 			unsigned char c = compressedData[i];
-			octets += c;
+      octets.push_back(c);
 		}
 		delete[] compressedData;
 		delete[] bytes;
@@ -145,18 +151,22 @@ namespace XIOT {
 
 	void DeltazlibIntArrayAlgorithm::decodeToIntArray(const FI::NonEmptyOctetString &octets, std::vector<int> &vec)
 	{
-		const unsigned char* pStr = octets.c_str();
+		const unsigned char* pStr = &octets.front();
 
 		unsigned int length = FI::Tools::readUInt((unsigned char*)pStr);
 		unsigned char span = octets[4];
 
 		std::vector<Bytef> temp_result(length*4);
-
+    uLong sourceLen = static_cast<uLong>(octets.size()-5);
 		uLong destSize = static_cast<uLong>(temp_result.size());
-		int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 5, static_cast<uLong>(octets.size())-5);
-		if (result_code != Z_OK)
-			throw X3DParseException("Error while decoding DeltazlibIntArrayAlgorithm");
+		const Bytef *source = (const Bytef *)(pStr + 5);
 
+    int result_code = uncompress(&temp_result.front(), &destSize, source, sourceLen);
+    if (result_code != Z_OK) {
+      std::stringstream ss;
+      ss << "Error while decoding DeltazlibIntArrayAlgorithm. ZLIB error code: " << result_code;
+      throw X3DParseException(ss.str());
+    }
 		std::vector<int> result(length);
 
 		Bytef* pRes = &temp_result.front();

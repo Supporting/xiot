@@ -451,8 +451,11 @@ void Decoder::getNonEmptyOctetString5(FI::NonEmptyOctetString &value)
 	}
 	
 	value.reserve(iLength);
-	for(int i = 0; i < iLength; i++)
-		value.push_back(static_cast<const char>(_stream->get()));
+  for(int i = 0; i < iLength; i++) {
+    if(!_stream->good())
+      throw std::runtime_error("Error in stream");
+		value.push_back(static_cast<unsigned char>(_stream->get()));
+  }
 
 }
 
@@ -472,8 +475,7 @@ void Decoder::getNonEmptyOctetString7(FI::NonEmptyOctetString &value)
 		iLength = _stream->get() + 3;
 		break;
 	case Constants::NON_EMPTY_OCTET_STRING_7TH_LARGE:
-		_stream->read((char*)&iLength, 4); 
-		iLength += 265;
+		iLength = (_stream->get() << 24) + (_stream->get() << 16) + (_stream->get()<< 8) + _stream->get() + 259;
 		break;
 	default:
 		throw std::runtime_error("Illegal Octet length encoding");

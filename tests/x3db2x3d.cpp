@@ -179,7 +179,7 @@ int start(std::string inFile, std::string outFile)
     useStdIn = true;
   }
   else {
-    in.open(inFile.c_str(),  std::istream::in |  std::istream::in);
+    in.open(inFile.c_str(),  std::istream::in |  std::istream::binary);
   }
 
   if (outFile.empty())
@@ -229,8 +229,8 @@ int main(int argc, char *argv[])
   ah.new_named_string('o', "output", "output", "The name of the output file", output_filename);
   
   //ARGUMENT_HELPER_BASICS(ah);
-  ah.set_description("A simple test application for the FI parser");
-  ah.set_author("Kristian Sons, kristian.sons@actor3d.com");
+  ah.set_description("Converts a binary X3D file to it's text representation.");
+  ah.set_author("Kristian Sons, kristian.sons@supporting.com");
   ah.set_version(0.9f);
   ah.set_build_date(__DATE__);
 

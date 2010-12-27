@@ -38,7 +38,7 @@ namespace FI {
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
 
-		const unsigned char*pOctets = octets.c_str();
+		const unsigned char*pOctets = &octets.front();
 		std::vector<float> result(length);
 		for (size_t i = 0; i < length; i++)
 		{
@@ -85,7 +85,7 @@ namespace FI {
 		assert(octets.size() % 4 == 0);
 		size_t length = octets.size() / 4;
 
-		const unsigned char *pOctets = octets.c_str();
+		const unsigned char *pOctets = &octets.front();
 		std::vector<int> result(length);
 		for (size_t i = 0; i < length; i++)
 		{

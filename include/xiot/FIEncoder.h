@@ -138,7 +138,7 @@ protected:
 
   inline void writeOctet(const NonEmptyOctetString& value)
   {
-	  putBytes(value.c_str(), value.length());
+	  putBytes(&value.front(), value.size());
   }
 
   inline unsigned char append(unsigned int value, unsigned char count)
