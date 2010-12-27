@@ -42,9 +42,9 @@ public:
 	X3DParseException(const std::string &message, int lineNumber, int columnNumber);
   /// Constructor.
 	X3DParseException(const std::string &message);
-  virtual ~X3DParseException();
+  virtual ~X3DParseException() throw();
 
-  const char* what(void) const { return _message.c_str(); };
+  const char* what(void) const throw() { return _message.c_str(); };
 
   /**
    *  Get the reason for the parse exception 

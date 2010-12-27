@@ -13,7 +13,7 @@ _message(message), _lineNumber(0), _columnNumber(0)
 {
 }
 
-X3DParseException::~X3DParseException()
+X3DParseException::~X3DParseException() throw()
 {
 }
 
