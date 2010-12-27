@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	//ARGUMENT_HELPER_BASICS(ah);
 	ah.set_description("A demonstrator that allows loading of VRML or X3D scenes. It demonstrates the capabilities of the generic X3D loader library.");
 	ah.set_author("Kristian Sons, kristian.sons@actor3d.com");
-	ah.set_version(0.9f);
+	ah.set_version(0.95f);
 	ah.set_build_date(__DATE__);
 
 	ah.process(argc, argv);
