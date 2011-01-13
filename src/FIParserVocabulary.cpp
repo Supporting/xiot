@@ -136,7 +136,7 @@ IEncodingAlgorithm* DefaultParserVocabulary::getEncodingAlgorithm(unsigned int i
 			return result;
 		} catch (std::out_of_range&)
 		{
-			THROW("URI not present for encoding algorithm identifier " << index);
+			THROW("URI not present for encoding algorithm identifier " << index - 1);
 		}
 	}
 	THROW("Encoding algorithm index 11-31 are reserved for future versions of FastInfoSet");

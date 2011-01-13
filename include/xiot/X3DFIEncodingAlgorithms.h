@@ -76,7 +76,7 @@ class XIOT_EXPORT QuantizedzlibFloatArrayAlgorithm : public FI::IEncodingAlgorit
 {
 public:
 	/// The position of this algorithm in the FI algorithm table.
-	static const int ALGORITHM_ID = 35; 
+	static const int ALGORITHM_ID = 36; 
 
 	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
 

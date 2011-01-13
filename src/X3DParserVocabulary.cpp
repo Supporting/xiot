@@ -5,7 +5,7 @@ namespace XIOT {
 
 X3DParserVocabulary::X3DParserVocabulary() :  DefaultParserVocabulary() 
 {
-	_externalVocabularyURI = "urn:external-vocabulary";
+	_externalVocabularyURI = "urn:web3d:x3d:fi-vocabulary-3.2";
 	X3DTypes::initMaps();
 
 	// Init X3D Element name table
@@ -28,9 +28,10 @@ X3DParserVocabulary::X3DParserVocabulary() :  DefaultParserVocabulary()
 	_attributeValues.push_back("false"); // Index 1
 	_attributeValues.push_back("true"); // Index 2
 
-	addEncodingAlgorithm(NULL);
-	addEncodingAlgorithm(&_deltazlibIntArrayAlgorithm);
-	addEncodingAlgorithm(&_quantizedzlibFloatArrayAlgorithm);
+	addEncodingAlgorithm(NULL); // 32: encoder://web3d.org/QuantizedFloatArrayEncoder
+	addEncodingAlgorithm(&_deltazlibIntArrayAlgorithm); // 33: encoder://web3d.org/DeltazlibIntArrayEncoder 
+	addEncodingAlgorithm(NULL); // 34 Reserved, undefined 
+	addEncodingAlgorithm(&_quantizedzlibFloatArrayAlgorithm); // 35	encoder://web3d.org/QuantizedzlibFloatArrayEncoder
 };
 
 

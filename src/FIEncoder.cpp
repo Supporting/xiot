@@ -41,7 +41,7 @@ void FIEncoder::encodeHeader(bool )
 
 void FIEncoder::encodeInitialVocabulary()
 {
-  const std::string external_voc = "urn:external-vocabulary";
+  const std::string external_voc = "urn:web3d:x3d:fi-vocabulary-3.2";
   
   // ITU C.2.3 
   putBit(0); // additional-data

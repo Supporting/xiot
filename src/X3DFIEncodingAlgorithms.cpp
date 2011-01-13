@@ -38,14 +38,14 @@ namespace XIOT {
 
 		const unsigned char* pStr = &octets.front();
 
-		unsigned int len = FI::Tools::readUInt(pStr+2);
-		unsigned int numFloats = FI::Tools::readUInt(pStr+6); // = (len * 8) / (exponent + mantissa + sign); 
+		unsigned int numFloats = FI::Tools::readUInt(pStr+2); 
+		unsigned int len = static_cast<unsigned int>(ceil(numFloats * numBits / 8.0f));
 
 		std::vector<Bytef> temp_result(len);
-    uLong sourceLen = static_cast<uLong>(octets.size()-10);
+    uLong sourceLen = static_cast<uLong>(octets.size()-6);
 		uLong destSize = static_cast<uLong>(temp_result.size());
 		
-    int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 10, sourceLen);
+    int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 6, sourceLen);
     if (result_code != Z_OK) {
       std::stringstream ss;
       ss << "Error while decoding QuantizedzlibFloatArray. ZLIB error code: " << result_code;
@@ -111,11 +111,11 @@ namespace XIOT {
 		// Put the number of bits for mantissa
     octets.push_back(static_cast<unsigned char>(23));
 		
-		// Put the length
-		int length = static_cast<int>(size*4);
-		int length_reversed = FI::Tools::reverseBytes(&length);
-		s = reinterpret_cast <unsigned char*> (&length_reversed);
-    octets.insert(octets.end(), s, s+3);
+		// Put the length (deprecated)
+		//int length = static_cast<int>(size*4);
+		//int length_reversed = FI::Tools::reverseBytes(&length);
+		//s = reinterpret_cast <unsigned char*> (&length_reversed);
+    //octets.insert(octets.end(), s, s+3);
 
 		// Put the number of floats
 		int numFloats = static_cast<int>(size);
