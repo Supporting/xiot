@@ -1,5 +1,7 @@
 XIOT - The X3D I/O Toolkit library 
 
+[![Build Status](https://travis-ci.org/Supporting/xiot.svg?branch=master)](https://travis-ci.org/Supporting/xiot)
+
 About
 =====
 
