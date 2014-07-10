@@ -43,7 +43,7 @@ namespace XIOT {
 	};
 
 	struct BitUnpacker {
-			BitUnpacker(unsigned char *data, size_t len);
+			BitUnpacker(unsigned char *data, std::size_t len);
 
 			void set_input(unsigned char *data, int len);
 			unsigned long unpack(unsigned long num_bits);
