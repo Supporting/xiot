@@ -24,7 +24,7 @@
 
 
 #if defined(_WIN32)
-# if defined(openFI_EXPORTS)
+# if defined(openFI_EXPORTS) || defined(ksons_xiot_EXPORTS)
 #  define OPENFI_EXPORT __declspec(dllexport)
 # else
 #  define OPENFI_EXPORT __declspec(dllimport)

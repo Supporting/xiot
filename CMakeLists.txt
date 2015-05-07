@@ -1,5 +1,10 @@
 cmake_minimum_required(VERSION 2.6)
 
+IF(BIICODE)
+   INCLUDE("biicode.cmake")
+   RETURN()
+ENDIF()
+
 project(xiot)
  
 # Setup output paths.

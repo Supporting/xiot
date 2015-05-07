@@ -1,6 +1,6 @@
 #include <xiot/X3DXMLAttributes.h>
 
-#include XIOT_EXPAT_HEADER
+#include "expat/lib/expat.h"
 #include <cstring>
 
 namespace XIOT {

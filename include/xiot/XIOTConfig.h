@@ -29,9 +29,8 @@
 # define _CRT_SECURE_NO_WARNINGS
 #endif
 
-
 #if defined(_WIN32)
-# if defined(xiot_EXPORTS)
+# if defined(xiot_EXPORTS) || defined(ksons_xiot_EXPORTS)
 #  define XIOT_EXPORT __declspec(dllexport)
 # else
 #  define XIOT_EXPORT __declspec(dllimport)
@@ -39,8 +38,5 @@
 #else
 # define XIOT_EXPORT
 #endif
-
-#define XIOT_EXPAT_HEADER "expat.h"
-#define XIOT_ZLIB_HEADER "zlib.h"
 
 #endif // __x3dexporterConfigure_h

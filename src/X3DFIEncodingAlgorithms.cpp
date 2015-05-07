@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-#include XIOT_ZLIB_HEADER
+#include "zlib.h"
 
 #include <xiot/FITypes.h>
 #include <xiot/FIConstants.h>
