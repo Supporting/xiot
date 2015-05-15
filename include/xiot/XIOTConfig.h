@@ -22,21 +22,13 @@
 #ifndef __XIOTConfigure_h
 #define __XIOTConfigure_h
 
+#include "xiot_export.h"
+
 #if defined(_MSC_VER) 
 # pragma warning (disable: 4275) /* non-DLL-interface base class used */
 # pragma warning (disable: 4251) /* needs to have dll-interface to be used by clients */
 /* No warning for safe windows only functions */
 # define _CRT_SECURE_NO_WARNINGS
-#endif
-
-#if defined(_WIN32)
-# if defined(xiot_EXPORTS) || defined(ksons_xiot_EXPORTS)
-#  define XIOT_EXPORT __declspec(dllexport)
-# else
-#  define XIOT_EXPORT __declspec(dllimport)
-# endif
-#else
-# define XIOT_EXPORT
 #endif
 
 #endif // __x3dexporterConfigure_h
