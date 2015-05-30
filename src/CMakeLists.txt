@@ -1,4 +1,4 @@
-
+include(GenerateExportHeader)
 
 set(XIOT_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 
@@ -144,13 +144,17 @@ include_directories( ${ZLIB_INCLUDE_DIR} )
 include_directories( ${XML_PARSER_INCLUDE_DIR} )
 
 # set up openFI
-add_library(openFI SHARED ${OPENFI_SRC} ${OPENFI_HEADER})
+add_library(openFI ${OPENFI_SRC} ${OPENFI_HEADER})
+target_include_directories(openFI PUBLIC "${PROJECT_BINARY_DIR}/src")
+GENERATE_EXPORT_HEADER(openFI)
 
 # set up XIOT
-add_library(xiot SHARED ${XIOT_SRC} ${XIOT_HEADER} ${XML_PARSER_IMPL_SRC} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h)
+add_library(xiot ${XIOT_SRC} ${XIOT_HEADER} ${XML_PARSER_IMPL_SRC} ${XIOT_INCLUDE_DIR}/xiot/XIOTConfig.h)
 target_link_libraries (xiot ${XML_PARSER_LIBRARY}) 
 target_link_libraries (xiot ${ZLIB_LIBRARIES}) 
 target_link_libraries (xiot openFI) 
+target_include_directories(xiot PUBLIC "${PROJECT_BINARY_DIR}/src")
+GENERATE_EXPORT_HEADER(xiot)
 
 
 add_executable(sourceGenerator gen/sourceGenerator.cpp)

@@ -1,0 +1,12 @@
+integration/*
+examples/*
+plugins/*
+contrib/*
+doc/*
+data/*
+
+# Igone other XML parsers than expat
+src/X3DXMLLoaderQtImpl.cpp 
+src/X3DXMLAttributesQtImpl.cpp
+src/X3DXMLLoaderXercesImpl.cpp 
+src/X3DXMLAttributesXercesImpl.cpp
