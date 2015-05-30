@@ -4,3 +4,8 @@ install:
   - cmd: set PATH=%PATH%;C:\Program Files (x86)\BiiCode\bii;
   - cmd: bii --version
   - cmd: cmake --version
+
+build_script:
+  - cmd: bii init
+  - cmd: bii cpp:configure -G "Visual Studio 12"
+  - cmd: bii cpp:build
