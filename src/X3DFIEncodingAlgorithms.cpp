@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cmath>
 
-#include XIOT_ZLIB_HEADER
+#include "zlib.h"
 
 #include <xiot/FITypes.h>
 #include <xiot/FIConstants.h>
@@ -16,9 +16,9 @@ namespace XIOT {
 	{
 		std::vector<float> floatArray;
 		QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(octets, floatArray);
-		
+
 		std::stringstream ss;
-		std::vector<float>::const_iterator I; 
+		std::vector<float>::const_iterator I;
 		for(I = floatArray.begin(); I != floatArray.end() -1; I++)
 		{
 			ss << (*I) << " ";
@@ -30,7 +30,7 @@ namespace XIOT {
 	void QuantizedzlibFloatArrayAlgorithm::decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec)
 	{
     // The format for encoding the custom float format is : (-S)000EEEE|000MMMMM.
-    bool sign = !static_cast<bool>(octets[0] & 0x80);
+    bool sign = (octets[0] & 0x80) == 0;
     unsigned char exponent = octets[0] & FI::Constants::LAST_FOUR_BITS;
 		unsigned char mantissa = octets[1]  & FI::Constants::LAST_FIVE_BITS;
 
@@ -39,12 +39,12 @@ namespace XIOT {
 		const unsigned char* pStr = &octets.front();
 
 		unsigned int len = FI::Tools::readUInt(pStr+2);
-		unsigned int numFloats = FI::Tools::readUInt(pStr+6); // = (len * 8) / (exponent + mantissa + sign); 
+		unsigned int numFloats = FI::Tools::readUInt(pStr+6); // = (len * 8) / (exponent + mantissa + sign);
 
 		std::vector<Bytef> temp_result(len);
     uLong sourceLen = static_cast<uLong>(octets.size()-10);
 		uLong destSize = static_cast<uLong>(temp_result.size());
-		
+
     int result_code = uncompress(&temp_result.front(), &destSize, (unsigned char*)pStr + 10, sourceLen);
     if (result_code != Z_OK) {
       std::stringstream ss;
@@ -101,7 +101,7 @@ namespace XIOT {
 
 		// Call zlib's compress function.
 		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(bytes), static_cast<unsigned long>(size*4), Z_DEFAULT_COMPRESSION) != Z_OK)
-		{    
+		{
 			throw X3DParseException("Error while encoding QuantizedzlibFloatArrayAlgorithm");
 		}
 
@@ -110,7 +110,7 @@ namespace XIOT {
     octets.push_back(static_cast<unsigned char>(8));
 		// Put the number of bits for mantissa
     octets.push_back(static_cast<unsigned char>(23));
-		
+
 		// Put the length
 		int length = static_cast<int>(size*4);
 		int length_reversed = FI::Tools::reverseBytes(&length);
@@ -245,7 +245,7 @@ namespace XIOT {
 
 		// Call zlib's compress function.
 		if(compress2(compressedData, &compressedSize, reinterpret_cast<const Bytef*>(&deltas[0]), static_cast<unsigned long>(deltas.size()), Z_DEFAULT_COMPRESSION) != Z_OK)
-		{    
+		{
 			throw X3DParseException("Error while encoding DeltazlibIntArrayAlgorithm");
 		}
 
@@ -264,4 +264,3 @@ namespace XIOT {
 
 	}
 }
-

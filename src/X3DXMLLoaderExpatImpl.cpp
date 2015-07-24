@@ -5,7 +5,7 @@
 #include <xiot/X3DXMLAttributes.h>
 #include <xiot/X3DParseException.h>
 
-#include XIOT_EXPAT_HEADER 
+#include "expat/lib/expat.h"
 
 #include <iostream>
 #include <cassert>

@@ -1,0 +1,17 @@
+install:
+  - cinst -y biicode
+  - cmd: set PATH=%PATH:CMake 2.8\bin=%;C:\ProgramData\chocolatey\lib\cmake.3.0.2\content\cmake-3.0.2-win32-x86\bin
+  - cmd: set PATH=%PATH%;C:\Program Files (x86)\BiiCode\bii;
+  - cmd: bii --version
+  - cmd: cmake --version
+
+build_script:
+  - cmd: bii init -L
+  - cmd: bii find
+  - cmd: bii cpp:configure -G "Visual Studio 11"
+  - cmd: bii cpp:build
+
+test_script:
+  - cmd: cd bin
+  - cmd: ksons_xiot_tests_IOTest.exe
+  - cmd: ksons_xiot_tests_shapeCounter.exe iotest.x3d

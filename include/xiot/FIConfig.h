@@ -22,16 +22,7 @@
 #ifndef FI_FICONFIG_H
 #define FI_FICONFIG_H
 
-
-#if defined(_WIN32)
-# if defined(openFI_EXPORTS)
-#  define OPENFI_EXPORT __declspec(dllexport)
-# else
-#  define OPENFI_EXPORT __declspec(dllimport)
-# endif
-#else
-# define OPENFI_EXPORT
-#endif
+#include "openfi_export.h"
 
 #if defined(_MSC_VER) 
 # pragma warning (disable: 4275) /* non-DLL-interface base class used */
