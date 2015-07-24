@@ -30,7 +30,7 @@ void X3DWriter::startX3DDocument(X3DProfile profile, X3DVersion version, const s
       {
         startNode(ID::meta);
         setSFString(ID::name, "generator");
-        setSFString(ID::content, "XIOT library (0.9.0), http://forge.collaviz.org/community/xiot");
+        setSFString(ID::content, "XIOT library (1.0.0), http://forge.collaviz.org/community/xiot");
         endNode(); // meta
 
         time_t rawtime;
