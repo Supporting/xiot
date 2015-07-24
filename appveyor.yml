@@ -10,3 +10,8 @@ build_script:
   - cmd: bii find
   - cmd: bii cpp:configure -G "Visual Studio 11"
   - cmd: bii cpp:build
+
+test_script:
+  - cmd: cd bin
+  - cmd: ksons_xiot_tests_IOTest.exe
+  - cmd: ksons_xiot_tests_shapeCounter.exe iotest.x3d
