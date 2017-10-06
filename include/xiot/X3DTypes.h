@@ -23,118 +23,117 @@
 #ifndef X3DTYPES_H
 #define X3DTYPES_H
 
-#include <xiot/XIOTConfig.h>
+#include <iostream>
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include <iostream>
+#include <xiot/XIOTConfig.h>
 
 /**
  * All of the methods of the x3dLoader library  reside in the X3D namespace in order
  * to prevent name conflicts.
  */
 namespace XIOT {
-  /**
+/**
    * Return value for element callbacks that indicates
    * the parser should continue normally.
    */
-  static const int CONTINUE = 1;
-  /**
+static const int CONTINUE = 1;
+/**
    * Return value for element callbacks that indicates
    * the parser should abort.
    * @warning Not implemented yet.
    */
-  static const int ABORT = 2;
-  /**
+static const int ABORT = 2;
+/**
    * Return value for element callbacks that indicates
    * the parser should suppress all callbacks for
    * child nodes until the corresponding end callback.
    */
-  static const int SKIP_CHILDREN = 3;
+static const int SKIP_CHILDREN = 3;
 
-  struct XIOT_EXPORT Property {
-		static const char* FloatEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/FloatEncodingAlgorithm";
-		static const char* IntEncodingAlgorithm; // "http://www.web3d.org/x3d/properties/fi/IntEncodingAlgorithm";
-  };
+struct XIOT_EXPORT Property {
+    static const char *FloatEncodingAlgorithm;  // "http://www.web3d.org/x3d/properties/fi/FloatEncodingAlgorithm";
+    static const char *IntEncodingAlgorithm;    // "http://www.web3d.org/x3d/properties/fi/IntEncodingAlgorithm";
+};
 
-  struct XIOT_EXPORT Encoder {
-		static const char* BuiltIn; // 0;
-		static const char* DeltazlibIntArrayEncoder; // "encoder://web3d.org/DeltazlibIntArrayEncoder";
-		static const char* QuantizedzlibFloatArrayEncoder; // "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
-  };
+struct XIOT_EXPORT Encoder {
+    static const char *BuiltIn;                         // 0;
+    static const char *DeltazlibIntArrayEncoder;        // "encoder://web3d.org/DeltazlibIntArrayEncoder";
+    static const char *QuantizedzlibFloatArrayEncoder;  // "encoder://web3d.org/QuantizedzlibFloatArrayEncoder";
+};
 
-  enum X3DProfile {
-      Core = 0,
-      Full,
-      Immersive,
-      Interactive,
-      Interchange,
-      MPEG4Interactive
-    };
+enum X3DProfile {
+    Core = 0,
+    Full,
+    Immersive,
+    Interactive,
+    Interchange,
+    MPEG4Interactive
+};
 
-  enum X3DVersion {
-      VERSION_3_0,
-      VERSION_3_1,
-      VERSION_3_2,
-    };
+enum X3DVersion {
+    VERSION_3_0,
+    VERSION_3_1,
+    VERSION_3_2,
+};
 
 
-  /**
+/**
    * \defgroup x3ddatatypes X3D Data Types
    */
 
-  typedef std::vector<float> MFFloat;
-  typedef std::vector<int> MFInt32;
-  
-  
-  typedef std::string SFString;
-  typedef std::vector<SFString> MFString;
+typedef std::vector<float> MFFloat;
+typedef std::vector<int> MFInt32;
 
 
-  /**
+typedef std::string SFString;
+typedef std::vector<SFString> MFString;
+
+
+/**
    * The SFVec2f field specifies a two-dimensional (2D) vector.
    *
    * A 2-element tuple that is represented by single-precision floating point x,y coordinates
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFVec2fAndMFVec2f">X3D spec. 5.3.17</a>
    * @ingroup x3ddatatypes
    */
-  struct SFVec2f {
-	  float x, y;	  
-	  SFVec2f() : x(0.0f), y(0.0f) {};
-	  SFVec2f(float X, float Y) : x(X), y(Y) {};
-	  template <class C>
-		explicit SFVec2f(const C& c) : x(c[0]), y(c[1]) {};
+struct SFVec2f {
+    float x, y;
+    SFVec2f() : x(0.0f), y(0.0f){};
+    SFVec2f(float X, float Y) : x(X), y(Y){};
+    template <class C>
+    explicit SFVec2f(const C &c) : x(c[0]), y(c[1]){};
     /// Bracket operator.
-    inline float &operator[](int i) {return (&x)[i];};
+    inline float &operator[](int i) { return (&x)[i]; };
     /// Bracket operator.
-    inline const float &operator[](int i) const {return (&x)[i];};
-  };
+    inline const float &operator[](int i) const { return (&x)[i]; };
+};
 
-  typedef std::vector<SFVec2f> MFVec2f;
+typedef std::vector<SFVec2f> MFVec2f;
 
-  /**
+/**
    * The SFVec3f field specifies a three-dimensional (3D) vector.
    *
    * A 3-element tuple that is represented by single-precision floating point x,y,z coordinates
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFVec3fAndMFVec3f">X3D spec. 5.3.19</a>
    * @ingroup x3ddatatypes
    */
-  struct SFVec3f {
-	  float x, y, z;
-  	  SFVec3f() : x(0.0f), y(0.0f), z(0.0f) {};
-	  SFVec3f(float X, float Y, float Z) : x(X), y(Y), z(Z) {};
-  	  template <class C>
-		explicit SFVec3f(const C& c) : x(c[0]), y(c[1]), z(c[2]) {};
+struct SFVec3f {
+    float x, y, z;
+    SFVec3f() : x(0.0f), y(0.0f), z(0.0f){};
+    SFVec3f(float X, float Y, float Z) : x(X), y(Y), z(Z){};
+    template <class C>
+    explicit SFVec3f(const C &c) : x(c[0]), y(c[1]), z(c[2]){};
     /// Bracket operator.
-    inline float &operator[](int i) {return (&x)[i];};
+    inline float &operator[](int i) { return (&x)[i]; };
     /// Bracket operator.
-    inline const float &operator[](int i) const {return (&x)[i];};
+    inline const float &operator[](int i) const { return (&x)[i]; };
+};
 
-  };
+typedef std::vector<SFVec3f> MFVec3f;
 
-  typedef std::vector<SFVec3f> MFVec3f;
-  
-  /**
+/**
    * The SFRotation field specifies one arbitrary rotation. 
    *
    * An SFRotation is written to the X3D file as four floating point values. 
@@ -145,23 +144,22 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFRotationAndMFRotation">X3D spec. 5.3.13</a>
    * @ingroup x3ddatatypes
    */
-  struct SFRotation {
-	  float x, y, z, angle;	  
-   	  SFRotation() : x(0.0f), y(0.0f), z(1.0f), angle(0.0f) {};
-	  SFRotation(float X, float Y, float Z, float Angle) : x(X), y(Y), z(Z), angle(Angle) {};
-	  template <class C>
-		explicit SFRotation(const C& c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]) {};
+struct SFRotation {
+    float x, y, z, angle;
+    SFRotation() : x(0.0f), y(0.0f), z(1.0f), angle(0.0f){};
+    SFRotation(float X, float Y, float Z, float Angle) : x(X), y(Y), z(Z), angle(Angle){};
+    template <class C>
+    explicit SFRotation(const C &c) : x(c[0]), y(c[1]), z(c[2]), angle(c[3]){};
     /// Bracket operator.
-    inline float &operator[](int i) {return (&x)[i];};
+    inline float &operator[](int i) { return (&x)[i]; };
     /// Bracket operator.
-    inline const float &operator[](int i) const {return (&x)[i];};
+    inline const float &operator[](int i) const { return (&x)[i]; };
+};
 
-  };
-
-  typedef std::vector<SFRotation> MFRotation;
+typedef std::vector<SFRotation> MFRotation;
 
 
-  /**
+/**
    * The SFColor field specifies one RGB (red-green-blue) colour triple. 
    *
    * A 3-element tuple that is represented by single-precision floating point 
@@ -169,31 +167,30 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFColorAndMFColor">X3D spec. 5.3.2</a>
    * @ingroup x3ddatatypes
    */
-  struct SFColor {
-	  float r, g, b;	  
-	  SFColor() : r(0.0f), g(0.0f), b(0.0f) { 
-		  //std::cout << "Creating SFColor" << std::endl;
-	  };
-	  SFColor(float R, float G, float B) : r(R), g(G), b(B) {};
-	
-	  SFColor(const SFColor &other) : r(other.r), g(other.g), b(other.b) {
-		  //std::cout << "Copying SFColor" << std::endl;
-	  };
-	  //SFColor(float R, float G, float B) : r(R), g(G), b(B) {std::cout << "Creating SFColor" << std::endl;};
-	  template <class C>
-		explicit SFColor(const C& c) : r(c[0]), g(c[1]), b(c[2]) {
-			//std::cout << "Creating SFColor" << std::endl;
-		}
+struct SFColor {
+    float r, g, b;
+    SFColor() : r(0.0f), g(0.0f), b(0.0f){
+                                      //std::cout << "Creating SFColor" << std::endl;
+                                  };
+    SFColor(float R, float G, float B) : r(R), g(G), b(B){};
+
+    SFColor(const SFColor &other) : r(other.r), g(other.g), b(other.b){
+                                                                //std::cout << "Copying SFColor" << std::endl;
+                                                            };
+    //SFColor(float R, float G, float B) : r(R), g(G), b(B) {std::cout << "Creating SFColor" << std::endl;};
+    template <class C>
+    explicit SFColor(const C &c) : r(c[0]), g(c[1]), b(c[2]) {
+        //std::cout << "Creating SFColor" << std::endl;
+    }
     /// Bracket operator.
-    inline float &operator[](int i) {return (&r)[i];};
+    inline float &operator[](int i) { return (&r)[i]; };
     /// Bracket operator.
-    inline const float &operator[](int i) const {return (&r)[i];};
+    inline const float &operator[](int i) const { return (&r)[i]; };
+};
 
-  };
+typedef std::vector<SFColor> MFColor;
 
-  typedef std::vector<SFColor> MFColor;
-
-  /**
+/**
    * The SFColorRGBA field specifies one RGBA (red-green-blue-alpha) colour
    * quadruple that includes alpha (opacity) information. 
    *
@@ -203,22 +200,21 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFColorRGBAAndMFColorRGBA">X3D spec. 5.3.3</a>
    * @ingroup x3ddatatypes
    */
-  struct SFColorRGBA {
-	  float r, g, b, a;	  
- 	  SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f) {};
-	  SFColorRGBA(float R, float G, float B, float A) : r(R), g(G), b(B), a(A) {};
-	  template <class C>
-		explicit SFColorRGBA(const C& c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]) {};
+struct SFColorRGBA {
+    float r, g, b, a;
+    SFColorRGBA() : r(0.0f), g(0.0f), b(0.0f), a(0.0f){};
+    SFColorRGBA(float R, float G, float B, float A) : r(R), g(G), b(B), a(A){};
+    template <class C>
+    explicit SFColorRGBA(const C &c) : r(c[0]), g(c[1]), b(c[2]), a(c[3]){};
     /// Bracket operator.
-    inline float &operator[](int i) {return (&r)[i];};
+    inline float &operator[](int i) { return (&r)[i]; };
     /// Bracket operator.
-    inline const float &operator[](int i) const {return (&r)[i];};
+    inline const float &operator[](int i) const { return (&r)[i]; };
+};
 
-  };
+typedef std::vector<SFColorRGBA> MFColorRGBA;
 
-  typedef std::vector<SFColorRGBA> MFColorRGBA;
-
-  /**
+/**
    * The SFImage field specifies a single uncompressed 2-dimensional pixel image. 
    *
    * SFImage fields contain three integers representing the width, height
@@ -227,220 +223,218 @@ namespace XIOT {
    * @see <a href="http://www.web3d.org/x3d/specifications/ISO-IEC-FDIS-19775-1.2-X3D-AbstractSpecification/Part01/fieldsDef.html#SFImageAndMFImage">X3D spec 5.3.6</a>
    * @ingroup x3ddatatypes
    */
-  typedef std::vector<unsigned int> SFImage;
-  typedef std::vector<SFImage> MFImage;
+typedef std::vector<unsigned int> SFImage;
+typedef std::vector<SFImage> MFImage;
 
 
-  /**
+/**
    * Utility class that defines node and attribute ids
    *
    * The X3DTypes class provides static functions for obtaining an 
    * attribute's or element's string representation by its ID 
    * or vice versa.
    */
-  class XIOT_EXPORT X3DTypes {
-	friend class X3DParserVocabulary;
+class XIOT_EXPORT X3DTypes {
+    friend class X3DParserVocabulary;
 
   public:
-	  static const char* getElementByID(int id);
-	  static const char* getAttributeByID(int id);
-	  static int getElementID(const std::string &elementStr);
-	  static int getAttributeID(const std::string &attributeStr);
+    static const char *getElementByID(int id);
+    static const char *getAttributeByID(int id);
+    static int getElementID(const std::string &elementStr);
+    static int getAttributeID(const std::string &attributeStr);
 
-	  static void initMaps();
+    static void initMaps();
 
-    static const char* getProfileString(X3DProfile profile);
-    static const char* getVersionString(X3DVersion version);
+    static const char *getProfileString(X3DProfile profile);
+    static const char *getVersionString(X3DVersion version);
 
   private:
-	  static std::map<std::string, int>	elementFromStringMap;
-	  static std::map<std::string, int>	attributeFromStringMap;
-	  static std::map<int, std::string>	elementFromIDMap;
-	  static std::map<int, std::string>	attributeFromIDMap;
-  };
+    static std::map<std::string, int> elementFromStringMap;
+    static std::map<std::string, int> attributeFromStringMap;
+    static std::map<int, std::string> elementFromIDMap;
+    static std::map<int, std::string> attributeFromIDMap;
+};
 
 
-  namespace ID {
-  /* Elements */
-  enum X3DElement
-    {
-		Shape = 0,
-		Appearance = 1,
-		Material = 2,
-		IndexedFaceSet = 3,
-		ProtoInstance = 4,
-		Transform = 5,
-		ImageTexture = 6,
-		TextureTransform = 7,
-		Coordinate = 8,
-		Normal = 9,
-		Color = 10,
-		ColorRGBA = 11,
-		TextureCoordinate = 12,
-		ROUTE = 13,
-		fieldValue = 14,
-		Group = 15,
-		LOD = 16,
-		Switch = 17,
-		Script = 18,
-		IndexedTriangleFanSet = 19,
-		IndexedTriangleSet = 20,
-		IndexedTriangleStripSet = 21,
-		MultiTexture = 22,
-		MultiTextureCoordinate = 23,
-		MultiTextureTransform = 24,
-		IndexedLineSet = 25,
-		PointSet = 26,
-		StaticGroup = 27,
-		Sphere = 28,
-		Box = 29,
-		Cone = 30,
-		Anchor = 31,
-		Arc2D = 32,
-		ArcClose2D = 33,
-		AudioClip = 34,
-		Background = 35,
-		Billboard = 36,
-		BooleanFilter = 37,
-		BooleanSequencer = 38,
-		BooleanToggle = 39,
-		BooleanTrigger = 40,
-		Circle2D = 41,
-		Collision = 42,
-		ColorInterpolator = 43,
-		Contour2D = 44,
-		ContourPolyline2D = 45,
-		CoordinateDouble = 46,
-		CoordinateInterpolator = 47,
-		CoordinateInterpolator2D = 48,
-		Cylinder = 49,
-		CylinderSensor = 50,
-		DirectionalLight = 51,
-		Disk2D = 52,
-		EXPORT = 53,
-		ElevationGrid = 54,
-		EspduTransform = 55,
-		ExternProtoDeclare = 56,
-		Extrusion = 57,
-		FillProperties = 58,
-		Fog = 59,
-		FontStyle = 60,
-		GeoCoordinate = 61,
-		GeoElevationGrid = 62,
-		GeoLOD = 63,
-		GeoLocation = 64,
-		GeoMetadata = 65,
-		GeoOrigin = 66,
-		GeoPositionInterpolator = 67,
-		GeoTouchSensor = 68,
-		GeoViewpoint = 69,
-		HAnimDisplacer = 70,
-		HAnimHumanoid = 71,
-		HAnimJoint = 72,
-		HAnimSegment = 73,
-		HAnimSite = 74,
-		IMPORT = 75,
-		IS = 76,
-		Inline = 77,
-		IntegerSequencer = 78,
-		IntegerTrigger = 79,
-		KeySensor = 80,
-		LineProperties = 81,
-		LineSet = 82,
-		LoadSensor = 83,
-		MetadataDouble = 84,
-		MetadataFloat = 85,
-		MetadataInteger = 86,
-		MetadataSet = 87,
-		MetadataString = 88,
-		MovieTexture = 89,
-		NavigationInfo = 90,
-		NormalInterpolator = 91,
-		NurbsCurve = 92,
-		NurbsCurve2D = 93,
-		NurbsOrientationInterpolator = 94,
-		NurbsPatchSurface = 95,
-		NurbsPositionInterpolator = 96,
-		NurbsSet = 97,
-		NurbsSurfaceInterpolator = 98,
-		NurbsSweptSurface = 99,
-		NurbsSwungSurface = 100,
-		NurbsTextureCoordinate = 101,
-		NurbsTrimmedSurface = 102,
-		OrientationInterpolator = 103,
-		PixelTexture = 104,
-		PlaneSensor = 105,
-		PointLight = 106,
-		Polyline2D = 107,
-		Polypoint2D = 108,
-		PositionInterpolator = 109,
-		PositionInterpolator2D = 110,
-		ProtoBody = 111,
-		ProtoDeclare = 112,
-		ProtoInterface = 113,
-		ProximitySensor = 114,
-		ReceiverPdu = 115,
-		Rectangle2D = 116,
-		ScalarInterpolator = 117,
-		Scene = 118,
-		SignalPdu = 119,
-		Sound = 120,
-		SphereSensor = 121,
-		SpotLight = 122,
-		StringSensor = 123,
-		Text = 124,
-		TextureBackground = 125,
-		TextureCoordinateGenerator = 126,
-		TimeSensor = 127,
-		TimeTrigger = 128,
-		TouchSensor = 129,
-		TransmitterPdu = 130,
-		TriangleFanSet = 131,
-		TriangleSet = 132,
-		TriangleSet2D = 133,
-		TriangleStripSet = 134,
-		Viewpoint = 135,
-		VisibilitySensor = 136,
-		WorldInfo = 137,
-		X3D = 138,
-		component = 139,
-		connect = 140,
-		field = 141,
-		head = 142,
-		humanoidBodyType = 143,
-		meta = 144,
-		CADAssembly,
-		CADFace,
-		CADLayer,
-		CADPart,
-		ComposedCubeMapTexture,
-		ComposedShader,
-		ComposedTexture3D,
-		FloatVertexAttribute,
-		FogCoordinate,
-		GeneratedCubeMapTexture,
-		ImageCubeMapTexture,
-		ImageTexture3D,
-		IndexedQuadSet,
-		LocalFog,
-		Matrix3VertexAttribute,
-		Matrix4VertexAttribute,
-		PackagedShader,
-		PixelTexture3D,
-		ProgramShader,
-		QuadSet,
-		ShaderPart,
-		ShaderProgram,
-		TextureCoordinate3D,
-		TextureCoordinate4D,
-		TextureTransform3D,
-		TextureTransformMatrix3D,
-		X3DELEMENT_COUNT
-    };
+namespace ID {
+/* Elements */
+enum X3DElement {
+    Shape = 0,
+    Appearance = 1,
+    Material = 2,
+    IndexedFaceSet = 3,
+    ProtoInstance = 4,
+    Transform = 5,
+    ImageTexture = 6,
+    TextureTransform = 7,
+    Coordinate = 8,
+    Normal = 9,
+    Color = 10,
+    ColorRGBA = 11,
+    TextureCoordinate = 12,
+    ROUTE = 13,
+    fieldValue = 14,
+    Group = 15,
+    LOD = 16,
+    Switch = 17,
+    Script = 18,
+    IndexedTriangleFanSet = 19,
+    IndexedTriangleSet = 20,
+    IndexedTriangleStripSet = 21,
+    MultiTexture = 22,
+    MultiTextureCoordinate = 23,
+    MultiTextureTransform = 24,
+    IndexedLineSet = 25,
+    PointSet = 26,
+    StaticGroup = 27,
+    Sphere = 28,
+    Box = 29,
+    Cone = 30,
+    Anchor = 31,
+    Arc2D = 32,
+    ArcClose2D = 33,
+    AudioClip = 34,
+    Background = 35,
+    Billboard = 36,
+    BooleanFilter = 37,
+    BooleanSequencer = 38,
+    BooleanToggle = 39,
+    BooleanTrigger = 40,
+    Circle2D = 41,
+    Collision = 42,
+    ColorInterpolator = 43,
+    Contour2D = 44,
+    ContourPolyline2D = 45,
+    CoordinateDouble = 46,
+    CoordinateInterpolator = 47,
+    CoordinateInterpolator2D = 48,
+    Cylinder = 49,
+    CylinderSensor = 50,
+    DirectionalLight = 51,
+    Disk2D = 52,
+    EXPORT = 53,
+    ElevationGrid = 54,
+    EspduTransform = 55,
+    ExternProtoDeclare = 56,
+    Extrusion = 57,
+    FillProperties = 58,
+    Fog = 59,
+    FontStyle = 60,
+    GeoCoordinate = 61,
+    GeoElevationGrid = 62,
+    GeoLOD = 63,
+    GeoLocation = 64,
+    GeoMetadata = 65,
+    GeoOrigin = 66,
+    GeoPositionInterpolator = 67,
+    GeoTouchSensor = 68,
+    GeoViewpoint = 69,
+    HAnimDisplacer = 70,
+    HAnimHumanoid = 71,
+    HAnimJoint = 72,
+    HAnimSegment = 73,
+    HAnimSite = 74,
+    IMPORT = 75,
+    IS = 76,
+    Inline = 77,
+    IntegerSequencer = 78,
+    IntegerTrigger = 79,
+    KeySensor = 80,
+    LineProperties = 81,
+    LineSet = 82,
+    LoadSensor = 83,
+    MetadataDouble = 84,
+    MetadataFloat = 85,
+    MetadataInteger = 86,
+    MetadataSet = 87,
+    MetadataString = 88,
+    MovieTexture = 89,
+    NavigationInfo = 90,
+    NormalInterpolator = 91,
+    NurbsCurve = 92,
+    NurbsCurve2D = 93,
+    NurbsOrientationInterpolator = 94,
+    NurbsPatchSurface = 95,
+    NurbsPositionInterpolator = 96,
+    NurbsSet = 97,
+    NurbsSurfaceInterpolator = 98,
+    NurbsSweptSurface = 99,
+    NurbsSwungSurface = 100,
+    NurbsTextureCoordinate = 101,
+    NurbsTrimmedSurface = 102,
+    OrientationInterpolator = 103,
+    PixelTexture = 104,
+    PlaneSensor = 105,
+    PointLight = 106,
+    Polyline2D = 107,
+    Polypoint2D = 108,
+    PositionInterpolator = 109,
+    PositionInterpolator2D = 110,
+    ProtoBody = 111,
+    ProtoDeclare = 112,
+    ProtoInterface = 113,
+    ProximitySensor = 114,
+    ReceiverPdu = 115,
+    Rectangle2D = 116,
+    ScalarInterpolator = 117,
+    Scene = 118,
+    SignalPdu = 119,
+    Sound = 120,
+    SphereSensor = 121,
+    SpotLight = 122,
+    StringSensor = 123,
+    Text = 124,
+    TextureBackground = 125,
+    TextureCoordinateGenerator = 126,
+    TimeSensor = 127,
+    TimeTrigger = 128,
+    TouchSensor = 129,
+    TransmitterPdu = 130,
+    TriangleFanSet = 131,
+    TriangleSet = 132,
+    TriangleSet2D = 133,
+    TriangleStripSet = 134,
+    Viewpoint = 135,
+    VisibilitySensor = 136,
+    WorldInfo = 137,
+    X3D = 138,
+    component = 139,
+    connect = 140,
+    field = 141,
+    head = 142,
+    humanoidBodyType = 143,
+    meta = 144,
+    CADAssembly,
+    CADFace,
+    CADLayer,
+    CADPart,
+    ComposedCubeMapTexture,
+    ComposedShader,
+    ComposedTexture3D,
+    FloatVertexAttribute,
+    FogCoordinate,
+    GeneratedCubeMapTexture,
+    ImageCubeMapTexture,
+    ImageTexture3D,
+    IndexedQuadSet,
+    LocalFog,
+    Matrix3VertexAttribute,
+    Matrix4VertexAttribute,
+    PackagedShader,
+    PixelTexture3D,
+    ProgramShader,
+    QuadSet,
+    ShaderPart,
+    ShaderProgram,
+    TextureCoordinate3D,
+    TextureCoordinate4D,
+    TextureTransform3D,
+    TextureTransformMatrix3D,
+    X3DELEMENT_COUNT
+};
 
-  /* Attributes */
-  enum X3DAttribute
-    {
+/* Attributes */
+enum X3DAttribute {
     DEF = 0,
     USE = 1,
     containerField = 2,
@@ -769,33 +763,30 @@ namespace XIOT {
     yScale = 325,
     zDimension = 326,
     zSpacing = 327,
-	visible = 328,
-	repeatR = 329,
-	texture = 330,
-	back = 331,
-	front = 332,
-	left = 333,
-	right = 334,
-	parts = 335,
-	isSelected = 336,
-	isValid = 337,
-	numComponents = 338,
-	depth = 339,
-	update = 340,
-	fogCoord = 341,
-	texCoord = 342,
-	activate = 343,
-	programs = 344,
-	matrix = 345,
-	X3DATTRIBUTE_COUNT
-    };
-	
-	}; // namespace ID
-	
-
-
-
+    visible = 328,
+    repeatR = 329,
+    texture = 330,
+    back = 331,
+    front = 332,
+    left = 333,
+    right = 334,
+    parts = 335,
+    isSelected = 336,
+    isValid = 337,
+    numComponents = 338,
+    depth = 339,
+    update = 340,
+    fogCoord = 341,
+    texCoord = 342,
+    activate = 343,
+    programs = 344,
+    matrix = 345,
+    X3DATTRIBUTE_COUNT
 };
 
-#endif
+};  // namespace ID
 
+
+};  // namespace XIOT
+
+#endif

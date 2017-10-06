@@ -28,76 +28,71 @@ namespace XIOT {
 
 struct XMLInfo {
 
-XMLInfo(int _elementId)
-{
-  this->elementId = _elementId;
-  this->endTagWritten = false;
-}
-  int elementId;
-  bool endTagWritten;
+    XMLInfo(int _elementId) {
+        this->elementId = _elementId;
+        this->endTagWritten = false;
+    }
+    int elementId;
+    bool endTagWritten;
 };
 
-class XIOT_EXPORT X3DWriterXML : public X3DWriter
-{
+class XIOT_EXPORT X3DWriterXML : public X3DWriter {
 
-public:
-    
-  virtual void closeFile();
-  virtual int openFile(const char* file);
-  virtual void flush();
+  public:
+    virtual void closeFile();
+    virtual int openFile(const char *file);
+    virtual void flush();
 
 
-  void startDocument();
-  void endDocument();
+    void startDocument();
+    void endDocument();
 
-  // Elements
-  void startNode(int elementID);
-  void endNode();
-  
-  
-  // Single Field
-  virtual void setSFFloat(int attributeID, float);
-  virtual void setSFInt32(int attributeID, int);
-  virtual void setSFBool(int attributeID, bool);
+    // Elements
+    void startNode(int elementID);
+    void endNode();
 
-  virtual void setSFVec3f(int attributeID, float x, float y, float z);
-  virtual void setSFVec2f(int attributeID, float s, float t);
-  virtual void setSFRotation(int attributeID, float x, float y, float z, float angle);
-  virtual void setSFString(int attributeID, const std::string &s);
-  virtual void setSFColor(int attributeID, float r, float g, float b);
-  virtual void setSFImage(int attributeID, const std::vector<int>&); 
 
-  // Multi Field
-  virtual void setMFFloat(int attributeID, const std::vector<float>&);
-  virtual void setMFInt32(int attributeID, const std::vector<int>&);
+    // Single Field
+    virtual void setSFFloat(int attributeID, float);
+    virtual void setSFInt32(int attributeID, int);
+    virtual void setSFBool(int attributeID, bool);
 
-  virtual void setMFVec3f(int attributeID, const std::vector<float>&);
-  virtual void setMFVec2f(int attributeID, const std::vector<float>&);
-  virtual void setMFRotation(int attributeID, const std::vector<float>&);
-  virtual void setMFString(int attributeID, const std::vector<std::string>&);
-  virtual void setMFColor(int attributeID, const std::vector<float>&);
-  
-  virtual bool setProperty(const char* const name, void* value);
-  virtual void* getProperty(const char* const name) const;
+    virtual void setSFVec3f(int attributeID, float x, float y, float z);
+    virtual void setSFVec2f(int attributeID, float s, float t);
+    virtual void setSFRotation(int attributeID, float x, float y, float z, float angle);
+    virtual void setSFString(int attributeID, const std::string &s);
+    virtual void setSFColor(int attributeID, float r, float g, float b);
+    virtual void setSFImage(int attributeID, const std::vector<int> &);
 
-public:
-  X3DWriterXML();
-  ~X3DWriterXML();
+    // Multi Field
+    virtual void setMFFloat(int attributeID, const std::vector<float> &);
+    virtual void setMFInt32(int attributeID, const std::vector<int> &);
 
-private:
- 
-  const char* getNewline() { return "\n"; };
-  void addDepth();
-  void subDepth();
-  void printAttributeString(int attributeID);
+    virtual void setMFVec3f(int attributeID, const std::vector<float> &);
+    virtual void setMFVec2f(int attributeID, const std::vector<float> &);
+    virtual void setMFRotation(int attributeID, const std::vector<float> &);
+    virtual void setMFString(int attributeID, const std::vector<std::string> &);
+    virtual void setMFColor(int attributeID, const std::vector<float> &);
 
-  std::string ActTab;
-  int Depth;
-  FILE *OutputStream;
-  std::vector<XMLInfo> *InfoStack;
+    virtual bool setProperty(const char *const name, void *value);
+    virtual void *getProperty(const char *const name) const;
 
+  public:
+    X3DWriterXML();
+    ~X3DWriterXML();
+
+  private:
+    const char *getNewline() { return "\n"; };
+    void addDepth();
+    void subDepth();
+    void printAttributeString(int attributeID);
+
+    std::string ActTab;
+    int Depth;
+    FILE *OutputStream;
+    std::vector<XMLInfo> *InfoStack;
 };
 
-}
+}  // namespace XIOT
 
 #endif

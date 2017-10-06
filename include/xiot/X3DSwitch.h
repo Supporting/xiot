@@ -41,15 +41,14 @@ class X3DNodeHandler;
  * @see X3DNodeHandler
  */
 
-class X3DSwitch
-{
-public:
-  /// Constructor.
-  X3DSwitch();
-  /// Destructor.
-  virtual ~X3DSwitch();
-  
-  /**
+class X3DSwitch {
+  public:
+    /// Constructor.
+    X3DSwitch();
+    /// Destructor.
+    virtual ~X3DSwitch();
+
+    /**
    * Calls <code>startXXX</code> of the given X3DNodeHandler for each node
    * of the X3D model.
    *
@@ -59,9 +58,9 @@ public:
    * through X3DAttributes::getNodeName().
    * @parm attr Class that can be accessed to receive the nodes attributes
    */
-  int doStartElement(int id, const X3DAttributes& attr) const;
-  
-  /**
+    int doStartElement(int id, const X3DAttributes &attr) const;
+
+    /**
    * Calls <code>endXXX</code> of the given X3DNodeHandler for each node
    * of the X3D model.
    *
@@ -72,19 +71,19 @@ public:
    * @param nodeName Optionally parameter that holds the name of the current node.
    * @parm attr Class that can be accessed to receive the nodes attributes
    */
-  int doEndElement(int id, const char* nodeName = 0) const;
+    int doEndElement(int id, const char *nodeName = 0) const;
 
-  /**
+    /**
    * Set the X3DNodeHandler that the start and end callbacks will be delegated to.
    * @param handler The handler. Must not be <code>null</code>.
    */
-  void setNodeHandler(X3DNodeHandler *handler);
-  
-protected:
-  /// Handler.
-  X3DNodeHandler *_handler;
+    void setNodeHandler(X3DNodeHandler *handler);
+
+  protected:
+    /// Handler.
+    X3DNodeHandler *_handler;
 };
 
-}
+}  // namespace XIOT
 
 #endif

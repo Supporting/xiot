@@ -22,36 +22,34 @@
 #ifndef X3D_X3DFIENCODER_H
 #define X3D_X3DFIENCODER_H
 
-#include <xiot/XIOTConfig.h>
 #include <xiot/FIEncoder.h>
+#include <xiot/XIOTConfig.h>
 
 namespace XIOT {
 
 /**  
  *  Decoder for FI files. 
  */
-class XIOT_EXPORT X3DFIEncoder : public FI::FIEncoder
-{
-public:
-  X3DFIEncoder(void);
-  virtual ~X3DFIEncoder(void);
+class XIOT_EXPORT X3DFIEncoder : public FI::FIEncoder {
+  public:
+    X3DFIEncoder(void);
+    virtual ~X3DFIEncoder(void);
 
-  virtual void encodeAttributeIntegerArray(const int* values, size_t size);
-  virtual void encodeAttributeFloatArray(const float* values, size_t size);
+    virtual void encodeAttributeIntegerArray(const int *values, size_t size);
+    virtual void encodeAttributeFloatArray(const float *values, size_t size);
 
-  void setFloatAlgorithm(int algorithmID);
-  void setIntAlgorithm(int algorithmID);
-  
-  int getFloatAlgorithm() const;
-  int getIntAlgorithm() const;
+    void setFloatAlgorithm(int algorithmID);
+    void setIntAlgorithm(int algorithmID);
+
+    int getFloatAlgorithm() const;
+    int getIntAlgorithm() const;
 
 
-protected:
-  int _floatAlgorithm;
-  int _intAlgorithm;
+  protected:
+    int _floatAlgorithm;
+    int _intAlgorithm;
 };
 
-} // namespace XIOT
+}  // namespace XIOT
 
-#endif // X3D_X3DFIENCODER_H
-
+#endif  // X3D_X3DFIENCODER_H

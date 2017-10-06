@@ -36,140 +36,137 @@ namespace XIOT {
  * @see X3DXMLAttributes
  * @ingroup x3dloader
  */
-class XIOT_EXPORT X3DDataTypeFactory
-{
-public:
-
-  /**
+class XIOT_EXPORT X3DDataTypeFactory {
+  public:
+    /**
    * Parses a given string and returns its value as a bool.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static bool getSFBoolFromString(const std::string &s);
+    static bool getSFBoolFromString(const std::string &s);
 
-  /**
+    /**
    * Parses a given string and returns its value as a bool.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  //static bool getSFBoolFromBytes(const std::string &s);
+    //static bool getSFBoolFromBytes(const std::string &s);
 
-  /**
+    /**
    * Parses a given string and returns its value as a float.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static float getSFFloatFromString(const std::string &s);
-  /**
+    static float getSFFloatFromString(const std::string &s);
+    /**
    * Parses a given string and returns its value as an integer.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static int getSFInt32FromString(const std::string &s);
+    static int getSFInt32FromString(const std::string &s);
 
-  /**
+    /**
    * Parses a given string and returns its value as a SFVec3f structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFVec3fFromString(const std::string &s, SFVec3f &value);
-  /**
+    static void getSFVec3fFromString(const std::string &s, SFVec3f &value);
+    /**
    * Parses a given string and returns its value as a SFVec2f structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFVec2fFromString(const std::string &s, SFVec2f &value);
-  /**
+    static void getSFVec2fFromString(const std::string &s, SFVec2f &value);
+    /**
    * Parses a given string and returns its value as a SFRotation structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFRotationFromString(const std::string &s, SFRotation &value);
-  /**
+    static void getSFRotationFromString(const std::string &s, SFRotation &value);
+    /**
    * Returns the string itself.
    * @param const std::string &s The string to be parsed.
    * @return The string itself.
    */
-  static void getSFStringFromString(const std::string &s, std::string& value);
-  /**
+    static void getSFStringFromString(const std::string &s, std::string &value);
+    /**
    * Parses a given string and returns its value as a SFColor structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFColorFromString(const std::string &s, SFColor& value);
-  
-  /**
+    static void getSFColorFromString(const std::string &s, SFColor &value);
+
+    /**
    * Parses a given string and returns its value as a SFColor structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  //static SFColor getSFColorFromBytes(const std::string &s);
-  
-  /**
+    //static SFColor getSFColorFromBytes(const std::string &s);
+
+    /**
    * Parses a given string and returns its value as a SFColorRGBA structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFColorRGBAFromString(const std::string &s, SFColorRGBA &value);
-  /**
+    static void getSFColorRGBAFromString(const std::string &s, SFColorRGBA &value);
+    /**
    * Parses a given string and returns its value as a SFImage structure.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getSFImageFromString(const std::string &s, SFImage &value); 
-  
-  // Multi Field
-  /**
+    static void getSFImageFromString(const std::string &s, SFImage &value);
+
+    // Multi Field
+    /**
    * Parses a given string and returns its value as a std::vector<float>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFFloatFromString(const std::string &s, MFFloat &value);
-  /**
+    static void getMFFloatFromString(const std::string &s, MFFloat &value);
+    /**
    * Parses a given string and returns its value as a std::vector<int>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFInt32FromString(const std::string &s, MFInt32 &value);
-  /**
+    static void getMFInt32FromString(const std::string &s, MFInt32 &value);
+    /**
    * Parses a given string and returns its value as a std::vector<SFVec3f>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFVec3fFromString(const std::string &s, MFVec3f &value);
-  /**
+    static void getMFVec3fFromString(const std::string &s, MFVec3f &value);
+    /**
    * Parses a given string and returns its value as a std::vector<SFVec2f>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFVec2fFromString(const std::string &s, MFVec2f &value);
-  /**
+    static void getMFVec2fFromString(const std::string &s, MFVec2f &value);
+    /**
    * Parses a given string and returns its value as a std::vector<SFRotation>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFRotationFromString(const std::string &s, MFRotation &value);
-  /**
+    static void getMFRotationFromString(const std::string &s, MFRotation &value);
+    /**
    * Parses a given string and returns its value as a std::vector<std::string>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFStringFromString(const std::string &s, MFString &value);
-  /**
+    static void getMFStringFromString(const std::string &s, MFString &value);
+    /**
    * Parses a given string and returns its value as a std::vector<SFColor>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFColorFromString(const std::string &s, MFColor &value);
-  /**
+    static void getMFColorFromString(const std::string &s, MFColor &value);
+    /**
    * Parses a given string and returns its value as a std::vector<SFColorRGBA>.
    * @param const std::string &s The string to be parsed.
    * @return Value of the string.
    */
-  static void getMFColorRGBAFromString(const std::string &s, MFColorRGBA &value);	
+    static void getMFColorRGBAFromString(const std::string &s, MFColorRGBA &value);
 };
 
-}
+}  // namespace XIOT
 
 #endif
-

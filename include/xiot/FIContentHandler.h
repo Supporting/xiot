@@ -37,17 +37,16 @@ class ParserVocabulary;
  * attribute content.
  * @see FISAXParser
  */
-class OPENFI_EXPORT ContentHandler
-{
-public:
-  virtual void startDocument() = 0;
-  
-  virtual void endDocument() = 0;
+class OPENFI_EXPORT ContentHandler {
+  public:
+    virtual void startDocument() = 0;
 
-  virtual void startElement(const ParserVocabulary* vocab, const Element &element, const Attributes &attributes) = 0;
-  virtual void endElement(const ParserVocabulary* vocab, const Element &element) = 0;
-  
-  virtual void characters(const ParserVocabulary* vocab, const CharacterChunk &chunk) = 0;
+    virtual void endDocument() = 0;
+
+    virtual void startElement(const ParserVocabulary *vocab, const Element &element, const Attributes &attributes) = 0;
+    virtual void endElement(const ParserVocabulary *vocab, const Element &element) = 0;
+
+    virtual void characters(const ParserVocabulary *vocab, const CharacterChunk &chunk) = 0;
 };
 
 /**
@@ -56,22 +55,20 @@ public:
  * It implements all the callbacks defined in the ContentHandler interface. It does nothing for these
  * callbacks, so clients can implement just the needed methods.
  */
-class OPENFI_EXPORT DefaultContentHandler : public ContentHandler
-{
-public:
-  /// Destructor.
-	virtual ~DefaultContentHandler() {};
+class OPENFI_EXPORT DefaultContentHandler : public ContentHandler {
+  public:
+    /// Destructor.
+    virtual ~DefaultContentHandler(){};
 
-  virtual void startDocument();
-  virtual void endDocument();
+    virtual void startDocument();
+    virtual void endDocument();
 
-  virtual void startElement(const ParserVocabulary* vocab, const Element &element, const Attributes &attributes);
-  virtual void endElement(const ParserVocabulary* vocab, const Element &element);
+    virtual void startElement(const ParserVocabulary *vocab, const Element &element, const Attributes &attributes);
+    virtual void endElement(const ParserVocabulary *vocab, const Element &element);
 
-  virtual void characters(const ParserVocabulary* vocab, const CharacterChunk &chunk);
-
+    virtual void characters(const ParserVocabulary *vocab, const CharacterChunk &chunk);
 };
 
-}
+}  // namespace FI
 
 #endif

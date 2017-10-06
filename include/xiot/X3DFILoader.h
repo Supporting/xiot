@@ -22,13 +22,13 @@
 #ifndef X3D_X3DFILOADER_H
 #define X3D_X3DFILOADER_H
 
+#include <fstream>
+#include <string>
+#include <xiot/FITypes.h>
+#include <xiot/X3DFIAttributes.h>
 #include <xiot/X3DLoader.h>
 #include <xiot/X3DNodeHandler.h>
 #include <xiot/X3DSwitch.h>
-#include <xiot/X3DFIAttributes.h>
-#include <xiot/FITypes.h>
-#include <string>
-#include <fstream>
 
 namespace XIOT {
 
@@ -41,28 +41,26 @@ namespace XIOT {
  *  
  *  @see X3DLoader
  */
-class XIOT_EXPORT X3DFILoader : public X3DLoader
-{
-public:
-  /// Constructor.
-  X3DFILoader();
-  /// Destructor.
-  virtual ~X3DFILoader();
- 
-  /**
-   * @see X3DLoader::load()
-   */ 
-  bool load(const char* fileStr, bool fileValidation = true); // C.2
+class XIOT_EXPORT X3DFILoader : public X3DLoader {
+  public:
+    /// Constructor.
+    X3DFILoader();
+    /// Destructor.
+    virtual ~X3DFILoader();
 
-  
-protected:
-	
-private:
-	std::ifstream file;
-	X3DNodeHandler *handler;
-	X3DSwitch	x3dswitch;
+    /**
+   * @see X3DLoader::load()
+   */
+    bool load(const char *fileStr, bool fileValidation = true);  // C.2
+
+
+  protected:
+  private:
+    std::ifstream file;
+    X3DNodeHandler *handler;
+    X3DSwitch x3dswitch;
 };
 
-}
+}  // namespace XIOT
 
 #endif

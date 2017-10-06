@@ -24,12 +24,12 @@
 
 #include "openfi_export.h"
 
-#if defined(_MSC_VER) 
-# pragma warning (disable: 4275) /* non-DLL-interface base class used */
-# pragma warning (disable: 4251) /* needs to have dll-interface to be used by clients */
+#if defined(_MSC_VER)
+#pragma warning(disable : 4275) /* non-DLL-interface base class used */
+#pragma warning(disable : 4251) /* needs to have dll-interface to be used by clients */
 /* No warning for safe windows only functions */
-# define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #endif
 
 
-#endif // FI_FICONFIG_H
+#endif  // FI_FICONFIG_H

@@ -22,11 +22,11 @@
 #ifndef FI_DECODER_H
 #define FI_DECODER_H
 
-#include <xiot/X3DFIAttributes.h>
-#include <xiot/FITypes.h>
-#include <xiot/FIParserVocabulary.h>
-#include <string>
 #include <fstream>
+#include <string>
+#include <xiot/FIParserVocabulary.h>
+#include <xiot/FITypes.h>
+#include <xiot/X3DFIAttributes.h>
 
 namespace FI {
 
@@ -43,122 +43,121 @@ namespace FI {
  *  
  *  @see SAXParser
  */
-class OPENFI_EXPORT Decoder 
-{
-public:
-  /// Constructor.
-  Decoder();
-  /// Destructor.
-  virtual ~Decoder();
- 
-  void setStream(std::istream* stream);
+class OPENFI_EXPORT Decoder {
+  public:
+    /// Constructor.
+    Decoder();
+    /// Destructor.
+    virtual ~Decoder();
 
-  /**
+    void setStream(std::istream *stream);
+
+    /**
    *  C.1 Fast infoset document.
    *  This method validates the header of a Fast Infoset document
    */
-  bool detectFIDocument();
+    bool detectFIDocument();
 
-  /**
+    /**
    * C.2 Encoding of the Document type
    */
-  void getDocument(FI::Document &document);
+    void getDocument(FI::Document &document);
 
 
-  /**
+    /**
    * C.3 Encoding of the Element type
    */
-  void getElement(FI::Element &element);
+    void getElement(FI::Element &element);
 
-  /**
+    /**
    * C.4 Encoding of the Attribute type
    */
-  void getAttribute(FI::Attribute &value);
+    void getAttribute(FI::Attribute &value);
 
-  /**
+    /**
    * C.7 Encoding of the CharacterChunk type
    */
-  void getCharacterChunk(FI::CharacterChunk &chunk); 
+    void getCharacterChunk(FI::CharacterChunk &chunk);
 
-  /**
+    /**
    * C.13 Encoding of the IdentifyingStringOrIndex type
    */
-  void getIdentifyingStringOrIndex(FI::IdentifyingStringOrIndex &value); 
+    void getIdentifyingStringOrIndex(FI::IdentifyingStringOrIndex &value);
 
-  /**
+    /**
    * C.14 Encoding of the NonIdentifyingStringOrIndex type starting on the first bit of an octet
    */
-  void getNonIdentifyingStringOrIndex1(FI::NonIdentifyingStringOrIndex &value);
+    void getNonIdentifyingStringOrIndex1(FI::NonIdentifyingStringOrIndex &value);
 
-  /**
+    /**
    * C.15 Encoding of the NonIdentifyingStringOrIndex type starting on the third bit of an octet
    */
-  void getNonIdentifyingStringOrIndex3(FI::NonIdentifyingStringOrIndex &value); 
+    void getNonIdentifyingStringOrIndex3(FI::NonIdentifyingStringOrIndex &value);
 
-  /**
+    /**
    * C.17 Encoding of the QualifiedNameOrIndex type starting on the second bit of an octet
    */
-  void getQualifiedNameOrIndex2(FI::QualifiedNameOrIndex& value);
+    void getQualifiedNameOrIndex2(FI::QualifiedNameOrIndex &value);
 
-  /**
+    /**
    * C.18 Encoding of the QualifiedNameOrIndex type starting on the third bit of an octet
    */
-  void getQualifiedNameOrIndex3(FI::QualifiedNameOrIndex& value);
+    void getQualifiedNameOrIndex3(FI::QualifiedNameOrIndex &value);
 
-  /**
+    /**
    * C.19 Encoding of the EncodedCharacterString type starting on the third bit of an octet
    */
-  void getEncodedCharacterString3(FI::EncodedCharacterString &value);
-  
-  /**
+    void getEncodedCharacterString3(FI::EncodedCharacterString &value);
+
+    /**
    * C.20 Encoding of the EncodedCharacterString type starting on the fifth bit of an octet
    */
-  void getEncodedCharacterString5(FI::EncodedCharacterString &value);
+    void getEncodedCharacterString5(FI::EncodedCharacterString &value);
 
-  /**
+    /**
    * C.22 Encoding of the NonEmptyOctetString type starting on the second bit of an octet
    */
-  void getNonEmptyOctetString2(FI::NonEmptyOctetString &value); 
+    void getNonEmptyOctetString2(FI::NonEmptyOctetString &value);
 
-  /**
+    /**
    * C.23 Encoding of the NonEmptyOctetString starting on the fifth bit of an octet
    */
-  void getNonEmptyOctetString5(FI::NonEmptyOctetString& value);
+    void getNonEmptyOctetString5(FI::NonEmptyOctetString &value);
 
-  /**
+    /**
    * C.24 Encoding of the NonEmptyOctetString type starting on the seventh bit of an octet
    */
-  void getNonEmptyOctetString7(FI::NonEmptyOctetString& value);
-  
-  /**
+    void getNonEmptyOctetString7(FI::NonEmptyOctetString &value);
+
+    /**
    * C.25 Encoding of integers in the range 1 to 2^20 starting on the second bit of an octet
    * C.26 Encoding of integers in the range 0 to 2^20 starting on the second bit of an octet
    */
-  unsigned int getInteger2();
-  
-  /**
+    unsigned int getInteger2();
+
+    /**
    * C.27 Encoding of integers in the range 1 to 2^20 starting on the third bit of an octet
    */
-  unsigned int getInteger3();
+    unsigned int getInteger3();
 
-  /**
+    /**
    * C.28 Encoding of integers in the range 1 to 2^20 starting on the fourth bit of an octet
    */
-  unsigned int getInteger4();
+    unsigned int getInteger4();
 
-  /**
+    /**
    * C.29 Encoding of integers in the range 1 to 256
    * Starting at the 5th bit of the current byte
    */
-  unsigned int getSmallInteger5();
-  
-  /**
+    unsigned int getSmallInteger5();
+
+    /**
    * C.29 Encoding of integers in the range 1 to 256
    * Starting at the 7th bit of the current byte
    */
-  unsigned int getSmallInteger7();
+    unsigned int getSmallInteger7();
 
-  /**
+    /**
    * This method adds an external vocabulary to the intenal map of
    * external vocabularies. If a external vocabulary is refernced inside
    * the parsed document, the parser will look up for it using the
@@ -167,34 +166,34 @@ public:
    * @uri The URI to identifiy the given ParserVocabulary
    * @parserVocabulary An external ParserVocabulary
    */
-  virtual void addExternalVocabularies(const std::string &uri, ParserVocabulary* parserVocabulary); 
+    virtual void addExternalVocabularies(const std::string &uri, ParserVocabulary *parserVocabulary);
 
-protected:
-  void processDocumentProperties();
+  protected:
+    void processDocumentProperties();
 
-  void decodeAdditionalData();
-  void decodeInitialVocabulary();
-  void decodeNotations();
-  void decodeUnparsedEntities();
-  void decodeCharacterEncodingScheme();
-  void decodeStandalone();
-  void decodeVersion();
+    void decodeAdditionalData();
+    void decodeInitialVocabulary();
+    void decodeNotations();
+    void decodeUnparsedEntities();
+    void decodeCharacterEncodingScheme();
+    void decodeStandalone();
+    void decodeVersion();
 
-  void decodeExternalVocabularyURI();
+    void decodeExternalVocabularyURI();
 
-  bool readChildren(); // C.2
-  bool readAttributes(FI::Element& element); // C.4
+    bool readChildren();                        // C.2
+    bool readAttributes(FI::Element &element);  // C.4
 
-  int checkBit(unsigned char c, unsigned char iPos);
+    int checkBit(unsigned char c, unsigned char iPos);
 
-protected:
-  unsigned char _b;
-  ParserVocabulary* _vocab;
+  protected:
+    unsigned char _b;
+    ParserVocabulary *_vocab;
 
-  std::map<std::string, ParserVocabulary*> _externalVocabularies;
-  std::istream* _stream;
+    std::map<std::string, ParserVocabulary *> _externalVocabularies;
+    std::istream *_stream;
 };
 
-}
+}  // namespace FI
 
 #endif

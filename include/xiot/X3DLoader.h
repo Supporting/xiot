@@ -22,11 +22,11 @@
 #ifndef X3D_X3DLOADER_H
 #define X3D_X3DLOADER_H
 
-#include <xiot/XIOTConfig.h>
 #include <string>
+#include <xiot/XIOTConfig.h>
 
 
- /*!
+/*!
    
  \mainpage XIOT - The X3D I/O Toolkit library
 
@@ -222,15 +222,14 @@ class X3DNodeHandler;
  * </pre>
  * @ingroup x3dloader
  */
-class XIOT_EXPORT X3DLoader
-{
-public:
-  /// Constructor.
-  X3DLoader();
-  /// Destructor.
-  virtual ~X3DLoader();
-  
-  /**
+class XIOT_EXPORT X3DLoader {
+  public:
+    /// Constructor.
+    X3DLoader();
+    /// Destructor.
+    virtual ~X3DLoader();
+
+    /**
    * Loads an X3D scene graph from the file.
    *
    * @param fileName Absolute path to the file. Make sure that the
@@ -239,9 +238,9 @@ public:
    * verified and messages will be written if the file is invalid. 
    * @return <code>true</code>, if the loading process was successful
    */
-  bool load(const char* fileName, bool fileValidation = false) const;
-  
-  /**
+    bool load(const char *fileName, bool fileValidation = false) const;
+
+    /**
    * Sets the X3DNodeHandler which processes the callbacks. If there is already
    * a handler, it will be replaced. 
    * @warning The loader will not delete the handler. Please make shure the 
@@ -249,13 +248,13 @@ public:
    * has finished.
    * @param handler The handler to use for callbacks
    */
-  void setNodeHandler(X3DNodeHandler *handler);
-  
-protected:
-  /// Handler.
-  X3DNodeHandler *_handler;
+    void setNodeHandler(X3DNodeHandler *handler);
+
+  protected:
+    /// Handler.
+    X3DNodeHandler *_handler;
 };
 
-}
+}  // namespace XIOT
 
 #endif

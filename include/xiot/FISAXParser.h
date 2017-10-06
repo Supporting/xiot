@@ -22,11 +22,11 @@
 #ifndef FI_SAXPARSER_H
 #define FI_SAXPARSER_H
 
-#include <xiot/FITypes.h>
-#include <xiot/FIDecoder.h>
-#include <string>
 #include <fstream>
 #include <map>
+#include <string>
+#include <xiot/FIDecoder.h>
+#include <xiot/FITypes.h>
 
 namespace FI {
 
@@ -41,35 +41,34 @@ class ParserVocabulary;
  *
  * @see ContentHandler
  */
-class OPENFI_EXPORT SAXParser : public Decoder
-{
-public:
-  /// Constructor.
-  SAXParser() {};
-  /// Destructor.
-  virtual ~SAXParser();
+class OPENFI_EXPORT SAXParser : public Decoder {
+  public:
+    /// Constructor.
+    SAXParser(){};
+    /// Destructor.
+    virtual ~SAXParser();
 
-  virtual void parse();
+    virtual void parse();
 
-  void setContentHandler(ContentHandler* handler);
+    void setContentHandler(ContentHandler *handler);
 
-protected:
-  virtual void processDocument();
-  virtual void processElement();
-  virtual void processAttributes();
-  virtual void processCharacterChunk();
+  protected:
+    virtual void processDocument();
+    virtual void processElement();
+    virtual void processAttributes();
+    virtual void processCharacterChunk();
 
-  /**
+    /**
     * Reference to content handler.
     */
-  ContentHandler* _contentHandler;
+    ContentHandler *_contentHandler;
 
-private:
-  bool _terminated;
-  bool _doubleTerminated;
-  Attributes _attributes;
+  private:
+    bool _terminated;
+    bool _doubleTerminated;
+    Attributes _attributes;
 };
 
-}
+}  // namespace FI
 
 #endif

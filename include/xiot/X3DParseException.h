@@ -22,9 +22,9 @@
 #ifndef X3D_X3DPARSEEXCEPTION_H
 #define X3D_X3DPARSEEXCEPTION_H
 
-#include <xiot/XIOTConfig.h>
-#include <string>
 #include <exception>
+#include <string>
+#include <xiot/XIOTConfig.h>
 
 namespace XIOT {
 
@@ -35,31 +35,30 @@ namespace XIOT {
  * in the original X3D document.
  * @ingroup x3dloader
  */
-class XIOT_EXPORT X3DParseException : public std::exception
-{
-public:
-  /// Constructor.
-	X3DParseException(const std::string &message, int lineNumber, int columnNumber);
-  /// Constructor.
-	X3DParseException(const std::string &message);
-  virtual ~X3DParseException() throw();
+class XIOT_EXPORT X3DParseException : public std::exception {
+  public:
+    /// Constructor.
+    X3DParseException(const std::string &message, int lineNumber, int columnNumber);
+    /// Constructor.
+    X3DParseException(const std::string &message);
+    virtual ~X3DParseException() throw();
 
-  const char* what(void) const throw() { return _message.c_str(); };
+    const char *what(void) const throw() { return _message.c_str(); };
 
-  /**
+    /**
    *  Get the reason for the parse exception 
    */
-  virtual const std::string getMessage() const { return _message; }
-  
-  /**
+    virtual const std::string getMessage() const { return _message; }
+
+    /**
   * The line number of the end of the text where the exception occurred.
   *
   * @return An integer representing the line number, or 0
   *         if none is available.
   */
-  virtual int getLineNumber() const { return _lineNumber; }
+    virtual int getLineNumber() const { return _lineNumber; }
 
-  /**
+    /**
   * The column number of the end of the text where the exception occurred.
   *
   * <p>The first column in a line is position 1.</p>
@@ -67,15 +66,14 @@ public:
   * @return An integer representing the column number, or 0
   *         if none is available.
   */
-  virtual int getColumnNumber() const { return _columnNumber; }
+    virtual int getColumnNumber() const { return _columnNumber; }
 
-protected:
-	int _columnNumber;
-	int _lineNumber;
-	std::string _message;
+  protected:
+    int _columnNumber;
+    int _lineNumber;
+    std::string _message;
 };
 
-} // namespace X3D
+}  // namespace XIOT
 
 #endif
-

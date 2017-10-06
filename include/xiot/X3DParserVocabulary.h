@@ -22,12 +22,12 @@
 #ifndef X3D_X3DPARSERVOCABULARY_H
 #define X3D_X3DPARSERVOCABULARY_H
 
-#include <xiot/XIOTConfig.h>
-#include <xiot/FIParserVocabulary.h>
-#include <xiot/X3DFIEncodingAlgorithms.h>
-#include <string>
 #include <fstream>
 #include <map>
+#include <string>
+#include <xiot/FIParserVocabulary.h>
+#include <xiot/X3DFIEncodingAlgorithms.h>
+#include <xiot/XIOTConfig.h>
 
 namespace XIOT {
 
@@ -43,20 +43,19 @@ namespace XIOT {
  *
  * @ingroup x3dloader
  */
-class XIOT_EXPORT X3DParserVocabulary : public FI::DefaultParserVocabulary
-{
-public:
-	static const int ATTRIBUT_VALUE_FALSE_INDEX = 1;
-	static const int ATTRIBUT_VALUE_TRUE_INDEX = 2;
+class XIOT_EXPORT X3DParserVocabulary : public FI::DefaultParserVocabulary {
+  public:
+    static const int ATTRIBUT_VALUE_FALSE_INDEX = 1;
+    static const int ATTRIBUT_VALUE_TRUE_INDEX = 2;
 
-	X3DParserVocabulary();
-	virtual ~X3DParserVocabulary() {};
+    X3DParserVocabulary();
+    virtual ~X3DParserVocabulary(){};
 
-	QuantizedzlibFloatArrayAlgorithm _quantizedzlibFloatArrayAlgorithm;
-	DeltazlibIntArrayAlgorithm _deltazlibIntArrayAlgorithm;
-private:
+    QuantizedzlibFloatArrayAlgorithm _quantizedzlibFloatArrayAlgorithm;
+    DeltazlibIntArrayAlgorithm _deltazlibIntArrayAlgorithm;
+
+  private:
 };
-}
+}  // namespace XIOT
 
 #endif
-

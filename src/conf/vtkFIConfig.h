@@ -24,4 +24,4 @@
 
 #include <xiot/XIOTConfig.h>
 
-#endif // FI_FICONFIG_H
+#endif  // FI_FICONFIG_H

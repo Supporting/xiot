@@ -1,0 +1,11 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+BreakConstructorInitializersBeforeComma: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 2
+PointerBindsToType: false
+SpacesBeforeTrailingComments: 2
+Standard: Cpp11
+ColumnLimit: 0

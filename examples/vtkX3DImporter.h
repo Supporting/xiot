@@ -36,36 +36,34 @@
  * There is no event processing
  * @ingroup vtkX3DImporter
  */
-class vtkX3DImporter : public vtkImporter
-{
-public:
-  static vtkX3DImporter *New();
-  vtkTypeRevisionMacro(vtkX3DImporter,vtkImporter);
-  void PrintSelf(ostream& os, vtkIndent indent);
+class vtkX3DImporter : public vtkImporter {
+  public:
+    static vtkX3DImporter *New();
+    vtkTypeRevisionMacro(vtkX3DImporter, vtkImporter);
+    void PrintSelf(ostream &os, vtkIndent indent);
 
-  // Description:
-  // Specify the name of the file to read.
-  vtkSetStringMacro(FileName);
-  vtkGetStringMacro(FileName);
+    // Description:
+    // Specify the name of the file to read.
+    vtkSetStringMacro(FileName);
+    vtkGetStringMacro(FileName);
 
-  vtkSetMacro(CalculateNormals  ,int);
-  vtkGetMacro(CalculateNormals ,int);
-  vtkBooleanMacro(CalculateNormals ,int);
+    vtkSetMacro(CalculateNormals, int);
+    vtkGetMacro(CalculateNormals, int);
+    vtkBooleanMacro(CalculateNormals, int);
 
-  virtual int ImportBegin ();
-  virtual void ImportEnd ();
+    virtual int ImportBegin();
+    virtual void ImportEnd();
 
-protected:
-  vtkX3DImporter();
-  ~vtkX3DImporter();
- 
-  char *FileName;
-  int CalculateNormals;
+  protected:
+    vtkX3DImporter();
+    ~vtkX3DImporter();
 
-private:
+    char *FileName;
+    int CalculateNormals;
 
-  vtkX3DImporter(const vtkX3DImporter&); // Not implemented.
-  void operator=(const vtkX3DImporter&); // Not implemented.
+  private:
+    vtkX3DImporter(const vtkX3DImporter &);  // Not implemented.
+    void operator=(const vtkX3DImporter &);  // Not implemented.
 };
 
 

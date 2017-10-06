@@ -22,9 +22,9 @@
 #ifndef X3D_X3DFIENCODINGALGORITHMS_H
 #define X3D_X3DFIENCODINGALGORITHMS_H
 
-#include <xiot/X3DTypes.h>
-#include <xiot/FIEncodingAlgorithms.h>
 #include <string>
+#include <xiot/FIEncodingAlgorithms.h>
+#include <xiot/X3DTypes.h>
 
 namespace XIOT {
 
@@ -42,22 +42,20 @@ namespace XIOT {
  *
  * @ingroup x3dloader
  */
-class XIOT_EXPORT DeltazlibIntArrayAlgorithm : public FI::IEncodingAlgorithm
-{
-public:
-	/// The position of this algorithm in the FI algorithm table.
-	static const int ALGORITHM_ID = 34; 
+class XIOT_EXPORT DeltazlibIntArrayAlgorithm : public FI::IEncodingAlgorithm {
+  public:
+    /// The position of this algorithm in the FI algorithm table.
+    static const int ALGORITHM_ID = 34;
 
-	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
+    virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
 
-	/**
+    /**
 	 * Decodes a given vector of unsigned chars to a vector of int using the 
 	 * Delta zlib integer array decoder.
 	 */
-	static void decodeToIntArray(const FI::NonEmptyOctetString &octets,  std::vector<int> &vec);
+    static void decodeToIntArray(const FI::NonEmptyOctetString &octets, std::vector<int> &vec);
 
-	static void encode(const int* values, size_t size, FI::NonEmptyOctetString &octets, bool isImage = false);
-	
+    static void encode(const int *values, size_t size, FI::NonEmptyOctetString &octets, bool isImage = false);
 };
 
 /**
@@ -72,29 +70,24 @@ public:
  *
  * @ingroup x3dloader
  */
-class XIOT_EXPORT QuantizedzlibFloatArrayAlgorithm : public FI::IEncodingAlgorithm
-{
-public:
-	/// The position of this algorithm in the FI algorithm table.
-	static const int ALGORITHM_ID = 35; 
+class XIOT_EXPORT QuantizedzlibFloatArrayAlgorithm : public FI::IEncodingAlgorithm {
+  public:
+    /// The position of this algorithm in the FI algorithm table.
+    static const int ALGORITHM_ID = 35;
 
-	virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
+    virtual std::string decodeToString(const FI::NonEmptyOctetString &octets) const;
 
-	/**
+    /**
 	 * Decodes a given vector of unsigned chars to a vector of float using the 
 	 * Quantized zlib float array encoder.
 	 */
-	static void decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec);
+    static void decodeToFloatArray(const FI::NonEmptyOctetString &octets, std::vector<float> &vec);
 
-	static void encode(const float* values, size_t size, FI::NonEmptyOctetString &octets);
-	
+    static void encode(const float *values, size_t size, FI::NonEmptyOctetString &octets);
 };
 
 
-
-
-}; // End namespace X3D;
+};  // namespace XIOT
 
 
 #endif
-
