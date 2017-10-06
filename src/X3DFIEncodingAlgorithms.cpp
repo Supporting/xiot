@@ -115,15 +115,19 @@ namespace XIOT {
 		int length = static_cast<int>(size*4);
 		int length_reversed = FI::Tools::reverseBytes(&length);
 		s = reinterpret_cast <unsigned char*> (&length_reversed);
-    octets.insert(octets.end(), s, s+3);
+		for (int i = 0; i < 4; i++) {
+			octets.push_back(s[i]);
+
+		}
 
 		// Put the number of floats
 		int numFloats = static_cast<int>(size);
 		int numFloats_reversed = FI::Tools::reverseBytes(&numFloats);;
 		s = reinterpret_cast <unsigned char*> (&numFloats_reversed);
-    octets.insert(octets.end(), s, s+3);
-    //octets.insert(octets.end(), s[0], s[3]);
-		//octets.append(s, 4);
+		for (int i = 0; i < 4; i++) {
+			octets.push_back(s[i]);
+
+		}
 
 		for (i = 0; i < compressedSize; i++)
 		{
