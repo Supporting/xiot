@@ -1,9 +1,5 @@
-cmake_minimum_required(VERSION 2.8.12)
-
-IF(BIICODE)
-   INCLUDE("biicode.cmake")
-   RETURN()
-ENDIF()
+cmake_minimum_required(VERSION 3.1)
+cmake_policy(SET CMP0074 NEW)
 
 project(xiot)
  
@@ -60,9 +56,9 @@ install(FILES README.md COPYING DESTINATION .)
 #CPack
 include(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "2")
 if(WIN32 AND NOT UNIX)
   set(CPACK_GENERATOR "ZIP;NSIS")
   set(CPACK_SOURCE_GENERATOR "ZIP")
