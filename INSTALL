@@ -10,7 +10,7 @@ Build System Dependencies
    platform-specific build environment. To build this from the 
    CMakeLists.txt files you will need following tool:
    
-   Kitware CMake 2.6.0 or newer
+   Kitware CMake 3.1 or newer
    
    If you don't already have CMake installed on your system you can get
    it from:

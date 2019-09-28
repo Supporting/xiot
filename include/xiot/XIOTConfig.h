@@ -27,8 +27,7 @@
 #if defined(_MSC_VER)
 #pragma warning(disable : 4275) /* non-DLL-interface base class used */
 #pragma warning(disable : 4251) /* needs to have dll-interface to be used by clients */
-/* No warning for safe windows only functions */
-#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable : 4996) /* */
 #endif
 
 #endif  // __x3dexporterConfigure_h
