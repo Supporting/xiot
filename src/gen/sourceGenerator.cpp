@@ -100,7 +100,7 @@ void generateLogNodeHandler() {
         fprintf(f, "  return 1;\n}\n\n");
         fprintf(f, "int X3DLogNodeHandler::end%s() {\n", elementStr.c_str());
         fprintf(f, "  fprintf(fp, \"Event %%4i - End node %s\\n\", iCounter++);\n", elementStr.c_str());
-        fprintf(f, "  return 1;\n}\n\n", elementStr.c_str());
+        fprintf(f, "  return 1;\n}\n\n");
     }
     fprintf(f, "int X3DLogNodeHandler::startUnknown(const X3DAttributes &attr) {\n");
     fprintf(f, "  fprintf(fp, \"Event %%4i - Start unknown node %%s with %%i attribute(s): %%s\\n\", iCounter++, attr.getNodeName(), attr.getLength(), attr.getAttributesAsString().c_str());\n");
