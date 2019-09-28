@@ -9,7 +9,6 @@ environment:
 
 build_script:
   - cmd: echo "Generator='%CMAKE_GENERATOR%', CMAKE_BUILD_TYPE='%CMAKE_BUILD_TYPE%'"
-  - cmd: echo "Platform='%Platform%'"
   - cmd: cmake --version
   - cmd: mkdir build
   - cmd: cd build
@@ -17,6 +16,5 @@ build_script:
   - cmd: cmake --build . --config %CMAKE_BUILD_TYPE%
 
 test_script:
-  - cmd: cd bin
-  - cmd: ksons_xiot_tests_IOTest.exe
-  - cmd: ksons_xiot_tests_shapeCounter.exe iotest.x3d
+  - cmd: cd build
+  - cmd: ctest -C %CMAKE_BUILD_TYPE% --output-on-failure
