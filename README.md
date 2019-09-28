@@ -9,9 +9,6 @@ This library provides an open source generic C++ toolkit to import and
 export X3D in its differents XML encodings : ASCII and binary. A special
 development was done to provide a FI (FastInfoset) based X3D encoding.
 
-See project homepage for more details:
-http://forge.collaviz.org/community/xiot
-	
 ## Credits
 
 This project was lead by Actor3D and funded by EDF R&D in the context of 
