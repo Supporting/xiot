@@ -14,7 +14,4 @@ build_script:
   - cmd: cd build
   - cmd: cmake -G "%CMAKE_GENERATOR%" ..
   - cmd: cmake --build . --config %CMAKE_BUILD_TYPE%
-
-test_script:
-  - cmd: cd build
   - cmd: ctest -C %CMAKE_BUILD_TYPE% --output-on-failure
